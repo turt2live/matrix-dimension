@@ -1,3 +1,7 @@
+.idea/
+node_modules/
+web-dist/
+
 # Logs
 logs
 *.log
