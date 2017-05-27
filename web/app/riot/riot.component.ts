@@ -19,7 +19,10 @@ export class RiotComponent {
 
     private scalarToken: string;
 
-    constructor(private activatedRoute: ActivatedRoute, private api: ApiService, private scalar: ScalarService, private toaster:ToasterService) {
+    constructor(private activatedRoute: ActivatedRoute,
+                private api: ApiService,
+                private scalar: ScalarService,
+                private toaster: ToasterService) {
         let params: any = this.activatedRoute.snapshot.queryParams;
         if (!params.scalar_token || !params.room_id) this.error = "Missing scalar token or room ID";
         else {
@@ -71,14 +74,14 @@ export class RiotComponent {
         promise
             .then(() => this.toaster.pop("success", bot.name + " invited to the room"))
             .catch(err => {
-            var errorMessage = "Could not update bot status";
+                let errorMessage = "Could not update bot status";
 
-            if (err.json) {
-                errorMessage = err.json().error;
-            } else errorMessage = err.response.error.message;
+                if (err.json) {
+                    errorMessage = err.json().error;
+                } else errorMessage = err.response.error.message;
 
-            bot.isEnabled = !bot.isEnabled;
-            this.toaster.pop("error", errorMessage);
-        });
+                bot.isEnabled = !bot.isEnabled;
+                this.toaster.pop("error", errorMessage);
+            });
     }
 }
