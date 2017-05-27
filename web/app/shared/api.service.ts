@@ -16,4 +16,9 @@ export class ApiService {
         return this.http.get("/api/v1/dimension/bots")
             .map(res => res.json()).toPromise();
     }
+
+    kickUser(roomId: string, userId: string, scalarToken: string): Promise<any> {
+        return this.http.post("/api/v1/dimension/kick", {roomId: roomId, userId: userId, scalarToken: scalarToken})
+            .map(res => res.json()).toPromise();
+    }
 }

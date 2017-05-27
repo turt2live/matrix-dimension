@@ -43,6 +43,7 @@ class MatrixLiteClient {
         return new Promise((resolve, reject) => {
             request(params, (err, response, body) => {
                 if (err) {
+                    log.error("MatrixLiteClient", err);
                     reject(err);
                 } else resolve(response, body);
             });

@@ -65,14 +65,16 @@ class DimensionStore {
      * @param {string} mxid the matrix user id
      * @param {OpenID} openId the open ID
      * @param {string} scalarToken the token associated with the user
+     * @param {string} upstreamToken the upstream scalar token
      * @returns {Promise<>} resolves when complete
      */
-    createToken(mxid, openId, scalarToken) {
+    createToken(mxid, openId, scalarToken, upstreamToken) {
         return this.__Tokens.create({
             matrixUserId: mxid,
             matrixServerName: openId.matrix_server_name,
             matrixAccessToken: openId.access_token,
             scalarToken: scalarToken,
+            upstreamToken: upstreamToken,
             expires: moment().add(openId.expires_in, 'seconds').toDate()
         });
     }
@@ -87,6 +89,18 @@ class DimensionStore {
             if (!token) return Promise.reject();
             //if (moment().isAfter(moment(token.expires))) return this.__Tokens.destroy({where: {id: token.id}}).then(() => Promise.reject());
             return Promise.resolve();
+        });
+    }
+
+    /**
+     * Gets the upstream token for a given scalar token
+     * @param {string} scalarToken the scalar token to lookup
+     * @returns {Promise<string>} resolves to the upstream token, or null if not found
+     */
+    getUpstreamToken(scalarToken) {
+        return this.__Tokens.find({where: {scalarToken: scalarToken}}).then(token => {
+            if (!token) return null;
+            return token.upstreamToken;
         });
     }
 }

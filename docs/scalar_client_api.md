@@ -53,8 +53,10 @@ then we can expect a response object that looks like this:
 An error response will always have the following structure under `response`:
 ```
 {
-  "message": "Something went wrong",
-  "_error": <original Error object>
+  "error": {
+    "message": "Something went wrong",
+    "_error": <original Error object>
+  }
 }
 ```
 

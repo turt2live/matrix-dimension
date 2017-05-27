@@ -5,26 +5,31 @@ bots:
     name: "Giphy"
     avatar: "/img/avatars/giphy.png"
     about: "Use `!giphy query` to find an animated GIF on demand"
+    upstreamType: "giphy"
   # Guggy (from matrix.org)
-  - mxid: "@neb_guggy:matrix.org"
+  - mxid: "@_neb_guggy:matrix.org"
     name: "Guggy"
     avatar: "/img/avatars/guggy.png"
     about: "Use `!guggy sentence` to create an animated GIF from a sentence"
+    upstreamType: "guggy"
   # Imgur (from matrix.org)
   - mxid: "@_neb_imgur:matrix.org"
     name: "Imgur"
     avatar: "/img/avatars/imgur.png"
     about: "Use `!imgur query` to find an image from Imgur"
+    upstreamType: "imgur"
   # Wikipedia (from matrix.org)
   - mxid: "@_neb_wikipedia:matrix.org"
     name: "Wikipedia"
     avatar: "/img/avatars/wikipedia.png"
     about: "Use `!wikipedia query` to find something from Wikipedia"
+    upstreamType: "wikipedia"
   # Google (from matrix.org)
   - mxid: "@_neb_google:matrix.org"
     name: "Google"
     avatar: "/img/avatars/google.png"
     about: "Use `!google image query` to find an image from Google"
+    upstreamType: "google"
 
 # The web settings for the service (API and UI)
 web:
@@ -33,6 +38,10 @@ web:
 
   # The address to bind to (0.0.0.0 for all interfaces)
   address: '0.0.0.0'
+
+# Upstream scalar configuration. This should almost never change.
+scalar:
+  upstreamRestUrl: "https://scalar.vector.im/api"
 
 # Settings for controlling how logging works
 logging:

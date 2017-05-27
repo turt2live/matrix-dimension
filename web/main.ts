@@ -19,13 +19,16 @@ if (document.readyState === 'complete') {
     document.addEventListener('DOMContentLoaded', main);
 }
 
-(<any>String.prototype).hashCode = function() {
+(<any>String.prototype).hashCode = function () {
     let hash = 0, i, chr;
     if (this.length === 0) return hash;
     for (i = 0; i < this.length; i++) {
-        chr   = this.charCodeAt(i);
-        hash  = ((hash << 5) - hash) + chr;
+        chr = this.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
         hash |= 0; // Convert to 32bit integer
     }
     return hash;
 };
+
+// HACK: Work around .opener not being available
+if (!window.opener && window.parent) window.opener = window.parent;

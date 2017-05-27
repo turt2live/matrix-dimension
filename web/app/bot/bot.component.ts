@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Bot } from "../shared/models/bot";
 
 @Component({
@@ -9,15 +9,13 @@ import { Bot } from "../shared/models/bot";
 export class BotComponent {
 
     @Input() bot: Bot;
-
-    public updating = false;
-    public htmlAbout: string;
+    @Output() updated: EventEmitter<any> = new EventEmitter();
 
     constructor() {
     }
 
     public update(): void {
-        this.updating = true;
-        setTimeout(() => this.updating = false, Math.random() * 15000);
+        this.bot.isEnabled = !this.bot.isEnabled;
+        this.updated.emit();
     }
 }

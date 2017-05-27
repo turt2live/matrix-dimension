@@ -1,4 +1,6 @@
 // styles in src/style directory are applied to the whole page
+@import '../../node_modules/angular2-toaster/toaster';
+
 body {
   background: #ddd !important;
   margin: 0;

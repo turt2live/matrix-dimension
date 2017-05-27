@@ -11,6 +11,9 @@ import { RiotComponent } from "./riot/riot.component";
 import { ApiService } from "./shared/api.service";
 import { BotComponent } from "./bot/bot.component";
 import { UiSwitchModule } from "angular2-ui-switch";
+import { ScalarService } from "./shared/scalar.service";
+import { ToasterModule } from "angular2-toaster";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
     imports: [
@@ -20,6 +23,8 @@ import { UiSwitchModule } from "angular2-ui-switch";
         routing,
         NgbModule.forRoot(),
         UiSwitchModule,
+        ToasterModule,
+        BrowserAnimationsModule,
     ],
     declarations: [
         AppComponent,
@@ -31,6 +36,7 @@ import { UiSwitchModule } from "angular2-ui-switch";
     ],
     providers: [
         ApiService,
+        ScalarService,
 
         // Vendor
     ],

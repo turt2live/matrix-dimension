@@ -27,6 +27,11 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false,
             field: 'scalarToken'
         },
+        upstreamToken: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            field: 'upstreamToken'
+        },
         expires: {
             type: DataTypes.TIME,
             allowNull: false,
