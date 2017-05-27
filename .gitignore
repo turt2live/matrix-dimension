@@ -1,6 +1,10 @@
 .idea/
 node_modules/
 web-dist/
+logs/
+config/development.yaml
+config/production.yaml
+db/*.db
 
 # Logs
 logs

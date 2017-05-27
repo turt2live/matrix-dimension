@@ -1,0 +1,10 @@
+// styles applied on :host are applied on the current component, "app" in this case
+:host {
+  display: block;
+}
+
+main {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  display: block;
+}
