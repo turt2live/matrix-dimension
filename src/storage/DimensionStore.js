@@ -2,6 +2,7 @@ var DBMigrate = require("db-migrate");
 var log = require("./../util/LogService");
 var Sequelize = require('sequelize');
 var dbConfig = require("../../config/database.json");
+var moment = require("moment");
 
 /**
  * Primary storage for Dimension.
@@ -54,8 +55,39 @@ class DimensionStore {
 
     _bindModels() {
         // Models
+        this.__Tokens = this._orm.import(__dirname + "/models/tokens");
 
         // Relationships
+    }
+
+    /**
+     * Creates a new Scalar token
+     * @param {string} mxid the matrix user id
+     * @param {OpenID} openId the open ID
+     * @param {string} scalarToken the token associated with the user
+     * @returns {Promise<>} resolves when complete
+     */
+    createToken(mxid, openId, scalarToken) {
+        return this.__Tokens.create({
+            matrixUserId: mxid,
+            matrixServerName: openId.matrix_server_name,
+            matrixAccessToken: openId.access_token,
+            scalarToken: scalarToken,
+            expires: moment().add(openId.expires_in, 'seconds').toDate()
+        });
+    }
+
+    /**
+     * Checks to determine if a token is valid or not
+     * @param {string} scalarToken the scalar token to check
+     * @returns {Promise<>} resolves if valid, rejected otherwise
+     */
+    checkToken(scalarToken) {
+        return this.__Tokens.find({where: {scalarToken: scalarToken}}).then(token => {
+            if (!token) return Promise.reject();
+            //if (moment().isAfter(moment(token.expires))) return this.__Tokens.destroy({where: {id: token.id}}).then(() => Promise.reject());
+            return Promise.resolve();
+        });
     }
 }
 

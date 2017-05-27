@@ -69,7 +69,7 @@ var log = new winston.Logger({
 });
 
 function doLog(level, module, messageOrObject) {
-    if (typeof(messageOrObject) === 'object')
+    if (typeof(messageOrObject) === 'object' && !(messageOrObject instanceof Error))
         messageOrObject = JSON.stringify(messageOrObject);
     var message = "[" + module + "] " + messageOrObject;
     log.log(level, message);

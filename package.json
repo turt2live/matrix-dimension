@@ -5,7 +5,7 @@
   "main": "app.js",
   "license": "GPL-3.0",
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --port 8080",
+    "dev": "webpack-dev-server --inline --progress --port 8080 --host 0.0.0.0",
     "build": "rimraf web-dist && webpack --progress --profile --bail"
   },
   "repository": {
@@ -14,6 +14,7 @@
   },
   "author": "Travis Ralston",
   "dependencies": {
+    "body-parser": "^1.17.2",
     "chalk": "^1.1.3",
     "config": "^1.25.1",
     "db-migrate": "^0.10.0-beta.20",
@@ -21,6 +22,8 @@
     "express": "^4.15.2",
     "js-yaml": "^3.8.2",
     "moment": "^2.18.1",
+    "random-string": "^0.2.0",
+    "request": "^2.81.0",
     "sequelize": "^3.30.4",
     "sqlite3": "^3.1.8",
     "winston": "^2.3.1"
