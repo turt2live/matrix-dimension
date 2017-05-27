@@ -1,0 +1,10 @@
+<div *ngIf="error">
+    <p class="text-danger">{{ error }}</p>
+</div>
+<div *ngIf="!error">
+    <h3>Manage Integrations</h3>
+    <p>Turn on anything you like. If an integration has some special configuration, it will have a configuration icon next to it.</p>
+    <div class="integration-container">
+        <my-bot *ngFor="let bot of bots" [bot]="bot"></my-bot>
+    </div>
+</div>

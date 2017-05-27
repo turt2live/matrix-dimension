@@ -1,0 +1,35 @@
+// component styles are encapsulated and only applied to their components
+.bot {
+  flex: auto;
+  margin: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-width: 200px;
+  min-width: 150px;
+  background-color: white;
+}
+
+.avatar {
+  float: left;
+  margin-right: 7px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+}
+
+.title {
+  float: right;
+  width: calc(100% - 57px);
+}
+
+.switch {
+  display: inline-block;
+  text-align: left;
+}
+
+.toolbar {
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 5px;
+}

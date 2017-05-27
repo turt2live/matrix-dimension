@@ -41,11 +41,26 @@ class Dimension {
         });
 
         this._app.post("/api/v1/scalar/register", this._scalarRegister.bind(this));
+        this._app.get("/api/v1/dimension/bots", this._getBots.bind(this));
+        this._app.get("/api/v1/scalar/checkToken", this._checkScalarToken.bind(this));
     }
 
     start() {
         this._app.listen(config.get('web.port'), config.get('web.address'));
         log.info("Dimension", "API and UI listening on " + config.get("web.address") + ":" + config.get("web.port"));
+    }
+
+    _getBots(req, res) {
+        res.setHeader("Content-Type", "application/json");
+        res.send(JSON.stringify(config.bots));
+    }
+
+    _checkScalarToken(req, res) {
+        var token = req.query.scalar_token;
+        if (!token) res.sendStatus(404);
+        else this._db.checkToken(token).then(() => {
+            res.sendStatus(200);
+        }, () => res.sendStatus(404));
     }
 
     _scalarRegister(req, res) {

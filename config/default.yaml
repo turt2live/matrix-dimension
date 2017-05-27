@@ -1,3 +1,31 @@
+# Configuration for the bots this Dimension supports
+bots:
+  # Giphy (from matrix.org)
+  - mxid: "@neb_giphy:matrix.org"
+    name: "Giphy"
+    avatar: "/img/avatars/giphy.png"
+    about: "Use `!giphy query` to find an animated GIF on demand"
+  # Guggy (from matrix.org)
+  - mxid: "@neb_guggy:matrix.org"
+    name: "Guggy"
+    avatar: "/img/avatars/guggy.png"
+    about: "Use `!guggy sentence` to create an animated GIF from a sentence"
+  # Imgur (from matrix.org)
+  - mxid: "@_neb_imgur:matrix.org"
+    name: "Imgur"
+    avatar: "/img/avatars/imgur.png"
+    about: "Use `!imgur query` to find an image from Imgur"
+  # Wikipedia (from matrix.org)
+  - mxid: "@_neb_wikipedia:matrix.org"
+    name: "Wikipedia"
+    avatar: "/img/avatars/wikipedia.png"
+    about: "Use `!wikipedia query` to find something from Wikipedia"
+  # Google (from matrix.org)
+  - mxid: "@_neb_google:matrix.org"
+    name: "Google"
+    avatar: "/img/avatars/google.png"
+    about: "Use `!google image query` to find an image from Google"
+
 # The web settings for the service (API and UI)
 web:
   # The port to run the webserver on

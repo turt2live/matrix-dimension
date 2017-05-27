@@ -7,6 +7,10 @@ import { HomeComponent } from "./home/home.component";
 import { routing } from "./app.routing";
 import { removeNgStyles, createNewHosts } from "@angularclass/hmr";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { RiotComponent } from "./riot/riot.component";
+import { ApiService } from "./shared/api.service";
+import { BotComponent } from "./bot/bot.component";
+import { UiSwitchModule } from "angular2-ui-switch";
 
 @NgModule({
     imports: [
@@ -14,13 +18,21 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
         HttpModule,
         FormsModule,
         routing,
-        NgbModule.forRoot()
+        NgbModule.forRoot(),
+        UiSwitchModule,
     ],
     declarations: [
         AppComponent,
-        HomeComponent
+        HomeComponent,
+        RiotComponent,
+        BotComponent,
+
+        // Vendor
     ],
     providers: [
+        ApiService,
+
+        // Vendor
     ],
     bootstrap: [AppComponent],
     entryComponents: []

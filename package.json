@@ -42,6 +42,7 @@
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.22",
     "@types/node": "^7.0.18",
     "angular2-template-loader": "^0.6.2",
+    "angular2-ui-switch": "^1.2.0",
     "autoprefixer": "^6.7.7",
     "awesome-typescript-loader": "^3.1.2",
     "codelyzer": "^3.0.1",
