@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ApiService } from "../shared/api.service";
-import { Bot } from "../shared/models/bot";
 import { ScalarService } from "../shared/scalar.service";
 import { ToasterService } from "angular2-toaster";
+import { Integration } from "../shared/models/integration";
 
 @Component({
     selector: 'my-riot',
@@ -13,7 +13,7 @@ import { ToasterService } from "angular2-toaster";
 export class RiotComponent {
 
     public error: string;
-    public bots: Bot[] = [];
+    public integrations: Integration[] = [];
     public loading = true;
     public roomId: string;
 
@@ -40,47 +40,50 @@ export class RiotComponent {
     }
 
     private init() {
-        this.api.getBots().then(bots => {
-            this.bots = bots;
-            let promises = bots.map(b => this.updateBotState(b));
+        this.api.getIntegrations().then(integrations => {
+            this.integrations = integrations;
+            let promises = integrations.map(b => this.updateIntegrationState(b));
             return Promise.all(promises);
-        }).then(() => this.loading = false);
-    }
-
-    private updateBotState(bot: Bot) {
-        return this.scalar.getMembershipState(this.roomId, bot.mxid).then(payload => {
-            bot.isBroken = false;
-
-            if (!payload.response) {
-                bot.isEnabled = false;
-                return;
-            }
-
-            bot.isEnabled = (payload.response.membership === 'join' || payload.response.membership === 'invite');
-        }, (error) => {
-            console.error(error);
-            bot.isEnabled = false;
-            bot.isBroken = true;
+        }).then(() => this.loading = false).catch(err => {
+            this.error = "Unable to communicate with Dimension";
+            console.error(err);
         });
     }
 
-    public updateBot(bot: Bot) {
+    private updateIntegrationState(integration: Integration) {
+        return this.scalar.getMembershipState(this.roomId, integration.userId).then(payload => {
+            integration.isBroken = false;
+
+            if (!payload.response) {
+                integration.isEnabled = false;
+                return;
+            }
+
+            integration.isEnabled = (payload.response.membership === 'join' || payload.response.membership === 'invite');
+        }, (error) => {
+            console.error(error);
+            integration.isEnabled = false;
+            integration.isBroken = true;
+        });
+    }
+
+    public updateIntegration(integration: Integration) {
         let promise = null;
 
-        if (!bot.isEnabled) {
-            promise = this.api.kickUser(this.roomId, bot.mxid, this.scalarToken);
-        } else promise = this.scalar.inviteUser(this.roomId, bot.mxid);
+        if (!integration.isEnabled) {
+            promise = this.api.removeIntegration(this.roomId, integration.userId, this.scalarToken);
+        } else promise = this.scalar.inviteUser(this.roomId, integration.userId);
 
         promise
-            .then(() => this.toaster.pop("success", bot.name + " invited to the room"))
+            .then(() => this.toaster.pop("success", integration.name + " invited to the room"))
             .catch(err => {
-                let errorMessage = "Could not update bot status";
+                let errorMessage = "Could not update integration status";
 
                 if (err.json) {
                     errorMessage = err.json().error;
                 } else errorMessage = err.response.error.message;
 
-                bot.isEnabled = !bot.isEnabled;
+                integration.isEnabled = !integration.isEnabled;
                 this.toaster.pop("error", errorMessage);
             });
     }

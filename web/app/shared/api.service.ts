@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
-import { Bot } from "./models/bot";
+import { Integration } from "./models/integration";
 
 @Injectable()
 export class ApiService {
@@ -12,13 +12,13 @@ export class ApiService {
             .map(res => res.status === 200).toPromise();
     }
 
-    getBots(): Promise<Bot[]> {
-        return this.http.get("/api/v1/dimension/bots")
+    getIntegrations(): Promise<Integration[]> {
+        return this.http.get("/api/v1/dimension/integrations")
             .map(res => res.json()).toPromise();
     }
 
-    kickUser(roomId: string, userId: string, scalarToken: string): Promise<any> {
-        return this.http.post("/api/v1/dimension/kick", {roomId: roomId, userId: userId, scalarToken: scalarToken})
+    removeIntegration(roomId: string, userId: string, scalarToken: string): Promise<any> {
+        return this.http.post("/api/v1/dimension/removeIntegration", {roomId: roomId, userId: userId, scalarToken: scalarToken})
             .map(res => res.json()).toPromise();
     }
 }

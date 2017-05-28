@@ -1,5 +1,6 @@
-export interface Bot {
-    mxid: string;
+export interface Integration {
+    type: string;
+    userId: string;
     name: string;
     avatar: string;
     about: string; // nullable

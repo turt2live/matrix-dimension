@@ -1,0 +1,9 @@
+type: "bot"
+enabled: true
+userId: "@_neb_guggy:matrix.org"
+name: "Guggy"
+about: "Use `!guggy sentence` to create an animated GIF from a sentence"
+avatar: "/img/avatars/guggy.png"
+upstream:
+  type: "vector"
+  id: "guggy"

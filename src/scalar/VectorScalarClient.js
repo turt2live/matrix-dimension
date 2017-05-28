@@ -33,7 +33,10 @@ class VectorScalarClient {
      * @return {Promise<>} resolves when complete
      */
     removeIntegration(type, roomId, scalarToken) {
-        return this._do("POST", "/removeIntegration", {scalar_token: scalarToken}, {type: type, room_id: roomId}).then((response, body) => {
+        return this._do("POST", "/removeIntegration", {scalar_token: scalarToken}, {
+            type: type,
+            room_id: roomId
+        }).then((response, body) => {
             if (response.statusCode !== 200) {
                 log.error("VectorScalarClient", response.body);
                 return Promise.reject(response.body);
@@ -44,7 +47,7 @@ class VectorScalarClient {
     }
 
     _do(method, endpoint, qs = null, body = null) {
-        var url = config.scalar.upstreamRestUrl + endpoint;
+        var url = config.get("upstreams.vector") + endpoint;
 
         log.verbose("VectorScalarClient", "Performing request: " + url);
 

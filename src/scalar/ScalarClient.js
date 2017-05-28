@@ -29,8 +29,10 @@ class ScalarClient {
         });
     }
 
+    // TODO: Merge this, VectorScalarClient, and MatrixLiteClient into a base class
     _do(method, endpoint, qs = null, body = null) {
-        var url = config.scalar.upstreamRestUrl + endpoint;
+        // TODO: Generify URL
+        var url = config.get("upstreams.vector") + endpoint;
 
         log.verbose("ScalarClient", "Performing request: " + url);
 

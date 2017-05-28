@@ -9,11 +9,11 @@ import { removeNgStyles, createNewHosts } from "@angularclass/hmr";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { RiotComponent } from "./riot/riot.component";
 import { ApiService } from "./shared/api.service";
-import { BotComponent } from "./bot/bot.component";
 import { UiSwitchModule } from "angular2-ui-switch";
 import { ScalarService } from "./shared/scalar.service";
 import { ToasterModule } from "angular2-toaster";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { IntegrationComponent } from "./integration/integration.component";
 
 @NgModule({
     imports: [
@@ -30,7 +30,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
         AppComponent,
         HomeComponent,
         RiotComponent,
-        BotComponent,
+        IntegrationComponent,
 
         // Vendor
     ],

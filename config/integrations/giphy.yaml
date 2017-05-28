@@ -1,0 +1,9 @@
+type: "bot"
+enabled: true
+userId: "@neb_giphy:matrix.org"
+name: "Giphy"
+about: "Use `!giphy query` to find an animated GIF on demand"
+avatar: "/img/avatars/giphy.png"
+upstream:
+  type: "vector"
+  id: "giphy"

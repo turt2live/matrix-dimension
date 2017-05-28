@@ -1,0 +1,9 @@
+type: "bot"
+enabled: true
+userId: "@_neb_imgur:matrix.org"
+name: "Imgur"
+about: "Use `!imgur query` to find an image from Imgur"
+avatar: "/img/avatars/imgur.png"
+upstream:
+  type: "vector"
+  id: "imgur"

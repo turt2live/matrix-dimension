@@ -1,0 +1,9 @@
+type: "bot"
+enabled: true
+userId: "@_neb_google:matrix.org"
+name: "Google"
+about: "Use `!google image query` to find an image from Google"
+avatar: "/img/avatars/google.png"
+upstream:
+  type: "vector"
+  id: "google"

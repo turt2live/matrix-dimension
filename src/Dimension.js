@@ -8,6 +8,10 @@ var MatrixLiteClient = require("./matrix/MatrixLiteClient");
 var randomString = require("random-string");
 var ScalarClient = require("./scalar/ScalarClient.js");
 var VectorScalarClient = require("./scalar/VectorScalarClient");
+var integrations = require("./integration");
+var _ = require("lodash");
+var UpstreamIntegration = require("./integration/UpstreamIntegration");
+var HostedIntegration = require("./integration/HostedIntegration");
 
 /**
  * Primary entry point for Dimension
@@ -48,8 +52,8 @@ class Dimension {
         this._app.post("/api/v1/scalar/register", this._scalarRegister.bind(this));
         this._app.get("/api/v1/scalar/checkToken", this._checkScalarToken.bind(this));
 
-        this._app.get("/api/v1/dimension/bots", this._getBots.bind(this));
-        this._app.post("/api/v1/dimension/kick", this._kickUser.bind(this));
+        this._app.get("/api/v1/dimension/integrations", this._getIntegrations.bind(this));
+        this._app.post("/api/v1/dimension/removeIntegration", this._removeIntegration.bind(this));
     }
 
     start() {
@@ -57,8 +61,7 @@ class Dimension {
         log.info("Dimension", "API and UI listening on " + config.get("web.address") + ":" + config.get("web.port"));
     }
 
-    _kickUser(req, res) {
-        // {roomId: roomId, userId: userId, scalarToken: scalarToken}
+    _removeIntegration(req, res) {
         var roomId = req.body.roomId;
         var userId = req.body.userId;
         var scalarToken = req.body.scalarToken;
@@ -68,27 +71,32 @@ class Dimension {
             return;
         }
 
-        var integrationName = null;
-        this._db.checkToken(scalarToken).then(() => {
-            for (var bot of config.bots) {
-                if (bot.mxid == userId) {
-                    integrationName = bot.upstreamType;
-                    break;
-                }
-            }
+        var integrationConfig = integrations.byUserId[userId];
+        if (!integrationConfig) {
+            res.status(400).send({error: "Unknown integration"});
+            return;
+        }
 
-            return this._db.getUpstreamToken(scalarToken);
-        }).then(upstreamToken => {
-            if (!upstreamToken || !integrationName) {
-                res.status(400).send({error: "Missing token or integration name"});
-                return Promise.resolve();
-            } else return VectorScalarClient.removeIntegration(integrationName, roomId, upstreamToken);
-        }).then(() => res.status(200).send({success: true})).catch(err => res.status(500).send({error: err.message}));
+        this._db.checkToken(scalarToken).then(() => {
+            if (integrationConfig.upstream) {
+                return this._db.getUpstreamToken(scalarToken).then(upstreamToken => new UpstreamIntegration(integrationConfig, upstreamToken));
+            } else return new HostedIntegration(integrationConfig);
+        }).then(integration => integration.leaveRoom(roomId)).then(() => {
+            res.status(200).send({success: true});
+        }).catch(err => res.status(500).send({error: err.message}));
     }
 
-    _getBots(req, res) {
+    _getIntegrations(req, res) {
         res.setHeader("Content-Type", "application/json");
-        res.send(JSON.stringify(config.bots));
+
+        var results = _.map(integrations.all, i => {
+            var integration = JSON.parse(JSON.stringify(i));
+            integration.upstream = undefined;
+            integration.hosted = undefined;
+            return integration;
+        });
+
+        res.send(results);
     }
 
     _checkScalarToken(req, res) {
