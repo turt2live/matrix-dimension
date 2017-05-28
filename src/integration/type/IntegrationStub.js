@@ -21,6 +21,15 @@ class IntegrationStub {
     getState() {
         return Promise.resolve({});
     }
+
+    /**
+     * Removes the integration from the given room
+     * @param {string} roomId the room ID to remove the integration from
+     * @returns {Promise<>} resolves when completed
+     */
+    removeFromRoom(roomId) {
+        throw new Error("Not implemented");
+    }
 }
 
 module.exports = IntegrationStub;

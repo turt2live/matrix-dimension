@@ -24,6 +24,15 @@ class StubbedRssBackbone {
     getFeeds() {
         throw new Error("Not implemented");
     }
+
+    /**
+     * Removes the bot from the given room
+     * @param {string} roomId the room ID to remove the bot from
+     * @returns {Promise<>} resolves when completed
+     */
+    removeFromRoom(roomId) {
+        throw new Error("Not implemented");
+    }
 }
 
 module.exports = StubbedRssBackbone;

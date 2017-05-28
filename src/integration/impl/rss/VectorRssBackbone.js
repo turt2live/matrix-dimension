@@ -1,6 +1,7 @@
 var StubbedRssBackbone = require("./StubbedRssBackbone");
 var VectorScalarClient = require("../../../scalar/VectorScalarClient");
 var _ = require("lodash");
+var log = require("../../../util/LogService");
 
 /**
  * Backbone for RSS bots running on vector.im through scalar
@@ -40,6 +41,10 @@ class VectorRssBackbone extends StubbedRssBackbone {
         });
     }
 
+    /*override*/
+    removeFromRoom(roomId) {
+        return VectorScalarClient.removeIntegration(this._config.upstream.id, roomId, this._upstreamToken);
+    }
 }
 
 module.exports = VectorRssBackbone;

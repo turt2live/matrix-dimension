@@ -7,8 +7,7 @@ var config = require("config");
 log.info("app", "Bootstrapping Dimension...");
 var db = new DimensionStore();
 db.prepare().then(() => {
-    var app = new Dimension(db);
-    app.start();
+    Dimension.start(db);
 
     if (config.get("demobot.enabled")) {
         log.info("app", "Demo bot enabled - starting up");

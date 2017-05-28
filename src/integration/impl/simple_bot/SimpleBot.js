@@ -20,16 +20,15 @@ class RSSBot extends ComplexBot {
         return this._backbone.getUserId();
     }
 
-    /*override*/
-    getState() {
-        return this._backbone.getFeeds().then(feeds => {
-            return {feeds: feeds};
-        });
+    getFeeds() {
+        return this._backbone.getFeeds();
     }
 
     /*override*/
-    removeFromRoom(roomId) {
-        return this._backbone.removeFromRoom(roomId);
+    getState() {
+        return this.getFeeds().then(feeds => {
+            return {feeds: feeds};
+        });
     }
 }
 

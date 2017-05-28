@@ -1,3 +1,5 @@
+var IntegrationStub = require("../type/IntegrationStub");
+
 /**
  * Creates an integration using the given
  * @param {DimensionStore} db the database
@@ -7,5 +9,5 @@
  * @returns {Promise<*>} resolves to the configured integration
  */
 module.exports = (db, integrationConfig, roomId, scalarToken) => {
-    throw new Error("Not implemented");
+    return Promise.resolve(new IntegrationStub(integrationConfig));
 };
