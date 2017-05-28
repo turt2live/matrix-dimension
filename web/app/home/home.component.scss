@@ -1,1 +1,17 @@
 // component styles are encapsulated and only applied to their components
+.header {
+  text-align: center;
+  background-color: #fff;
+}
+
+.header img {
+  height: 125px;
+}
+
+.wrapper {
+  margin-top: 20px;
+}
+
+.center {
+  text-align: center;
+}
