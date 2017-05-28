@@ -30,6 +30,10 @@ export class ScalarService {
         });
     }
 
+    public close(): void {
+        this.callAction("close_scalar", {});
+    }
+
     private callAction(action, payload) {
         let requestKey = randomString({length: 20});
         return new Promise((resolve, reject) => {

@@ -14,6 +14,7 @@ import { ScalarService } from "./shared/scalar.service";
 import { ToasterModule } from "angular2-toaster";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { IntegrationComponent } from "./integration/integration.component";
+import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component";
 
 @NgModule({
     imports: [
@@ -31,6 +32,7 @@ import { IntegrationComponent } from "./integration/integration.component";
         HomeComponent,
         RiotComponent,
         IntegrationComponent,
+        ScalarCloseComponent,
 
         // Vendor
     ],
