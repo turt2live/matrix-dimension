@@ -75,7 +75,11 @@ export class RiotComponent {
         } else promise = this.scalar.inviteUser(this.roomId, integration.userId);
 
         promise
-            .then(() => this.toaster.pop("success", integration.name + " invited to the room"))
+            .then(() => {
+                if (integration.isEnabled)
+                    this.toaster.pop('success', integration.name + " was invited to the room");
+                else this.toaster.pop('success', integration.name + " was removed from the room");
+            })
             .catch(err => {
                 let errorMessage = "Could not update integration status";
 
