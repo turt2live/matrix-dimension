@@ -1,6 +1,7 @@
 // component styles are encapsulated and only applied to their components
 .integration-container {
   display: flex;
+  flex-wrap: wrap;
 }
 
 #wrapper {
