@@ -50,7 +50,31 @@ None of these are officially documented, and are subject to change.
         }
       }
     },
-    "self":false
+    "self": false
+  }]
+}
+```
+
+**Travis-CI Bot Response**:
+```
+{
+  "bot_user_id": "@_neb_travisci_=40travis=3at2l.io:matrix.org",
+  "integrations": [{
+    "type": "travis-ci",
+    "user_id": "@travis:t2l.io",
+    "config": {
+      "webhook_url": "https://scalar.vector.im/api/neb/services/hooks/some_long_string",
+      "rooms": {
+        "!JmvocvDuPTYUfuvKgs:t2l.io": {
+          "repos": {
+            "turt2live/matrix-dimension": {
+              "template": "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}\n    Change view : %{compare_url}\n    Build details : %{build_url}\n"
+            }
+          }
+        }
+      }
+    },
+    "self": true
   }]
 }
 ```
@@ -74,6 +98,23 @@ None of these are officially documented, and are subject to change.
   "room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
   "feeds": {
     "https://ci.t2l.io/view/all/rssAll": {}
+  }
+}
+```
+
+## POST `/api/integrations/travis-ci/configureService?scalar_token=...`
+
+**Body**:
+```
+{
+  "rooms": {
+    "!JmvocvDuPTYUfuvKgs:t2l.io": {
+      "repos": {
+        "turt2live/matrix-dimension": {
+          "template": "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}\n    Change view : %{compare_url}\n    Build details : %{build_url}\n"
+        }
+      }
+    }
   }
 }
 ```
