@@ -1,11 +1,11 @@
 var sdk = require("matrix-js-sdk");
 var log = require("../../../util/LogService");
-var IntegrationStub = require("../../type/IntegrationStub");
+var StubbedSimpleBackbone = require("./StubbedSimpleBackbone");
 
 /**
  * Standalone (matrix) backbone for simple bots
  */
-class HostedSimpleBackbone extends IntegrationStub {
+class HostedSimpleBackbone extends StubbedSimpleBackbone {
 
     /**
      * Creates a new standalone bot backbone
@@ -21,14 +21,9 @@ class HostedSimpleBackbone extends IntegrationStub {
         });
     }
 
-    /**
-     * Leaves a given Matrix room
-     * @param {string} roomId the room to leave
-     * @returns {Promise<>} resolves when completed
-     */
     /*override*/
     removeFromRoom(roomId) {
-        log.info("HostedSimpleBackbone", "Removing " + this._settings.userId + " from " + roomId);
+        log.info("HostedSimpleBackbone", "Removing " + this._config.userId + " from " + roomId);
         return this._client.leave(roomId);
     }
 }

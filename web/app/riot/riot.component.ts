@@ -71,7 +71,7 @@ export class RiotComponent {
         let promise = null;
 
         if (!integration.isEnabled) {
-            promise = this.api.removeIntegration(this.roomId, integration.userId, this.scalarToken);
+            promise = this.api.removeIntegration(this.roomId, integration.type, integration.integrationType, this.scalarToken);
         } else promise = this.scalar.inviteUser(this.roomId, integration.userId);
 
         promise

@@ -1,9 +1,9 @@
-var ComplexBot = require("../../type/ComplexBot");
+var IntegrationStub = require("../../generic_types/IntegrationStub");
 
 /**
  * Represents an RSS bot
  */
-class RSSBot extends ComplexBot {
+class SimpleBot extends IntegrationStub {
 
     /**
      * Creates a new RSS bot
@@ -16,20 +16,9 @@ class RSSBot extends ComplexBot {
     }
 
     /*override*/
-    getUserId() {
-        return this._backbone.getUserId();
-    }
-
-    getFeeds() {
-        return this._backbone.getFeeds();
-    }
-
-    /*override*/
-    getState() {
-        return this.getFeeds().then(feeds => {
-            return {feeds: feeds};
-        });
+    removeFromRoom(roomId) {
+        return this._backbone.removeFromRoom(roomId);
     }
 }
 
-module.exports = RSSBot;
+module.exports = SimpleBot;

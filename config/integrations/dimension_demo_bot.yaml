@@ -1,4 +1,5 @@
 type: "bot"
+integrationType: "demo"
 enabled: false
 userId: "@dimension:t2bot.io"
 name: "Demo Bot"

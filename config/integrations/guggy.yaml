@@ -1,4 +1,5 @@
 type: "bot"
+integrationType: "guggy"
 enabled: true
 userId: "@_neb_guggy:matrix.org"
 name: "Guggy"

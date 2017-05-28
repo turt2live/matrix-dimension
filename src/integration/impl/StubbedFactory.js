@@ -1,4 +1,4 @@
-var IntegrationStub = require("../type/IntegrationStub");
+var IntegrationStub = require("../generic_types/IntegrationStub");
 
 /**
  * Creates an integration using the given

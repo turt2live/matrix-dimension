@@ -1,22 +1,28 @@
+var VectorScalarClient = require("../../../scalar/VectorScalarClient");
+var log = require("../../../util/LogService");
+var StubbedSimpleBackbone = require("./StubbedSimpleBackbone");
+
 /**
- * Stubbed/placeholder simple bot backbone
+ * Vector backbone for simple bots
  */
-class StubbedSimpleBackbone {
+class VectorSimpleBackbone extends StubbedSimpleBackbone {
 
     /**
-     * Creates a new stubbed RSS backbone
+     * Creates a new vector bot backbone
+     * @param {*} botConfig the configuration for the bot
+     * @param {string} upstreamScalarToken the upstream scalar token
      */
-    constructor() {
+    constructor(botConfig, upstreamScalarToken) {
+        super(botConfig);
+        this._config = botConfig;
+        this._upstreamToken = upstreamScalarToken;
     }
 
-    /**
-     * Leaves a given Matrix room
-     * @param {string} roomId the room to leave
-     * @returns {Promise<>} resolves when completed
-     */
-    leaveRoom(roomId) {
-        throw new Error("Not implemented");
+    /*override*/
+    removeFromRoom(roomId) {
+        log.info("VectorSimpleBackbone", "Removing " + this._config.userId + " from " + roomId);
+        return VectorScalarClient.removeIntegration(this._config.upstream.id, roomId, this._upstreamToken);
     }
 }
 
-module.exports = StubbedRssBackbone;
+module.exports = VectorSimpleBackbone;

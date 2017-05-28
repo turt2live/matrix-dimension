@@ -1,4 +1,5 @@
 type: "bot"
+integrationType: "giphy"
 enabled: true
 userId: "@neb_giphy:matrix.org"
 name: "Giphy"

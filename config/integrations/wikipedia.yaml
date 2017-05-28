@@ -1,4 +1,5 @@
 type: "bot"
+integrationType: "wikipedia"
 enabled: true
 userId: "@_neb_wikipedia:matrix.org"
 name: "Wikipedia"

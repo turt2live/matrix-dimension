@@ -23,7 +23,7 @@ class DimensionApi {
         this._db = db;
 
         app.get("/api/v1/dimension/integrations/:roomId", this._getIntegrations.bind(this));
-        app.post("/api/v1/dimension/removeIntegration", this._removeIntegration.bind(this));
+        app.delete("/api/v1/dimension/integrations/:roomId/:type/:integrationType", this._removeIntegration.bind(this));
     }
 
     _getIntegration(integrationConfig, roomId, scalarToken) {
@@ -75,22 +75,23 @@ class DimensionApi {
     }
 
     _removeIntegration(req, res) {
-        var roomId = req.body.roomId;
-        var userId = req.body.userId;
-        var scalarToken = req.body.scalarToken;
+        var roomId = req.params.roomId;
+        var scalarToken = req.query.scalar_token;
+        var type = req.params.type;
+        var integrationType = req.params.integrationType;
 
-        if (!roomId || !userId || !scalarToken) {
-            res.status(400).send({error: "Missing room, user, or token"});
+        if (!roomId || !scalarToken || !type || !integrationType) {
+            res.status(400).send({error: "Missing room, integration type, type, or token"});
             return;
         }
 
-        var integrationConfig = Integrations.byUserId[userId];
+        var integrationConfig = Integrations.byType[type][integrationType];
         if (!integrationConfig) {
             res.status(400).send({error: "Unknown integration"});
             return;
         }
 
-        log.info("DimensionApi", "Remove requested for " + userId + " in room " + roomId);
+        log.info("DimensionApi", "Remove requested for " + type + " (" + integrationType + ") in room " + roomId);
 
         this._db.checkToken(scalarToken).then(() => {
             return this._getIntegration(integrationConfig, roomId, scalarToken);

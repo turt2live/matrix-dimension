@@ -1,4 +1,5 @@
 type: "bot"
+integrationType: "google"
 enabled: true
 userId: "@_neb_google:matrix.org"
 name: "Google"

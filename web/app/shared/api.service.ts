@@ -17,12 +17,8 @@ export class ApiService {
             .map(res => res.json()).toPromise();
     }
 
-    removeIntegration(roomId: string, userId: string, scalarToken: string): Promise<any> {
-        return this.http.post("/api/v1/dimension/removeIntegration", {
-            roomId: roomId,
-            userId: userId,
-            scalarToken: scalarToken
-        })
+    removeIntegration(roomId: string, type: string, integrationType: string, scalarToken: string): Promise<any> {
+        return this.http.delete("/api/v1/dimension/integrations/" + roomId + "/" + type + "/" + integrationType, {params: {scalar_token: scalarToken}})
             .map(res => res.json()).toPromise();
     }
 }

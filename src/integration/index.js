@@ -33,6 +33,7 @@ log.info("Integrations", "Discovered " + keys.length + " integrations. Parsing d
 
 var linear = [];
 var byUserId = {};
+var byType = {};
 
 for (var key of keys) {
     log.info("Integrations", "Preparing " + key);
@@ -45,11 +46,18 @@ for (var key of keys) {
     linear.push(merged);
     if (merged['userId'])
         byUserId[merged['userId']] = merged;
+
+    if (!byType[merged['type']])
+        byType[merged['type']] = {};
+    if (byType[merged['type']][merged['integrationType']])
+        throw new Error("Duplicate type " + merged['type'] + " (" + merged['integrationType'] + ") at key " + key);
+    byType[merged['type']][merged['integrationType']] = merged;
 }
 
 log.info("Integrations", "Loaded " + linear.length + " integrations");
 
 module.exports = {
     all: linear,
-    byUserId: byUserId
+    byUserId: byUserId,
+    byType: byType
 };

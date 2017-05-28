@@ -1,4 +1,4 @@
-var ComplexBot = require("../../type/ComplexBot");
+var ComplexBot = require("../../generic_types/ComplexBot");
 
 /**
  * Represents an RSS bot
