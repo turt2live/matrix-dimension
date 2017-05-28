@@ -86,7 +86,7 @@ class DimensionStore {
      */
     checkToken(scalarToken) {
         return this.__Tokens.find({where: {scalarToken: scalarToken}}).then(token => {
-            if (!token) return Promise.reject();
+            if (!token) return Promise.reject(new Error("Token not found"));
             //if (moment().isAfter(moment(token.expires))) return this.__Tokens.destroy({where: {id: token.id}}).then(() => Promise.reject());
             return Promise.resolve();
         });

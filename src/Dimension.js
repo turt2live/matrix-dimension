@@ -12,6 +12,7 @@ var integrations = require("./integration");
 var _ = require("lodash");
 var UpstreamIntegration = require("./integration/UpstreamIntegration");
 var HostedIntegration = require("./integration/HostedIntegration");
+var IntegrationImpl = require("./integration/impl");
 
 /**
  * Primary entry point for Dimension
@@ -52,7 +53,7 @@ class Dimension {
         this._app.post("/api/v1/scalar/register", this._scalarRegister.bind(this));
         this._app.get("/api/v1/scalar/checkToken", this._checkScalarToken.bind(this));
 
-        this._app.get("/api/v1/dimension/integrations", this._getIntegrations.bind(this));
+        this._app.get("/api/v1/dimension/integrations/:roomId", this._getIntegrations.bind(this));
         this._app.post("/api/v1/dimension/removeIntegration", this._removeIntegration.bind(this));
     }
 
@@ -89,14 +90,46 @@ class Dimension {
     _getIntegrations(req, res) {
         res.setHeader("Content-Type", "application/json");
 
-        var results = _.map(integrations.all, i => {
-            var integration = JSON.parse(JSON.stringify(i));
-            integration.upstream = undefined;
-            integration.hosted = undefined;
-            return integration;
-        });
+        var scalarToken = req.query.scalar_token;
+        this._db.checkToken(scalarToken).then(() => {
+            var roomId = req.params.roomId;
+            if (!roomId) {
+                res.status(400).send({error: 'Missing room ID'});
+                return;
+            }
 
-        res.send(results);
+            var results = _.map(integrations.all, i => JSON.parse(JSON.stringify(i)));
+
+            var promises = [];
+            _.forEach(results, i => {
+                if (IntegrationImpl[i.type]) {
+                    var confs = IntegrationImpl[i.type];
+                    if (confs[i.integrationType]) {
+                        log.info("Dimension", "Using special configuration for " + i.type + " (" + i.integrationType + ")");
+
+                        promises.push(confs[i.integrationType](this._db, i, roomId, scalarToken).then(integration => {
+                            return integration.getUserId().then(userId=> {
+                                i.userId = userId;
+                                return integration.getState();
+                            }).then(state=> {
+                                for (var key in state) {
+                                    i[key] = state[key];
+                                }
+                            });
+                        }))
+                    } else log.verbose("Dimension", "No special configuration needs for " + i.type + " (" + i.integrationType + ")");
+                } else log.verbose("Dimension", "No special implementation type for " + i.type);
+            });
+
+            Promise.all(promises).then(() => res.send(_.map(results, integration => {
+                integration.upstream = undefined;
+                integration.hosted = undefined;
+                return integration;
+            })));
+        }).catch(err => {
+            log.error("Dimension", err);
+            res.status(500).send({error: err});
+        });
     }
 
     _checkScalarToken(req, res) {

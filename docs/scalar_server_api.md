@@ -4,6 +4,67 @@ Scalar has a server-side component to assist in managing integrations. The known
 
 None of these are officially documented, and are subject to change.
 
+## POST `/api/integrations?scalar_token=...`
+
+**Body**:
+```
+{
+  "RoomID": "!JmvocvDuPTYUfuvKgs:t2l.io"
+}
+```
+*Note*: Case difference appears to be intentional.
+
+**Response**:
+```
+{
+  "integrations": [{
+    "type": "rssbot",
+    "user_id": "@travis:t2l.io",
+    "config": {
+      "feeds": {
+        "https://ci.t2l.io/view/all/rssAll": {
+          "poll_interval_mins": 0,
+          "is_failing": false,
+          "last_updated_ts_secs": 1495995601,
+          "rooms": ["!JmvocvDuPTYUfuvKgs:t2l.io"]
+        }
+      }
+    },
+    "self": false
+  },{
+    "type": "rssbot",
+    "user_id": "@travis:tang.ents.ca",
+    "config": {
+      "feeds": {
+        "https://ci.t2l.io/job/java-simple-eventemitter/rssAll": {
+          "poll_interval_mins": 0,
+          "is_failing": false,
+          "last_updated_ts_secs": 1495995618,
+          "rooms": ["!JmvocvDuPTYUfuvKgs:t2l.io"]
+        }
+      }
+    },
+    "self": true
+  },{
+    "type": "travis-ci",
+    "user_id": "@travis:t2l.io",
+    "config": {
+      "webhook_url": "https://scalar.vector.im/api/neb/services/hooks/some_long_string",
+      "rooms": {
+        "!JmvocvDuPTYUfuvKgs:t2l.io": {
+          "repos": {
+            "turt2live/matrix-dimension": {
+              "template": "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}\n    Change view : %{compare_url}\n    Build details : %{build_url}\n"
+            }
+          }
+        }
+      }
+    },
+    "self": false
+  }]
+}
+```
+
 ## POST `/api/integrations/{type}?scalar_token=...`
 
 **Params**:

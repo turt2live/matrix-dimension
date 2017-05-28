@@ -40,7 +40,7 @@ export class RiotComponent {
     }
 
     private init() {
-        this.api.getIntegrations().then(integrations => {
+        this.api.getIntegrations(this.roomId, this.scalarToken).then(integrations => {
             this.integrations = integrations;
             let promises = integrations.map(b => this.updateIntegrationState(b));
             return Promise.all(promises);
