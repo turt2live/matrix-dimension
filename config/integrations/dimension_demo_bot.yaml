@@ -1,5 +1,5 @@
 type: "bot"
-enabled: true
+enabled: false
 userId: "@dimension:t2bot.io"
 name: "Demo Bot"
 about: "A bot that has no functionality. This is just a demonstration on the config."
