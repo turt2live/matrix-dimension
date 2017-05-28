@@ -5,6 +5,7 @@ logs/
 config/development.yaml
 config/production.yaml
 db/*.db
+start.sh
 
 # Logs
 logs
