@@ -97,12 +97,7 @@ module.exports = function () {
                 },
                 sassLoader: {
                     //includePaths: [path.resolve(__dirname, "node_modules/foundation-sites/scss")]
-                },
-                postcss: [
-                    autoprefixer({
-                        browsers: ['last 2 version']
-                    })
-                ]
+                }
             }
         }),
         new CommonsChunkPlugin({
