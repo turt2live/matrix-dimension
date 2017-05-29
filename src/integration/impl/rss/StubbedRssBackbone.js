@@ -26,6 +26,23 @@ class StubbedRssBackbone {
     }
 
     /**
+     * Sets the new feeds for this backbone
+     * @param {string[]} newFeeds the new feed URLs
+     * @returns {Promise<>} resolves when complete
+     */
+    setFeeds(newFeeds) {
+        throw new Error("Not implemented");
+    }
+
+    /**
+     * Gets the immutable feeds for this backbone
+     * @returns {Promise<{url:string,ownerId:string}>} resolves to the collection of immutable feeds
+     */
+    getImmutableFeeds() {
+        throw new Error("Not implemented");
+    }
+
+    /**
      * Removes the bot from the given room
      * @param {string} roomId the room ID to remove the bot from
      * @returns {Promise<>} resolves when completed

@@ -7,4 +7,10 @@ export interface Integration {
     about: string; // nullable
     isEnabled: boolean;
     isBroken: boolean;
+    hasConfig: boolean;
+}
+
+export interface RSSIntegration extends Integration {
+    feeds: string[];
+    immutableFeeds: {url: string, ownerId: string}[];
 }

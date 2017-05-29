@@ -4,6 +4,8 @@ import { ApiService } from "../shared/api.service";
 import { ScalarService } from "../shared/scalar.service";
 import { ToasterService } from "angular2-toaster";
 import { Integration } from "../shared/models/integration";
+import { IntegrationService } from "../shared/integration.service";
+import * as _ from "lodash";
 
 @Component({
     selector: 'my-riot',
@@ -16,8 +18,7 @@ export class RiotComponent {
     public integrations: Integration[] = [];
     public loading = true;
     public roomId: string;
-
-    private scalarToken: string;
+    public scalarToken: string;
 
     constructor(private activatedRoute: ActivatedRoute,
                 private api: ApiService,
@@ -41,7 +42,7 @@ export class RiotComponent {
 
     private init() {
         this.api.getIntegrations(this.roomId, this.scalarToken).then(integrations => {
-            this.integrations = integrations;
+            this.integrations = _.filter(integrations, i => IntegrationService.isSupported(i));
             let promises = integrations.map(b => this.updateIntegrationState(b));
             return Promise.all(promises);
         }).then(() => this.loading = false).catch(err => {
@@ -51,6 +52,8 @@ export class RiotComponent {
     }
 
     private updateIntegrationState(integration: Integration) {
+        integration.hasConfig = IntegrationService.hasConfig(integration);
+
         return this.scalar.getMembershipState(this.roomId, integration.userId).then(payload => {
             integration.isBroken = false;
 
@@ -74,21 +77,19 @@ export class RiotComponent {
             promise = this.api.removeIntegration(this.roomId, integration.type, integration.integrationType, this.scalarToken);
         } else promise = this.scalar.inviteUser(this.roomId, integration.userId);
 
-        promise
-            .then(() => {
-                if (integration.isEnabled)
-                    this.toaster.pop('success', integration.name + " was invited to the room");
-                else this.toaster.pop('success', integration.name + " was removed from the room");
-            })
-            .catch(err => {
-                let errorMessage = "Could not update integration status";
+        promise.then(() => {
+            if (integration.isEnabled)
+                this.toaster.pop('success', integration.name + " was invited to the room");
+            else this.toaster.pop('success', integration.name + " was removed from the room");
+        }).catch(err => {
+            let errorMessage = "Could not update integration status";
 
-                if (err.json) {
-                    errorMessage = err.json().error;
-                } else errorMessage = err.response.error.message;
+            if (err.json) {
+                errorMessage = err.json().error;
+            } else errorMessage = err.response.error.message;
 
-                integration.isEnabled = !integration.isEnabled;
-                this.toaster.pop("error", errorMessage);
-            });
+            integration.isEnabled = !integration.isEnabled;
+            this.toaster.pop("error", errorMessage);
+        });
     }
 }

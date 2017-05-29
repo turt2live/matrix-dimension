@@ -22,14 +22,27 @@ class RSSBot extends ComplexBot {
 
     /*override*/
     getState() {
+        var response = {
+            feeds: [],
+            immutableFeeds: []
+        };
         return this._backbone.getFeeds().then(feeds => {
-            return {feeds: feeds};
+            response.feeds = feeds;
+            return this._backbone.getImmutableFeeds();
+        }).then(feeds => {
+            response.immutableFeeds = feeds;
+            return response;
         });
     }
 
     /*override*/
     removeFromRoom(roomId) {
         return this._backbone.removeFromRoom(roomId);
+    }
+
+    /*override*/
+    updateState(newState) {
+        return this._backbone.setFeeds(newState.feeds).then(() => this.getState());
     }
 }
 

@@ -30,6 +30,15 @@ class IntegrationStub {
     removeFromRoom(roomId) {
         throw new Error("Not implemented");
     }
+
+    /**
+     * Updates the state information for this integration. The data passed is an implementation detail.
+     * @param {*} newState the new state
+     * @returns {Promise<*>} resolves when completed, with the new state of the integration
+     */
+    updateState(newState) {
+        return Promise.resolve({});
+    }
 }
 
 module.exports = IntegrationStub;

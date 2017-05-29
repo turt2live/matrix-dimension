@@ -6,4 +6,3 @@ about: "Tracks any Atom/RSS feed and sends new items into this room"
 avatar: "/img/avatars/rssbot.png"
 upstream:
   type: "vector"
-  id: "rssbot"

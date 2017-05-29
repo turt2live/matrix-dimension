@@ -18,7 +18,14 @@ export class ApiService {
     }
 
     removeIntegration(roomId: string, type: string, integrationType: string, scalarToken: string): Promise<any> {
-        return this.http.delete("/api/v1/dimension/integrations/" + roomId + "/" + type + "/" + integrationType, {params: {scalar_token: scalarToken}})
+        const url = "/api/v1/dimension/integrations/" + roomId + "/" + type + "/" + integrationType;
+        return this.http.delete(url, {params: {scalar_token: scalarToken}})
+            .map(res => res.json()).toPromise();
+    }
+
+    updateIntegrationState(roomId: string, type: string, integrationType: string, scalarToken: string, newState: any): Promise<any> {
+        const url = "/api/v1/dimension/integrations/" + roomId + "/" + type + "/" + integrationType + "/state";
+        return this.http.put(url, {scalar_token: scalarToken, state: newState})
             .map(res => res.json()).toPromise();
     }
 }

@@ -15,6 +15,10 @@ import { ToasterModule } from "angular2-toaster";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { IntegrationComponent } from "./integration/integration.component";
 import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component";
+import { IntegrationService } from "./shared/integration.service";
+import { BootstrapModalModule } from "angular2-modal/plugins/bootstrap";
+import { ModalModule } from "angular2-modal";
+import { RssConfigComponent } from "./configs/rss/rss-config.component";
 
 @NgModule({
     imports: [
@@ -26,6 +30,8 @@ import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component
         UiSwitchModule,
         ToasterModule,
         BrowserAnimationsModule,
+        ModalModule.forRoot(),
+        BootstrapModalModule,
     ],
     declarations: [
         AppComponent,
@@ -33,17 +39,21 @@ import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component
         RiotComponent,
         IntegrationComponent,
         ScalarCloseComponent,
+        RssConfigComponent,
 
         // Vendor
     ],
     providers: [
         ApiService,
         ScalarService,
+        IntegrationService,
 
         // Vendor
     ],
     bootstrap: [AppComponent],
-    entryComponents: []
+    entryComponents: [
+        RssConfigComponent,
+    ]
 })
 export class AppModule {
     constructor(public appRef: ApplicationRef) {

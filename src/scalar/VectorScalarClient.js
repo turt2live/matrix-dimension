@@ -54,13 +54,30 @@ class VectorScalarClient {
      * @return {Promise<>} resolves when completed
      */
     configureIntegration(type, scalarToken, config) {
-        return this._do("POST", "/integrations/"+type+"/configureService", {scalar_token:scalarToken}, config).then((response, body) => {
+        return this._do("POST", "/integrations/" + type + "/configureService", {scalar_token: scalarToken}, config).then((response, body) => {
             if (response.statusCode !== 200) {
                 log.error("VectorScalarClient", response.body);
                 return Promise.reject(response.body);
             }
 
             // no success processing
+        });
+    }
+
+    /**
+     * Gets all of the integrations currently in a room
+     * @param {string} roomId the room ID
+     * @param {string} scalarToken the scalar token to use
+     * @returns {Promise<*[]>} resolves a collection of integrations
+     */
+    getIntegrationsForRoom(roomId, scalarToken) {
+        return this._do("POST", "/integrations", {scalar_token: scalarToken}, {RoomId: roomId}).then((response, body) => {
+            if (response.statusCode !== 200) {
+                log.error("VectorScalarClient", response.body);
+                return Promise.reject(response.body);
+            }
+
+            return response.body.integrations;
         });
     }
 
@@ -72,7 +89,7 @@ class VectorScalarClient {
      * @return {Promise<{bot_user_id:string,integrations:[]}>} resolves to the integration information
      */
     getIntegration(type, roomId, scalarToken) {
-        return this._do("POST", "/integrations/"+type,{scalar_token:scalarToken}, {room_id:roomId}).then((response, body) => {
+        return this._do("POST", "/integrations/" + type, {scalar_token: scalarToken}, {room_id: roomId}).then((response, body) => {
             if (response.statusCode !== 200) {
                 log.error("VectorScalarClient", response.body);
                 return Promise.reject(response.body);

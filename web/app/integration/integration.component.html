@@ -8,6 +8,7 @@
             </div>
             <div class="toolbar">
                 <i class="fa fa-question-circle text-info" ngbTooltip="{{integration.about}}" *ngIf="integration.about"></i>
+                <i class="fa fa-cog text-info config-icon" (click)="configureIntegration()" *ngIf="integration.isEnabled && integration.hasConfig"></i>
             </div>
         </div>
     </div>
