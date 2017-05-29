@@ -40,14 +40,14 @@ export class RssConfigComponent implements ModalComponent<ConfigModalContext> {
 
         let feedCopy = JSON.parse(JSON.stringify(this.integration.feeds));
         feedCopy.push(this.feedUrl);
-        this.updateFeeds(feedCopy);
+        this.updateFeeds(feedCopy).then(() => this.feedUrl = "");
     }
 
     public removeFeed(feedUrl) {
         let feedCopy = JSON.parse(JSON.stringify(this.integration.feeds));
         const idx = feedCopy.indexOf(feedUrl);
         feedCopy.splice(idx, 1);
-        this.updateFeeds(feedCopy).then(() => this.feedUrl = "");
+        this.updateFeeds(feedCopy);
     }
 
     private updateFeeds(newFeeds) {

@@ -19,7 +19,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-md-12" *ngFor="let feed of integration.feeds trackById">
+                <div class="col-md-12 removable-feed" *ngFor="let feed of integration.feeds trackById">
                     <a [href]="feed" rel="noopener" target="_blank">{{ feed }}</a>
                     <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeFeed(feed)"
                             style="margin-top: -5px;" [disabled]="isUpdating">
