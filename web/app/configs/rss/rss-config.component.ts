@@ -35,6 +35,7 @@ export class RssConfigComponent implements ModalComponent<ConfigModalContext> {
         }
         if (this.integration.feeds.indexOf(this.feedUrl) !== -1) {
             this.toaster.pop("error", "This feed has already been added");
+            return;
         }
 
         let feedCopy = JSON.parse(JSON.stringify(this.integration.feeds));
