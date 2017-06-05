@@ -82,7 +82,7 @@ class VectorScalarClient {
     }
 
     /**
-     * Gets information on
+     * Gets information for an integration
      * @param {string} type the type to lookup
      * @param {string} roomId the room ID to look in
      * @param {string} scalarToken the scalar token
@@ -96,6 +96,66 @@ class VectorScalarClient {
             }
 
             return response.body;
+        });
+    }
+
+    /**
+     * Gets a list of supported IRC networks
+     * @param {string} scalarToken the scalar token
+     * @returns {Promise<{rid: string, title: string, domain: string, id: string}[]>} resolves to the list of IRC networks
+     */
+    getIrcNetworks(scalarToken) {
+        return this._do("GET", "/bridges/irc/_matrix/provision/querynetworks", {scalar_token: scalarToken}).then((response, body) => {
+            if (response.statusCode !== 200) {
+                log.error("VectorScalarClient", response.body);
+                return Promise.reject(response.body);
+            }
+
+            response.body = JSON.parse(response.body);
+
+            var results = [];
+            for (var network of response.body["replies"]) {
+                var result = {
+                    rid: network["rid"],
+                    // Assumption: All networks have 1 server from vector
+                    id: network["response"]["servers"][0]["network_id"],
+                    title: network["response"]["servers"][0]["desc"],
+                    domain: network["response"]["servers"][0]["fields"]["domain"]
+                };
+                results.push(result);
+            }
+
+            return results;
+        });
+    }
+
+    /**
+     * Gets a list of all linked IRC channels for a given room
+     * @param {string} roomId the room ID to look in
+     * @param {string} scalarToken the scalar token
+     * @returns {Promise<{rid: string, server: string, channel: string}>} resolves to a list of linked channels
+     */
+    getIrcLinks(roomId, scalarToken) {
+        return this._do("GET", "/bridges/irc/_matrix/provision/listlinks/" + roomId, {scalar_token: scalarToken}).then((response, body) => {
+            if (response.statusCode !== 200) {
+                log.error("VectorScalarClient", response.body);
+                return Promise.reject(response.body);
+            }
+
+            response.body = JSON.parse(response.body);
+
+            var results = [];
+            for (var linkContainer of response.body["replies"]) {
+                for (var link of linkContainer["response"]) {
+                    results.push({
+                        rid: linkContainer["rid"],
+                        server: link["remote_room_server"],
+                        channel: link["remote_room_channel"]
+                    });
+                }
+            }
+
+            return results;
         });
     }
 

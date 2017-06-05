@@ -1,0 +1,10 @@
+<div class="config-wrapper">
+    <img src="/img/close.svg" (click)="dialog.close()" class="close-icon">
+    <div class="config-header">
+        <img src="/img/avatars/irc.png">
+        <h4>Configure IRC Bridge</h4>
+    </div>
+    <div class="config-content">
+        <pre>{{ integration | json }}</pre>
+    </div>
+</div>

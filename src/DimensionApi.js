@@ -50,14 +50,15 @@ class DimensionApi {
             var promises = [];
             _.forEach(integrations, integration => {
                 promises.push(this._getIntegration(integration, roomId, scalarToken).then(builtIntegration => {
-                    return builtIntegration.getUserId().then(userId => {
-                        integration.userId = userId;
-                        return builtIntegration.getState();
-                    }).then(state => {
+                    return builtIntegration.getState().then(state => {
                         var keys = _.keys(state);
                         for (var key of keys) {
                             integration[key] = state[key];
                         }
+
+                        return builtIntegration.getUserId();
+                    }).then(userId => {
+                        integration.userId = userId;
                     });
                 }));
             });

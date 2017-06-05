@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Integration } from "./models/integration";
 import { RssConfigComponent } from "../configs/rss/rss-config.component";
 import { ContainerContent } from "angular2-modal";
+import { IrcConfigComponent } from "../configs/irc/irc-config.component";
 
 @Injectable()
 export class IntegrationService {
@@ -10,12 +11,18 @@ export class IntegrationService {
         "bot": true,
         "complex-bot": {
             "rss": true
+        },
+        "bridge": {
+            "irc": true
         }
     };
 
     private static components = {
         "complex-bot": {
             "rss": RssConfigComponent
+        },
+        "bridge": {
+            "irc": IrcConfigComponent
         }
     };
 

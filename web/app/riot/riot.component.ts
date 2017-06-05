@@ -54,6 +54,26 @@ export class RiotComponent {
     private updateIntegrationState(integration: Integration) {
         integration.hasConfig = IntegrationService.hasConfig(integration);
 
+        if (integration.requirements) {
+            let keys = _.keys(integration.requirements);
+            let promises = [];
+
+            for (let key of keys) {
+                let requirement = this.checkRequirement(integration, key);
+                promises.push(requirement);
+            }
+
+            return Promise.all(promises).then(() => {
+                integration.isEnabled = true;
+                integration.isBroken = false;
+            }, error => {
+                console.error(error);
+                integration.bridgeError = error.message;
+                integration.isEnabled = false;
+                integration.isBroken = false;
+            });
+        }
+
         return this.scalar.getMembershipState(this.roomId, integration.userId).then(payload => {
             integration.isBroken = false;
 
@@ -68,6 +88,24 @@ export class RiotComponent {
             integration.isEnabled = false;
             integration.isBroken = true;
         });
+    }
+
+    private checkRequirement(integration: Integration, key: string) {
+        let requirement = integration.requirements[key];
+
+        switch (key) {
+            case "joinRule":
+                return this.scalar.getJoinRule(this.roomId).then(payload => {
+                    if (!payload.response) {
+                        return Promise.reject("Could not communicate with Riot");
+                    }
+                    return payload.response.join_rule === requirement
+                        ? Promise.resolve()
+                        : Promise.reject(new Error("The room must be " + requirement + " to use this integration."));
+                });
+            default:
+                return Promise.reject(new Error("Requirement '" + key + "' not found"));
+        }
     }
 
     public updateIntegration(integration: Integration) {

@@ -25,3 +25,9 @@ export interface MembershipStateResponse extends ScalarUserResponse {
         displayname: string;
     };
 }
+
+export interface JoinRuleStateResponse extends ScalarRoomResponse {
+    response: {
+        join_rule: string;
+    };
+}
