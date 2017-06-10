@@ -4,7 +4,7 @@ enabled: true
 userId: "@_neb_wikipedia:matrix.org"
 name: "Wikipedia"
 about: "Use `!wikipedia query` to find something from Wikipedia"
-avatar: "/img/avatars/wikipedia.png"
+avatar: "img/avatars/wikipedia.png"
 upstream:
   type: "vector"
   id: "wikipedia"

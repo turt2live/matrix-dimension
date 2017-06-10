@@ -2,16 +2,21 @@ var log = require("../../util/LogService");
 var StubbedFactory = require("./StubbedFactory");
 var SimpleBotFactory = require("./simple_bot/SimpleBotFactory");
 var RSSFactory = require("./rss/RSSFactory");
+var IRCFactory = require("./irc/IRCFactory");
 
 var mapping = {
     "complex-bot": {
         "rss": RSSFactory
+    },
+    "bridge": {
+        "irc": IRCFactory
     }
 };
 
 var defaultFactories = {
     "complex-bot": null,
-    "bot": SimpleBotFactory
+    "bot": SimpleBotFactory,
+    "bridge": null
 };
 
 module.exports = {

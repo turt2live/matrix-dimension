@@ -1,0 +1,10 @@
+type: "bridge"
+integrationType: "irc"
+enabled: true
+name: "IRC"
+about: "Bridges IRC channels to the room"
+avatar: "img/avatars/irc.png"
+requirements:
+  joinRule: 'public'
+upstream:
+  type: "vector"

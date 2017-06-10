@@ -179,3 +179,145 @@ None of these are officially documented, and are subject to change.
   }
 }
 ```
+
+## GET `/api/bridges/irc/_matrix/provision/querynetworks?scalar_token=...`
+
+**Response**
+```
+{
+  "replies": [
+    {
+      "rid": "...",
+      "response": {
+        "servers": [
+          {
+            "bot_user_id": "@appservice-irc:matrix.org",
+            "desc": "Freenode",
+            "fields": {
+              "domain": "chat.freenode.net"
+            },
+            "icon": "https:\/\/matrix.org\/_matrix\/media\/v1\/download\/matrix.org\/DHLHpDDgWNNejFmrewvwEAHX",
+            "network_id": "freenode"
+          }
+        ]
+      }
+    },
+    {
+      "rid": "...",
+      "response": {
+        "servers": [
+          {
+            "bot_user_id": "@mozilla-irc:matrix.org",
+            "desc": "Moznet",
+            "fields": {
+              "domain": "irc.mozilla.org"
+            },
+            "icon": "https:\/\/matrix.org\/_matrix\/media\/v1\/download\/matrix.org\/DHLHpDDgWNNejFmrewvwEAHX",
+            "network_id": "mozilla"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+## POST `/api/bridges/irc/_matrix/provision/querylink?rid=...&scalar_token=...`
+
+**Body**
+```
+{
+  "remote_room_channel": "#dimensiontesting",
+  "remote_room_server": "chat.freenode.net"
+}
+```
+
+**Response**
+```
+{
+  "replies": [{
+    "rid": "...",
+    "response": {
+      "operators": ["travis-test"]
+    }
+  }]
+}
+```
+
+## POST `/api/bridges/irc/_matrix/provision/link?rid=...&scalar_token=...`
+
+**Body**
+```
+{
+  "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
+  "remote_room_channel": "#dimensiontesting",
+  "remote_room_server": "chat.freenode.net",
+  "op_nick": "travis-test",
+  "key": ""
+}
+```
+
+**Response**
+```
+{
+  "replies": [{
+    "rid": "...",
+    "response":{}
+  }]
+}
+```
+
+*Note*: This returns 200 OK after sending the request to link. If the link succeeds, `listlinks` will show as such.
+
+## GET `/api/bridges/irc/_matrix/provision/listlinks/{roomId}?scalar_token=...`
+
+**Params**
+* `{roomId}` - the matrix room id (ie: `!JmvocvDuPTYUfuvKgs:t2l.io`)
+
+**Response**
+```
+{
+  "replies": [
+    {
+      "rid": "...",
+      "response": [
+        {
+          "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
+          "remote_room_channel": "#dimensiontesting",
+          "remote_room_server": "chat.freenode.net"
+        }
+      ]
+    },
+    {
+      "rid": "...",
+      "response": []
+    }
+  ]
+}
+```
+
+*Note*: This is called on a timer in Scalar to show when a user has approved a link. Called every few seconds.
+
+## POST `/api/bridges/irc/_matrix/provision/unlink?rid=...&scalar_token=...`
+
+**Body**
+```
+{
+  "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
+  "remote_room_channel": "#dimensiontest",
+  "remote_room_server": "chat.freenode.net",
+  "rid": "..."
+}
+```
+
+**Response**
+```
+{
+  "replies": [
+    {
+      "rid": "..",
+      "response": {}
+    }
+  ]
+}
+```

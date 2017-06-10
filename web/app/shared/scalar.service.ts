@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import * as randomString from "random-string";
-import { MembershipStateResponse, ScalarSuccessResponse } from "./models/scalar_responses";
+import { MembershipStateResponse, ScalarSuccessResponse, JoinRuleStateResponse } from "./models/scalar_responses";
 
 @Injectable()
 export class ScalarService {
@@ -27,6 +27,12 @@ export class ScalarService {
         return this.callAction("membership_state", {
             room_id: roomId,
             user_id: userId
+        });
+    }
+
+    public getJoinRule(roomId: string): Promise<JoinRuleStateResponse> {
+        return this.callAction("join_rules_state", {
+            room_id: roomId
         });
     }
 

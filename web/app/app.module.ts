@@ -19,6 +19,7 @@ import { IntegrationService } from "./shared/integration.service";
 import { BootstrapModalModule } from "angular2-modal/plugins/bootstrap";
 import { ModalModule } from "angular2-modal";
 import { RssConfigComponent } from "./configs/rss/rss-config.component";
+import { IrcConfigComponent } from "./configs/irc/irc-config.component";
 
 @NgModule({
     imports: [
@@ -40,6 +41,7 @@ import { RssConfigComponent } from "./configs/rss/rss-config.component";
         IntegrationComponent,
         ScalarCloseComponent,
         RssConfigComponent,
+        IrcConfigComponent,
 
         // Vendor
     ],
@@ -53,6 +55,7 @@ import { RssConfigComponent } from "./configs/rss/rss-config.component";
     bootstrap: [AppComponent],
     entryComponents: [
         RssConfigComponent,
+        IrcConfigComponent,
     ]
 })
 export class AppModule {

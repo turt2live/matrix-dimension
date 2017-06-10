@@ -4,7 +4,7 @@ enabled: false
 userId: "@dimension:t2bot.io"
 name: "Demo Bot"
 about: "A bot that has no functionality. This is just a demonstration on the config."
-avatar: "/img/avatars/demobot.png"
+avatar: "img/avatars/demobot.png"
 hosted:
   homeserverUrl: "https://t2bot.io"
   accessToken: "your_matrix_access_token_here"
