@@ -4,7 +4,7 @@ enabled: false
 userId: "@pollbot:t2bot.io"
 name: "Poll Bot"
 about: "A bot to poll users in a room. Use `!pollhelp` for more information"
-avatar: "/img/avatars/pollbot.png"
+avatar: "img/avatars/pollbot.png"
 hosted:
   homeserverUrl: "https://t2bot.io"
   accessToken: "your_matrix_access_token_here"
