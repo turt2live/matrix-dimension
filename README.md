@@ -7,6 +7,12 @@ An alternative integrations manager for [Riot](https://riot.im). Join us on matr
 
 ![screenshot](https://t2bot.io/_matrix/media/v1/download/t2l.io/kWDyaWXqdsjOJgGYAMMRgGiE)
 
+# ⚠️ Dimension is in Alpha ⚠️
+
+Dimension supports some bridges and bots, however using Dimension in a production scenario is not recommended. Dimension uses features available in recent builds of Riot and may not work on older versions.
+
+There are plans on the matrix.org front to better support integration managers. Those changes may require an updated homeserver and Riot when made available.
+
 # Configuring Riot to use Dimension
 
 Change the values in Riot's `config.json` as shown below. If you do not have a `config.json`, copy the `config.sample.json` from Riot.
