@@ -122,7 +122,7 @@ module.exports = function () {
     config.devServer = {
         contentBase: './web/public',
         historyApiFallback: true,
-        quiet: true,
+        quiet: false,
         stats: 'minimal',
         proxy: {
             '/api': {
