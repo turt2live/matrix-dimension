@@ -42,7 +42,7 @@
     "@angular/router": "^4.2.1",
     "@angularclass/hmr": "^1.2.2",
     "@angularclass/hmr-loader": "^3.0.2",
-    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.22",
+    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.26",
     "@types/node": "^7.0.29",
     "angular2-modal": "^2.0.3",
     "angular2-template-loader": "^0.6.2",
