@@ -6,11 +6,8 @@
             <div class="switch" *ngIf="integration.type !== 'bridge'">
                 <ui-switch [checked]="integration.isEnabled" size="small" [disabled]="integration.isBroken" (change)="update()"></ui-switch>
             </div>
-            <div class="switch" *ngIf="integration.type == 'bridge' && integration.isEnabled">
-                <ui-switch [checked]="true" size="small" [disabled]="true" ngbTooltip="This integration is always enabled. Click the cog to configure it."></ui-switch>
-            </div>
             <div class="switch" *ngIf="integration.type == 'bridge' && !integration.isEnabled">
-                <ui-switch [checked]="false" size="small" [disabled]="true" ngbTooltip="{{ integration.bridgeError }}"></ui-switch>
+                <i class="fa fa-warning text-warning" ngbTooltip="{{ integration.bridgeError }}"></i>
             </div>
             <div class="toolbar">
                 <i class="fa fa-question-circle text-info" ngbTooltip="{{integration.about}}" *ngIf="integration.about"></i>

@@ -68,7 +68,7 @@ export class RiotComponent {
                 integration.isBroken = false;
             }, error => {
                 console.error(error);
-                integration.bridgeError = error.message;
+                integration.bridgeError = error.message || error;
                 integration.isEnabled = false;
                 integration.isBroken = false;
             });
