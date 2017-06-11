@@ -25,6 +25,7 @@ class DimensionApi {
         app.get("/api/v1/dimension/integrations/:roomId", this._getIntegrations.bind(this));
         app.delete("/api/v1/dimension/integrations/:roomId/:type/:integrationType", this._removeIntegration.bind(this));
         app.put("/api/v1/dimension/integrations/:roomId/:type/:integrationType/state", this._updateIntegrationState.bind(this));
+        app.get("/api/v1/dimension/integrations/:roomId/:type/:integrationType/state", this._getIntegrationState.bind(this));
     }
 
     _getIntegration(integrationConfig, roomId, scalarToken) {
@@ -131,6 +132,38 @@ class DimensionApi {
             return integration.updateState(req.body.state);
         }).then(newState => {
             res.status(200).send(newState);
+        }).catch(err => {
+            log.error("DimensionApi", err);
+            console.error(err);
+            res.status(500).send({error: err.message});
+        });
+    }
+
+    _getIntegrationState(req, res) {
+        var roomId = req.params.roomId;
+        var scalarToken = req.query.scalar_token;
+        var type = req.params.type;
+        var integrationType = req.params.integrationType;
+
+        if (!roomId || !scalarToken || !type || !integrationType) {
+            res.status(400).send({error: "Missing room, integration type, type, or token"});
+            return;
+        }
+
+        var integrationConfig = Integrations.byType[type][integrationType];
+        if (!integrationConfig) {
+            res.status(400).send({error: "Unknown integration"});
+            return;
+        }
+
+        log.info("DimensionApi", "State requested for " + type + " (" + integrationType + ") in room " + roomId);
+
+        this._db.checkToken(scalarToken).then(() => {
+            return this._getIntegration(integrationConfig, roomId, scalarToken);
+        }).then(integration => {
+            return integration.getState();
+        }).then(state => {
+            res.status(200).send(state);
         }).catch(err => {
             log.error("DimensionApi", err);
             console.error(err);

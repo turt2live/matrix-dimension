@@ -1,16 +1,19 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { IRCIntegration } from "../../shared/models/integration";
 import { ModalComponent, DialogRef } from "angular2-modal";
 import { ConfigModalContext } from "../../integration/integration.component";
 import { IrcApiService } from "../../shared/irc-api.service";
 import { ToasterService } from "angular2-toaster";
+import { IntervalObservable } from "rxjs/observable/IntervalObservable";
+import { ApiService } from "../../shared/api.service";
+import { Subscription } from "rxjs";
 
 @Component({
     selector: 'my-irc-config',
     templateUrl: './irc-config.component.html',
     styleUrls: ['./irc-config.component.scss', './../config.component.scss'],
 })
-export class IrcConfigComponent implements ModalComponent<ConfigModalContext> {
+export class IrcConfigComponent implements ModalComponent<ConfigModalContext>, OnDestroy {
 
     public integration: IRCIntegration;
     public loadingOps = false;
@@ -27,18 +30,32 @@ export class IrcConfigComponent implements ModalComponent<ConfigModalContext> {
 
     private roomId: string;
     private scalarToken: string;
+    private stateTimer: Subscription;
 
     constructor(public dialog: DialogRef<ConfigModalContext>,
                 private ircApi: IrcApiService,
                 private toaster: ToasterService,
-                // private api: ApiService
-    ) {
+                private api: ApiService) {
         this.integration = <IRCIntegration>dialog.context.integration;
         this.roomId = dialog.context.roomId;
         this.scalarToken = dialog.context.scalarToken;
 
         this.newChannel.network = this.integration.availableNetworks[0].id;
         this.buildChannelLinks();
+
+        this.stateTimer = IntervalObservable.create(5000).subscribe(() => {
+            this.api.getIntegrationState(this.roomId, this.integration.type, this.integration.integrationType, this.scalarToken)
+                .then(state => {
+                    for (let key in state) {
+                        this.integration[key] = state[key];
+                    }
+                    this.buildChannelLinks();
+                });
+        });
+    }
+
+    public ngOnDestroy(): void {
+        this.stateTimer.unsubscribe();
     }
 
     public checkOps(): void {
