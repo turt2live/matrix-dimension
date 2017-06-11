@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var path = require("path");
 var DimensionApi = require("./DimensionApi");
 var ScalarApi = require("./ScalarApi");
+var IRCApi = require("./integration/impl/irc/IRCApi");
 
 // TODO: Convert backend to typescript? Would avoid stubbing classes all over the place
 
@@ -50,6 +51,7 @@ class Dimension {
 
         DimensionApi.bootstrap(this._app, this._db);
         ScalarApi.bootstrap(this._app, this._db);
+        IRCApi.bootstrap(this._app, this._db);
 
         this._app.listen(config.get('web.port'), config.get('web.address'));
         log.info("Dimension", "API and UI listening on " + config.get("web.address") + ":" + config.get("web.port"));

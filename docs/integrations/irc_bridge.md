@@ -27,7 +27,7 @@ Make a call to the Dimension state API: `GET /api/v1/dimension/integrations/{roo
 
 ## Getting the OPs in a channel
 
-IRC API Endpoint: `GET /api/v1/irc/{network}/{channel}/ops?scalar_token=...`. Be sure to encode the channel parameter.
+IRC API Endpoint: `GET /api/v1/irc/{roomId}/ops/{network}/{channel}?scalar_token=...`. The channel should not include the prefix (`#test` becomes `test`).
 
 *Example response*
 ```
@@ -36,12 +36,12 @@ IRC API Endpoint: `GET /api/v1/irc/{network}/{channel}/ops?scalar_token=...`. Be
 
 ## Linking a new channel
 
-IRC API Endpoint: `PUT /api/v1/irc/{roomId}/channels/{network}/{channel}?op=turt2live&scalar_token=...`. Be sure to encode the channel parameter.
+IRC API Endpoint: `PUT /api/v1/irc/{roomId}/channels/{network}/{channel}?op=turt2live&scalar_token=...`. The channel should not include the prefix (`#test` becomes `test`).
 
 A 200 OK is returned if the request to add the channel was sent. The channel will not appear in the state information until the op has approved the bridge.
 
 ## Unlinking a channel
 
-IRC API Endpoint: `DELETE /api/v1/irc/{roomId}/channels/{network}/{channel}?scalar_token=...`. Be sure to encode the channel parameter.
+IRC API Endpoint: `DELETE /api/v1/irc/{roomId}/channels/{network}/{channel}?scalar_token=...`. The channel should not include the prefix (`#test` becomes `test`).
 
 A 200 OK is returned if the delete was successful.

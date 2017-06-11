@@ -159,6 +159,80 @@ class VectorScalarClient {
         });
     }
 
+    /**
+     * Gets a list of operators in a particular channel on a particular network
+     * @param {string} rid the network ID
+     * @param {string} networkServer the server that has the channel on it
+     * @param {string} channel the channel to look up, with prefix
+     * @param {string} scalarToken the scalar token
+     * @returns {Promise<string[]>} resolves to a list of operators in the channel
+     */
+    getIrcOperators(rid, networkServer, channel, scalarToken) {
+        return this._do("POST", "/bridges/irc/_matrix/provision/querylink", {scalar_token: scalarToken, rid: rid}, {
+            remote_room_server: networkServer,
+            remote_room_channel: channel
+        }).then((response, body) => {
+            if (response.statusCode !== 200) {
+                log.error("VectorScalarClient", response.body);
+                return Promise.reject(response.body);
+            }
+
+            if (response.body["replies"]) {
+                return response.body["replies"][0]["response"]["operators"];
+            } else return Promise.reject("No operators could be found");
+        });
+    }
+
+    /**
+     * Requests an operator for permission to link an IRC channel to a matrix room
+     * @param {string} rid the network ID
+     * @param {string} roomId the matrix room ID
+     * @param {string} networkServer the server that has the channel on it
+     * @param {string} channel the channel to look up, with prefix
+     * @param {string} operator the channel operator's nick
+     * @param {string} scalarToken the scalar token
+     * @returns {Promise<>} resolves when completed
+     */
+    addIrcLink(rid, roomId, networkServer, channel, operator, scalarToken) {
+        return this._do("POST", "/bridges/irc/_matrix/provision/link", {rid: rid, scalar_token: scalarToken}, {
+            matrix_room_id: roomId,
+            remote_room_channel: channel,
+            remote_room_server: networkServer,
+            op_nick: operator
+        }).then((response, body) => {
+            if (response.statusCode !== 200) {
+                log.error("VectorScalarClient", response.body);
+                return Promise.reject(response.body);
+            }
+
+            return {status: 'ok'};
+        })
+    }
+
+    /**
+     * Removes a channel link from a Matrix room
+     * @param {string} rid the network ID
+     * @param {string} roomId the matrix room ID
+     * @param {string} networkServer the server that has the channel on it
+     * @param {string} channel the channel to remove, with prefix
+     * @param {string} scalarToken the scalar token
+     * @returns {Promise<>} resolves when completed
+     */
+    removeIrcLink(rid, roomId, networkServer, channel, scalarToken) {
+        return this._do("POST", "/bridges/irc/_matrix/provision/unlink", {rid: rid, scalar_token: scalarToken}, {
+            matrix_room_id: roomId,
+            remote_room_channel: channel,
+            remote_room_server: networkServer
+        }).then((response, body) => {
+            if (response.statusCode !== 200) {
+                log.error("VectorScalarClient", response.body);
+                return Promise.reject(response.body);
+            }
+
+            return {status: 'ok'};
+        })
+    }
+
     _do(method, endpoint, qs = null, body = null) {
         var url = config.get("upstreams.vector") + endpoint;
 

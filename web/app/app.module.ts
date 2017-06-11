@@ -20,6 +20,7 @@ import { BootstrapModalModule } from "angular2-modal/plugins/bootstrap";
 import { ModalModule } from "angular2-modal";
 import { RssConfigComponent } from "./configs/rss/rss-config.component";
 import { IrcConfigComponent } from "./configs/irc/irc-config.component";
+import { IrcApiService } from "./shared/irc-api.service";
 
 @NgModule({
     imports: [
@@ -49,6 +50,7 @@ import { IrcConfigComponent } from "./configs/irc/irc-config.component";
         ApiService,
         ScalarService,
         IntegrationService,
+        IrcApiService,
 
         // Vendor
     ],

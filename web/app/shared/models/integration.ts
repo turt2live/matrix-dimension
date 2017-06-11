@@ -18,6 +18,6 @@ export interface RSSIntegration extends Integration {
 }
 
 export interface IRCIntegration extends Integration {
-    availableNetworks: {name: string, id: string};
+    availableNetworks: {name: string, id: string}[];
     channels: {[networkId: string]: string[]};
 }

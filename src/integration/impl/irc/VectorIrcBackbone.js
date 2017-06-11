@@ -50,10 +50,61 @@ class VectorIrcBackbone extends StubbedIrcBackbone {
                     throw new Error("Unexpected RID");
                 }
 
-                container[server.id].push(link.channel);
+                container[server].push(link.channel);
             }
 
             return container;
+        });
+    }
+
+    /*override*/
+    getChannelOps(network, channel) {
+        return this._getNetworks().then(networks => {
+            var networkServer = null;
+            var rid = null;
+            for (var n of networks) {
+                if (n.id === network) {
+                    networkServer = n.domain;
+                    rid = n.rid;
+                    break;
+                }
+            }
+
+            return VectorScalarClient.getIrcOperators(rid, networkServer, '#' + channel, this._scalarToken);
+        });
+    }
+
+    /*override*/
+    addChannel(network, channel, op) {
+        return this._getNetworks().then(networks => {
+            var networkServer = null;
+            var rid = null;
+            for (var n of networks) {
+                if (n.id === network) {
+                    networkServer = n.domain;
+                    rid = n.rid;
+                    break;
+                }
+            }
+
+            return VectorScalarClient.addIrcLink(rid, this._roomId, networkServer, '#' + channel, op, this._scalarToken);
+        });
+    }
+
+    /*override*/
+    removeChannel(network, channel) {
+        return this._getNetworks().then(networks => {
+            var networkServer = null;
+            var rid = null;
+            for (var n of networks) {
+                if (n.id === network) {
+                    networkServer = n.domain;
+                    rid = n.rid;
+                    break;
+                }
+            }
+
+            return VectorScalarClient.removeIrcLink(rid, this._roomId, networkServer, '#' + channel, this._scalarToken);
         });
     }
 

@@ -13,14 +13,6 @@ class Bridge extends IntegrationStub {
         super(bridgeConfig);
     }
 
-    /**
-     * Registers the API routes for this bridge with the given app.
-     * @param app the app to register the routes on
-     */
-    registerApi(app) {
-        // nothing
-    }
-
     /*override*/
     getUserId() {
         return null; // bridges don't have bot users we care about
