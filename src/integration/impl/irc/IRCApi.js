@@ -13,6 +13,11 @@ class IRCApi {
     constructor() {
     }
 
+    /**
+     * Bootstraps the IRC API
+     * @param {*} app the Express application
+     * @param {DimensionStore} db the store to use
+     */
     bootstrap(app, db) {
         if (!Integrations.byType["bridge"]["irc"]) {
             log.info("IRCApi", "IRC Bridge not enabled - not setting up the API");
