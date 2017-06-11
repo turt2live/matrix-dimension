@@ -60,16 +60,44 @@ TODO
 }
 ```
 
-### `GET /api/v1/dimension/integrations/{roomId}/{type}/{integrationType}/state`
+### `GET /api/v1/dimension/integrations/{roomId}/{type}/{integrationType}/state?scalar_token=your_token_here`
 
 **Parameters**
 * `{roomId}` - The room ID to get the integration state in
 * `{type}` - The integration type (eg: `bot`, `complex-bot`, `bridge`, etc)
 * `{integrationType}` - The integration subtype (eg: `irc`, `rssbot`, `giphy`, etc)
+* `scalar_token` - The scalar (dimension) token to authenticate with
 
 **Response**
 
 An object representing the integration-specific state. See the documentation for the desired integration for more information.
+
+### `GET /api/v1/dimension/{type}/{integrationType}/oauth/url?redirect=your_url_here&scalar_token=your_token_here`
+
+**Parameters**
+* `{type}` - The integration type (eg: `bot`, `complex-bot`, `bridge`, etc)
+* `{integrationType}` - The integration subtype (eg: `irc`, `rssbot`, `giphy`, etc)
+* `redirect` - The URL to redirect to when complete
+* `scalar_token` - The scalar (dimension) token to authenticate with
+
+**Example Response**
+```
+{
+  "url": "https://github.com/somewhere?with=params"
+}
+```
+
+### `DELETE /api/v1/dimension/{type}/{integrationType}/oauth?scalar_token=your_token_here`
+
+**Parameters**
+* `{type}` - The integration type (eg: `bot`, `complex-bot`, `bridge`, etc)
+* `{integrationType}` - The integration subtype (eg: `irc`, `rssbot`, `giphy`, etc)
+* `scalar_token` - The scalar (dimension) token to authenticate with
+
+**Example Response**
+```
+{}
+```
 
 ## Integration State Information
 
@@ -93,6 +121,31 @@ Do not hold state.
         "https://some.domain.com/third_feed.rss",
         "https://some.domain.com/fourth_feed.rss"
     ]
+}
+```
+
+#### Github
+```
+{
+  // Mutable using state API
+  "repositories": {
+    "turt2live/matrix-dimension": ["push", "pull_request", "issues", "issue_comment", "pull_request_review_comment", "labels", "milestones", "assignments"],
+    "turt2live/matrix-voyager-bot": []
+  },
+
+  // Read only.
+  "authenticated": true
+}
+```
+
+*Unauthenticated response*
+```
+{
+  // Read only.
+  "repositories": {},
+
+  // Read only.
+  "authenticated": false
 }
 ```
 
