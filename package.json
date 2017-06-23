@@ -44,7 +44,7 @@
     "@angularclass/hmr-loader": "^3.0.2",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.26",
     "@types/node": "^8.0.2",
-    "angular2-modal": "^2.0.3",
+    "angular2-modal": "^3.0.1",
     "angular2-template-loader": "^0.6.2",
     "angular2-toaster": "^4.0.0",
     "angular2-ui-switch": "^1.2.0",
