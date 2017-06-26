@@ -121,6 +121,7 @@ module.exports = function () {
     config.devServer = {
         contentBase: './web/public',
         historyApiFallback: true,
+        disableHostCheck: true,
         quiet: true,
         stats: 'minimal',
         proxy: {
