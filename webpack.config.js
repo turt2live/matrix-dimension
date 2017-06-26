@@ -2,7 +2,6 @@ var path = require("path");
 var webpack = require("webpack");
 
 var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -122,7 +121,8 @@ module.exports = function () {
     config.devServer = {
         contentBase: './web/public',
         historyApiFallback: true,
-        quiet: false,
+        disableHostCheck: true,
+        quiet: true,
         stats: 'minimal',
         proxy: {
             '/api': {
