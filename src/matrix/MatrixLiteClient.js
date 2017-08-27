@@ -1,5 +1,7 @@
 var request = require('request');
 var log = require("../util/LogService");
+var dns = require("dns-then");
+var Promise = require("bluebird");
 
 /**
  * Represents a lightweight matrix client with minimal functionality
@@ -26,26 +28,36 @@ class MatrixLiteClient {
     }
 
     _do(method, endpoint, qs = null, body = null) {
-        var url = "http://" + this._openId.matrix_server_name + endpoint;
+        // HACK: We have to wrap the dns promise in a Bluebird promise just to make sure it works
+        var dnsPromise = dns.resolveSrv("_matrix._tcp." + this._openId.matrix_server_name);
+        return Promise.resolve(dnsPromise).then(records => {
+            if (records && records.length > 0)
+                this._openId.matrix_server_name = records[0].name + ":" + records[0].port;
+        }, err => {
+            log.warn("MatrixLiteClient", "Failed to lookup SRV for " + this._openId.matrix_server_name + " - assuming none available.");
+            log.warn("MatrixLiteClient", err);
+        }).then(() => {
+            var url = "http://" + this._openId.matrix_server_name + endpoint;
 
-        log.verbose("MatrixLiteClient", "Performing request: " + url);
+            log.verbose("MatrixLiteClient", "Performing request: " + url);
 
-        if (!qs) qs = {};
-        qs['access_token'] = this._openId.access_token;
+            if (!qs) qs = {};
+            qs['access_token'] = this._openId.access_token;
 
-        var params = {
-            url: url,
-            method: method,
-            form: body,
-            qs: qs
-        };
+            var params = {
+                url: url,
+                method: method,
+                form: body,
+                qs: qs
+            };
 
-        return new Promise((resolve, reject) => {
-            request(params, (err, response, body) => {
-                if (err) {
-                    log.error("MatrixLiteClient", err);
-                    reject(err);
-                } else resolve(response, body);
+            return new Promise((resolve, reject) => {
+                request(params, (err, response, body) => {
+                    if (err) {
+                        log.error("MatrixLiteClient", err);
+                        reject(err);
+                    } else resolve(response, body);
+                });
             });
         });
     }

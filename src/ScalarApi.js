@@ -3,6 +3,7 @@ var randomString = require("random-string");
 var ScalarClient = require("./scalar/ScalarClient.js");
 var _ = require("lodash");
 var log = require("./util/LogService");
+var Promise = require("bluebird");
 
 /**
  * API handler for the Scalar API, as required by Riot
