@@ -16,8 +16,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { IntegrationComponent } from "./integration/integration.component";
 import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component";
 import { IntegrationService } from "./shared/integration.service";
-import { BootstrapModalModule } from "angular2-modal/plugins/bootstrap";
-import { ModalModule } from "angular2-modal";
+import { BootstrapModalModule } from "ngx-modialog/plugins/bootstrap";
+import { ModalModule } from "ngx-modialog";
 import { RssConfigComponent } from "./configs/rss/rss-config.component";
 import { IrcConfigComponent } from "./configs/irc/irc-config.component";
 import { IrcApiService } from "./shared/irc-api.service";
@@ -65,7 +65,7 @@ export class AppModule {
     }
 
     hmrOnInit(store) {
-        console.log('HMR store', store);
+        console.log("HMR store", store);
     }
 
     hmrOnDestroy(store) {

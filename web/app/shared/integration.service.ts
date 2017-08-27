@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Integration } from "./models/integration";
 import { RssConfigComponent } from "../configs/rss/rss-config.component";
-import { ContainerContent } from "angular2-modal";
+import { ContainerContent } from "ngx-modialog";
 import { IrcConfigComponent } from "../configs/irc/irc-config.component";
 
 @Injectable()

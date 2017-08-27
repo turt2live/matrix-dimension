@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from "@angular/core";
 import { IRCIntegration } from "../../shared/models/integration";
-import { ModalComponent, DialogRef } from "angular2-modal";
+import { ModalComponent, DialogRef } from "ngx-modialog";
 import { ConfigModalContext } from "../../integration/integration.component";
 import { IrcApiService } from "../../shared/irc-api.service";
 import { ToasterService } from "angular2-toaster";
@@ -9,9 +9,9 @@ import { ApiService } from "../../shared/api.service";
 import { Subscription } from "rxjs";
 
 @Component({
-    selector: 'my-irc-config',
-    templateUrl: './irc-config.component.html',
-    styleUrls: ['./irc-config.component.scss', './../config.component.scss'],
+    selector: "my-irc-config",
+    templateUrl: "./irc-config.component.html",
+    styleUrls: ["./irc-config.component.scss", "./../config.component.scss"],
 })
 export class IrcConfigComponent implements ModalComponent<ConfigModalContext>, OnDestroy {
 
