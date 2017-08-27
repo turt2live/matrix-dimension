@@ -8,9 +8,9 @@ import { IntegrationService } from "../shared/integration.service";
 import * as _ from "lodash";
 
 @Component({
-    selector: 'my-riot',
-    templateUrl: './riot.component.html',
-    styleUrls: ['./riot.component.scss'],
+    selector: "my-riot",
+    templateUrl: "./riot.component.html",
+    styleUrls: ["./riot.component.scss"],
 })
 export class RiotComponent {
 
@@ -82,7 +82,7 @@ export class RiotComponent {
                 return;
             }
 
-            integration.isEnabled = (payload.response.membership === 'join' || payload.response.membership === 'invite');
+            integration.isEnabled = (payload.response.membership === "join" || payload.response.membership === "invite");
         }, (error) => {
             console.error(error);
             integration.isEnabled = false;
@@ -117,8 +117,8 @@ export class RiotComponent {
 
         promise.then(() => {
             if (integration.isEnabled)
-                this.toaster.pop('success', integration.name + " was invited to the room");
-            else this.toaster.pop('success', integration.name + " was removed from the room");
+                this.toaster.pop("success", integration.name + " was invited to the room");
+            else this.toaster.pop("success", integration.name + " was removed from the room");
         }).catch(err => {
             let errorMessage = "Could not update integration status";
 

@@ -1,14 +1,14 @@
 import { Component } from "@angular/core";
 import { RSSIntegration } from "../../shared/models/integration";
-import { ModalComponent, DialogRef } from "angular2-modal";
+import { ModalComponent, DialogRef } from "ngx-modialog";
 import { ConfigModalContext } from "../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
 import { ApiService } from "../../shared/api.service";
 
 @Component({
-    selector: 'my-rss-config',
-    templateUrl: './rss-config.component.html',
-    styleUrls: ['./rss-config.component.scss', './../config.component.scss'],
+    selector: "my-rss-config",
+    templateUrl: "./rss-config.component.html",
+    styleUrls: ["./rss-config.component.scss", "./../config.component.scss"],
 })
 export class RssConfigComponent implements ModalComponent<ConfigModalContext> {
 

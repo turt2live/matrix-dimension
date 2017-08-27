@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, ViewContainerRef } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Integration } from "../shared/models/integration";
-import { Overlay, overlayConfigFactory } from "angular2-modal";
-import { Modal, BSModalContext } from "angular2-modal/plugins/bootstrap";
+import { overlayConfigFactory } from "ngx-modialog";
+import { Modal, BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { IntegrationService } from "../shared/integration.service";
 
 export class ConfigModalContext extends BSModalContext {
@@ -11,9 +11,9 @@ export class ConfigModalContext extends BSModalContext {
 }
 
 @Component({
-    selector: 'my-integration',
-    templateUrl: './integration.component.html',
-    styleUrls: ['./integration.component.scss'],
+    selector: "my-integration",
+    templateUrl: "./integration.component.html",
+    styleUrls: ["./integration.component.scss"],
 })
 export class IntegrationComponent {
 
@@ -22,8 +22,8 @@ export class IntegrationComponent {
     @Input() scalarToken: string;
     @Output() updated: EventEmitter<any> = new EventEmitter();
 
-    constructor(overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal) {
-        overlay.defaultViewContainer = vcRef;
+    constructor(/*overlay: Overlay, vcRef: ViewContainerRef, */public modal: Modal) {
+        // overlay.defaultViewContainer = vcRef;
     }
 
     public update(): void {
@@ -37,7 +37,7 @@ export class IntegrationComponent {
             roomId: this.roomId,
             scalarToken: this.scalarToken,
             isBlocking: false,
-            size: 'lg'
+            size: "lg"
         }, BSModalContext));
     }
 }

@@ -4,7 +4,7 @@ import { AppModule } from "./app/app.module";
 
 // depending on the env mode, enable prod mode or add debugging modules
 //noinspection TypeScriptUnresolvedVariable
-if (process.env.ENV === 'build') {
+if (process.env.ENV === "build") {
     enableProdMode();
 }
 
@@ -12,10 +12,10 @@ export function main() {
     return platformBrowserDynamic().bootstrapModule(AppModule);
 }
 
-if (document.readyState === 'complete') {
+if (document.readyState === "complete") {
     main();
 } else {
-    document.addEventListener('DOMContentLoaded', main);
+    document.addEventListener("DOMContentLoaded", main);
 }
 
 (<any>String.prototype).hashCode = function () {
