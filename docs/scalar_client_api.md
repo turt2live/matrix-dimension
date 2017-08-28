@@ -248,6 +248,153 @@ sendMessage("set_plumbing_state", "!curbf:matrix.org", null, {status:"whatever"}
 
 *Note*: This sets the `m.room.plumbing` state event for the room.
 
+### Getting the number of people in a room
+
+**Action**: `"get_membership_count"`
+**Required params**:
+* `room_id` - where to query the membership count
+
+**Sample call**:
+```
+sendMessage("get_membership_count", "!curbf:matrix.org");
+```
+
+**Success Response**:
+```
+{
+  "action": "get_membership_count",
+  "room_id": "!curbf:matrix.org",
+  "response": 78
+}
+```
+
+### Determining if the user can send a particular event
+
+**Action**: `"can_send_event"`
+**Required params**:
+* `room_id` - where to query the membership count
+* `event_type` - the event type wishing to be sent
+* `is_state` - true if the event being sent will be a state event
+
+**Sample call**:
+```
+sendMessage("can_send_event", "!curbf:matrix.org", null, {event_type: "m.room.message", is_state: false});
+```
+
+**Success Response**:
+```
+{
+  "action": "get_membership_count",
+  "room_id": "!curbf:matrix.org",
+  "event_type": "m.room.message",
+  "is_state": false,
+  "response": true
+}
+```
+
+### Get widgets in a room
+
+**Action**: `"get_widgets"`
+**Required params**:
+* `room_id` - where to find widgets
+
+**Sample call**:
+```
+sendMessage("get_widgets", "!curbf:matrix.org");
+```
+
+**Success Response**:
+```
+{
+  "action": "get_widgets",
+  "room_id": "!curbf:matrix.org",
+  "response: [{
+    "type": "im.vector.modular.widgets",
+    "state_key": "widget1",
+    "content": {
+      "type": "grafana",
+      "url": "https://somewhere.com",
+      "name": "Dashboard",
+      "data": {"key": "val"}
+    },
+    "room_id": "!curbf:matrix.org",
+    "sender": "@travis:t2l.io"
+  }]
+}
+```
+
+### Adding, updating, or deleting a widget in a room
+
+**Action**: `"set_widget"`
+**Required params**:
+* `"room_id"` - the room to affect
+* `"widget_id"` - an arbitrary utf8 unique identifier for the widget (used to distinguish update from add)
+* `"url"` - the url to put in the iframe (null to delete the widget). Some values are replaced:
+  * `$matrix_user_id` - current user ID (not a way to authorize a user for the widget)
+  * `$matrix_room_id` - current room ID
+  * `$matrix_display_name` - current user's display name
+  * `$matrix_avatar_url` - current user's avatar url (http, not mxc)
+  * `$key` - the value of `key` in the `data` object
+* `"type"` - the widget type. Widgets supported in Scalar are:
+  * `grafana`
+  * `youtube`
+  * `jitsi`
+  * `googledocs`
+  * `etherpad`
+  * `customwidget`
+* `"name"` - optional human-readable string for the widget (eg: "Dashboard")
+* `"data"` - optional key-value pairs for the widget. Appended to the iframe. Some values are magic:
+
+**Sample call**:
+```
+// Add
+sendMessage("set_widget", "!curbf:matrix.org", null, {
+  widget_id: "my_cool_widget",
+  type: "grafana",
+  url: "https://somewhere.com",
+  name: "Dashboard",
+  data: {
+    "userId": "$mxUserId"
+  }
+});
+
+// Update
+// All fields must be supplied. If the field is optional, it must be present or undefined
+sendMessage("set_widget", "!curbf:matrix.org", null, {
+  widget_id: "my_cool_widget",
+  type: "grafana",
+  url: "https://somewhere.else.com",
+  name: "New Dashboard",
+  data: {
+    "userId": "$mxUserId"
+  }
+});
+
+// Delete
+sendMessage("set_widget", "!curbf:matrix.org", null, {
+  widget_id: "my_cool_widget",
+  type: "grafana",
+  url: null
+  // other fields not required if deleting
+});
+```
+
+**Success Response**:
+```
+{
+  "action": "set_widget",
+  "room_id": "!curbf:matrix.org",
+  "url": "https://somewhere.com",
+  "type": "example",
+  "response": {
+    "success": true
+  }
+}
+```
+
+*Note*: Widgets are documented by the matrix.org team [on this Google Doc](https://docs.google.com/document/d/1TiWNDcEOULeRYQpkJHQDjgIW32ohIJSi5MKv9oRdzCo/edit). That document is the source of truth for the event structure and usage.
+*Note*: `scalar_token` will be appended to the query string if the widget's url matches the API URL of the integration manager (in Riot)
+
 ### Closing the integrations manager (scalar)
 
 **Action**: `"close_scalar"`
