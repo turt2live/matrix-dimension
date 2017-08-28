@@ -321,3 +321,123 @@ None of these are officially documented, and are subject to change.
   ]
 }
 ```
+
+## POST `/api/integrations/github-webhook?scalar_token=...`
+
+**Body**
+```
+{
+  "room_id": "!JmvocvDuPTYUfuvKgs:t2l.io"
+}
+```
+
+**Response**
+```
+{
+  "bot_user_id": "@_neb_github_=40travis=3atang.ents.ca:matrix.org",
+  "authenticated": false,
+  "session": null,
+  "integrations": []
+}
+```
+
+**Response (if authed)**
+```
+{
+  "bot_user_id": "@_neb_github_=40travis=3at2l.io:matrix.org",
+  "authenticated": true,
+  "session": {
+    "Repos": [
+      {
+        "name": "riot-welcome-page",
+        "description": "A welcome page specific for tang.ents.ca (built for Riot)",
+        "private": false,
+        "html_url": "https:\/\/github.com\/ENTS-Source\/riot-welcome-page",
+        "created_at": "2017-06-10T16:54:37Z",
+        "updated_at": "2017-06-10T19:10:21Z",
+        "pushed_at": "2017-06-10T18:15:07Z",
+        "fork": false,
+        "full_name": "ENTS-Source\/riot-welcome-page",
+        "permissions": {
+          "admin": true,
+          "pull": true,
+          "push": true
+        }
+      },
+      {
+        "name": "matrix-dimension",
+        "description": "An alternative integrations manager for Riot",
+        "private": false,
+        "html_url": "https:\/\/github.com\/turt2live\/matrix-dimension",
+        "created_at": "2017-05-25T21:41:55Z",
+        "updated_at": "2017-05-28T18:33:57Z",
+        "pushed_at": "2017-06-11T01:41:02Z",
+        "fork": false,
+        "full_name": "turt2live\/matrix-dimension",
+        "permissions": {
+          "admin": true,
+          "pull": true,
+          "push": true
+        }
+      },
+    ]
+  },
+  "integrations": []
+}
+```
+
+*Note*: For organization avatars: `https://github.com/turt2live.png`
+
+## POST `/api/integrations/github/requestAuthSession?scalar_token=...`
+
+**Body**
+```
+{
+  "RedirectURL": "https://scalar.vector.im/?scalar_token=...&room_id=!JmvocvDuPTYUfuvKgs%3At2l.io&github_auth_complete=1"
+}
+```
+
+**Response**
+```
+{
+  "URL": "https://github.com/login/oauth/authorize?client_id=...&client_secret=...&redirect_uri=https%3A%2F%2Fscalar.vector.im%2Fapi%2Fneb%2Frealms%2Fredirects%2F...&scope=admin%3Arepo_hook%2Cadmin%3Aorg_hook%2Crepo&state=..."
+}
+```
+
+## POST `/api/integrations/github/removeAuthSession?scalar_token=...`
+
+**Body**
+```
+{}
+```
+
+**Response**
+```
+{}
+```
+
+## POST `/api/integrations/github-webhook/configureService?scalar_token=...`
+
+**Body**
+```
+{
+  "RoomID": "!JmvocvDuPTYUfuvKgs:t2l.io",
+  "Config": {
+    "Repos":  {
+      "ENTS-Source/amember-google-groups": {
+        "Events": ["push", "pull_request", "issues", "issue_comment", "pull_request_review_comment", "labels", "milestones", "assignments"]
+      },
+      "ENTS-Source/amember-mastercontrol": {
+        "Events": ["push", "pull_request"]
+      }
+    }
+  }
+}
+```
+
+**Response**
+```
+{}
+```
+
+*Note*: Invite person-specific bot on first repository
