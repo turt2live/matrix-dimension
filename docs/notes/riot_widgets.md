@@ -18,5 +18,5 @@ Ends up calling `$scalar_ui_url?integ_id=...&screen=...` alongside the standard 
 ### Permissions
 
 * Creators of widgets do not get prompted for permission to load
-* Only creators of widgets can remove them (remove otherwise just revokes permission)
+* Only people with permission to add widgets can remove widgets (otherwise it just revokes permission)
 * Only creators of widgets can edit them
