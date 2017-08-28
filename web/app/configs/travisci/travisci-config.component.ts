@@ -56,12 +56,12 @@ export class TravisCiConfigComponent implements ModalComponent<ConfigModalContex
 
     public editTemplate(repoKey: string) {
         this.toggleTemplate(repoKey);
-        var repoConfig = this.integration.repoTemplates.find(r => r.repoKey == repoKey);
+        let repoConfig = this.integration.repoTemplates.find(r => r.repoKey === repoKey);
         repoConfig.newTemplate = repoConfig.template;
     }
 
     public saveTemplate(repoKey: string) {
-        var repoConfig = this.integration.repoTemplates.find(r => r.repoKey == repoKey);
+        let repoConfig = this.integration.repoTemplates.find(r => r.repoKey === repoKey);
         repoConfig.template = repoConfig.newTemplate;
         this.updateTemplates().then(() => this.toggleTemplate(repoKey));
     }
