@@ -17,6 +17,12 @@ export interface RSSIntegration extends Integration {
     immutableFeeds: {url: string, ownerId: string}[];
 }
 
+export interface TravisCiIntegration extends Integration {
+    repoTemplates: {repoKey: string, template: string, newTemplate: string}[]; // newTemplate is local
+    immutableRepoTemplates: {repoKey: string, template: string, ownerId: string}[];
+    webhookUrl: string; // immutable
+}
+
 export interface IRCIntegration extends Integration {
     availableNetworks: {name: string, id: string}[];
     channels: {[networkId: string]: string[]};

@@ -3,6 +3,7 @@ import { Integration } from "./models/integration";
 import { RssConfigComponent } from "../configs/rss/rss-config.component";
 import { ContainerContent } from "ngx-modialog";
 import { IrcConfigComponent } from "../configs/irc/irc-config.component";
+import { TravisCiConfigComponent } from "../configs/travisci/travisci-config.component";
 
 @Injectable()
 export class IntegrationService {
@@ -10,19 +11,21 @@ export class IntegrationService {
     private static supportedTypeMap = {
         "bot": true,
         "complex-bot": {
-            "rss": true
+            "rss": true,
+            "travisci": true,
         },
         "bridge": {
-            "irc": true
+            "irc": true,
         }
     };
 
     private static components = {
         "complex-bot": {
-            "rss": RssConfigComponent
+            "rss": RssConfigComponent,
+            "travisci": TravisCiConfigComponent,
         },
         "bridge": {
-            "irc": IrcConfigComponent
+            "irc": IrcConfigComponent,
         }
     };
 

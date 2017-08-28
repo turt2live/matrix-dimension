@@ -1,0 +1,8 @@
+type: "complex-bot"
+integrationType: "travisci"
+enabled: true
+name: "Travis CI"
+about: "Sends Travis CI build results into the room"
+avatar: "img/avatars/travisci.png"
+upstream:
+  type: "vector"

@@ -21,6 +21,7 @@ import { ModalModule } from "ngx-modialog";
 import { RssConfigComponent } from "./configs/rss/rss-config.component";
 import { IrcConfigComponent } from "./configs/irc/irc-config.component";
 import { IrcApiService } from "./shared/irc-api.service";
+import { TravisCiConfigComponent } from "./configs/travisci/travisci-config.component";
 
 @NgModule({
     imports: [
@@ -43,6 +44,7 @@ import { IrcApiService } from "./shared/irc-api.service";
         ScalarCloseComponent,
         RssConfigComponent,
         IrcConfigComponent,
+        TravisCiConfigComponent,
 
         // Vendor
     ],
@@ -57,6 +59,7 @@ import { IrcApiService } from "./shared/irc-api.service";
     bootstrap: [AppComponent],
     entryComponents: [
         RssConfigComponent,
+        TravisCiConfigComponent,
         IrcConfigComponent,
     ]
 })

@@ -3,10 +3,12 @@ var StubbedFactory = require("./StubbedFactory");
 var SimpleBotFactory = require("./simple_bot/SimpleBotFactory");
 var RSSFactory = require("./rss/RSSFactory");
 var IRCFactory = require("./irc/IRCFactory");
+var TravisCiFactory = require("./travisci/TravisCiFactory");
 
 var mapping = {
     "complex-bot": {
-        "rss": RSSFactory
+        "rss": RSSFactory,
+        "travisci": TravisCiFactory,
     },
     "bridge": {
         "irc": IRCFactory
