@@ -54,6 +54,12 @@ export class RiotComponent {
     private updateIntegrationState(integration: Integration) {
         integration.hasConfig = IntegrationService.hasConfig(integration);
 
+        if (integration.type === "widget") {
+            integration.isEnabled = true;
+            integration.isBroken = false;
+            return Promise.resolve();
+        }
+
         if (integration.requirements) {
             let keys = _.keys(integration.requirements);
             let promises = [];

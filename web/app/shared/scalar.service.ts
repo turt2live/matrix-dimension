@@ -1,6 +1,12 @@
 import { Injectable } from "@angular/core";
 import * as randomString from "random-string";
-import { MembershipStateResponse, ScalarSuccessResponse, JoinRuleStateResponse } from "./models/scalar_responses";
+import {
+    MembershipStateResponse,
+    ScalarSuccessResponse,
+    JoinRuleStateResponse,
+    WidgetsResponse
+} from "./models/scalar_responses";
+import { Widget } from "./models/widget";
 
 @Injectable()
 export class ScalarService {
@@ -33,6 +39,32 @@ export class ScalarService {
     public getJoinRule(roomId: string): Promise<JoinRuleStateResponse> {
         return this.callAction("join_rules_state", {
             room_id: roomId
+        });
+    }
+
+    public getWidgets(roomId: string): Promise<WidgetsResponse> {
+        return this.callAction("get_widgets", {
+            room_id: roomId
+        });
+    }
+
+    public setWidget(roomId: string, widget: Widget): Promise<ScalarSuccessResponse> {
+        return this.callAction("set_widget", {
+            room_id: roomId,
+            widget_id: widget.id,
+            type: widget.type,
+            url: widget.url,
+            name: widget.name,
+            data: widget.data
+        });
+    }
+
+    public deleteWidget(roomId: string, widget: Widget): Promise<ScalarSuccessResponse> {
+        return this.callAction("set_widget", {
+            room_id: roomId,
+            widget_id: widget.id,
+            type: widget.type, // required for some reason
+            url: ""
         });
     }
 

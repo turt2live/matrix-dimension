@@ -22,6 +22,7 @@ import { RssConfigComponent } from "./configs/rss/rss-config.component";
 import { IrcConfigComponent } from "./configs/irc/irc-config.component";
 import { IrcApiService } from "./shared/irc-api.service";
 import { TravisCiConfigComponent } from "./configs/travisci/travisci-config.component";
+import { CustomWidgetConfigComponent } from "./configs/widget/custom_widget/custom_widget-config.component";
 
 @NgModule({
     imports: [
@@ -45,6 +46,7 @@ import { TravisCiConfigComponent } from "./configs/travisci/travisci-config.comp
         RssConfigComponent,
         IrcConfigComponent,
         TravisCiConfigComponent,
+        CustomWidgetConfigComponent,
 
         // Vendor
     ],
@@ -61,6 +63,7 @@ import { TravisCiConfigComponent } from "./configs/travisci/travisci-config.comp
         RssConfigComponent,
         TravisCiConfigComponent,
         IrcConfigComponent,
+        CustomWidgetConfigComponent,
     ]
 })
 export class AppModule {

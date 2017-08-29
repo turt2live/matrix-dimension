@@ -3,7 +3,7 @@
     <div class="title">
         <b>{{ integration.name }}</b>
         <div style="display: flex;">
-            <div class="switch" *ngIf="integration.type !== 'bridge'">
+            <div class="switch" *ngIf="integration.type !== 'bridge' && integration.type !== 'widget'">
                 <ui-switch [checked]="integration.isEnabled" size="small" [disabled]="integration.isBroken" (change)="update()"></ui-switch>
             </div>
             <div class="switch" *ngIf="integration.type == 'bridge' && !integration.isEnabled">

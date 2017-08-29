@@ -4,6 +4,7 @@ import { RssConfigComponent } from "../configs/rss/rss-config.component";
 import { ContainerContent } from "ngx-modialog";
 import { IrcConfigComponent } from "../configs/irc/irc-config.component";
 import { TravisCiConfigComponent } from "../configs/travisci/travisci-config.component";
+import { CustomWidgetConfigComponent } from "../configs/widget/custom_widget/custom_widget-config.component";
 
 @Injectable()
 export class IntegrationService {
@@ -16,7 +17,10 @@ export class IntegrationService {
         },
         "bridge": {
             "irc": true,
-        }
+        },
+        "widget": {
+            "customwidget": true
+        },
     };
 
     private static components = {
@@ -26,7 +30,10 @@ export class IntegrationService {
         },
         "bridge": {
             "irc": IrcConfigComponent,
-        }
+        },
+        "widget": {
+            "customwidget": CustomWidgetConfigComponent,
+        },
     };
 
     static isSupported(integration: Integration): boolean {
