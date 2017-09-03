@@ -1,7 +1,8 @@
 # Dimension
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/turt2live/matrix-dimension.svg)](https://greenkeeper.io/) [![TravisCI badge](https://travis-ci.org/turt2live/matrix-dimension.svg?branch=master)](https://travis-ci.org/turt2live/matrix-dimension)
-[![Targeted for next release](https://badge.waffle.io/turt2live/matrix-dimension.png?label=sorted&title=Targeted+for+next+release)](https://waffle.io/turt2live/waffle-matrix?utm_source=badge) [![WIP](https://badge.waffle.io/turt2live/matrix-dimension.png?label=wip&title=WIP)](https://waffle.io/turt2live/waffle-matrix?utm_source=badge)
+ 
+[![TravisCI badge](https://travis-ci.org/turt2live/matrix-dimension.svg?branch=master)](https://travis-ci.org/turt2live/matrix-dimension)
+[![Targeted for next release](https://badge.waffle.io/turt2live/matrix-dimension.png?label=sorted&title=Targeted+for+next+release)](https://waffle.io/turt2live/waffle-matrix?utm_source=badge) 
+[![WIP](https://badge.waffle.io/turt2live/matrix-dimension.png?label=wip&title=WIP)](https://waffle.io/turt2live/waffle-matrix?utm_source=badge)
 
 An alternative integrations manager for [Riot](https://riot.im). Join us on matrix: [#dimension:t2l.io](https://matrix.to/#/#dimension:t2l.io)
 
