@@ -5,12 +5,7 @@ env:
 - NODE_ENV=development
 before_install:
 - npm i -g npm
-- npm i -g greenkeeper-lockfile@1
 install:
   - npm install
-before_script:
-  - greenkeeper-lockfile-update
 script:
   - npm run build
-after_script:
-  - greenkeeper-lockfile-upload
