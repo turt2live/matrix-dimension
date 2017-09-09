@@ -25,14 +25,37 @@ Change the values in Riot's `config.json` as shown below. If you do not have a `
 
 The remaining settings should be tailored for your Riot deployment.
 
-# Running your own
-
-TODO
-
 # Building
 
-TODO
+To create a production build of Dimension, run `npm run build`. For development environments, see the Development section below.
+
+# Running your own
+
+1. Run `npm run build`
+2. Copy `config/default.yaml` to `config/production.yaml` and edit `config/production.yaml`
+3. Edit any integration settings in `config/integrations`
+4. Run Dimension with `NODE_ENV=production node app.js`
+
+Dimension is now available on the port/host you configured.
+
+### Running Dimension behind nginx
+
+1. Run `npm run build`
+2. Copy `config/default.yaml` to `config/production.yaml` and edit `config/production.yaml`
+3. Edit any integration settings in `config/integrations`
+4. Set the host for Dimension to listen on to `localhost` or `127.0.0.1`
+5. Run Dimension with `NODE_ENV=production node app.js`
+6. Set up the following reverse proxy information as applicable
+    ```
+    location / {
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_pass http://localhost:8184;
+    }
+    ```
+   Be sure to also configure any SSL offloading.
 
 # Development
 
-TODO
+1. Copy `config/default.yaml` to `config/development.yaml` and make any edits
+2. Run Dimension with `NODE_ENV=development node app.js`
+3. Run the web app with `npm run dev`
