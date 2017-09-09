@@ -23,6 +23,7 @@ import { IrcConfigComponent } from "./configs/irc/irc-config.component";
 import { IrcApiService } from "./shared/irc-api.service";
 import { TravisCiConfigComponent } from "./configs/travisci/travisci-config.component";
 import { CustomWidgetConfigComponent } from "./configs/widget/custom_widget/custom_widget-config.component";
+import { MyFilterPipe } from "./shared/my-filter.pipe";
 
 @NgModule({
     imports: [
@@ -47,6 +48,7 @@ import { CustomWidgetConfigComponent } from "./configs/widget/custom_widget/cust
         IrcConfigComponent,
         TravisCiConfigComponent,
         CustomWidgetConfigComponent,
+        MyFilterPipe,
 
         // Vendor
     ],

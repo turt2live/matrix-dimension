@@ -7,11 +7,51 @@
         <p><i class="fa fa-circle-o-notch fa-spin"></i> Loading...</p>
     </div>
     <div *ngIf="!error && !loading">
-        <h3>Manage Integrations</h3>
-        <p>Turn on anything you like. If an integration has some special configuration, it will have a configuration
-            icon next to it.</p>
+
+        <!-- ------------------------ -->
+        <!-- WIDGETS                  -->
+        <!-- ------------------------ -->
+        <h4>
+            Widgets <i class="fa fa-question-circle text-info" style="font-size: 15px;" placement="bottom"
+                       ngbTooltip="Widgets add small apps to Riot, like Google Docs, Jitsi conferences, and YouTube videos"></i>
+        </h4>
         <div class="integration-container">
-            <my-integration *ngFor="let integration of integrations"
+            <my-integration *ngFor="let integration of integrations | myfilter:'type':'widget'"
+                            [integration]="integration"
+                            [roomId]="roomId"
+                            [scalarToken]="scalarToken"
+                            (updated)="updateIntegration(integration)"></my-integration>
+        </div>
+
+        <!-- ------------------------ -->
+        <!-- BOTS                     -->
+        <!-- ------------------------ -->
+        <h4>
+            Bots <i class="fa fa-question-circle text-info" style="font-size: 15px;" placement="bottom"
+                    ngbTooltip="Bots can provide entertainment or some utility to your room"></i>
+        </h4>
+        <div class="integration-container">
+            <my-integration *ngFor="let integration of integrations | myfilter:'type':'bot'"
+                            [integration]="integration"
+                            [roomId]="roomId"
+                            [scalarToken]="scalarToken"
+                            (updated)="updateIntegration(integration)"></my-integration>
+            <my-integration *ngFor="let integration of integrations | myfilter:'type':'complex-bot'"
+                            [integration]="integration"
+                            [roomId]="roomId"
+                            [scalarToken]="scalarToken"
+                            (updated)="updateIntegration(integration)"></my-integration>
+        </div>
+
+        <!-- ------------------------ -->
+        <!-- BRIDGES                  -->
+        <!-- ------------------------ -->
+        <h4>
+            Bridges <i class="fa fa-question-circle text-info" style="font-size: 15px;" placement="bottom"
+                       ngbTooltip="Bridges allow people on other platforms to talk in the room"></i>
+        </h4>
+        <div class="integration-container">
+            <my-integration *ngFor="let integration of integrations | myfilter:'type':'bridge'"
                             [integration]="integration"
                             [roomId]="roomId"
                             [scalarToken]="scalarToken"

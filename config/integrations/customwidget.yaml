@@ -2,6 +2,6 @@
 type: "widget"
 integrationType: "customwidget"
 enabled: true
-name: "Custom Widget"
+name: "Custom Widgets"
 about: "A webpage embedded in the room."
 avatar: "img/avatars/customwidget.png"
