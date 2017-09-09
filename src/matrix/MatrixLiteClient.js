@@ -28,16 +28,17 @@ class MatrixLiteClient {
     }
 
     _do(method, endpoint, qs = null, body = null) {
+        var serverName = this._openId.matrix_server_name;
         // HACK: We have to wrap the dns promise in a Bluebird promise just to make sure it works
-        var dnsPromise = dns.resolveSrv("_matrix._tcp." + this._openId.matrix_server_name);
+        var dnsPromise = dns.resolveSrv("_matrix._tcp." + serverName);
         return Promise.resolve(dnsPromise).then(records => {
             if (records && records.length > 0)
-                this._openId.matrix_server_name = records[0].name + ":" + records[0].port;
+                serverName = records[0].name + ":" + records[0].port;
         }, err => {
-            log.warn("MatrixLiteClient", "Failed to lookup SRV for " + this._openId.matrix_server_name + " - assuming none available.");
+            log.warn("MatrixLiteClient", "Failed to lookup SRV for " + serverName + " - assuming none available.");
             log.warn("MatrixLiteClient", err);
         }).then(() => {
-            var url = "https://" + this._openId.matrix_server_name + endpoint;
+            var url = "https://" + serverName + endpoint;
 
             log.verbose("MatrixLiteClient", "Performing request: " + url);
 
