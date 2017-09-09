@@ -37,7 +37,7 @@ class MatrixLiteClient {
             log.warn("MatrixLiteClient", "Failed to lookup SRV for " + this._openId.matrix_server_name + " - assuming none available.");
             log.warn("MatrixLiteClient", err);
         }).then(() => {
-            var url = "http://" + this._openId.matrix_server_name + endpoint;
+            var url = "https://" + this._openId.matrix_server_name + endpoint;
 
             log.verbose("MatrixLiteClient", "Performing request: " + url);
 
