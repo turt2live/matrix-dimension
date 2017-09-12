@@ -59,3 +59,17 @@ Dimension is now available on the port/host you configured.
 1. Copy `config/default.yaml` to `config/development.yaml` and make any edits
 2. Run Dimension with `NODE_ENV=development node app.js`
 3. Run the web app with `npm run dev`
+
+# Common Problems / Setup Questions
+
+Dimension uses unstable and undocumented parts of Riot and can sometimes be a bit difficult to set up. If you're running into issues, check the solutions below. If you're still having issues, come by [#dimension:t2bot.io](https://matrix.to/#/#dimension:t2bot.io) and we can help you out.
+
+## "Could not contact integrations server"
+
+1. **Check that federation is enabled and working on your homeserver.** Even in a private, or non-federated environment, the federation API still needs to be accessible. If federation is a major concern, limit the servers that can use the API by IP or install Dimension on the same server as your homeserver, only exposing federation to localhost.
+2. **Check your SRV records.** If you are using SRV records to point to your federation port, make sure that the hostname and port are correct, and that HTTPS is listening on that port. Dimension will use the first record it sees and will only communicate over HTTPS.
+3. **Log out of Riot and log back in.** When switching from the default integrations manager (Scalar) to Dimension the authentication tokens can change. Logging out and back in will reset this token, allowing Dimension to work. More advanced users can delete the "mx_scalar_token" localstorage key.
+
+## Turning off matrix.org/Scalar dependency
+
+To completely disconnect Dimension from using the matrix.org bots and bridges, remove the `vector` upstream from your config. This will force anything using the upstream (matrix.org bots and bridges) to not load.
