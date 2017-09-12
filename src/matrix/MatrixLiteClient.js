@@ -21,13 +21,13 @@ class MatrixLiteClient {
      * @return {Promise<string>} resolves to the mxid
      */
     getSelfMxid() {
-        return this._do("GET", "/_matrix/federation/v1/openid/userinfo").then((response, body) => {
+        return this._do("GET", "/_matrix/federation/v1/openid/userinfo", /*qs=*/null, /*body=*/null, /*allowSelfSigned=*/true).then((response, body) => {
             var json = JSON.parse(response.body);
             return json['sub'];
         });
     }
 
-    _do(method, endpoint, qs = null, body = null) {
+    _do(method, endpoint, qs = null, body = null, allowSelfSigned = false) {
         var serverName = this._openId.matrix_server_name;
         // HACK: We have to wrap the dns promise in a Bluebird promise just to make sure it works
         var dnsPromise = dns.resolveSrv("_matrix._tcp." + serverName);
@@ -49,7 +49,8 @@ class MatrixLiteClient {
                 url: url,
                 method: method,
                 form: body,
-                qs: qs
+                qs: qs,
+                rejectUnauthorized: !allowSelfSigned
             };
 
             return new Promise((resolve, reject) => {
