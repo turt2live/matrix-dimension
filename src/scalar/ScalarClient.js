@@ -1,6 +1,7 @@
 var request = require('request');
 var log = require("../util/LogService");
 var config = require("config");
+var UpstreamConfiguration = require("../UpstreamConfiguration");
 
 /**
  * Represents a scalar client
@@ -32,7 +33,7 @@ class ScalarClient {
     // TODO: Merge this, VectorScalarClient, and MatrixLiteClient into a base class
     _do(method, endpoint, qs = null, body = null) {
         // TODO: Generify URL
-        var url = config.get("upstreams.vector") + endpoint;
+        var url = UpstreamConfiguration.getUpstream("vector").url + endpoint;
 
         log.verbose("ScalarClient", "Performing request: " + url);
 

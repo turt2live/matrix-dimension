@@ -19,7 +19,7 @@ class IRCApi {
      * @param {DimensionStore} db the store to use
      */
     bootstrap(app, db) {
-        if (!Integrations.byType["bridge"]["irc"]) {
+        if (!Integrations.byType["bridge"] || !Integrations.byType["bridge"]["irc"]) {
             log.info("IRCApi", "IRC Bridge not enabled - not setting up the API");
             return;
         } else log.info("IRCApi", "Setting up IRC API");

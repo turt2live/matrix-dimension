@@ -65,7 +65,7 @@ class DimensionStore {
      * @param {string} mxid the matrix user id
      * @param {OpenID} openId the open ID
      * @param {string} scalarToken the token associated with the user
-     * @param {string} upstreamToken the upstream scalar token
+     * @param {String?} upstreamToken the upstream scalar token (optional)
      * @returns {Promise<>} resolves when complete
      */
     createToken(mxid, openId, scalarToken, upstreamToken) {

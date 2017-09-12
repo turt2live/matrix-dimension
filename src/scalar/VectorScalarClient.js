@@ -1,6 +1,7 @@
 var request = require('request');
 var log = require("../util/LogService");
 var config = require("config");
+var UpstreamConfiguration = require("../UpstreamConfiguration");
 
 /**
  * Represents a scalar client for vector.im
@@ -234,7 +235,7 @@ class VectorScalarClient {
     }
 
     _do(method, endpoint, qs = null, body = null) {
-        var url = config.get("upstreams.vector") + endpoint;
+        var url = UpstreamConfiguration.getUpstream("vector").url + endpoint;
 
         log.verbose("VectorScalarClient", "Performing request: " + url);
 

@@ -3,6 +3,7 @@ var log = require("../util/LogService");
 var fs = require("fs");
 var path = require("path");
 var _ = require("lodash");
+var IntegrationImpl = require("./impl");
 
 log.info("Integrations", "Discovering integrations");
 
@@ -40,6 +41,19 @@ for (var key of keys) {
     var merged = config.util.extendDeep(configs[key].defaults, configs[key].alt);
     if (!merged['enabled']) {
         log.warn("Integrations", "Integration " + key + " is not enabled - skipping");
+        continue;
+    }
+
+    var factory = IntegrationImpl.getFactory(merged);
+    if (!factory) {
+        log.warn("Integrations", "Integration " + key + " does not have an associated factory - skipping");
+        continue;
+    }
+    try {
+        factory.validateConfig(merged);
+    } catch (err) {
+        log.error("Integrations", "Error while validating integration " + key + " - skipping");
+        log.error("Integrations", err);
         continue;
     }
 

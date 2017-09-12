@@ -32,7 +32,11 @@ class DimensionApi {
         var factory = IntegrationImpl.getFactory(integrationConfig);
         if (!factory) throw new Error("Missing config factory for " + integrationConfig.name);
 
-        return factory(this._db, integrationConfig, roomId, scalarToken);
+        try {
+            return factory(this._db, integrationConfig, roomId, scalarToken);
+        } catch (err) {
+            throw new Error("Error using factory for " + integrationConfig.name + ". Please either fix the integration settings or disable the integration.", err);
+        }
     }
 
     _getIntegrations(req, res) {
@@ -49,20 +53,33 @@ class DimensionApi {
             var integrations = _.map(Integrations.all, i => JSON.parse(JSON.stringify(i))); // clone
 
             var promises = [];
+            var remove = [];
             _.forEach(integrations, integration => {
-                promises.push(this._getIntegration(integration, roomId, scalarToken).then(builtIntegration => {
-                    return builtIntegration.getState().then(state => {
-                        var keys = _.keys(state);
-                        for (var key of keys) {
-                            integration[key] = state[key];
-                        }
+                try {
+                    promises.push(this._getIntegration(integration, roomId, scalarToken).then(builtIntegration => {
+                        return builtIntegration.getState().then(state => {
+                            var keys = _.keys(state);
+                            for (var key of keys) {
+                                integration[key] = state[key];
+                            }
 
-                        return builtIntegration.getUserId();
-                    }).then(userId => {
-                        integration.userId = userId;
-                    });
-                }));
+                            return builtIntegration.getUserId();
+                        }).then(userId => {
+                            integration.userId = userId;
+                        });
+                    }));
+                } catch (err) {
+                    remove.push(integration);
+                    log.error("DimensionApi", err);
+                }
             });
+
+            for (var toRemove of remove) {
+                var idx = integrations.indexOf(toRemove);
+                if (idx === -1) continue;
+                log.warn("DimensionApi", "Disabling integration " + toRemove.name +" due to an error encountered in setup");
+                integrations.splice(idx, 1);
+            }
 
             Promise.all(promises).then(() => res.send(_.map(integrations, integration => {
                 // Remove sensitive material

@@ -22,4 +22,5 @@ demobot:
 
 # Upstream configuration. This should almost never change.
 upstreams:
-  vector: "https://scalar.vector.im/api"
+- name: vector
+  url: "https://scalar.vector.im/api"

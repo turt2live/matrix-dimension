@@ -4,6 +4,7 @@ var ScalarClient = require("./scalar/ScalarClient.js");
 var _ = require("lodash");
 var log = require("./util/LogService");
 var Promise = require("bluebird");
+var UpstreamConfiguration = require("./UpstreamConfiguration");
 
 /**
  * API handler for the Scalar API, as required by Riot
@@ -33,7 +34,11 @@ class ScalarApi {
         if (!token) res.sendStatus(400);
         else this._db.checkToken(token).then(() => {
             res.sendStatus(200);
-        }).catch(() => res.sendStatus(401));
+        }).catch(e => {
+            res.sendStatus(401);
+            log.warn("ScalarApi", "Failed to authenticate token");
+            log.verbose("ScalarApi", e);
+        });
     }
 
     _scalarRegister(req, res) {
@@ -51,6 +56,9 @@ class ScalarApi {
         client.getSelfMxid().then(mxid => {
             userId = mxid;
             if (!mxid) throw new Error("Token does not resolve to a matrix user");
+
+            // TODO: Make this part more generic for other upstreams (#22)
+            if (!UpstreamConfiguration.hasUpstream("vector")) return Promise.resolve(null);
             return ScalarClient.register(tokenInfo);
         }).then(upstreamToken => {
             return this._db.createToken(userId, tokenInfo, scalarToken, upstreamToken);
