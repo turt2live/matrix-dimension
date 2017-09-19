@@ -1,7 +1,0 @@
-# This is an awkward configuration, but it basically adds the "Custom Widget" option to the UI
-type: "widget"
-integrationType: "customwidget"
-enabled: true
-name: "Custom Widgets"
-about: "A webpage embedded in the room."
-avatar: "img/avatars/customwidget.png"

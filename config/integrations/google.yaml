@@ -5,6 +5,14 @@ userId: "@_neb_google:matrix.org"
 name: "Google"
 about: "Use `!google image query` to find an image from Google"
 avatar: "img/avatars/google.png"
+
+# This integration can be hosted in one of two ways: self-hosted or using vector.im's version.
+# By default, vector.im's version is used, but you can host your own by uncommenting the `hosted`
+# section below. Be sure to comment out or remove the `upstream` section below if you're self-hosting.
+
 upstream:
   type: "vector"
   id: "google"
+#hosted:
+#  homeserverUrl: "https://t2bot.io"
+#  accessToken: "your_matrix_access_token_here"

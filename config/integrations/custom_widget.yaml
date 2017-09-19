@@ -1,0 +1,7 @@
+# All this configuration does is make "Custom Widget" available in the UI
+type: "widget"
+integrationType: "customwidget"
+enabled: true
+name: "Custom Widgets"
+about: "A webpage embedded in the room."
+avatar: "img/avatars/customwidget.png"

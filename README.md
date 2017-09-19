@@ -64,6 +64,10 @@ Dimension is now available on the port/host you configured.
 
 Dimension uses unstable and undocumented parts of Riot and can sometimes be a bit difficult to set up. If you're running into issues, check the solutions below. If you're still having issues, come by [#dimension:t2bot.io](https://matrix.to/#/#dimension:t2bot.io) and we can help you out.
 
+## Setting up integrations (including custom)
+
+See the INTEGRATIONS.md file in this repository.
+
 ## "Could not contact integrations server"
 
 1. **Check that federation is enabled and working on your homeserver.** Even in a private, or non-federated environment, the federation API still needs to be accessible. If federation is a major concern, limit the servers that can use the API by IP or install Dimension on the same server as your homeserver, only exposing federation to localhost.
