@@ -5,6 +5,15 @@ userId: "@_neb_imgur:matrix.org"
 name: "Imgur"
 about: "Use `!imgur query` to find an image from Imgur"
 avatar: "img/avatars/imgur.png"
+
+# This integration can be hosted in one of two ways: self-hosted or using vector.im's version.
+# By default, vector.im's version is used, but you can host your own by uncommenting the `hosted`
+# section below. Be sure to comment out or remove the `upstream` section below if you're self-hosting.
+# Self-hosted bots are expected to auto-respond to invites.
+
 upstream:
   type: "vector"
   id: "imgur"
+#hosted:
+#  homeserverUrl: "https://t2bot.io"
+#  accessToken: "your_matrix_access_token_here"

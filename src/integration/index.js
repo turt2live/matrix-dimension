@@ -22,10 +22,10 @@ for (var file of files) {
         var fileName = file.replace("_development.yaml", "").replace("_production.yaml", "") + ".yaml";
 
         if (!configs[fileName]) configs[fileName] = {};
-        configs[fileName]["alt"] = config.util.parseFile(path.join(searchPath, file));
+        configs[fileName]["alt"] = config.util.parseFile(path.join(searchPath, file)) || {};
     } else {
         if (!configs[file]) configs[file] = {};
-        configs[file]["defaults"] = config.util.parseFile(path.join(searchPath, file));
+        configs[file]["defaults"] = config.util.parseFile(path.join(searchPath, file)) || {};
     }
 }
 
@@ -38,6 +38,7 @@ var byType = {};
 
 for (var key of keys) {
     log.info("Integrations", "Preparing " + key);
+    if (!configs[key].defaults) configs[key].defaults = {};
     var merged = config.util.extendDeep(configs[key].defaults, configs[key].alt);
     if (!merged['enabled']) {
         log.warn("Integrations", "Integration " + key + " is not enabled - skipping");
