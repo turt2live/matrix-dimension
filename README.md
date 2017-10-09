@@ -60,13 +60,38 @@ Dimension is now available on the port/host you configured.
 2. Run Dimension with `NODE_ENV=development node app.js`
 3. Run the web app with `npm run dev`
 
+# Do I need an integrations manager?
+
+Integration managers aim to ease a user's interaction with the various services a homeserver may provide. Often times the integrations manager provided by Riot.im, named Modular, is more than suitable. However, there are a few cases where running your own makes more sense:
+
+* Wanting to self-host all aspects of your Riot install
+* Wanting to advertise custom bots specific to your homeserver
+* Corporate or closed environments where Modular's integrations won't work
+
+# How do integration managers work?
+
+Integration managers sit between your users and your integrations (bots, bridges, etc). It helps guide users through the configuration of your integrations for their rooms. The integrations manager can only manage integrations it is configured for. For example, Modular can only provide configuration for the bridges and bots running on matrix.org, while Dimension can provide configuration for your own bots and bridges.
+
+The infrastructure diagram looks something like this:
+```
++-----------+         +----------------------+                          +--------------------+
+|           |========>|                      |=========================>|                    |
+|           |         | Integrations Manager |                          | Bots, bridges, etc |
+|           |         |     (Dimension)      |    +-------------+       | (go-neb, irc, etc) |
+|  Clients  |         |                      |===>|             |<=====>|                    |
+|  (Riot)   |         +----------------------+    |  Homeserver |       +--------------------+
+|           |                                     |  (synapse)  |
+|           |============client/server API=======>|             |
++-----------+                                     +-------------+
+```
+
 # Common Problems / Setup Questions
 
 Dimension uses unstable and undocumented parts of Riot and can sometimes be a bit difficult to set up. If you're running into issues, check the solutions below. If you're still having issues, come by [#dimension:t2bot.io](https://matrix.to/#/#dimension:t2bot.io) and we can help you out.
 
 ## Setting up integrations (including custom)
 
-See the INTEGRATIONS.md file in this repository.
+The INTEGRATIONS.md file in this repository explains how to add custom integrations. For assistance, please visit [#dimension:t2bot.io](https://matrix.to/#/#dimension:t2bot.io)
 
 ## "Could not contact integrations server"
 
