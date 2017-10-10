@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import * as screenfull from 'screenfull';
+import * as screenfull from "screenfull";
 
 @Component({
     selector: "my-fullscreen-button",
@@ -17,7 +17,7 @@ export class FullscreenButtonComponent implements OnDestroy, OnInit {
     }
 
     public ngOnInit(): void {
-        this.listener = screenfull.on('change', () => {
+        this.listener = screenfull.on("change", () => {
             this.isFullscreen = screenfull.isFullscreen;
         });
         this.isFullscreen = screenfull.isFullscreen;

@@ -31,7 +31,7 @@ export class IntegrationComponent {
         this.updated.emit();
     }
 
-    public configureIntegration(integrationId:string=null): void {
+    public configureIntegration(integrationId: string = null): void {
         this.modal.open(IntegrationService.getConfigComponent(this.integration), overlayConfigFactory({
             integration: this.integration,
             roomId: this.roomId,

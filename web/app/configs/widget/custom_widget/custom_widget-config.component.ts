@@ -58,7 +58,7 @@ export class CustomWidgetConfigComponent extends WidgetComponent implements Moda
 
     private getWrappedUrl(url: string): string {
         const urls = [this.wrapperUrl].concat(SCALAR_WIDGET_LINKS);
-        for (var scalarUrl of urls) {
+        for (let scalarUrl of urls) {
             if (url.startsWith(scalarUrl)) {
                 return decodeURIComponent(url.substring(scalarUrl.length));
             }

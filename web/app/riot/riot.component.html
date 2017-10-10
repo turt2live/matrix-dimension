@@ -16,7 +16,7 @@
                        ngbTooltip="Widgets add small apps to Riot, like Google Docs, Jitsi conferences, and YouTube videos"></i>
         </h4>
         <div class="integration-container">
-            <my-integration *ngFor="let integration of integrations | myfilter:'type':'widget'"
+            <my-integration *ngFor="let integration of integrations | myFilter:'type':'widget'"
                             [integration]="integration"
                             [roomId]="roomId"
                             [scalarToken]="scalarToken"
@@ -31,12 +31,12 @@
                     ngbTooltip="Bots can provide entertainment or some utility to your room"></i>
         </h4>
         <div class="integration-container">
-            <my-integration *ngFor="let integration of integrations | myfilter:'type':'bot'"
+            <my-integration *ngFor="let integration of integrations | myFilter:'type':'bot'"
                             [integration]="integration"
                             [roomId]="roomId"
                             [scalarToken]="scalarToken"
                             (updated)="updateIntegration(integration)"></my-integration>
-            <my-integration *ngFor="let integration of integrations | myfilter:'type':'complex-bot'"
+            <my-integration *ngFor="let integration of integrations | myFilter:'type':'complex-bot'"
                             [integration]="integration"
                             [roomId]="roomId"
                             [scalarToken]="scalarToken"
@@ -51,7 +51,7 @@
                        ngbTooltip="Bridges allow people on other platforms to talk in the room"></i>
         </h4>
         <div class="integration-container">
-            <my-integration *ngFor="let integration of integrations | myfilter:'type':'bridge'"
+            <my-integration *ngFor="let integration of integrations | myFilter:'type':'bridge'"
                             [integration]="integration"
                             [roomId]="roomId"
                             [scalarToken]="scalarToken"
