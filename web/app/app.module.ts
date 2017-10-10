@@ -25,6 +25,8 @@ import { TravisCiConfigComponent } from "./configs/travisci/travisci-config.comp
 import { CustomWidgetConfigComponent } from "./configs/widget/custom_widget/custom_widget-config.component";
 import { MyFilterPipe } from "./shared/my-filter.pipe";
 import { GenericWidgetWrapperComponent } from "./widget_wrappers/generic/generic.component";
+import { ToggleFullscreenDirective } from "./toggle-fullscreen/toggle-fullscreen.directive";
+import { FullscreenButtonComponent } from "./fullscreen-button/fullscreen-button.component";
 
 @NgModule({
     imports: [
@@ -51,6 +53,8 @@ import { GenericWidgetWrapperComponent } from "./widget_wrappers/generic/generic
         CustomWidgetConfigComponent,
         MyFilterPipe,
         GenericWidgetWrapperComponent,
+        ToggleFullscreenDirective,
+        FullscreenButtonComponent,
 
         // Vendor
     ],

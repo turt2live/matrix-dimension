@@ -10,4 +10,5 @@
         </div>
     </div>
     <iframe [src]="embedUrl" *ngIf="!isLoading && canEmbed" frameborder="0" allowfullscreen></iframe>
+    <my-fullscreen-button *ngIf="!isLoading && canEmbed" class="toggleFullscreen"></my-fullscreen-button>
 </div>
