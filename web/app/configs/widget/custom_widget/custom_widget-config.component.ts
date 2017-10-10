@@ -22,12 +22,15 @@ export class CustomWidgetConfigComponent extends WidgetComponent implements Moda
 
     private toggledWidgets: string[] = [];
     private wrapperUrl = "";
+    private requestedEditId: string = null;
 
     constructor(public dialog: DialogRef<ConfigModalContext>,
                 private toaster: ToasterService,
                 scalarService: ScalarService,
                 window: Window) {
         super(scalarService, dialog.context.roomId);
+
+        this.requestedEditId = dialog.context.integrationId;
 
         this.getWidgetsOfType(WIDGET_DIM_CUSTOM, WIDGET_SCALAR_CUSTOM).then(widgets => {
             this.widgets = widgets;
@@ -37,6 +40,16 @@ export class CustomWidgetConfigComponent extends WidgetComponent implements Moda
             // Unwrap URLs for easy-editing
             for (let widget of this.widgets) {
                 widget.url = this.getWrappedUrl(widget.url);
+            }
+
+            // See if we should request editing a particular widget
+            if (this.requestedEditId) {
+                for (let widget of this.widgets) {
+                    if (widget.id === this.requestedEditId) {
+                        console.log("Requesting edit for " + widget.id);
+                        this.editWidget(widget);
+                    }
+                }
             }
         });
 

@@ -8,6 +8,7 @@ export class ConfigModalContext extends BSModalContext {
     public integration: Integration;
     public roomId: string;
     public scalarToken: string;
+    public integrationId: string;
 }
 
 @Component({
@@ -22,8 +23,7 @@ export class IntegrationComponent {
     @Input() scalarToken: string;
     @Output() updated: EventEmitter<any> = new EventEmitter();
 
-    constructor(/*overlay: Overlay, vcRef: ViewContainerRef, */public modal: Modal) {
-        // overlay.defaultViewContainer = vcRef;
+    constructor(public modal: Modal) {
     }
 
     public update(): void {
@@ -31,12 +31,13 @@ export class IntegrationComponent {
         this.updated.emit();
     }
 
-    public configureIntegration(): void {
+    public configureIntegration(integrationId:string=null): void {
         this.modal.open(IntegrationService.getConfigComponent(this.integration), overlayConfigFactory({
             integration: this.integration,
             roomId: this.roomId,
             scalarToken: this.scalarToken,
             isBlocking: false,
+            integrationId: integrationId,
             size: "lg"
         }, BSModalContext));
     }
