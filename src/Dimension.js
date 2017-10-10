@@ -32,7 +32,7 @@ class Dimension {
         this._app.use(bodyParser.json());
 
         // Register routes for angular app
-        this._app.get(['/riot', '/riot/*', '/widget_wrapper', '/widget_wrapper/*'], (req, res) => {
+        this._app.get(['/riot', '/riot/*', '/widgets', '/widgets/*'], (req, res) => {
             res.sendFile(path.join(__dirname, "..", "web-dist", "index.html"));
         });
 

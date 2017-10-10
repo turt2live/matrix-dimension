@@ -40,7 +40,7 @@ export class CustomWidgetConfigComponent extends WidgetComponent implements Moda
             }
         });
 
-        this.wrapperUrl = window.location.origin + "/riot/widget_wrapper?url=";
+        this.wrapperUrl = window.location.origin + "/widgets/generic?url=";
     }
 
     private getWrappedUrl(url: string): string {

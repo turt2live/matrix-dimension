@@ -21,6 +21,7 @@ Change the values in Riot's `config.json` as shown below. If you do not have a `
 ```
 "integrations_ui_url": "https://dimension.t2bot.io/riot",
 "integrations_rest_url": "https://dimension.t2bot.io/api/v1/scalar",
+"integrations_widgets_urls": ["https://dimension.t2bot.io/widgets"],
 ``` 
 
 The remaining settings should be tailored for your Riot deployment.

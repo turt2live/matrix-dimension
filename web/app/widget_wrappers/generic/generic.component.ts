@@ -1,14 +1,14 @@
 import { Component } from "@angular/core";
-import { ApiService } from "../shared/api.service";
+import { ApiService } from "../../shared/api.service";
 import { ActivatedRoute } from "@angular/router";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 
 @Component({
-    selector: "my-widget-wrapper",
-    templateUrl: "widget_wrapper.component.html",
-    styleUrls: ["widget_wrapper.component.scss"],
+    selector: "my-generic-widget-wrapper",
+    templateUrl: "generic.component.html",
+    styleUrls: ["generic.component.scss"],
 })
-export class WidgetWrapperComponent {
+export class GenericWidgetWrapperComponent {
 
     public isLoading = true;
     public canEmbed = false;
