@@ -27,7 +27,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-md-12 removable" *ngFor="let widget of widgets trackById">
+                <div class="col-md-12 removable widget-item" *ngFor="let widget of widgets trackById">
                     {{ widget.name || widget.url }} <span class="text-muted" *ngIf="widget.ownerId">(added by {{ widget.ownerId }})</span>
                     <button type="button" class="btn btn-outline-info btn-sm" (click)="editWidget(widget)"
                             style="margin-top: -5px;" [disabled]="isUpdating">

@@ -1,7 +1,12 @@
-var IntegrationImpl = require("./integration/impl/index");
-var Integrations = require("./integration/index");
-var _ = require("lodash");
-var log = require("./util/LogService");
+const IntegrationImpl = require("./integration/impl/index");
+const Integrations = require("./integration/index");
+const _ = require("lodash");
+const log = require("./util/LogService");
+const request = require("request");
+const dns = require("dns-then");
+const urlParse = require("url");
+const Netmask = require("netmask").Netmask;
+const config = require("config");
 
 /**
  * API handler for the Dimension API
@@ -26,6 +31,74 @@ class DimensionApi {
         app.delete("/api/v1/dimension/integrations/:roomId/:type/:integrationType", this._removeIntegration.bind(this));
         app.put("/api/v1/dimension/integrations/:roomId/:type/:integrationType/state", this._updateIntegrationState.bind(this));
         app.get("/api/v1/dimension/integrations/:roomId/:type/:integrationType/state", this._getIntegrationState.bind(this));
+        app.get("/api/v1/dimension/widgets/embeddable", this._checkEmbeddable.bind(this));
+    }
+
+    _checkEmbeddable(req, res) {
+        // Unauthed endpoint.
+
+        var url = req.query.url;
+        var parts = urlParse.parse(url);
+        var processed = false;
+
+        // Only allow http and https
+        if (parts.protocol !== "http:" && parts.protocol !== "https:") {
+            res.status(400).send({error: "Invalid request scheme " + parts.protocol, canEmbed: false});
+            processed = true;
+            return;
+        }
+
+        // Verify the address is permitted for widgets
+        var hostname = parts.hostname.split(":")[0];
+        dns.resolve4(hostname).then(addresses => {
+            log.verbose("DimensionApi", "Hostname " + hostname + " resolves to " + addresses);
+            if (addresses.length == 0) {
+                res.status(400).send({error: "Unrecongized address", canEmbed: false});
+                processed = true;
+                return;
+            }
+            for (var ipOrCidr of config.get("widgetBlacklist")) {
+                var block = new Netmask(ipOrCidr);
+                for (var address of addresses) {
+                    if (block.contains(address)) {
+                        res.status(400).send({error: "Address not allowed", canEmbed: false});
+                        processed = true;
+                        return;
+                    }
+                }
+            }
+        }, err => {
+            log.verbose("DimensionApi", "Error resolving host " + hostname);
+            log.verbose("DimensionApi", err);
+
+            res.status(400).send({error: "DNS error", canEmbed: false});
+            processed = true;
+        }).then(() => {
+            if (processed) return;
+
+            // Verify that the content can actually be embedded (CORS)
+            request(url, (err, response) => {
+                if (err) {
+                    log.verbose("DimensionApi", "Error contacting host " + hostname);
+                    log.verbose("DimensionApi", err);
+
+                    res.status(400).send({error: "Host error", canEmbed: false});
+                    return;
+                }
+
+                if (response.statusCode >= 200 && response.statusCode < 300) {
+                    // 200 OK
+                    var headers = response.headers;
+                    var xFrameOptions = (headers['x-frame-options'] || '').toLowerCase();
+
+                    if (xFrameOptions === 'sameorigin' || xFrameOptions === 'deny') {
+                        res.status(400).send({error: "X-Frame-Options forbids embedding", canEmbed: false});
+                    } else res.status(200).send({canEmbed: true});
+                } else {
+                    res.status(400).send({error: "Unsuccessful status code: " + response.statusCode, canEmbed: false});
+                }
+            });
+        });
     }
 
     _getIntegration(integrationConfig, roomId, scalarToken) {
@@ -77,7 +150,7 @@ class DimensionApi {
             for (var toRemove of remove) {
                 var idx = integrations.indexOf(toRemove);
                 if (idx === -1) continue;
-                log.warn("DimensionApi", "Disabling integration " + toRemove.name +" due to an error encountered in setup");
+                log.warn("DimensionApi", "Disabling integration " + toRemove.name + " due to an error encountered in setup");
                 integrations.splice(idx, 1);
             }
 

@@ -31,10 +31,12 @@
     "lodash": "^4.17.4",
     "matrix-js-sdk": "^0.8.2",
     "moment": "^2.18.1",
+    "netmask": "^1.0.6",
     "random-string": "^0.2.0",
     "request": "^2.81.0",
     "sequelize": "^4.7.5",
     "sqlite3": "^3.1.9",
+    "url": "^0.11.0",
     "winston": "^2.3.1"
   },
   "devDependencies": {

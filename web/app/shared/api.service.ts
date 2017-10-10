@@ -34,4 +34,10 @@ export class ApiService {
         return this.http.get(url, {params: {scalar_token: scalarToken}})
             .map(res => res.json()).toPromise();
     }
+
+    isEmbeddable(checkUrl: string): Promise<any> {
+        const url = "/api/v1/dimension/widgets/embeddable";
+        return this.http.get(url, {params: {url: checkUrl}})
+            .map(res => res.json()).toPromise();
+    }
 }

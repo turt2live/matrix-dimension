@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { ModalComponent, DialogRef } from "ngx-modialog";
-import { WidgetComponent } from "../widget.component";
+import { WidgetComponent, SCALAR_WIDGET_LINKS } from "../widget.component";
 import { ScalarService } from "../../../shared/scalar.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
@@ -21,23 +21,46 @@ export class CustomWidgetConfigComponent extends WidgetComponent implements Moda
     public widgetUrl = "";
 
     private toggledWidgets: string[] = [];
+    private wrapperUrl = "";
 
     constructor(public dialog: DialogRef<ConfigModalContext>,
                 private toaster: ToasterService,
-                scalarService: ScalarService) {
+                scalarService: ScalarService,
+                window: Window) {
         super(scalarService, dialog.context.roomId);
 
         this.getWidgetsOfType(WIDGET_DIM_CUSTOM, WIDGET_SCALAR_CUSTOM).then(widgets => {
             this.widgets = widgets;
             this.isLoading = false;
             this.isUpdating = false;
+
+            // Unwrap URLs for easy-editing
+            for (let widget of this.widgets) {
+                widget.url = this.getWrappedUrl(widget.url);
+            }
         });
+
+        this.wrapperUrl = window.location.origin + "/riot/widget_wrapper?url=";
+    }
+
+    private getWrappedUrl(url: string): string {
+        const urls = [this.wrapperUrl].concat(SCALAR_WIDGET_LINKS);
+        for (var scalarUrl of urls) {
+            if (url.startsWith(scalarUrl)) {
+                return decodeURIComponent(url.substring(scalarUrl.length));
+            }
+        }
+        return url;
+    }
+
+    private wrapUrl(url: string): string {
+        return this.wrapperUrl + encodeURIComponent(url);
     }
 
     public addWidget() {
         let constructedWidget: Widget = {
             id: "dimension-" + (new Date().getTime()),
-            url: this.widgetUrl,
+            url: this.wrapUrl(this.widgetUrl),
             type: WIDGET_DIM_CUSTOM,
             name: "Custom Widget",
         };
@@ -45,6 +68,7 @@ export class CustomWidgetConfigComponent extends WidgetComponent implements Moda
         this.isUpdating = true;
         this.scalarApi.setWidget(this.roomId, constructedWidget)
             .then(() => this.widgets.push(constructedWidget))
+            .then(() => constructedWidget.url = this.getWrappedUrl(constructedWidget.url)) // unwrap for immediate editing
             .then(() => {
                 this.isUpdating = false;
                 this.widgetUrl = "";
@@ -64,7 +88,7 @@ export class CustomWidgetConfigComponent extends WidgetComponent implements Moda
         }
 
         widget.name = widget.newName || "Custom Widget";
-        widget.url = widget.newUrl;
+        widget.url = this.wrapUrl(widget.newUrl);
 
         this.isUpdating = true;
         this.scalarApi.setWidget(this.roomId, widget)
