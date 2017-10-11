@@ -79,7 +79,6 @@ export class WidgetComponent {
 
     private getWrappedUrl(url: string): string {
         const urls = [this.wrapperUrl].concat(this.scalarWrapperUrls);
-        console.log(urls);
         for (let scalarUrl of urls) {
             if (url.startsWith(scalarUrl)) {
                 return decodeURIComponent(url.substring(scalarUrl.length));
@@ -93,7 +92,6 @@ export class WidgetComponent {
     }
 
     private setWidgetUrl(widget: Widget) {
-        console.log(widget);
         widget.url = this.getWrappedUrl(widget.url);
 
         // Use the Dimension-specific URL override if one is present
