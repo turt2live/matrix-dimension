@@ -52,7 +52,8 @@ export class YoutubeWidgetConfigComponent extends WidgetComponent implements Mod
             return;
         }
 
-        widget.data = {dimOriginalUrl: widget.newUrl};
+        if (!widget.data) widget.data = {};
+        widget.data.dimOriginalUrl = widget.newUrl;
         widget.newUrl = url;
         this.saveWidget(widget);
     }

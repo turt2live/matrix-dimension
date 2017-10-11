@@ -106,8 +106,8 @@ export class WidgetComponent {
             url: this.wrapUrl(this.newWidgetUrl),
             type: this.primaryWidgetType,
             name: this.newWidgetName || this.defaultName,
-            data: data,
         };
+        if (data) constructedWidget.data = data;
 
         this.isUpdating = true;
         this.scalarApi.setWidget(this.roomId, constructedWidget)
