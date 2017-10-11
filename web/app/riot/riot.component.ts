@@ -6,7 +6,7 @@ import { ToasterService } from "angular2-toaster";
 import { Integration } from "../shared/models/integration";
 import { IntegrationService } from "../shared/integration.service";
 import * as _ from "lodash";
-import { WIDGET_DIM_CUSTOM } from "../shared/models/widget";
+import { WIDGET_DIM_CUSTOM, WIDGET_DIM_YOUTUBE } from "../shared/models/widget";
 import { IntegrationComponent } from "../integration/integration.component";
 
 @Component({
@@ -73,6 +73,9 @@ export class RiotComponent {
         if (this.requestedScreen === "type_" + WIDGET_DIM_CUSTOM) {
             type = "widget";
             integrationType = "customwidget";
+        } else if (this.requestedScreen === "type_" + WIDGET_DIM_YOUTUBE) {
+            type = "widget";
+            integrationType = "youtube";
         } else {
             console.log("Unknown screen requested: " + this.requestedScreen);
         }

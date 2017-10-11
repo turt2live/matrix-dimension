@@ -27,6 +27,8 @@ import { MyFilterPipe } from "./shared/my-filter.pipe";
 import { GenericWidgetWrapperComponent } from "./widget_wrappers/generic/generic.component";
 import { ToggleFullscreenDirective } from "./shared/toggle-fullscreen.directive";
 import { FullscreenButtonComponent } from "./fullscreen-button/fullscreen-button.component";
+import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube-config.component";
+import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.component";
 
 @NgModule({
     imports: [
@@ -55,6 +57,8 @@ import { FullscreenButtonComponent } from "./fullscreen-button/fullscreen-button
         GenericWidgetWrapperComponent,
         ToggleFullscreenDirective,
         FullscreenButtonComponent,
+        YoutubeWidgetConfigComponent,
+        VideoWidgetWrapperComponent,
 
         // Vendor
     ],
@@ -73,6 +77,7 @@ import { FullscreenButtonComponent } from "./fullscreen-button/fullscreen-button
         TravisCiConfigComponent,
         IrcConfigComponent,
         CustomWidgetConfigComponent,
+        YoutubeWidgetConfigComponent,
     ]
 })
 export class AppModule {

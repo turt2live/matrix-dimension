@@ -10,6 +10,7 @@ export const WIDGET_SCALAR_GRAFANA = "grafana";
 
 // Dimension has its own set of types to ensure that we don't conflict with Scalar
 export const WIDGET_DIM_CUSTOM = "dimension-customwidget";
+export const WIDGET_DIM_YOUTUBE = "dimension-youtube";
 
 export interface Widget {
     id: string;

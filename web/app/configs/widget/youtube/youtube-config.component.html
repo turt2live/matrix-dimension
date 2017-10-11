@@ -1,8 +1,8 @@
 <div class="config-wrapper">
     <img src="/img/close.svg" (click)="dialog.close()" class="close-icon">
     <div class="config-header">
-        <img src="/img/avatars/customwidget.png">
-        <h4>Configure custom widgets</h4>
+        <img src="/img/avatars/youtube.png">
+        <h4>Configure video widgets</h4>
     </div>
     <div class="config-content" *ngIf="isLoading">
         <div class="row">
@@ -12,12 +12,12 @@
         </div>
     </div>
     <div class="config-content" *ngIf="!isLoading">
-        <form (submit)="addWidget()" novalidate name="addForm">
+        <form (submit)="validateAndAddWidget()" novalidate name="addForm">
             <div class="row">
                 <div class="col-md-8" style="margin-bottom: 12px;">
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control"
-                               placeholder="Custom widget URL"
+                               placeholder="YouTube, Vimeo, or DailyMotion video URL"
                                [(ngModel)]="newWidgetUrl" name="newWidgetUrl"
                                [disabled]="isUpdating">
                         <span class="input-group-btn">
@@ -41,18 +41,18 @@
                         <label>
                             Widget Name
                             <input type="text" class="form-control"
-                                   placeholder="Custom Widget"
+                                   placeholder="YouTube Widget"
                                    [(ngModel)]="widget.newName" name="widget-name-{{widget.id}}"
                                    [disabled]="isUpdating">
                         </label>
                         <label>
-                            Widget URL
+                            Video URL
                             <input type="text" class="form-control"
-                                   placeholder="Custom widget URL"
+                                   placeholder="YouTube, Vimeo, or DailyMotion video URL"
                                    [(ngModel)]="widget.newUrl" name="widget-url-{{widget.id}}"
                                    [disabled]="isUpdating">
                         </label>
-                        <button type="button" class="btn btn-primary btn-sm" (click)="saveWidget(widget)">Save
+                        <button type="button" class="btn btn-primary btn-sm" (click)="validateAndSaveWidget(widget)">Save
                         </button>
                         <button type="button" class="btn btn-outline btn-sm" (click)="toggleWidget(widget)">
                             Cancel
