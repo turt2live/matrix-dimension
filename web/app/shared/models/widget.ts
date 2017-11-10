@@ -7,10 +7,13 @@ export const WIDGET_SCALAR_GOOGLEDOCS = "googledocs";
 export const WIDGET_SCALAR_JITSI = "jitsi";
 export const WIDGET_SCALAR_YOUTUBE = "youtube";
 export const WIDGET_SCALAR_GRAFANA = "grafana";
+//Placeholder until Scalar supports twitch
+export const WIDGET_SCALAR_TWITCH = "";
 
 // Dimension has its own set of types to ensure that we don't conflict with Scalar
 export const WIDGET_DIM_CUSTOM = "dimension-customwidget";
 export const WIDGET_DIM_YOUTUBE = "dimension-youtube";
+export const WIDGET_DIM_TWITCH = "dimension-twitch";
 
 export interface Widget {
     id: string;
