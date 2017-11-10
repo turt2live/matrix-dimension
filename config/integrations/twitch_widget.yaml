@@ -1,4 +1,4 @@
-# All this configuration does is make "Youtube Widget" available in the UI
+# All this configuration does is make "Twitch Widget" available in the UI
 type: "widget"
 integrationType: "twitch"
 enabled: true
