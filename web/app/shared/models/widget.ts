@@ -7,7 +7,7 @@ export const WIDGET_SCALAR_GOOGLEDOCS = "googledocs";
 export const WIDGET_SCALAR_JITSI = "jitsi";
 export const WIDGET_SCALAR_YOUTUBE = "youtube";
 export const WIDGET_SCALAR_GRAFANA = "grafana";
-//Placeholder until Scalar supports twitch
+// Placeholder until Scalar supports twitch
 export const WIDGET_SCALAR_TWITCH = "";
 
 // Dimension has its own set of types to ensure that we don't conflict with Scalar
