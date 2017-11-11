@@ -28,6 +28,7 @@ import { GenericWidgetWrapperComponent } from "./widget_wrappers/generic/generic
 import { ToggleFullscreenDirective } from "./shared/toggle-fullscreen.directive";
 import { FullscreenButtonComponent } from "./fullscreen-button/fullscreen-button.component";
 import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube-config.component";
+import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch-config.component";
 import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.component";
 
 @NgModule({
@@ -58,6 +59,7 @@ import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.compo
         ToggleFullscreenDirective,
         FullscreenButtonComponent,
         YoutubeWidgetConfigComponent,
+        TwitchWidgetConfigComponent,
         VideoWidgetWrapperComponent,
 
         // Vendor
@@ -78,6 +80,7 @@ import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.compo
         IrcConfigComponent,
         CustomWidgetConfigComponent,
         YoutubeWidgetConfigComponent,
+        TwitchWidgetConfigComponent
     ]
 })
 export class AppModule {

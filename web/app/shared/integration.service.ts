@@ -6,6 +6,7 @@ import { IrcConfigComponent } from "../configs/irc/irc-config.component";
 import { TravisCiConfigComponent } from "../configs/travisci/travisci-config.component";
 import { CustomWidgetConfigComponent } from "../configs/widget/custom_widget/custom_widget-config.component";
 import { YoutubeWidgetConfigComponent } from "../configs/widget/youtube/youtube-config.component";
+import { TwitchWidgetConfigComponent } from "../configs/widget/twitch/twitch-config.component";
 
 @Injectable()
 export class IntegrationService {
@@ -22,6 +23,7 @@ export class IntegrationService {
         "widget": {
             "customwidget": true,
             "youtube": true,
+            "twitch": true,
         },
     };
 
@@ -36,6 +38,7 @@ export class IntegrationService {
         "widget": {
             "customwidget": CustomWidgetConfigComponent,
             "youtube": YoutubeWidgetConfigComponent,
+            "twitch": TwitchWidgetConfigComponent,
         },
     };
 
