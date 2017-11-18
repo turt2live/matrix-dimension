@@ -58,15 +58,15 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
     private checkPadURL(url: string, widget?: Widget): boolean {
         if (widget) {
             if (this.editUseCustomServer) {
-                return url === widget.data.newPadServer;
+                return Boolean(url === widget.data.newPadServer);
             } else {
-                return url === "https://demo.riot.im/etherpad/p/";
+                return Boolean(url === "https://demo.riot.im/etherpad/p/");
             }
         } else {
             if (this.useCustomServer) {
-                return url === this.newEtherpadServerUrl;
+                return Boolean(url === this.newEtherpadServerUrl);
             } else {
-                return url === "https://demo.riot.im/etherpad/p/";
+                return Boolean(url === "https://demo.riot.im/etherpad/p/");
             }
         }
     }
@@ -85,11 +85,16 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
 
         const originalUrl = this.newWidgetUrl;
         this.newWidgetUrl = url;
-        this.addWidget({padName: originalUrl, padSuffix: originalUrl, padServer: this.newEtherpadServerUrl});
+
+        if (this.useCustomServer) {
+            this.addWidget({padName: originalUrl, padSuffix: originalUrl, padServer: this.newEtherpadServerUrl});
+        } else {
+            this.addWidget({padName: originalUrl, padSuffix: originalUrl, padServer: "https://demo.riot.im/etherpad/p/"});
+        }
     }
 
     public validateAndSaveWidget(widget: Widget) {
-        const url = this.getPadURL();
+        const url = this.getPadURL(widget);
 
         if (this.checkPadURL(url, widget)) {
             this.toaster.pop("warning", "Please enter a Pad Name");
@@ -100,7 +105,15 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
 
         widget.newUrl = url;
         widget.data.padName = widget.data.newPadName;
-        widget.data.padServer = widget.data.newPadServer;
+        if (this.editUseCustomServer) {
+            widget.data.padServer = widget.data.newPadServer;
+        } else {
+            widget.data.padServer = "https://demo.riot.im/etherpad/p/"
+        }
+
+        delete widget.data.newPadServer;
+        delete widget.data.newPadName;
+
         this.saveWidget(widget);
     }
 
