@@ -18,7 +18,7 @@ export class WidgetComponent {
     public newWidgetName: string = "";
 
     private toggledWidgetIds: string[] = [];
-    private wrapperUrl = "";
+    public wrapperUrl = "";
     private scalarWrapperUrls: string[] = [];
 
     constructor(protected toaster: ToasterService,
@@ -87,7 +87,7 @@ export class WidgetComponent {
         return url;
     }
 
-    private wrapUrl(url: string): string {
+    public wrapUrl(url: string): string {
         return this.wrapperUrl + encodeURIComponent(url);
     }
 

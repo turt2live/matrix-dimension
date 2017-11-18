@@ -14,6 +14,7 @@ export const WIDGET_SCALAR_TWITCH = "";
 export const WIDGET_DIM_CUSTOM = "dimension-customwidget";
 export const WIDGET_DIM_YOUTUBE = "dimension-youtube";
 export const WIDGET_DIM_TWITCH = "dimension-twitch";
+export const WIDGET_DIM_ETHERPAD = "dimension-etherpad";
 
 export interface Widget {
     id: string;
