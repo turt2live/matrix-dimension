@@ -38,18 +38,18 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
     getPadURL(widget?: Widget): string {
         if (widget) {
             if (this.editUseCustomServer) {
-                const url = widget.data.newPadServer + widget.data.newPadName;
+                const url = widget.data.newPadServer + this.roomId + "_" + widget.data.newPadName;
                 return url;
             } else {
-                const url = "https://demo.riot.im/etherpad/p/" + widget.data.newPadName;
+                const url = "https://demo.riot.im/etherpad/p/" + this.roomId + "_" + widget.data.newPadName;
                 return url;
             }
         } else {
             if (this.useCustomServer) {
-                const url = this.newEtherpadServerUrl + this.newWidgetUrl;
+                const url = this.newEtherpadServerUrl + this.roomId + "_" + this.newWidgetUrl;
                 return url;
             } else {
-                const url = "https://demo.riot.im/etherpad/p/" + this.newWidgetUrl;
+                const url = "https://demo.riot.im/etherpad/p/" + this.roomId + "_" + this.newWidgetUrl;
                 return url;
             }
         }
@@ -83,7 +83,7 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
             return;
         }
 
-        const originalUrl = this.newWidgetUrl;
+        const originalUrl = this.roomId + "_" + this.newWidgetUrl;
         this.newWidgetUrl = url;
 
         if (this.useCustomServer) {
@@ -105,6 +105,7 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
 
         widget.newUrl = url;
         widget.data.padName = widget.data.newPadName;
+        widget.data.padSuffix = this.roomId + "_" + widget.data.newPadName;
         if (this.editUseCustomServer) {
             widget.data.padServer = widget.data.newPadServer;
         } else {
