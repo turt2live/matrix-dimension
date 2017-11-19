@@ -18,7 +18,7 @@ export class WidgetComponent {
     public newWidgetName: string = "";
 
     private toggledWidgetIds: string[] = [];
-    public wrapperUrl = "";
+    private wrapperUrl = "";
     private scalarWrapperUrls: string[] = [];
 
     constructor(protected toaster: ToasterService,
@@ -87,8 +87,17 @@ export class WidgetComponent {
         return url;
     }
 
-    public wrapUrl(url: string): string {
-        return this.wrapperUrl + encodeURIComponent(url);
+    private wrapUrl(url: string): string {
+        let encodedURL = this.wrapperUrl + encodeURIComponent(url);
+        
+        //don't URL encode $vars of the widget Spec
+        //TODO do the same with vars from the data object
+        encodedURL = encodedURL.replace(encodeURIComponent("$matrix_user_id"), "$matrix_user_id");
+        encodedURL = encodedURL.replace(encodeURIComponent("$matrix_room_id"), "$matrix_room_id");
+        encodedURL = encodedURL.replace(encodeURIComponent("$matrix_display_name"), "$matrix_display_name");
+        encodedURL = encodedURL.replace(encodeURIComponent("$matrix_avatar_url"), "$matrix_avatar_url");
+
+        return encodedURL;
     }
 
     private setWidgetUrl(widget: Widget) {

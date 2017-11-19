@@ -36,23 +36,21 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
     }
 
     getPadURL(widget?: Widget): string {
+        let url: string;
         if (widget) {
             if (this.editUseCustomServer) {
-                const url = widget.data.newPadServer + this.roomId + "_" + widget.data.newPadName;
-                return url;
+                url = widget.data.newPadServer + this.roomId + "_" + widget.data.newPadName;
             } else {
-                const url = "https://demo.riot.im/etherpad/p/" + this.roomId + "_" + widget.data.newPadName;
-                return url;
+                url = "https://demo.riot.im/etherpad/p/" + this.roomId + "_" + widget.data.newPadName;
             }
         } else {
             if (this.useCustomServer) {
-                const url = this.newEtherpadServerUrl + this.roomId + "_" + this.newWidgetUrl;
-                return url;
+                url = this.newEtherpadServerUrl + this.roomId + "_" + this.newWidgetUrl;
             } else {
-                const url = "https://demo.riot.im/etherpad/p/" + this.roomId + "_" + this.newWidgetUrl;
-                return url;
+                url = "https://demo.riot.im/etherpad/p/" + this.roomId + "_" + this.newWidgetUrl;
             }
         }
+        return url;
     }
 
     private checkPadURL(url: string, widget?: Widget): boolean {
@@ -71,12 +69,8 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
         }
     }
 
-    public wrapUrl(url: string): string {
-        return this.wrapperUrl + encodeURIComponent(url + "?userName=") + "$matrix_user_id";
-    }
-
     public validateAndAddWidget() {
-        const url = this.getPadURL();
+        const url = this.getPadURL() + "?userName=$matrix_user_id";
 
         if (this.checkPadURL(url)) {
             this.toaster.pop("warning", "Please enter a Pad Name");
@@ -94,7 +88,7 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
     }
 
     public validateAndSaveWidget(widget: Widget) {
-        const url = this.getPadURL(widget);
+        const url = this.getPadURL(widget) + "?userName=$matrix_user_id";
 
         if (this.checkPadURL(url, widget)) {
             this.toaster.pop("warning", "Please enter a Pad Name");
