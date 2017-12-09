@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import * as randomString from "random-string";
 import {
+    JoinRuleStateResponse,
     MembershipStateResponse,
     ScalarSuccessResponse,
-    JoinRuleStateResponse,
     WidgetsResponse
 } from "./models/scalar_responses";
 import { Widget } from "./models/widget";
@@ -11,9 +11,9 @@ import { Widget } from "./models/widget";
 @Injectable()
 export class ScalarService {
 
-    private static actionMap: {[key: string]: {resolve: (obj: any) => void, reject: (obj: any) => void}} = {};
+    private static actionMap: { [key: string]: { resolve: (obj: any) => void, reject: (obj: any) => void } } = {};
 
-    public static getAndRemoveActionHandler(requestKey: string): {resolve: (obj: any) => void, reject: (obj: any) => void} {
+    public static getAndRemoveActionHandler(requestKey: string): { resolve: (obj: any) => void, reject: (obj: any) => void } {
         let handler = ScalarService.actionMap[requestKey];
         ScalarService.actionMap[requestKey] = null;
         return handler;

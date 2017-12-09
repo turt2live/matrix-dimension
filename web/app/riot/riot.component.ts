@@ -6,7 +6,7 @@ import { ToasterService } from "angular2-toaster";
 import { Integration } from "../shared/models/integration";
 import { IntegrationService } from "../shared/integration.service";
 import * as _ from "lodash";
-import { WIDGET_DIM_CUSTOM, WIDGET_DIM_YOUTUBE, WIDGET_DIM_TWITCH, WIDGET_DIM_ETHERPAD } from "../shared/models/widget";
+import { WIDGET_DIM_CUSTOM, WIDGET_DIM_ETHERPAD, WIDGET_DIM_TWITCH, WIDGET_DIM_YOUTUBE } from "../shared/models/widget";
 import { IntegrationComponent } from "../integration/integration.component";
 
 @Component({

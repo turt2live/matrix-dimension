@@ -6,7 +6,8 @@ import * as screenfull from "screenfull";
 })
 export class ToggleFullscreenDirective {
 
-    @HostListener("click") onClick() {
+    @HostListener("click")
+    onClick() {
         // HACK: This should be behind a service in the event the library changes
         if (screenfull.enabled) {
             screenfull.toggle();

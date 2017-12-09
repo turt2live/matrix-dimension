@@ -11,11 +11,11 @@ export interface ScalarUserResponse extends ScalarRoomResponse {
 }
 
 export interface ScalarErrorResponse extends ScalarResponse {
-    response: {error: {message: string, _error: Error}};
+    response: { error: { message: string, _error: Error } };
 }
 
 export interface ScalarSuccessResponse extends ScalarResponse {
-    response: {success: boolean};
+    response: { success: boolean };
 }
 
 export interface MembershipStateResponse extends ScalarUserResponse {

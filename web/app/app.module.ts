@@ -1,11 +1,11 @@
-import { NgModule, ApplicationRef } from "@angular/core";
+import { ApplicationRef, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { HttpModule } from "@angular/http";
 import { FormsModule } from "@angular/forms";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
 import { routing } from "./app.routing";
-import { removeNgStyles, createNewHosts } from "@angularclass/hmr";
+import { createNewHosts, removeNgStyles } from "@angularclass/hmr";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { RiotComponent } from "./riot/riot.component";
 import { ApiService } from "./shared/api.service";

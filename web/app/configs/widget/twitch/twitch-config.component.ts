@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ModalComponent, DialogRef } from "ngx-modialog";
+import { DialogRef, ModalComponent } from "ngx-modialog";
 import { WidgetComponent } from "../widget.component";
 import { ScalarService } from "../../../shared/scalar.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
@@ -33,7 +33,7 @@ export class TwitchWidgetConfigComponent extends WidgetComponent implements Moda
 
     public validateAndAddWidget() {
         // Replace channel name with path to embedable Twitch Player
-        const url = "https://player.twitch.tv/?channel="+this.newWidgetUrl;
+        const url = "https://player.twitch.tv/?channel=" + this.newWidgetUrl;
 
         // TODO Somehow Validate if it is a valid Username
         if (!url) {
@@ -47,9 +47,9 @@ export class TwitchWidgetConfigComponent extends WidgetComponent implements Moda
     }
 
     public validateAndSaveWidget(widget: Widget) {
-        const url = "https://player.twitch.tv/?channel="+widget.data.dimChannelName;
+        const url = "https://player.twitch.tv/?channel=" + widget.data.dimChannelName;
 
-	// TODO Somehow Validate if it is a valid Username
+        // TODO Somehow Validate if it is a valid Username
         if (!url) {
             this.toaster.pop("warning", "Please enter a Twitch Livestream Channel Name");
             return;

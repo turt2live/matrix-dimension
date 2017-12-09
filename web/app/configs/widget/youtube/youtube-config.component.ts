@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
-import { ModalComponent, DialogRef } from "ngx-modialog";
+import { DialogRef, ModalComponent } from "ngx-modialog";
 import { WidgetComponent } from "../widget.component";
 import { ScalarService } from "../../../shared/scalar.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
-import { Widget, WIDGET_SCALAR_YOUTUBE, WIDGET_DIM_YOUTUBE } from "../../../shared/models/widget";
+import { Widget, WIDGET_DIM_YOUTUBE, WIDGET_SCALAR_YOUTUBE } from "../../../shared/models/widget";
 import * as embed from "embed-video";
 import * as $ from "jquery";
 

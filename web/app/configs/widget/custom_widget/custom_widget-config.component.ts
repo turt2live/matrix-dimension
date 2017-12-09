@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ModalComponent, DialogRef } from "ngx-modialog";
+import { DialogRef, ModalComponent } from "ngx-modialog";
 import { WidgetComponent } from "../widget.component";
 import { ScalarService } from "../../../shared/scalar.service";
 import { ConfigModalContext } from "../../../integration/integration.component";

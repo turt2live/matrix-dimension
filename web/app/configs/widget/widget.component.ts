@@ -1,5 +1,5 @@
 import { ScalarService } from "../../shared/scalar.service";
-import { Widget, ScalarToWidgets } from "../../shared/models/widget";
+import { ScalarToWidgets, Widget } from "../../shared/models/widget";
 import { ToasterService } from "angular2-toaster";
 
 const SCALAR_WIDGET_LINKS = [
@@ -89,7 +89,7 @@ export class WidgetComponent {
 
     private wrapUrl(url: string): string {
         let encodedURL = this.wrapperUrl + encodeURIComponent(url);
-        
+
         //don't URL encode $vars of the widget Spec
         //TODO do the same with vars from the data object
         encodedURL = encodedURL.replace(encodeURIComponent("$matrix_user_id"), "$matrix_user_id");
