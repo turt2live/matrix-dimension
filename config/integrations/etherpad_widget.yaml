@@ -5,3 +5,7 @@ enabled: true
 name: "Etherpad"
 about: "Etherpad is a collaborative text editor. With this widget you can embed Etherpad directly in to your Matrix chat rooms so that you can securely collaborate on documents."
 avatar: "img/avatars/etherpad.png"
+
+# This is the URL people will be provided when adding a new Etherpad widget. The supported variables
+# are $roomId and $padName. Both will end up being URL encoded.
+defaultUrl: "https://demo.riot.im/etherpad/p/$roomId_$padName"

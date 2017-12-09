@@ -14,45 +14,20 @@
     <div class="config-content" *ngIf="!isLoading">
         <form (submit)="validateAndAddWidget()" novalidate name="addForm">
             <div class="row">
-                <div class="col" style="margin-bottom: 12px;">
-                    <div class="form-group row">
-                        <label for="padNameInput" class="col col-form-label">Etherpad Name</label>
-                        <div class="col">
-                            <input type="text" class="form-control" id="padNameInput"
-                                   placeholder="Pad Name"
-                                   [(ngModel)]="newWidgetUrl" name="newWidgetUrl"
-                                   [disabled]="isUpdating">
-                        </div>
+                <div class="col-md-8" style="margin-bottom: 12px;">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control"
+                               placeholder="Etherpad name or URL"
+                               [(ngModel)]="newWidgetUrl" name="newWidgetUrl"
+                               [disabled]="isUpdating">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-success" [disabled]="isUpdating">
+                                <i class="fa fa-plus-circle"></i> Add Widget
+                            </button>
+                        </span>
                     </div>
-                    <div class="form-group row">
-                        <div class="form-check col">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" [(ngModel)]="useCustomServer" name="useCustomServer">
-                                Use Custom Etherpad Server
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group row" *ngIf="useCustomServer">
-                        <label for="padServerInput" class="col col-form-label">Etherpad Custom Server</label>
-                        <div class="col">
-                            <input type="text" class="form-control" id="padServerInput"
-                                   placeholder="https://demo.riot.im/etherpad/p/"
-                                   [(ngModel)]="newEtherpadServerUrl" name="newEtherpadServerUrl"
-                                   [disabled]="isUpdating">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="padURL" class="col col-form-label">Etherpad URL</label>
-                        <div class="col">
-                            <input type="text" class="form-control" id="padURL" [value]="getPadURL()" readonly>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success" [disabled]="isUpdating">
-                        <i class="fa fa-plus-circle"></i> Add Widget
-                    </button>
                 </div>
-                <div class="w-100"></div>
-                <div class="col removable widget-item" *ngFor="let widget of widgets trackById">
+                <div class="col-md-12 removable widget-item" *ngFor="let widget of widgets trackById">
                     {{ widget.name || widget.url }} <span class="text-muted" *ngIf="widget.ownerId">(added by {{ widget.ownerId }})</span>
                     <button type="button" class="btn btn-outline-info btn-sm" (click)="editWidget(widget)"
                             style="margin-top: -5px;" [disabled]="isUpdating">
@@ -62,54 +37,26 @@
                             style="margin-top: -5px;" [disabled]="isUpdating">
                         <i class="fa fa-times"></i> Remove Widget
                     </button>
-                    <div class="col" *ngIf="isWidgetToggled(widget)" style="margin-top: 12px;">
-                        <div class="form-group row">
-                            <div class="form-check col">
-                                <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" [(ngModel)]="editUseCustomServer" name="widget-useCustomServer-{{widget.id}}">
-                                    Use Custom Etherpad Server
-                                </label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col">
-                                <label for="widget-name-{{widget.id}}">Widget Name</label>
-                                <input type="text" class="form-control" id="widget-name-{{widget.id}}"
-                                       placeholder="Etherpad Widget"
-                                       [(ngModel)]="widget.newName" name="widget-name-{{widget.id}}"
-                                       [disabled]="isUpdating">
-                            </div>
-                            <div class="form-group col">
-                                <label for="widget-padName-{{widget.id}}">Etherpad Name</label>
-                                <input type="text" class="form-control" id="widget-padName-{{widget.id}}"
-                                       placeholder="Etherpad Name"
-                                       [(ngModel)]="widget.data.newPadName" name="widget-padName-{{widget.id}}"
-                                       [disabled]="isUpdating">
-                            </div>
-                            <div class="form-group col" *ngIf="editUseCustomServer">
-                                <label for="widget-padServer-{{widget.id}}">Etherpad Server URL</label>
-                                <input type="text" class="form-control"
-                                       placeholder="Etherpad Server URL"
-                                       [(ngModel)]="widget.data.newPadServer" name="widget-padServer-{{widget.id}}"
-                                       [disabled]="isUpdating">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="padURL" class="col col-form-label">Etherpad URL</label>
-                            <div class="col">
-                                <input type="text" class="form-control" id="padURL" [value]="getPadURL(widget)" readonly>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary btn-sm" (click)="validateAndSaveWidget(widget)">
-                                    Save
-                                </button>
-                                <button type="button" class="btn btn-outline btn-sm" (click)="toggleWidget(widget)">
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
+                    <div *ngIf="isWidgetToggled(widget)">
+                        <label>
+                            Pad Name
+                            <input type="text" class="form-control"
+                                   placeholder="Etherpad Widget"
+                                   [(ngModel)]="widget.newName" name="widget-name-{{widget.id}}"
+                                   [disabled]="isUpdating">
+                        </label>
+                        <label>
+                            Pad URL
+                            <input type="text" class="form-control"
+                                   placeholder="https://your-pad-url"
+                                   [(ngModel)]="widget.newUrl" name="widget-url-{{widget.id}}"
+                                   [disabled]="isUpdating">
+                        </label>
+                        <button type="button" class="btn btn-primary btn-sm" (click)="validateAndSaveWidget(widget)">Save
+                        </button>
+                        <button type="button" class="btn btn-outline btn-sm" (click)="toggleWidget(widget)">
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </div>
