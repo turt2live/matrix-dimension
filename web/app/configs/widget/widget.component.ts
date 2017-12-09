@@ -149,6 +149,7 @@ export class WidgetComponent {
             .then(() => this.toggleWidget(widget))
             .then(() => {
                 this.isUpdating = false;
+                widget.url = this.getWrappedUrl(widget.url); // for easier editing
                 this.toaster.pop("success", "Widget updated!");
             })
             .catch(err => {
