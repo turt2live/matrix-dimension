@@ -7,6 +7,7 @@ import { TravisCiConfigComponent } from "../configs/travisci/travisci-config.com
 import { CustomWidgetConfigComponent } from "../configs/widget/custom_widget/custom_widget-config.component";
 import { YoutubeWidgetConfigComponent } from "../configs/widget/youtube/youtube-config.component";
 import { TwitchWidgetConfigComponent } from "../configs/widget/twitch/twitch-config.component";
+import { EtherpadWidgetConfigComponent } from "../configs/widget/etherpad/etherpad-config.component";
 
 @Injectable()
 export class IntegrationService {
@@ -24,6 +25,7 @@ export class IntegrationService {
             "customwidget": true,
             "youtube": true,
             "twitch": true,
+            "etherpad": true,
         },
     };
 
@@ -39,6 +41,7 @@ export class IntegrationService {
             "customwidget": CustomWidgetConfigComponent,
             "youtube": YoutubeWidgetConfigComponent,
             "twitch": TwitchWidgetConfigComponent,
+            "etherpad": EtherpadWidgetConfigComponent,
         },
     };
 
