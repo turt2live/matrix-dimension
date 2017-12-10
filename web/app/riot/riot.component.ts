@@ -21,6 +21,7 @@ export class RiotComponent {
     public loading = true;
     public roomId: string;
     public scalarToken: string;
+    public isEncryptedRoom = false;
 
     private requestedScreen: string = null;
     private requestedIntegration: string = null;
@@ -50,9 +51,25 @@ export class RiotComponent {
     }
 
     private init() {
-        this.api.getIntegrations(this.roomId, this.scalarToken).then(integrations => {
-            this.integrations = _.filter(integrations, i => IntegrationService.isSupported(i));
-            let promises = integrations.map(b => this.updateIntegrationState(b));
+        this.scalar.isRoomEncrypted(this.roomId).then(payload => {
+            this.isEncryptedRoom = payload.response;
+            return this.api.getIntegrations(this.roomId, this.scalarToken);
+        }).then(integrations => {
+            const supportedIntegrations = _.filter(integrations, i => IntegrationService.isSupported(i));
+
+            for (const integration of supportedIntegrations) {
+                // Widgets technically support encrypted rooms, so unless they explicitly declare that
+                // they don't, we'll assume they do. A warning about adding widgets in encrypted rooms
+                // is displayed to users elsewhere.
+                if (integration.type === "widget" && integration.supportsEncryptedRooms !== false)
+                    integration.supportsEncryptedRooms = true;
+            }
+
+            if (this.isEncryptedRoom)
+                this.integrations = _.filter(supportedIntegrations, i => i.supportsEncryptedRooms);
+            else this.integrations = supportedIntegrations;
+
+            let promises = this.integrations.map(b => this.updateIntegrationState(b));
             return Promise.all(promises);
         }).then(() => {
             this.loading = false;
@@ -183,5 +200,13 @@ export class RiotComponent {
             integration.isEnabled = !integration.isEnabled;
             this.toaster.pop("error", errorMessage);
         });
+    }
+
+    public hasAnyOf(...types: string[]): boolean {
+        for (const integration of this.integrations) {
+            if (types.indexOf(integration.type) !== -1) return true;
+        }
+
+        return false;
     }
 }

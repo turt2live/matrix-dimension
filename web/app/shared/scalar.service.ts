@@ -3,7 +3,7 @@ import * as randomString from "random-string";
 import {
     CanSendEventResponse,
     JoinRuleStateResponse,
-    MembershipStateResponse,
+    MembershipStateResponse, RoomEncryptionStatusResponse,
     ScalarSuccessResponse,
     WidgetsResponse
 } from "./models/scalar_responses";
@@ -78,6 +78,12 @@ export class ScalarService {
             room_id: roomId,
             event_type: eventType,
             is_state: isState,
+        });
+    }
+
+    public isRoomEncrypted(roomId: string): Promise<RoomEncryptionStatusResponse> {
+        return this.callAction("get_room_enc_state", {
+            room_id: roomId,
         });
     }
 

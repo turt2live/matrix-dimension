@@ -397,19 +397,19 @@ sendMessage("set_widget", "!curbf:matrix.org", null, {
 
 ### Getting the room's encryption status
 
-**Action**: `"get_room_enc_status"`
+**Action**: `"get_room_enc_state"`
 **Required params**:
 * `room_id` - the room to check
 
 **Sample call**:
 ```
-sendMessage("get_room_enc_status", "!curbf:matrix.org");
+sendMessage("get_room_enc_state", "!curbf:matrix.org");
 ```
 
 **Success Response**:
 ```
 {
-  "action": "get_room_enc_status",
+  "action": "get_room_enc_state",
   "room_id": "!curbf:matrix.org",
   "response: false
 }

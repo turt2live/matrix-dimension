@@ -5,6 +5,9 @@ export interface Integration {
     name: string;
     avatar: string;
     about: string; // nullable
+    supportsEncryptedRooms: boolean;
+
+    // Set by us
     isEnabled: boolean;
     isBroken: boolean;
     hasConfig: boolean;

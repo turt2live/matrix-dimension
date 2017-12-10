@@ -7,11 +7,26 @@
         <p><i class="fa fa-circle-o-notch fa-spin"></i> Loading...</p>
     </div>
     <div *ngIf="!error && !loading">
+        <!-- ------------------------ -->
+        <!-- EMPTY/ENCRYPTED STATES   -->
+        <!-- ------------------------ -->
+        <div class="alert alert-warning" *ngIf="integrations.length > 0 && isEncryptedRoom">
+            <h4>This room is encrypted</h4>
+            <strong>Integrations are not encrypted!</strong> This means that some information about yourself and the room may be leaked to the bot, bridge, or widget. This information includes the room ID, your display name, your username, your avatar, information about Riot, and other similar details. Add integrations with caution.
+        </div>
+        <div class="alert alert-warning" *ngIf="integrations.length === 0 && isEncryptedRoom">
+            <h4>This room is encrypted</h4>
+            There are currently no integrations which support encrypted rooms. Sorry about that!
+        </div>
+        <div class="alert alert-warning" *ngIf="integrations.length === 0 && !isEncryptedRoom">
+            <h4>No integrations available</h4>
+            This room does not have any compatible integrations. Please contact the server owner if you're seeing this message.
+        </div>
 
         <!-- ------------------------ -->
         <!-- WIDGETS                  -->
         <!-- ------------------------ -->
-        <h4>
+        <h4 *ngIf="hasAnyOf('widget')">
             Widgets <i class="fa fa-question-circle text-info" style="font-size: 15px;" placement="bottom"
                        ngbTooltip="Widgets add small apps to Riot, like Google Docs, Jitsi conferences, and YouTube videos"></i>
         </h4>
@@ -26,7 +41,7 @@
         <!-- ------------------------ -->
         <!-- BOTS                     -->
         <!-- ------------------------ -->
-        <h4>
+        <h4 *ngIf="hasAnyOf('bot', 'complex-bot')">
             Bots <i class="fa fa-question-circle text-info" style="font-size: 15px;" placement="bottom"
                     ngbTooltip="Bots can provide entertainment or some utility to your room"></i>
         </h4>
@@ -46,7 +61,7 @@
         <!-- ------------------------ -->
         <!-- BRIDGES                  -->
         <!-- ------------------------ -->
-        <h4>
+        <h4 *ngIf="hasAnyOf('bridge')">
             Bridges <i class="fa fa-question-circle text-info" style="font-size: 15px;" placement="bottom"
                        ngbTooltip="Bridges allow people on other platforms to talk in the room"></i>
         </h4>

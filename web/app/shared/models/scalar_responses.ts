@@ -52,3 +52,7 @@ export interface CanSendEventResponse extends ScalarRoomResponse {
     is_state: boolean;
     response: boolean;
 }
+
+export interface RoomEncryptionStatusResponse extends ScalarRoomResponse {
+    response: boolean;
+}
