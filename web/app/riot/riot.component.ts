@@ -6,7 +6,10 @@ import { ToasterService } from "angular2-toaster";
 import { Integration } from "../shared/models/integration";
 import { IntegrationService } from "../shared/integration.service";
 import * as _ from "lodash";
-import { WIDGET_DIM_CUSTOM, WIDGET_DIM_ETHERPAD, WIDGET_DIM_TWITCH, WIDGET_DIM_YOUTUBE } from "../shared/models/widget";
+import {
+    WIDGET_DIM_CUSTOM, WIDGET_DIM_ETHERPAD, WIDGET_DIM_JITSI, WIDGET_DIM_TWITCH,
+    WIDGET_DIM_YOUTUBE
+} from "../shared/models/widget";
 import { IntegrationComponent } from "../integration/integration.component";
 
 @Component({
@@ -82,6 +85,9 @@ export class RiotComponent {
         } else if (this.requestedScreen === "type_" + WIDGET_DIM_ETHERPAD) {
             type = "widget";
             integrationType = "etherpad";
+        } else if (this.requestedScreen === "type_" + WIDGET_DIM_JITSI) {
+            type = "widget";
+            integrationType = "jitsi";
         } else {
             console.log("Unknown screen requested: " + this.requestedScreen);
         }

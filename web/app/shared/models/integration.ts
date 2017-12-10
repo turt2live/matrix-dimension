@@ -31,3 +31,8 @@ export interface IRCIntegration extends Integration {
 export interface EtherpadWidgetIntegration extends Integration {
     defaultUrl: string;
 }
+
+export interface JitsiWidgetIntegration extends Integration {
+    jitsiDomain: string;
+    scriptUrl: string
+}

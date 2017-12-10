@@ -40,4 +40,9 @@ export class ApiService {
         return this.http.get(url, {params: {url: checkUrl}})
             .map(res => res.json()).toPromise();
     }
+
+    getIntegration(type: string, integrationType: string): Promise<Integration> {
+        const url = "/api/v1/dimension/integration/" + type + "/" + integrationType;
+        return this.http.get(url).map(res => res.json()).toPromise();
+    }
 }

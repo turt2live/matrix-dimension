@@ -33,11 +33,14 @@ export class WidgetComponent {
                 scalarWrapperId = null) {
         this.isLoading = true;
         this.isUpdating = false;
-        this.wrapperUrl = window.location.origin + "/widgets/" + wrapperId + "?url=";
 
-        if (!scalarWrapperId) scalarWrapperId = wrapperId;
-        for (let widgetLink of SCALAR_WIDGET_LINKS) {
-            this.scalarWrapperUrls.push(widgetLink.replace("__TYPE__", scalarWrapperId));
+        if (wrapperId) {
+            this.wrapperUrl = window.location.origin + "/widgets/" + wrapperId + "?url=";
+
+            if (!scalarWrapperId) scalarWrapperId = wrapperId;
+            for (let widgetLink of SCALAR_WIDGET_LINKS) {
+                this.scalarWrapperUrls.push(widgetLink.replace("__TYPE__", scalarWrapperId));
+            }
         }
 
         this.getWidgetsOfType(primaryWidgetType, alternateWidgetType).then(widgets => {
@@ -62,6 +65,15 @@ export class WidgetComponent {
         });
     }
 
+    protected finishParsing(widget: Widget) {
+        // We don't actually need to do anything
+        return widget;
+    }
+
+    protected widgetAdded() {
+        // Meant to be overridden
+    }
+
     private getWidgetsOfType(type: string, altType: string): Promise<Widget[]> {
         return this.scalarApi.getWidgets(this.roomId)
             .then(resp => ScalarToWidgets(resp))
@@ -73,11 +85,13 @@ export class WidgetComponent {
                         filtered.push(widget);
                 }
 
-                return filtered;
+                return filtered.map(w => this.finishParsing(w));
             });
     }
 
     private getWrappedUrl(url: string): string {
+        if (!this.wrapperUrl) return url;
+
         const urls = [this.wrapperUrl].concat(this.scalarWrapperUrls);
         for (let scalarUrl of urls) {
             if (url.startsWith(scalarUrl)) {
@@ -88,16 +102,27 @@ export class WidgetComponent {
     }
 
     private wrapUrl(url: string): string {
+        if (!this.wrapperUrl) return url;
+
         let encodedURL = this.wrapperUrl + encodeURIComponent(url);
 
-        //don't URL encode $vars of the widget Spec
-        //TODO do the same with vars from the data object
-        encodedURL = encodedURL.replace(encodeURIComponent("$matrix_user_id"), "$matrix_user_id");
-        encodedURL = encodedURL.replace(encodeURIComponent("$matrix_room_id"), "$matrix_room_id");
-        encodedURL = encodedURL.replace(encodeURIComponent("$matrix_display_name"), "$matrix_display_name");
-        encodedURL = encodedURL.replace(encodeURIComponent("$matrix_avatar_url"), "$matrix_avatar_url");
+        // TODO: Decode data parameters
+        encodedURL = this.unformatParams(encodedURL);
 
         return encodedURL;
+    }
+
+    protected unformatParams(encodedUrl: string, additionalData: any = {}):string {
+        encodedUrl = encodedUrl.replace(encodeURIComponent("$matrix_user_id"), "$matrix_user_id");
+        encodedUrl = encodedUrl.replace(encodeURIComponent("$matrix_room_id"), "$matrix_room_id");
+        encodedUrl = encodedUrl.replace(encodeURIComponent("$matrix_display_name"), "$matrix_display_name");
+        encodedUrl = encodedUrl.replace(encodeURIComponent("$matrix_avatar_url"), "$matrix_avatar_url");
+
+        for (const key of Object.keys(additionalData)) {
+            encodedUrl = encodedUrl.replace(encodeURIComponent("$" + key), "$" + key);
+        }
+
+        return encodedUrl;
     }
 
     private setWidgetUrl(widget: Widget) {
@@ -127,6 +152,7 @@ export class WidgetComponent {
                 this.newWidgetUrl = "";
                 this.newWidgetName = "";
                 this.toaster.pop("success", "Widget added!");
+                this.widgetAdded();
             })
             .catch(err => {
                 this.toaster.pop("error", err.json().error);

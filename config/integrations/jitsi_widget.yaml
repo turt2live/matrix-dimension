@@ -1,0 +1,15 @@
+# All this configuration does is make "Jitsi Widget" available in the UI
+type: "widget"
+integrationType: "jitsi"
+enabled: true
+name: "Jitsi"
+about: "Add video conferencing to your room with Jitsi"
+avatar: "img/avatars/jitsi.png"
+
+# This is the domain that will be used to construct the Jitsi widget. It must be just the domain.
+# The default is meet.jit.si  The Riot.IM instance is at jitsi.riot.im
+jitsiDomain: "jitsi.riot.im"
+
+# This is the path to the external API script. Usually the domain can be replaced with your custom
+# domain above without any other modifications.
+scriptUrl: "https://jitsi.riot.im/libs/external_api.min.js"

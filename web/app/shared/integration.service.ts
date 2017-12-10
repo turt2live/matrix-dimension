@@ -8,6 +8,7 @@ import { CustomWidgetConfigComponent } from "../configs/widget/custom_widget/cus
 import { YoutubeWidgetConfigComponent } from "../configs/widget/youtube/youtube-config.component";
 import { TwitchWidgetConfigComponent } from "../configs/widget/twitch/twitch-config.component";
 import { EtherpadWidgetConfigComponent } from "../configs/widget/etherpad/etherpad-config.component";
+import { JitsiWidgetConfigComponent } from "../configs/widget/jitsi/jitsi-config.component";
 
 @Injectable()
 export class IntegrationService {
@@ -26,6 +27,7 @@ export class IntegrationService {
             "youtube": true,
             "twitch": true,
             "etherpad": true,
+            "jitsi": true,
         },
     };
 
@@ -42,6 +44,7 @@ export class IntegrationService {
             "youtube": YoutubeWidgetConfigComponent,
             "twitch": TwitchWidgetConfigComponent,
             "etherpad": EtherpadWidgetConfigComponent,
+            "jitsi": JitsiWidgetConfigComponent,
         },
     };
 

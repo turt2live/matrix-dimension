@@ -1,0 +1,13 @@
+<div id="jitsiContainer">
+</div>
+
+<div class="join-conference-wrapper">
+    <div class="join-conference-boat">
+        <div *ngIf="!isJoined" class="join-conference-prompt">
+            <h3>Jitsi Video Conference</h3>
+            <button type="button" (click)="joinConference()" class="btn btn-primary btn-large">
+                Join Conference
+            </button>
+        </div>
+    </div>
+</div>

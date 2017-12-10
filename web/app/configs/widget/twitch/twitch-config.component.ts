@@ -62,7 +62,7 @@ export class TwitchWidgetConfigComponent extends WidgetComponent implements Moda
         this.saveWidget(widget);
     }
 
-    editWidget(widget: Widget) {
+    public editWidget(widget: Widget) {
         widget.data.newDimChannelName = widget.data.dimChannelName;
         super.editWidget(widget);
     }

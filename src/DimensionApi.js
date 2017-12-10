@@ -32,6 +32,7 @@ class DimensionApi {
         app.put("/api/v1/dimension/integrations/:roomId/:type/:integrationType/state", this._updateIntegrationState.bind(this));
         app.get("/api/v1/dimension/integrations/:roomId/:type/:integrationType/state", this._getIntegrationState.bind(this));
         app.get("/api/v1/dimension/widgets/embeddable", this._checkEmbeddable.bind(this));
+        app.get("/api/v1/dimension/integration/:type/:integrationType", this._getIntegration.bind(this));
     }
 
     _checkEmbeddable(req, res) {
@@ -101,7 +102,7 @@ class DimensionApi {
         });
     }
 
-    _getIntegration(integrationConfig, roomId, scalarToken) {
+    _findIntegration(integrationConfig, roomId, scalarToken) {
         var factory = IntegrationImpl.getFactory(integrationConfig);
         if (!factory) throw new Error("Missing config factory for " + integrationConfig.name);
 
@@ -110,6 +111,27 @@ class DimensionApi {
         } catch (err) {
             throw new Error("Error using factory for " + integrationConfig.name + ". Please either fix the integration settings or disable the integration.", err);
         }
+    }
+
+    _getIntegration(req, res) {res.setHeader("Content-Type", "application/json");
+        // Unauthed endpoint.
+
+        var type = req.params.type;
+        var integrationType = req.params.integrationType;
+
+        if (!type || !integrationType) {
+            res.status(400).send({error: "Missing integration type or type"});
+            return;
+        }
+
+        var byIntegrationType = Integrations.byType[type];
+        if (!byIntegrationType || !byIntegrationType[integrationType]) {
+            res.status(400).send({error: "Unknown integration"});
+            return;
+        }
+        var integrationConfig = byIntegrationType[integrationType];
+
+        res.status(200).send(integrationConfig);
     }
 
     _getIntegrations(req, res) {
@@ -129,7 +151,7 @@ class DimensionApi {
             var remove = [];
             _.forEach(integrations, integration => {
                 try {
-                    promises.push(this._getIntegration(integration, roomId, scalarToken).then(builtIntegration => {
+                    promises.push(this._findIntegration(integration, roomId, scalarToken).then(builtIntegration => {
                         return builtIntegration.getState().then(state => {
                             var keys = _.keys(state);
                             for (var key of keys) {
@@ -187,7 +209,7 @@ class DimensionApi {
         log.info("DimensionApi", "Remove requested for " + type + " (" + integrationType + ") in room " + roomId);
 
         this._db.checkToken(scalarToken).then(() => {
-            return this._getIntegration(integrationConfig, roomId, scalarToken);
+            return this._findIntegration(integrationConfig, roomId, scalarToken);
         }).then(integration => integration.removeFromRoom(roomId)).then(() => {
             res.status(200).send({success: true});
         }).catch(err => {
@@ -217,7 +239,7 @@ class DimensionApi {
         log.info("DimensionApi", "Update state requested for " + type + " (" + integrationType + ") in room " + roomId);
 
         this._db.checkToken(scalarToken).then(() => {
-            return this._getIntegration(integrationConfig, roomId, scalarToken);
+            return this._findIntegration(integrationConfig, roomId, scalarToken);
         }).then(integration => {
             return integration.updateState(req.body.state);
         }).then(newState => {
@@ -249,7 +271,7 @@ class DimensionApi {
         log.info("DimensionApi", "State requested for " + type + " (" + integrationType + ") in room " + roomId);
 
         this._db.checkToken(scalarToken).then(() => {
-            return this._getIntegration(integrationConfig, roomId, scalarToken);
+            return this._findIntegration(integrationConfig, roomId, scalarToken);
         }).then(integration => {
             return integration.getState();
         }).then(state => {

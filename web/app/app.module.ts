@@ -31,6 +31,8 @@ import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube-c
 import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch-config.component";
 import { EtherpadWidgetConfigComponent } from "./configs/widget/etherpad/etherpad-config.component";
 import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.component";
+import { JitsiWidgetConfigComponent } from "./configs/widget/jitsi/jitsi-config.component";
+import { JitsiWidgetWrapperComponent } from "./widget_wrappers/jitsi/jitsi.component";
 
 @NgModule({
     imports: [
@@ -63,6 +65,8 @@ import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.compo
         TwitchWidgetConfigComponent,
         EtherpadWidgetConfigComponent,
         VideoWidgetWrapperComponent,
+        JitsiWidgetConfigComponent,
+        JitsiWidgetWrapperComponent,
 
         // Vendor
     ],
@@ -84,6 +88,7 @@ import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.compo
         YoutubeWidgetConfigComponent,
         TwitchWidgetConfigComponent,
         EtherpadWidgetConfigComponent,
+        JitsiWidgetConfigComponent,
     ]
 })
 export class AppModule {
