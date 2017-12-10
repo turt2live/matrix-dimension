@@ -60,8 +60,24 @@ export class JitsiWidgetConfigComponent extends WidgetComponent implements Modal
     }
 
     public validateAndAddWidget() {
-        const conferenceUrl = "https://" + this.integration.jitsiDomain + "/" + this.newWidgetName;
-        const conferenceId = this.newWidgetName;
+        const jitsiConfig = this.getJitsiConfig(this.integration.jitsiDomain, this.newWidgetName);
+
+        this.newWidgetUrl = jitsiConfig.url;
+        this.newWidgetName = "Jitsi Video Conference";
+        this.addWidget(jitsiConfig.data);
+    }
+
+    public validateAndSaveWidget(widget: Widget) {
+        const jitsiUrl = url.parse(widget.data.dimConferenceUrl);
+        const jitsiConfig = this.getJitsiConfig(jitsiUrl.host, jitsiUrl.path.substring(1));
+
+        widget.newUrl = jitsiConfig.url;
+        widget.data = jitsiConfig.data;
+        this.saveWidget(widget);
+    }
+
+    private getJitsiConfig(domain: string, conferenceId: string): {url: string, data: any} {
+        const conferenceUrl = "https://" + domain + "/" + encodeURIComponent(conferenceId);
         const data = {
             dimOriginalConferenceUrl: conferenceUrl,
             dimConferenceUrl: conferenceUrl,
@@ -70,7 +86,7 @@ export class JitsiWidgetConfigComponent extends WidgetComponent implements Modal
         let widgetQueryString = url.format({
             query: {
                 //"scriptUrl": this.integration.scriptUrl, // handled in wrapper
-                "domain": this.integration.jitsiDomain,
+                "domain": domain,
                 "conferenceId": conferenceId,
                 "displayName": "$matrix_display_name",
                 "avatarUrl": "$matrix_avatar_url",
@@ -79,13 +95,10 @@ export class JitsiWidgetConfigComponent extends WidgetComponent implements Modal
         });
         widgetQueryString = this.unformatParams(widgetQueryString, data);
 
-        this.newWidgetUrl = window.location.origin + "/widgets/jitsi" + widgetQueryString;
-        this.newWidgetName = "Jitsi Video Conference";
-        this.addWidget(data);
-    }
-
-    public validateAndSaveWidget(widget: Widget) {
-        console.log(widget);
+        return {
+            url: window.location.origin + "/widgets/jitsi" + widgetQueryString,
+            data: data,
+        };
     }
 
     protected widgetAdded() {
