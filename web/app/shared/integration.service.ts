@@ -9,49 +9,76 @@ import { YoutubeWidgetConfigComponent } from "../configs/widget/youtube/youtube-
 import { TwitchWidgetConfigComponent } from "../configs/widget/twitch/twitch-config.component";
 import { EtherpadWidgetConfigComponent } from "../configs/widget/etherpad/etherpad-config.component";
 import { JitsiWidgetConfigComponent } from "../configs/widget/jitsi/jitsi-config.component";
+import {
+    WIDGET_DIM_CUSTOM,
+    WIDGET_DIM_ETHERPAD,
+    WIDGET_DIM_JITSI,
+    WIDGET_DIM_TWITCH,
+    WIDGET_DIM_YOUTUBE
+} from "./models/widget";
 
 @Injectable()
 export class IntegrationService {
 
-    private static supportedTypeMap = {
-        "bot": true,
+    private static supportedIntegrationsMap = {
+        "bot": {}, // empty == supported
         "complex-bot": {
-            "rss": true,
-            "travisci": true,
+            "rss": {
+                component: RssConfigComponent,
+            },
+            "travisci": {
+                component: TravisCiConfigComponent,
+            },
         },
         "bridge": {
-            "irc": true,
+            "irc": {
+                component: IrcConfigComponent,
+            },
         },
         "widget": {
-            "customwidget": true,
-            "youtube": true,
-            "twitch": true,
-            "etherpad": true,
-            "jitsi": true,
+            "customwidget": {
+                component: CustomWidgetConfigComponent,
+                screenId: "type_" + WIDGET_DIM_CUSTOM,
+            },
+            "youtube": {
+                component: YoutubeWidgetConfigComponent,
+                screenId: "type_" + WIDGET_DIM_YOUTUBE,
+            },
+            "etherpad": {
+                component: EtherpadWidgetConfigComponent,
+                screenId: "type_" + WIDGET_DIM_ETHERPAD,
+            },
+            "twitch": {
+                component: TwitchWidgetConfigComponent,
+                screenId: "type_" + WIDGET_DIM_TWITCH,
+            },
+            "jitsi": {
+                component: JitsiWidgetConfigComponent,
+                screenId: "type_" + WIDGET_DIM_JITSI,
+            },
         },
     };
 
-    private static components = {
-        "complex-bot": {
-            "rss": RssConfigComponent,
-            "travisci": TravisCiConfigComponent,
-        },
-        "bridge": {
-            "irc": IrcConfigComponent,
-        },
-        "widget": {
-            "customwidget": CustomWidgetConfigComponent,
-            "youtube": YoutubeWidgetConfigComponent,
-            "twitch": TwitchWidgetConfigComponent,
-            "etherpad": EtherpadWidgetConfigComponent,
-            "jitsi": JitsiWidgetConfigComponent,
-        },
-    };
+    static getAllConfigComponents(): ContainerContent[] {
+        const components = [];
+
+        for (const iType of Object.keys(IntegrationService.supportedIntegrationsMap)) {
+            for (const iiType of Object.keys(IntegrationService.supportedIntegrationsMap[iType])) {
+                const component = IntegrationService.supportedIntegrationsMap[iType][iiType].component;
+                if (component) components.push(component);
+            }
+        }
+
+        return components;
+    }
 
     static isSupported(integration: Integration): boolean {
-        if (IntegrationService.supportedTypeMap[integration.type] === true) return true;
-        if (!IntegrationService.supportedTypeMap[integration.type]) return false;
-        return IntegrationService.supportedTypeMap[integration.type][integration.integrationType] === true;
+        const forType = IntegrationService.supportedIntegrationsMap[integration.type];
+        if (!forType) return false;
+
+        if (Object.keys(forType).length === 0) return true;
+
+        return forType[integration.integrationType]; // has sub type
     }
 
     static hasConfig(integration: Integration): boolean {
@@ -59,7 +86,18 @@ export class IntegrationService {
     }
 
     static getConfigComponent(integration: Integration): ContainerContent {
-        return IntegrationService.components[integration.type][integration.integrationType];
+        return IntegrationService.supportedIntegrationsMap[integration.type][integration.integrationType].component;
+    }
+
+    static getIntegrationForScreen(screen: string): { type: string, integrationType: string } {
+        for (const iType of Object.keys(IntegrationService.supportedIntegrationsMap)) {
+            for (const iiType of Object.keys(IntegrationService.supportedIntegrationsMap[iType])) {
+                const iScreen = IntegrationService.supportedIntegrationsMap[iType][iiType].screenId;
+                if (screen === iScreen) return {type: iType, integrationType: iiType};
+            }
+        }
+
+        return null;
     }
 
     constructor() {

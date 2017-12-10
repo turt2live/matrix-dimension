@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as randomString from "random-string";
 import {
+    CanSendEventResponse,
     JoinRuleStateResponse,
     MembershipStateResponse,
     ScalarSuccessResponse,
@@ -70,6 +71,14 @@ export class ScalarService {
 
     public close(): void {
         this.callAction("close_scalar", {});
+    }
+
+    public canSendEvent(roomId: string, eventType: string, isState: boolean): Promise<CanSendEventResponse> {
+        return this.callAction("can_send_event", {
+            room_id: roomId,
+            event_type: eventType,
+            is_state: isState,
+        });
     }
 
     private callAction(action, payload): Promise<any> {

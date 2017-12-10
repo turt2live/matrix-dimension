@@ -46,3 +46,9 @@ export interface WidgetsResponse extends ScalarRoomResponse {
         }
     }[];
 }
+
+export interface CanSendEventResponse extends ScalarRoomResponse {
+    event_type: string;
+    is_state: boolean;
+    response: boolean;
+}

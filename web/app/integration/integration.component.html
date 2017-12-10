@@ -7,7 +7,7 @@
                 <ui-switch [checked]="integration.isEnabled" size="small" [disabled]="integration.isBroken"
                            (change)="update()"></ui-switch>
             </div>
-            <div class="switch" *ngIf="integration.type == 'bridge' && !integration.isEnabled">
+            <div class="switch" *ngIf="canHaveErrors(integration) && !integration.isEnabled">
                 <i class="fa fa-warning text-warning" ngbTooltip="{{ integration.bridgeError }}"></i>
             </div>
             <div class="toolbar">

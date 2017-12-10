@@ -41,4 +41,8 @@ export class IntegrationComponent {
             size: "lg"
         }, BSModalContext));
     }
+
+    public canHaveErrors(integration: Integration): boolean {
+        return integration.type === 'bridge' || integration.type === "widget";
+    }
 }

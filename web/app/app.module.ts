@@ -18,21 +18,15 @@ import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component
 import { IntegrationService } from "./shared/integration.service";
 import { BootstrapModalModule } from "ngx-modialog/plugins/bootstrap";
 import { ModalModule } from "ngx-modialog";
-import { RssConfigComponent } from "./configs/rss/rss-config.component";
-import { IrcConfigComponent } from "./configs/irc/irc-config.component";
 import { IrcApiService } from "./shared/irc-api.service";
-import { TravisCiConfigComponent } from "./configs/travisci/travisci-config.component";
-import { CustomWidgetConfigComponent } from "./configs/widget/custom_widget/custom_widget-config.component";
 import { MyFilterPipe } from "./shared/my-filter.pipe";
 import { GenericWidgetWrapperComponent } from "./widget_wrappers/generic/generic.component";
 import { ToggleFullscreenDirective } from "./shared/toggle-fullscreen.directive";
 import { FullscreenButtonComponent } from "./fullscreen-button/fullscreen-button.component";
-import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube-config.component";
-import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch-config.component";
-import { EtherpadWidgetConfigComponent } from "./configs/widget/etherpad/etherpad-config.component";
 import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.component";
-import { JitsiWidgetConfigComponent } from "./configs/widget/jitsi/jitsi-config.component";
 import { JitsiWidgetWrapperComponent } from "./widget_wrappers/jitsi/jitsi.component";
+
+const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigComponents();
 
 @NgModule({
     imports: [
@@ -48,24 +42,17 @@ import { JitsiWidgetWrapperComponent } from "./widget_wrappers/jitsi/jitsi.compo
         BootstrapModalModule,
     ],
     declarations: [
+        ...WIDGET_CONFIGURATION_COMPONENTS,
         AppComponent,
         HomeComponent,
         RiotComponent,
         IntegrationComponent,
         ScalarCloseComponent,
-        RssConfigComponent,
-        IrcConfigComponent,
-        TravisCiConfigComponent,
-        CustomWidgetConfigComponent,
         MyFilterPipe,
         GenericWidgetWrapperComponent,
         ToggleFullscreenDirective,
         FullscreenButtonComponent,
-        YoutubeWidgetConfigComponent,
-        TwitchWidgetConfigComponent,
-        EtherpadWidgetConfigComponent,
         VideoWidgetWrapperComponent,
-        JitsiWidgetConfigComponent,
         JitsiWidgetWrapperComponent,
 
         // Vendor
@@ -81,14 +68,7 @@ import { JitsiWidgetWrapperComponent } from "./widget_wrappers/jitsi/jitsi.compo
     ],
     bootstrap: [AppComponent],
     entryComponents: [
-        RssConfigComponent,
-        TravisCiConfigComponent,
-        IrcConfigComponent,
-        CustomWidgetConfigComponent,
-        YoutubeWidgetConfigComponent,
-        TwitchWidgetConfigComponent,
-        EtherpadWidgetConfigComponent,
-        JitsiWidgetConfigComponent,
+        ...WIDGET_CONFIGURATION_COMPONENTS,
     ]
 })
 export class AppModule {

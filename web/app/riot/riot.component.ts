@@ -6,10 +6,6 @@ import { ToasterService } from "angular2-toaster";
 import { Integration } from "../shared/models/integration";
 import { IntegrationService } from "../shared/integration.service";
 import * as _ from "lodash";
-import {
-    WIDGET_DIM_CUSTOM, WIDGET_DIM_ETHERPAD, WIDGET_DIM_JITSI, WIDGET_DIM_TWITCH,
-    WIDGET_DIM_YOUTUBE
-} from "../shared/models/widget";
 import { IntegrationComponent } from "../integration/integration.component";
 
 @Component({
@@ -73,21 +69,11 @@ export class RiotComponent {
         let type = null;
         let integrationType = null;
         if (!this.requestedScreen) return;
-        if (this.requestedScreen === "type_" + WIDGET_DIM_CUSTOM) {
-            type = "widget";
-            integrationType = "customwidget";
-        } else if (this.requestedScreen === "type_" + WIDGET_DIM_YOUTUBE) {
-            type = "widget";
-            integrationType = "youtube";
-        } else if (this.requestedScreen === "type_" + WIDGET_DIM_TWITCH) {
-            type = "widget";
-            integrationType = "twitch";
-        } else if (this.requestedScreen === "type_" + WIDGET_DIM_ETHERPAD) {
-            type = "widget";
-            integrationType = "etherpad";
-        } else if (this.requestedScreen === "type_" + WIDGET_DIM_JITSI) {
-            type = "widget";
-            integrationType = "jitsi";
+
+        const targetIntegration = IntegrationService.getIntegrationForScreen(this.requestedScreen);
+        if (targetIntegration) {
+            type = targetIntegration.type;
+            integrationType = targetIntegration.integrationType;
         } else {
             console.log("Unknown screen requested: " + this.requestedScreen);
         }
@@ -109,9 +95,8 @@ export class RiotComponent {
         integration.hasConfig = IntegrationService.hasConfig(integration);
 
         if (integration.type === "widget") {
-            integration.isEnabled = true;
-            integration.isBroken = false;
-            return Promise.resolve();
+            if (!integration.requirements) integration.requirements = {};
+            integration.requirements["canSetWidget"] = true;
         }
 
         if (integration.requirements) {
@@ -163,6 +148,15 @@ export class RiotComponent {
                         ? Promise.resolve()
                         : Promise.reject(new Error("The room must be " + requirement + " to use this integration."));
                 });
+            case "canSetWidget":
+                const processPayload = payload => {
+                    const response = <any>payload.response;
+                    if (!response || response.error || response.error.message)
+                        return Promise.reject(new Error("You cannot modify widgets in this room"));
+                    if (payload.response === true) return Promise.resolve();
+                    return Promise.reject("Error communicating with Riot");
+                };
+                return this.scalar.canSendEvent(this.roomId, "im.vector.modular.widgets", true).then(processPayload).catch(processPayload);
             default:
                 return Promise.reject(new Error("Requirement '" + key + "' not found"));
         }
