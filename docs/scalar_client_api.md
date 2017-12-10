@@ -395,6 +395,26 @@ sendMessage("set_widget", "!curbf:matrix.org", null, {
 *Note*: Widgets are documented by the matrix.org team [on this Google Doc](https://docs.google.com/document/d/1TiWNDcEOULeRYQpkJHQDjgIW32ohIJSi5MKv9oRdzCo/edit). That document is the source of truth for the event structure and usage.
 *Note*: `scalar_token` will be appended to the query string if the widget's url matches the API URL of the integration manager (in Riot)
 
+### Getting the room's encryption status
+
+**Action**: `"get_room_enc_status"`
+**Required params**:
+* `room_id` - the room to check
+
+**Sample call**:
+```
+sendMessage("get_room_enc_status", "!curbf:matrix.org");
+```
+
+**Success Response**:
+```
+{
+  "action": "get_room_enc_status",
+  "room_id": "!curbf:matrix.org",
+  "response: false
+}
+```
+
 ### Closing the integrations manager (scalar)
 
 **Action**: `"close_scalar"`
