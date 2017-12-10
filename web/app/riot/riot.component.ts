@@ -168,9 +168,9 @@ export class RiotComponent {
             case "canSetWidget":
                 const processPayload = payload => {
                     const response = <any>payload.response;
-                    if (!response || response.error || response.error.message)
+                    if (response === true) return Promise.resolve();
+                    if (response.error || response.error.message)
                         return Promise.reject(new Error("You cannot modify widgets in this room"));
-                    if (payload.response === true) return Promise.resolve();
                     return Promise.reject("Error communicating with Riot");
                 };
                 return this.scalar.canSendEvent(this.roomId, "im.vector.modular.widgets", true).then(processPayload).catch(processPayload);
