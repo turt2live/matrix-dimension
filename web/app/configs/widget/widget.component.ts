@@ -1,6 +1,7 @@
 import { ScalarService } from "../../shared/scalar.service";
 import { ScalarToWidgets, Widget } from "../../shared/models/widget";
 import { ToasterService } from "angular2-toaster";
+import { Integration } from "../../shared/models/integration";
 
 const SCALAR_WIDGET_LINKS = [
     "https://scalar-staging.riot.im/scalar/api/widgets/__TYPE__.html?url=",
@@ -27,6 +28,7 @@ export class WidgetComponent {
                 window: Window,
                 private primaryWidgetType: string,
                 alternateWidgetType: string,
+                public integration: Integration,
                 requestedEditId: string,
                 private defaultName: string,
                 wrapperId = "generic",

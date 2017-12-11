@@ -24,6 +24,7 @@ export class TwitchWidgetConfigComponent extends WidgetComponent implements Moda
             window,
             WIDGET_DIM_TWITCH,
             WIDGET_SCALAR_TWITCH,
+            dialog.context.integration,
             dialog.context.integrationId,
             "Twitch Widget",
             "video", // wrapper

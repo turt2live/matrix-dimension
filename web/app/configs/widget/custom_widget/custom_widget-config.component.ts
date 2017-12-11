@@ -24,6 +24,7 @@ export class CustomWidgetConfigComponent extends WidgetComponent implements Moda
             window,
             WIDGET_DIM_CUSTOM,
             WIDGET_SCALAR_CUSTOM,
+            dialog.context.integration,
             dialog.context.integrationId,
             "Custom Widget",
             "generic" // wrapper

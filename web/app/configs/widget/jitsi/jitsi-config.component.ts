@@ -35,6 +35,7 @@ export class JitsiWidgetConfigComponent extends WidgetComponent implements Modal
             window,
             WIDGET_DIM_JITSI,
             WIDGET_SCALAR_JITSI,
+            dialog.context.integration,
             dialog.context.integrationId,
             "Jitsi Video Conference",
             "" // we intentionally don't specify the wrapper so we can control the behaviour

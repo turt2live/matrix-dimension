@@ -26,6 +26,7 @@ export class YoutubeWidgetConfigComponent extends WidgetComponent implements Mod
             window,
             WIDGET_DIM_YOUTUBE,
             WIDGET_SCALAR_YOUTUBE,
+            dialog.context.integration,
             dialog.context.integrationId,
             "Youtube Widget",
             "video", // wrapper

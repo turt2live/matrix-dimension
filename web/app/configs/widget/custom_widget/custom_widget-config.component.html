@@ -1,7 +1,7 @@
 <div class="config-wrapper">
     <img src="/img/close.svg" (click)="dialog.close()" class="close-icon">
     <div class="config-header">
-        <img src="/img/avatars/customwidget.png">
+        <img [src]="integration.avatar">
         <h4>Configure custom widgets</h4>
     </div>
     <div class="config-content" *ngIf="isLoading">

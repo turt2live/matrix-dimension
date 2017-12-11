@@ -27,6 +27,7 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
             window,
             WIDGET_DIM_ETHERPAD,
             WIDGET_SCALAR_ETHERPAD,
+            dialog.context.integration,
             dialog.context.integrationId,
             "Etherpad Widget",
             "generic", // wrapper
