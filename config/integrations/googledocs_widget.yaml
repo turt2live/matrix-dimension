@@ -1,0 +1,7 @@
+# All this configuration does is make "Google Docs Widget" available in the UI
+type: "widget"
+integrationType: "googledocs"
+enabled: true
+name: "Google Docs"
+about: "Collaborate on and share documents using Google Docs"
+avatar: "img/avatars/googledocs.png"

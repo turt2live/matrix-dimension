@@ -16,6 +16,7 @@ export const WIDGET_DIM_YOUTUBE = "dimension-youtube";
 export const WIDGET_DIM_TWITCH = "dimension-twitch";
 export const WIDGET_DIM_ETHERPAD = "dimension-etherpad";
 export const WIDGET_DIM_JITSI = "dimension-jitsi";
+export const WIDGET_DIM_GOOGLEDOCS = "dimension-googledocs";
 
 export interface Widget {
     id: string;

@@ -11,11 +11,12 @@ import { EtherpadWidgetConfigComponent } from "../configs/widget/etherpad/etherp
 import { JitsiWidgetConfigComponent } from "../configs/widget/jitsi/jitsi-config.component";
 import {
     WIDGET_DIM_CUSTOM,
-    WIDGET_DIM_ETHERPAD,
+    WIDGET_DIM_ETHERPAD, WIDGET_DIM_GOOGLEDOCS,
     WIDGET_DIM_JITSI,
     WIDGET_DIM_TWITCH,
     WIDGET_DIM_YOUTUBE
 } from "./models/widget";
+import { GoogleDocsWidgetConfigComponent } from "../configs/widget/googledocs/googledocs-config.component";
 
 @Injectable()
 export class IntegrationService {
@@ -55,6 +56,10 @@ export class IntegrationService {
             "jitsi": {
                 component: JitsiWidgetConfigComponent,
                 screenId: "type_" + WIDGET_DIM_JITSI,
+            },
+            "googledocs": {
+                component: GoogleDocsWidgetConfigComponent,
+                screenId: "type_" + WIDGET_DIM_GOOGLEDOCS,
             },
         },
     };
