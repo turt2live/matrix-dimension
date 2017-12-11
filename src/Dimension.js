@@ -7,6 +7,7 @@ var path = require("path");
 var DimensionApi = require("./DimensionApi");
 var ScalarApi = require("./ScalarApi");
 var IRCApi = require("./integration/impl/irc/IRCApi");
+var URL = require("url");
 
 // TODO: Convert backend to typescript? Would avoid stubbing classes all over the place
 
@@ -45,7 +46,12 @@ class Dimension {
 
         // Logging incoming requests
         this._app.use((req, res, next) => {
-            log.verbose("Dimension", "Incoming: " + req.method + " " + req.url);
+            var parsedUrl = URL.parse(req.url, true);
+            if (parsedUrl.query && parsedUrl.query["scalar_token"]) {
+                parsedUrl.query["scalar_token"] = "redacted";
+                parsedUrl.search = undefined; // to trigger the URL.format to use `query`
+            }
+            log.verbose("Dimension", "Incoming: " + req.method + " " + URL.format(parsedUrl));
             next();
         });
 
