@@ -101,3 +101,7 @@ The INTEGRATIONS.md file in this repository explains how to add custom integrati
 ## Turning off matrix.org/Scalar dependency
 
 To completely disconnect Dimension from using the matrix.org bots and bridges, remove the `vector` upstream from your config. This will force anything using the upstream (matrix.org bots and bridges) to not load.
+
+# License
+
+For information about Dimension's license, please see the LICENSE file included in this repository.
