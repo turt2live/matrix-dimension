@@ -441,3 +441,20 @@ None of these are officially documented, and are subject to change.
 ```
 
 *Note*: Invite person-specific bot on first repository
+
+## GET `/api/widgets/title_lookup?curl=https://t2bot.io&scalar_token=...`
+
+**Response**
+```
+{
+  "page_title_cache_item": {
+    "expires": "2017-12-12T20:11:00.70212938Z",
+    "cached_title": "t2bot.io",
+    "cached_response_err": ""
+  },
+  "error": {
+    "message": ""
+  },
+  "cached_response": false
+}
+```

@@ -25,6 +25,11 @@ upstreams:
 - name: vector
   url: "https://scalar.vector.im/api"
 
+# Homeserver configuration (used to proxy some requests to the homeserver for processing)
+homeserver:
+  name: "t2bot.io"
+  accessToken: "something"
+
 # IPs and CIDR ranges listed here will be blocked from being widgets.
 # Note: Widgets may still be embedded with restricted content, although not through Dimension directly.
 widgetBlacklist:

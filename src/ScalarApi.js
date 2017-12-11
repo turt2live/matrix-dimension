@@ -27,6 +27,46 @@ class ScalarApi {
 
         app.post("/api/v1/scalar/register", this._scalarRegister.bind(this));
         app.get("/api/v1/scalar/checkToken", this._checkScalarToken.bind(this));
+        app.get("/api/v1/scalar/widgets/title_lookup", this._getWidgetTitle.bind(this));
+    }
+
+    _getWidgetTitle(req, res) {
+        res.setHeader("Content-Type", "application/json");
+
+        var token = req.query.scalar_token;
+        var url = req.query.curl;
+
+        if (!token || !url) {
+            res.status(400).send({error: "Missing token or curl"});
+            return;
+        }
+
+        this._db.checkToken(token).then(() => {
+            MatrixLiteClient.getUrlPreview(url).then(preview => {
+                if (!preview["og:title"]) {
+                    res.status(404).send({error:{message:"Could not locate a title for the URL"}});
+                    return;
+                }
+
+                // We need to convert the preview response to what Scalar expects
+                res.status(200).send({
+                    cached_response: false,
+                    page_title_cache_item: {
+                        expires: null, // unused
+                        cached_response_err: null, // unused
+                        cached_title: preview["og:title"],
+                    }
+                });
+            }).catch(err => {
+                res.status(500).send({error: {message: "Failed to get preview"}});
+                log.error("ScalarApi", "Failed to get URL preview");
+                log.error("ScalarApi", err);
+            });
+        }).catch(err => {
+            res.status(401).send({error: {message: "Failed to authenticate token"}});
+            log.warn("ScalarApi", "Failed to authenticate token");
+            log.warn("ScalarApi", err);
+        });
     }
 
     _checkScalarToken(req, res) {
