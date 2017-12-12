@@ -3,7 +3,8 @@ import { WidgetsResponse } from "./scalar_responses";
 // Scalar's widget types (known)
 export const WIDGET_SCALAR_CUSTOM = "customwidget";
 export const WIDGET_SCALAR_ETHERPAD = "etherpad";
-export const WIDGET_SCALAR_GOOGLEDOCS = "googledocs";
+export const WIDGET_SCALAR_GOOGLE_DOCS = "googledocs";
+export const WIDGET_SCALAR_GOOGLE_CALENDAR = "googlecalendar";
 export const WIDGET_SCALAR_JITSI = "jitsi";
 export const WIDGET_SCALAR_YOUTUBE = "youtube";
 export const WIDGET_SCALAR_GRAFANA = "grafana";
@@ -16,7 +17,8 @@ export const WIDGET_DIM_YOUTUBE = "dimension-youtube";
 export const WIDGET_DIM_TWITCH = "dimension-twitch";
 export const WIDGET_DIM_ETHERPAD = "dimension-etherpad";
 export const WIDGET_DIM_JITSI = "dimension-jitsi";
-export const WIDGET_DIM_GOOGLEDOCS = "dimension-googledocs";
+export const WIDGET_DIM_GOOGLE_DOCS = "dimension-googledocs";
+export const WIDGET_DIM_GOOGLE_CALENDAR = "dimension-googlecalendar";
 
 export interface Widget {
     id: string;

@@ -60,6 +60,11 @@ export class JitsiWidgetConfigComponent extends WidgetComponent implements Modal
         return widget;
     }
 
+    protected beforeEdit(widget: Widget) {
+        if (!widget.data) widget.data = {};
+        widget.data.dimConferenceUrl = widget.data.dimOriginalConferenceUrl;
+    }
+
     public validateAndAddWidget() {
         const jitsiConfig = this.getJitsiConfig(this.integration.jitsiDomain, this.newWidgetName);
 
@@ -77,7 +82,7 @@ export class JitsiWidgetConfigComponent extends WidgetComponent implements Modal
         this.saveWidget(widget);
     }
 
-    private getJitsiConfig(domain: string, conferenceId: string): {url: string, data: any} {
+    private getJitsiConfig(domain: string, conferenceId: string): { url: string, data: any } {
         const conferenceUrl = "https://" + domain + "/" + encodeURIComponent(conferenceId);
         const data = {
             dimOriginalConferenceUrl: conferenceUrl,

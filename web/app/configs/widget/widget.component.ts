@@ -76,6 +76,12 @@ export class WidgetComponent {
         // Meant to be overridden
     }
 
+    protected beforeEdit(widget: Widget) {
+        // Meant to be overridden - we do some silly logic here to make typescript happy
+        // noinspection SillyAssignmentJS
+        widget.url = widget.url;
+    }
+
     private getWidgetsOfType(type: string, altType: string): Promise<Widget[]> {
         return this.scalarApi.getWidgets(this.roomId)
             .then(resp => ScalarToWidgets(resp))
@@ -205,6 +211,7 @@ export class WidgetComponent {
     public editWidget(widget: Widget) {
         widget.newName = widget.name || this.defaultName;
         widget.newUrl = widget.url;
+        this.beforeEdit(widget);
         this.toggleWidget(widget);
     }
 

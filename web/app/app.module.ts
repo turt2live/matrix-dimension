@@ -25,6 +25,7 @@ import { ToggleFullscreenDirective } from "./shared/toggle-fullscreen.directive"
 import { FullscreenButtonComponent } from "./fullscreen-button/fullscreen-button.component";
 import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.component";
 import { JitsiWidgetWrapperComponent } from "./widget_wrappers/jitsi/jitsi.component";
+import { GCalWidgetWrapperComponent } from "./widget_wrappers/gcal/gcal.component";
 
 const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigComponents();
 
@@ -54,6 +55,7 @@ const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigCo
         FullscreenButtonComponent,
         VideoWidgetWrapperComponent,
         JitsiWidgetWrapperComponent,
+        GCalWidgetWrapperComponent,
 
         // Vendor
     ],
