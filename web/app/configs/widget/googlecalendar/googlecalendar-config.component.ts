@@ -4,7 +4,7 @@ import { WidgetComponent } from "../widget.component";
 import { ScalarService } from "../../../shared/scalar.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
-import { Widget, WIDGET_DIM_GOOGLE_CALENDAR, WIDGET_SCALAR_GOOGLE_CALENDAR } from "../../../shared/models/widget";
+import { EditableWidget, WIDGET_GOOGLE_CALENDAR } from "../../../shared/models/widget";
 
 @Component({
     selector: "my-googlecalendarwidget-config",
@@ -18,54 +18,40 @@ export class GoogleCalendarWidgetConfigComponent extends WidgetComponent impleme
                 scalarService: ScalarService,
                 window: Window) {
         super(
+            window,
             toaster,
             scalarService,
             dialog.context.roomId,
-            window,
-            WIDGET_DIM_GOOGLE_CALENDAR,
-            WIDGET_SCALAR_GOOGLE_CALENDAR,
             dialog.context.integration,
             dialog.context.integrationId,
+            WIDGET_GOOGLE_CALENDAR,
             "Google Calendar",
             "", // we intentionally don't specify the wrapper so we can control the behaviour
             "googleCalendar" // scalar wrapper
         );
     }
 
-    protected finishParsing(widget: Widget) {
-        if (!widget.data) widget.data = {};
-
-        if (widget.data.src) {
-            // Scalar widget
-            widget.data.dimSrc = widget.data.src;
-            widget.data.dimOriginalSrc = widget.data.src;
+    protected onWidgetsDiscovered() {
+        for (const widget of this.widgets) {
+            if (widget.data.dimSrc) {
+                // Convert legacy Dimension widgets to use src
+                widget.data.src = widget.data.dimSrc;
+            }
         }
-
-        return widget;
     }
 
     public validateAndAddWidget() {
-        const calendarConfig = this.getCalendarConfig(this.newWidgetUrl);
-
-        this.newWidgetUrl = calendarConfig.url;
-        this.addWidget(calendarConfig.data);
+        this.setCalendarUrl(this.newWidget);
+        this.addWidget();
     }
 
-    public validateAndSaveWidget(widget: Widget) {
-        const calendarConfig = this.getCalendarConfig(this.newWidgetUrl);
-
-        widget.newUrl = calendarConfig.url;
-        widget.data = calendarConfig.data;
+    public validateAndSaveWidget(widget: EditableWidget) {
+        this.setCalendarUrl(widget);
         this.saveWidget(widget);
     }
 
-    private getCalendarConfig(calendarId: string): { url: string, data: any } {
-        return {
-            url: window.location.origin + "/widgets/gcal?calendarId=" + encodeURIComponent(calendarId),
-            data: {
-                dimSrc: calendarId,
-                dimOriginalSrc: calendarId,
-            },
-        };
+    private setCalendarUrl(widget: EditableWidget) {
+        const encodedId = encodeURIComponent(widget.dimension.newData.src);
+        widget.dimension.newUrl = window.location.origin + "/widget/gcal?calendarId=" + encodedId;
     }
 }

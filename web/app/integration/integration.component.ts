@@ -7,6 +7,7 @@ import { IntegrationService } from "../shared/integration.service";
 export class ConfigModalContext extends BSModalContext {
     public integration: Integration;
     public roomId: string;
+    public userId: string;
     public scalarToken: string;
     public integrationId: string;
 }
@@ -43,6 +44,6 @@ export class IntegrationComponent {
     }
 
     public canHaveErrors(integration: Integration): boolean {
-        return integration.type === 'bridge' || integration.type === "widget";
+        return integration.type === "bridge" || integration.type === "widget";
     }
 }

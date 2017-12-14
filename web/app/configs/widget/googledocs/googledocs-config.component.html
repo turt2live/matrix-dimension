@@ -12,13 +12,13 @@
         </div>
     </div>
     <div class="config-content" *ngIf="!isLoading">
-        <form (submit)="validateAndAddWidget()" novalidate name="addForm">
+        <form (submit)="addWidget()" novalidate name="addForm">
             <div class="row">
                 <div class="col-md-8" style="margin-bottom: 12px;">
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control"
                                placeholder="Link to Google Doc"
-                               [(ngModel)]="newWidgetUrl" name="newWidgetUrl"
+                               [(ngModel)]="newWidget.dimension.newUrl" name="newWidgetUrl"
                                [disabled]="isUpdating">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-success" [disabled]="isUpdating">
@@ -42,10 +42,10 @@
                             Google Doc
                             <input type="text" class="form-control"
                                    placeholder="Link to Google Doc"
-                                   [(ngModel)]="widget.newUrl" name="widget-url-{{widget.id}}"
+                                   [(ngModel)]="widget.dimension.newUrl" name="widget-url-{{widget.id}}"
                                    [disabled]="isUpdating">
                         </label>
-                        <button type="button" class="btn btn-primary btn-sm" (click)="validateAndSaveWidget(widget)">
+                        <button type="button" class="btn btn-primary btn-sm" (click)="saveWidget(widget)">
                             Save
                         </button>
                         <button type="button" class="btn btn-outline btn-sm" (click)="toggleWidget(widget)">

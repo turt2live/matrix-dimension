@@ -18,7 +18,7 @@
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control"
                                placeholder="Etherpad name or URL"
-                               [(ngModel)]="newWidgetUrl" name="newWidgetUrl"
+                               [(ngModel)]="newWidget.dimension.newUrl" name="newWidgetUrl"
                                [disabled]="isUpdating">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-success" [disabled]="isUpdating">
@@ -42,17 +42,17 @@
                             Pad Name
                             <input type="text" class="form-control"
                                    placeholder="Etherpad Widget"
-                                   [(ngModel)]="widget.newName" name="widget-name-{{widget.id}}"
+                                   [(ngModel)]="widget.dimension.newName" name="widget-name-{{widget.id}}"
                                    [disabled]="isUpdating">
                         </label>
                         <label>
                             Pad URL
                             <input type="text" class="form-control"
                                    placeholder="https://your-pad-url"
-                                   [(ngModel)]="widget.newUrl" name="widget-url-{{widget.id}}"
+                                   [(ngModel)]="widget.dimension.newUrl" name="widget-url-{{widget.id}}"
                                    [disabled]="isUpdating">
                         </label>
-                        <button type="button" class="btn btn-primary btn-sm" (click)="validateAndSaveWidget(widget)">
+                        <button type="button" class="btn btn-primary btn-sm" (click)="saveWidget(widget)">
                             Save
                         </button>
                         <button type="button" class="btn btn-outline btn-sm" (click)="toggleWidget(widget)">

@@ -10,11 +10,8 @@ import { TwitchWidgetConfigComponent } from "../configs/widget/twitch/twitch-con
 import { EtherpadWidgetConfigComponent } from "../configs/widget/etherpad/etherpad-config.component";
 import { JitsiWidgetConfigComponent } from "../configs/widget/jitsi/jitsi-config.component";
 import {
-    WIDGET_DIM_CUSTOM,
-    WIDGET_DIM_ETHERPAD, WIDGET_DIM_GOOGLE_CALENDAR, WIDGET_DIM_GOOGLE_DOCS,
-    WIDGET_DIM_JITSI,
-    WIDGET_DIM_TWITCH,
-    WIDGET_DIM_YOUTUBE
+    WIDGET_CUSTOM, WIDGET_ETHERPAD, WIDGET_GOOGLE_CALENDAR, WIDGET_GOOGLE_DOCS, WIDGET_JITSI, WIDGET_TWITCH,
+    WIDGET_YOUTUBE
 } from "./models/widget";
 import { GoogleDocsWidgetConfigComponent } from "../configs/widget/googledocs/googledocs-config.component";
 import { GoogleCalendarWidgetConfigComponent } from "../configs/widget/googlecalendar/googlecalendar-config.component";
@@ -40,31 +37,31 @@ export class IntegrationService {
         "widget": {
             "customwidget": {
                 component: CustomWidgetConfigComponent,
-                screenId: "type_" + WIDGET_DIM_CUSTOM,
+                types: WIDGET_CUSTOM,
             },
             "youtube": {
                 component: YoutubeWidgetConfigComponent,
-                screenId: "type_" + WIDGET_DIM_YOUTUBE,
+                types: WIDGET_YOUTUBE
             },
             "etherpad": {
                 component: EtherpadWidgetConfigComponent,
-                screenId: "type_" + WIDGET_DIM_ETHERPAD,
+                types: WIDGET_ETHERPAD,
             },
             "twitch": {
                 component: TwitchWidgetConfigComponent,
-                screenId: "type_" + WIDGET_DIM_TWITCH,
+                types: WIDGET_TWITCH,
             },
             "jitsi": {
                 component: JitsiWidgetConfigComponent,
-                screenId: "type_" + WIDGET_DIM_JITSI,
+                types: WIDGET_JITSI,
             },
             "googledocs": {
                 component: GoogleDocsWidgetConfigComponent,
-                screenId: "type_" + WIDGET_DIM_GOOGLE_DOCS,
+                types: WIDGET_GOOGLE_DOCS,
             },
             "googlecalendar": {
                 component: GoogleCalendarWidgetConfigComponent,
-                screenId: "type_" + WIDGET_DIM_GOOGLE_CALENDAR,
+                types: WIDGET_GOOGLE_CALENDAR,
             },
         },
     };
@@ -102,8 +99,9 @@ export class IntegrationService {
     static getIntegrationForScreen(screen: string): { type: string, integrationType: string } {
         for (const iType of Object.keys(IntegrationService.supportedIntegrationsMap)) {
             for (const iiType of Object.keys(IntegrationService.supportedIntegrationsMap[iType])) {
-                const iScreen = IntegrationService.supportedIntegrationsMap[iType][iiType].screenId;
-                if (screen === iScreen) return {type: iType, integrationType: iiType};
+                const integrationTypes = IntegrationService.supportedIntegrationsMap[iType][iiType].types;
+                const integrationScreens = integrationTypes.map(t => "type_" + t);
+                if (integrationScreens.includes(screen)) return {type: iType, integrationType: iiType};
             }
         }
 

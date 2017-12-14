@@ -4,7 +4,7 @@ import { WidgetComponent } from "../widget.component";
 import { ScalarService } from "../../../shared/scalar.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
-import { Widget, WIDGET_DIM_ETHERPAD, WIDGET_SCALAR_ETHERPAD } from "../../../shared/models/widget";
+import { WIDGET_ETHERPAD } from "../../../shared/models/widget";
 import { EtherpadWidgetIntegration } from "../../../shared/models/integration";
 
 @Component({
@@ -21,14 +21,13 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
                 scalarService: ScalarService,
                 window: Window) {
         super(
+            window,
             toaster,
             scalarService,
             dialog.context.roomId,
-            window,
-            WIDGET_DIM_ETHERPAD,
-            WIDGET_SCALAR_ETHERPAD,
             dialog.context.integration,
             dialog.context.integrationId,
+            WIDGET_ETHERPAD,
             "Etherpad Widget",
             "generic", // wrapper
             "etherpad" // scalar wrapper
@@ -38,20 +37,14 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
     }
 
     public validateAndAddWidget() {
-        if (this.newWidgetUrl.startsWith("http://") || this.newWidgetUrl.startsWith("https://")) {
-            this.newWidgetName = "Etherpad";
+        if (this.newWidget.dimension.newUrl.startsWith("http://") || this.newWidget.dimension.newUrl.startsWith("https://")) {
+            this.newWidget.dimension.newName = "Etherpad";
         } else {
-            this.newWidgetName = this.newWidgetUrl;
-            this.newWidgetUrl = this.generatePadUrl(this.newWidgetName);
+            this.newWidget.dimension.newName = this.newWidget.dimension.newUrl;
+            this.newWidget.dimension.newUrl = this.generatePadUrl(this.newWidget.dimension.newName);
         }
 
-        this.addWidget({dimOriginalUrl: this.newWidgetUrl});
-    }
-
-    public validateAndSaveWidget(widget: Widget) {
-        if (!widget.data) widget.data = {};
-        widget.data.dimOriginalUrl = widget.newUrl;
-        this.saveWidget(widget);
+        this.addWidget();
     }
 
     private generatePadUrl(forName: string): string {

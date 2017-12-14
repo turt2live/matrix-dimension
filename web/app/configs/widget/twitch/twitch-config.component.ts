@@ -4,7 +4,7 @@ import { WidgetComponent } from "../widget.component";
 import { ScalarService } from "../../../shared/scalar.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
-import { Widget, WIDGET_DIM_TWITCH, WIDGET_SCALAR_TWITCH } from "../../../shared/models/widget";
+import { EditableWidget, WIDGET_TWITCH } from "../../../shared/models/widget";
 
 @Component({
     selector: "my-twitchwidget-config",
@@ -18,54 +18,55 @@ export class TwitchWidgetConfigComponent extends WidgetComponent implements Moda
                 scalarService: ScalarService,
                 window: Window) {
         super(
+            window,
             toaster,
             scalarService,
             dialog.context.roomId,
-            window,
-            WIDGET_DIM_TWITCH,
-            WIDGET_SCALAR_TWITCH,
             dialog.context.integration,
             dialog.context.integrationId,
+            WIDGET_TWITCH,
             "Twitch Widget",
             "video", // wrapper
             "twitch" // scalar wrapper
         );
     }
 
-    public validateAndAddWidget() {
-        // Replace channel name with path to embedable Twitch Player
-        const url = "https://player.twitch.tv/?channel=" + this.newWidgetUrl;
-
-        // TODO Somehow Validate if it is a valid Username
-        if (!url) {
-            this.toaster.pop("warning", "Please enter a Twitch Livestream Channel Name");
-            return;
-        }
-
-        const originalUrl = this.newWidgetUrl;
-        this.newWidgetUrl = url;
-        this.addWidget({dimChannelName: originalUrl});
+    protected onNewWidgetPrepared() {
+        this.newWidget.dimension.newData.channelName = "";
     }
 
-    public validateAndSaveWidget(widget: Widget) {
-        const url = "https://player.twitch.tv/?channel=" + widget.data.dimChannelName;
+    protected onWidgetsDiscovered() {
+        for (const widget of this.widgets) {
+            // Convert dimChannelName to channelName
+            if (!widget.data.channelName) {
+                widget.data.channelName = widget.data.dimChannelName;
+            }
+        }
+    }
 
-        // TODO Somehow Validate if it is a valid Username
-        if (!url) {
-            this.toaster.pop("warning", "Please enter a Twitch Livestream Channel Name");
+    public validateAndAddWidget() {
+        if (!this.newWidget.dimension.newData.channelName) {
+            this.toaster.pop("warning", "Please enter a Twitch Livestream channel name");
             return;
         }
 
-        if (!widget.data) widget.data = {};
+        this.setTwitchUrl(this.newWidget);
+        this.addWidget();
+    }
 
-        widget.newUrl = url;
-        widget.data.dimChannelName = widget.data.newDimChannelName;
+    public validateAndSaveWidget(widget: EditableWidget) {
+        if (!widget.dimension.newData.channelName) {
+            this.toaster.pop("warning", "Please enter a Twitch Livestream channel name");
+            return;
+        }
+
+        this.setTwitchUrl(widget);
         this.saveWidget(widget);
     }
 
-    public editWidget(widget: Widget) {
-        widget.data.newDimChannelName = widget.data.dimChannelName;
-        super.editWidget(widget);
+    private setTwitchUrl(widget: EditableWidget) {
+        // TODO: This should use templating when mobile riot supports it
+        widget.dimension.newUrl = "https://player.twitch.tv/?channel=" + widget.dimension.newData.channelName;
     }
 
 }

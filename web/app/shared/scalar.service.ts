@@ -7,7 +7,7 @@ import {
     ScalarSuccessResponse,
     WidgetsResponse
 } from "./models/scalar_responses";
-import { Widget } from "./models/widget";
+import { EditableWidget } from "./models/widget";
 
 @Injectable()
 export class ScalarService {
@@ -49,7 +49,7 @@ export class ScalarService {
         });
     }
 
-    public setWidget(roomId: string, widget: Widget): Promise<ScalarSuccessResponse> {
+    public setWidget(roomId: string, widget: EditableWidget): Promise<ScalarSuccessResponse> {
         return this.callAction("set_widget", {
             room_id: roomId,
             widget_id: widget.id,
@@ -60,7 +60,7 @@ export class ScalarService {
         });
     }
 
-    public deleteWidget(roomId: string, widget: Widget): Promise<ScalarSuccessResponse> {
+    public deleteWidget(roomId: string, widget: EditableWidget): Promise<ScalarSuccessResponse> {
         return this.callAction("set_widget", {
             room_id: roomId,
             widget_id: widget.id,

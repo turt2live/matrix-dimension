@@ -4,7 +4,7 @@ import { WidgetComponent } from "../widget.component";
 import { ScalarService } from "../../../shared/scalar.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
-import { Widget, WIDGET_DIM_YOUTUBE, WIDGET_SCALAR_YOUTUBE } from "../../../shared/models/widget";
+import { EditableWidget, WIDGET_YOUTUBE } from "../../../shared/models/widget";
 import * as embed from "embed-video";
 import * as $ from "jquery";
 
@@ -20,14 +20,13 @@ export class YoutubeWidgetConfigComponent extends WidgetComponent implements Mod
                 scalarService: ScalarService,
                 window: Window) {
         super(
+            window,
             toaster,
             scalarService,
             dialog.context.roomId,
-            window,
-            WIDGET_DIM_YOUTUBE,
-            WIDGET_SCALAR_YOUTUBE,
             dialog.context.integration,
             dialog.context.integrationId,
+            WIDGET_YOUTUBE,
             "Youtube Widget",
             "video", // wrapper
             "youtube" // scalar wrapper
@@ -35,37 +34,34 @@ export class YoutubeWidgetConfigComponent extends WidgetComponent implements Mod
     }
 
     public validateAndAddWidget() {
-        const url = this.getSafeUrl(this.newWidgetUrl);
+        const url = this.getRealVideoUrl(this.newWidget.dimension.newUrl);
         if (!url) {
             this.toaster.pop("warning", "Please enter a YouTube, Vimeo, or DailyMotion video URL");
             return;
         }
 
-        const originalUrl = this.newWidgetUrl;
-        this.newWidgetUrl = url;
-        this.addWidget({dimOriginalUrl: originalUrl});
+        this.newWidget.dimension.newUrl = url;
+        this.addWidget();
     }
 
-    public validateAndSaveWidget(widget: Widget) {
-        const url = this.getSafeUrl(widget.newUrl);
+    public validateAndSaveWidget(widget: EditableWidget) {
+        const url = this.getRealVideoUrl(widget.dimension.newUrl);
         if (!url) {
             this.toaster.pop("warning", "Please enter a YouTube, Vimeo, or DailyMotion video URL");
             return;
         }
 
-        if (!widget.data) widget.data = {};
-        widget.data.dimOriginalUrl = widget.newUrl;
-        widget.newUrl = url;
+        widget.dimension.newUrl = url;
         this.saveWidget(widget);
     }
 
-    private getSafeUrl(url) {
+    private getRealVideoUrl(url) {
         const embedCode = embed(url);
         if (!embedCode) {
             return null;
         }
 
-        // HACK: Grab the video URL from the iframe
+        // HACK: Grab the video URL from the iframe embed code
         url = $(embedCode).attr("src");
         if (url.startsWith("//")) url = "https:" + url;
 

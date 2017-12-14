@@ -4,7 +4,7 @@ import { WidgetComponent } from "../widget.component";
 import { ScalarService } from "../../../shared/scalar.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
-import { Widget, WIDGET_DIM_GOOGLE_DOCS, WIDGET_SCALAR_GOOGLE_DOCS } from "../../../shared/models/widget";
+import { WIDGET_GOOGLE_DOCS } from "../../../shared/models/widget";
 
 @Component({
     selector: "my-googledocswidget-config",
@@ -18,27 +18,16 @@ export class GoogleDocsWidgetConfigComponent extends WidgetComponent implements 
                 scalarService: ScalarService,
                 window: Window) {
         super(
+            window,
             toaster,
             scalarService,
             dialog.context.roomId,
-            window,
-            WIDGET_DIM_GOOGLE_DOCS,
-            WIDGET_SCALAR_GOOGLE_DOCS,
             dialog.context.integration,
             dialog.context.integrationId,
+            WIDGET_GOOGLE_DOCS,
             "Google Docs",
             "generic", // wrapper
             "googleDocs" // scalar wrapper
         );
-    }
-
-    public validateAndAddWidget() {
-        // We don't actually validate anything here, but we could
-        this.addWidget({dimOriginalUrl: this.newWidgetUrl});
-    }
-
-    public validateAndSaveWidget(widget: Widget) {
-        // We don't actually validate anything here, but we could
-        this.saveWidget(widget);
     }
 }

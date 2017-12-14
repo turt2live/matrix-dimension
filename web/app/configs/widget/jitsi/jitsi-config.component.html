@@ -16,10 +16,10 @@
             <div class="row">
                 <div class="col-md-8" style="margin-bottom: 12px;">
                     <div class="input-group input-group-sm">
-                        <span class="input-group-addon">https://{{ integration.jitsiDomain }}/</span>
+                        <span class="input-group-addon">https://{{ newWidget.dimension.newData.domain }}/</span>
                         <input type="text" class="form-control"
                                placeholder="MyConferenceName"
-                               [(ngModel)]="newWidgetName" name="newWidgetName"
+                               [(ngModel)]="newWidget.dimension.newData.conferenceId" name="newWidgetName"
                                [disabled]="isUpdating">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-success" [disabled]="isUpdating">
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 removable widget-item" *ngFor="let widget of widgets trackById">
-                    {{ widget.data.dimOriginalConferenceUrl }} <span class="text-muted" *ngIf="widget.ownerId">(added by {{ widget.ownerId }})</span>
+                    {{ widget.data.conferenceUrl }} <span class="text-muted" *ngIf="widget.ownerId">(added by {{ widget.ownerId }})</span>
                     <button type="button" class="btn btn-outline-info btn-sm" (click)="editWidget(widget)"
                             style="margin-top: -5px;" [disabled]="isUpdating">
                         <i class="fa fa-pencil"></i> Edit
@@ -43,7 +43,7 @@
                             Conference URL
                             <input type="text" class="form-control"
                                    placeholder="https://jitsi.riot.im/MyConference"
-                                   [(ngModel)]="widget.data.dimConferenceUrl" name="widget-url-{{widget.id}}"
+                                   [(ngModel)]="widget.dimension.newData.conferenceUrl" name="widget-url-{{widget.id}}"
                                    [disabled]="isUpdating">
                         </label>
                         <button type="button" class="btn btn-primary btn-sm" (click)="validateAndSaveWidget(widget)">

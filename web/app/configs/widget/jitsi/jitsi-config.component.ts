@@ -4,7 +4,7 @@ import { WidgetComponent } from "../widget.component";
 import { ScalarService } from "../../../shared/scalar.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
-import { Widget, WIDGET_DIM_JITSI, WIDGET_SCALAR_JITSI } from "../../../shared/models/widget";
+import { EditableWidget, WIDGET_JITSI } from "../../../shared/models/widget";
 import { JitsiWidgetIntegration } from "../../../shared/models/integration";
 import * as gobyInit from "goby";
 import * as url from "url";
@@ -29,86 +29,109 @@ export class JitsiWidgetConfigComponent extends WidgetComponent implements Modal
                 scalarService: ScalarService,
                 window: Window) {
         super(
+            window,
             toaster,
             scalarService,
             dialog.context.roomId,
-            window,
-            WIDGET_DIM_JITSI,
-            WIDGET_SCALAR_JITSI,
             dialog.context.integration,
             dialog.context.integrationId,
+            WIDGET_JITSI,
             "Jitsi Video Conference",
             "" // we intentionally don't specify the wrapper so we can control the behaviour
         );
 
         this.integration = <JitsiWidgetIntegration>dialog.context.integration;
-        this.newWidgetName = this.generateConferenceId();
     }
 
-    protected finishParsing(widget: Widget): Widget {
-        const parsedUrl = url.parse(widget.url, true);
-        const conferenceId = parsedUrl.query["confId"];
+    protected onNewWidgetPrepared() {
+        this.newWidget.dimension.newData.conferenceId = this.generateConferenceId();
+        this.newWidget.dimension.newData.domain = this.integration.jitsiDomain;
+        this.newWidget.dimension.newData.isAudioConf = false;
+    }
 
-        if (!widget.data) widget.data = {};
+    protected onWidgetsDiscovered() {
+        for (const widget of this.widgets) {
+            const parsedUrl = url.parse(widget.url, true);
+            const conferenceId = parsedUrl.query["conferenceId"];
+            const confId = parsedUrl.query["confId"];
+            const domain = parsedUrl.query["domain"];
+            let isAudioConf = parsedUrl.query["isAudioConf"];
 
-        if (conferenceId) {
-            // It's a scalar widget
-            widget.data.dimOriginalConferenceUrl = "https://jitsi.riot.im/" + conferenceId;
-            widget.data.dimConferenceUrl = widget.data.dimOriginalConferenceUrl;
+            // Convert isAudioConf to boolean
+            if (isAudioConf === "true") isAudioConf = true;
+            else if (isAudioConf === "false") isAudioConf = false;
+            else if (isAudioConf && isAudioConf[0] === '$') isAudioConf = widget.data[isAudioConf];
+            else isAudioConf = false; // default
+
+            if (conferenceId) {
+                // It's a legacy Dimension widget
+                widget.data.conferenceId = conferenceId;
+            } else widget.data.conferenceId = confId;
+
+            if (domain) widget.data.domain = domain;
+            else widget.data.domain = "jitsi.riot.im";
+
+            widget.data.isAudioConf = isAudioConf;
+
+            if (!widget.data.conferenceUrl) {
+                widget.data.conferenceUrl = "https://" + widget.data.domain + "/" + widget.data.conferenceId;
+            }
         }
-
-        return widget;
     }
 
-    protected beforeEdit(widget: Widget) {
-        if (!widget.data) widget.data = {};
-        widget.data.dimConferenceUrl = widget.data.dimOriginalConferenceUrl;
+    protected onWidgetPreparedForEdit(widget: EditableWidget) {
+        if (!widget.dimension.newData.conferenceUrl) {
+            const conferenceId = widget.dimension.newData.conferenceId;
+            const domain = widget.dimension.newData.domain;
+            widget.dimension.newData.conferenceUrl = "https://" + domain + "/" + conferenceId;
+        }
     }
 
     public validateAndAddWidget() {
-        const jitsiConfig = this.getJitsiConfig(this.integration.jitsiDomain, this.newWidgetName);
+        if (!this.newWidget.dimension.newData.conferenceId) {
+            this.toaster.pop("warning", "Please enter a conference name");
+            return;
+        }
 
-        this.newWidgetUrl = jitsiConfig.url;
-        this.newWidgetName = "Jitsi Video Conference";
-        this.addWidget(jitsiConfig.data);
+        this.setJitsiUrl(this.newWidget);
+        this.addWidget();
     }
 
-    public validateAndSaveWidget(widget: Widget) {
-        const jitsiUrl = url.parse(widget.data.dimConferenceUrl);
-        const jitsiConfig = this.getJitsiConfig(jitsiUrl.host, jitsiUrl.path.substring(1));
+    public validateAndSaveWidget(widget: EditableWidget) {
+        if (!widget.dimension.newData.conferenceUrl) {
+            this.toaster.pop("warning", "Please enter a conference URL");
+            return;
+        }
 
-        widget.newUrl = jitsiConfig.url;
-        widget.data = jitsiConfig.data;
+        const jitsiUrl = url.parse(widget.dimension.newData.conferenceUrl);
+        widget.dimension.newData.domain = jitsiUrl.host;
+        widget.dimension.newData.conferenceId = jitsiUrl.path.substring(1);
+        widget.dimension.newData.isAudioConf = false;
+
+        this.setJitsiUrl(widget);
         this.saveWidget(widget);
     }
 
-    private getJitsiConfig(domain: string, conferenceId: string): { url: string, data: any } {
-        const conferenceUrl = "https://" + domain + "/" + encodeURIComponent(conferenceId);
-        const data = {
-            dimOriginalConferenceUrl: conferenceUrl,
-            dimConferenceUrl: conferenceUrl,
-        };
+    private setJitsiUrl(widget: EditableWidget) {
+        const conferenceId = widget.dimension.newData.conferenceId;
+        const domain = widget.dimension.newData.domain;
+        const isAudioConf = widget.dimension.newData.isAudioConf;
 
         let widgetQueryString = url.format({
             query: {
-                //"scriptUrl": this.integration.scriptUrl, // handled in wrapper
+                // TODO: Use templating when mobile riot supports it
+                "confId": conferenceId, // named confId for compatibility with mobile clients
                 "domain": domain,
-                "conferenceId": conferenceId,
+                "isAudioConf": isAudioConf,
                 "displayName": "$matrix_display_name",
                 "avatarUrl": "$matrix_avatar_url",
                 "userId": "$matrix_user_id",
             },
         });
-        widgetQueryString = this.unformatParams(widgetQueryString, data);
+        widgetQueryString = this.decodeParams(widgetQueryString, Object.keys(widget.dimension.newData).map(k => "$" + k));
 
-        return {
-            url: window.location.origin + "/widgets/jitsi" + widgetQueryString,
-            data: data,
-        };
-    }
-
-    protected widgetAdded() {
-        this.newWidgetName = this.generateConferenceId();
+        widget.dimension.newUrl = window.location.origin + "/widgets/jitsi" + widgetQueryString;
+        widget.dimension.newData.conferenceUrl = "https://" + domain + "/" + conferenceId;
     }
 
     private generateConferenceId() {

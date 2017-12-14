@@ -18,7 +18,7 @@
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control"
                                placeholder="Twitch Channel Name"
-                               [(ngModel)]="newWidgetUrl" name="newWidgetUrl"
+                               [(ngModel)]="newWidget.dimension.newData.channelName" name="newWidgetUrl"
                                [disabled]="isUpdating">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-success" [disabled]="isUpdating">
@@ -42,14 +42,14 @@
                             Widget Name
                             <input type="text" class="form-control"
                                    placeholder="Twitch Widget"
-                                   [(ngModel)]="widget.newName" name="widget-name-{{widget.id}}"
+                                   [(ngModel)]="widget.dimension.newName" name="widget-name-{{widget.id}}"
                                    [disabled]="isUpdating">
                         </label>
                         <label>
                             Channel Name
                             <input type="text" class="form-control"
                                    placeholder="Twitch Channel Name"
-                                   [(ngModel)]="widget.data.newDimChannelName" name="widget-url-{{widget.id}}"
+                                   [(ngModel)]="widget.dimension.newData.channelName" name="widget-url-{{widget.id}}"
                                    [disabled]="isUpdating">
                         </label>
                         <button type="button" class="btn btn-primary btn-sm" (click)="validateAndSaveWidget(widget)">

@@ -18,7 +18,7 @@
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control"
                                placeholder="Calendar ID, example: en.uk#holiday@group.v.calendar.google.com"
-                               [(ngModel)]="newWidgetUrl" name="newWidgetUrl"
+                               [(ngModel)]="newWidget.dimension.newData.src" name="newWidgetUrl"
                                [disabled]="isUpdating">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-success" [disabled]="isUpdating">
@@ -42,7 +42,7 @@
                             Shared Calendar ID
                             <input type="text" class="form-control"
                                    placeholder="en.uk#holiday@group.v.calendar.google.com"
-                                   [(ngModel)]="widget.data.dimSrc" name="widget-url-{{widget.id}}"
+                                   [(ngModel)]="widget.dimension.newData.src" name="widget-url-{{widget.id}}"
                                    [disabled]="isUpdating">
                         </label>
                         <button type="button" class="btn btn-primary btn-sm" (click)="validateAndSaveWidget(widget)">
