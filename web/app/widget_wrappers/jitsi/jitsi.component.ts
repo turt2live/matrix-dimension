@@ -26,7 +26,7 @@ export class JitsiWidgetWrapperComponent implements OnInit {
         let params: any = activatedRoute.snapshot.queryParams;
 
         this.domain = params.domain;
-        this.conferenceId = params.conferenceId;
+        this.conferenceId = params.confId || params.conferenceId;
         this.displayName = params.displayName;
         this.avatarUrl = params.avatarUrl;
         this.userId = params.userId;
