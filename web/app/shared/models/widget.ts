@@ -1,13 +1,13 @@
 import { WidgetsResponse } from "./scalar_responses";
 
-export const WIDGET_CUSTOM = ["customwidget", "dimension-customwidget"].reverse();
-export const WIDGET_ETHERPAD = ["etherpad", "dimension-etherpad"].reverse();
-export const WIDGET_GOOGLE_DOCS = ["googledocs", "dimension-googledocs"].reverse();
-export const WIDGET_GOOGLE_CALENDAR = ["googlecalendar", "dimension-googlecalendar"].reverse();
-export const WIDGET_JITSI = ["jitsi", "dimension-jitsi"].reverse();
-export const WIDGET_YOUTUBE = ["youtube", "dimension-youtube"].reverse();
-export const WIDGET_GRAFANA = ["grafana", "dimension-grafana"].reverse();
-export const WIDGET_TWITCH = ["twitch", "dimension-twitch"].reverse();
+export const WIDGET_CUSTOM = ["customwidget", "dimension-customwidget"];
+export const WIDGET_ETHERPAD = ["etherpad", "dimension-etherpad"];
+export const WIDGET_GOOGLE_DOCS = ["googledocs", "dimension-googledocs"];
+export const WIDGET_GOOGLE_CALENDAR = ["googlecalendar", "dimension-googlecalendar"];
+export const WIDGET_JITSI = ["jitsi", "dimension-jitsi"];
+export const WIDGET_YOUTUBE = ["youtube", "dimension-youtube"];
+export const WIDGET_GRAFANA = ["grafana", "dimension-grafana"];
+export const WIDGET_TWITCH = ["twitch", "dimension-twitch"];
 
 export interface EditableWidget {
     /**
