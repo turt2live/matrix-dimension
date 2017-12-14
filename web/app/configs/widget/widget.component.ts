@@ -75,7 +75,7 @@ export class WidgetComponent {
         widget.dimension = {
             newUrl: this.unwrapUrl(widget.url),
             newName: widget.name,
-            newTitle: widget.data.title,
+            newTitle: widget.data ? widget.data.title : null,
             newData: JSON.parse(JSON.stringify(widget.data || "{}")),
         };
     }
