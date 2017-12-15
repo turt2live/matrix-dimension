@@ -29,6 +29,7 @@ import { GCalWidgetWrapperComponent } from "./widget_wrappers/gcal/gcal.componen
 import { PageHeaderComponent } from "./page-header/page-header.component";
 import { SpinnerComponent } from "./spinner/spinner.component";
 import { BreadcrumbsModule } from "ng2-breadcrumbs";
+import { RiotHomeComponent } from "./riot/riot-home/home.component";
 
 const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigComponents();
 
@@ -62,6 +63,7 @@ const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigCo
         VideoWidgetWrapperComponent,
         JitsiWidgetWrapperComponent,
         GCalWidgetWrapperComponent,
+        RiotHomeComponent,
 
         // Vendor
     ],
