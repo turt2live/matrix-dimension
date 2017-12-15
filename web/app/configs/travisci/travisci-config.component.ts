@@ -3,7 +3,7 @@ import { TravisCiIntegration } from "../../shared/models/integration";
 import { ModalComponent, DialogRef } from "ngx-modialog";
 import { ConfigModalContext } from "../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
-import { ApiService } from "../../shared/api.service";
+import { ApiService } from "../../shared/services/api.service";
 
 @Component({
     selector: "my-travisci-config",

@@ -1,11 +1,11 @@
 import { Component, ViewChildren } from "@angular/core";
-import { IntegrationService } from "../../shared/integration.service";
+import { IntegrationService } from "../../shared/services/integration.service";
 import { IntegrationComponent } from "../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
 import { Integration } from "../../shared/models/integration";
 import { ActivatedRoute } from "@angular/router";
-import { ApiService } from "../../shared/api.service";
-import { ScalarService } from "../../shared/scalar.service";
+import { ApiService } from "../../shared/services/api.service";
+import { ScalarService } from "../../shared/services/scalar.service";
 import * as _ from "lodash";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 

@@ -1,20 +1,20 @@
 import { Injectable } from "@angular/core";
-import { Integration } from "./models/integration";
-import { RssConfigComponent } from "../configs/rss/rss-config.component";
+import { Integration } from "../models/integration";
+import { RssConfigComponent } from "../../configs/rss/rss-config.component";
 import { ContainerContent } from "ngx-modialog";
-import { IrcConfigComponent } from "../configs/irc/irc-config.component";
-import { TravisCiConfigComponent } from "../configs/travisci/travisci-config.component";
-import { CustomWidgetConfigComponent } from "../configs/widget/custom_widget/custom_widget-config.component";
-import { YoutubeWidgetConfigComponent } from "../configs/widget/youtube/youtube-config.component";
-import { TwitchWidgetConfigComponent } from "../configs/widget/twitch/twitch-config.component";
-import { EtherpadWidgetConfigComponent } from "../configs/widget/etherpad/etherpad-config.component";
-import { JitsiWidgetConfigComponent } from "../configs/widget/jitsi/jitsi-config.component";
+import { IrcConfigComponent } from "../../configs/irc/irc-config.component";
+import { TravisCiConfigComponent } from "../../configs/travisci/travisci-config.component";
+import { CustomWidgetConfigComponent } from "../../configs/widget/custom_widget/custom_widget-config.component";
+import { YoutubeWidgetConfigComponent } from "../../configs/widget/youtube/youtube-config.component";
+import { TwitchWidgetConfigComponent } from "../../configs/widget/twitch/twitch-config.component";
+import { EtherpadWidgetConfigComponent } from "../../configs/widget/etherpad/etherpad-config.component";
+import { JitsiWidgetConfigComponent } from "../../configs/widget/jitsi/jitsi-config.component";
 import {
     WIDGET_CUSTOM, WIDGET_ETHERPAD, WIDGET_GOOGLE_CALENDAR, WIDGET_GOOGLE_DOCS, WIDGET_JITSI, WIDGET_TWITCH,
     WIDGET_YOUTUBE
-} from "./models/widget";
-import { GoogleDocsWidgetConfigComponent } from "../configs/widget/googledocs/googledocs-config.component";
-import { GoogleCalendarWidgetConfigComponent } from "../configs/widget/googlecalendar/googlecalendar-config.component";
+} from "../models/widget";
+import { GoogleDocsWidgetConfigComponent } from "../../configs/widget/googledocs/googledocs-config.component";
+import { GoogleCalendarWidgetConfigComponent } from "../../configs/widget/googlecalendar/googlecalendar-config.component";
 
 @Injectable()
 export class IntegrationService {

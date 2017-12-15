@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
-import { Integration } from "./models/integration";
+import { Integration } from "../models/integration";
 
 @Injectable()
 export class ApiService {

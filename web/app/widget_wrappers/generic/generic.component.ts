@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ApiService } from "../../shared/api.service";
+import { ApiService } from "../../shared/services/api.service";
 import { ActivatedRoute } from "@angular/router";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 

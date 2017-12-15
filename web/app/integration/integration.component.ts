@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Integration } from "../shared/models/integration";
 import { overlayConfigFactory } from "ngx-modialog";
 import { BSModalContext, Modal } from "ngx-modialog/plugins/bootstrap";
-import { IntegrationService } from "../shared/integration.service";
+import { IntegrationService } from "../shared/services/integration.service";
 
 export class ConfigModalContext extends BSModalContext {
     public integration: Integration;

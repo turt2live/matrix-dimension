@@ -1,4 +1,4 @@
-import { ScalarService } from "../../shared/scalar.service";
+import { ScalarService } from "../../shared/services/scalar.service";
 import { convertScalarWidgetsToDtos, EditableWidget } from "../../shared/models/widget";
 import { ToasterService } from "angular2-toaster";
 import { Integration } from "../../shared/models/integration";

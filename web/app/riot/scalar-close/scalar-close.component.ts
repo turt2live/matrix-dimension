@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ScalarService } from "../../shared/scalar.service";
+import { ScalarService } from "../../shared/services/scalar.service";
 
 @Component({
     selector: "my-scalar-close",

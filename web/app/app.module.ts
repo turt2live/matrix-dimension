@@ -8,20 +8,19 @@ import { routing } from "./app.routing";
 import { createNewHosts, removeNgStyles } from "@angularclass/hmr";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { RiotComponent } from "./riot/riot.component";
-import { ApiService } from "./shared/api.service";
+import { ApiService } from "./shared/services/api.service";
 import { UiSwitchModule } from "angular2-ui-switch";
-import { ScalarService } from "./shared/scalar.service";
+import { ScalarService } from "./shared/services/scalar.service";
 import { ToasterModule } from "angular2-toaster";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { IntegrationComponent } from "./integration/integration.component";
 import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component";
-import { IntegrationService } from "./shared/integration.service";
+import { IntegrationService } from "./shared/services/integration.service";
 import { BootstrapModalModule } from "ngx-modialog/plugins/bootstrap";
 import { ModalModule } from "ngx-modialog";
-import { IrcApiService } from "./shared/irc-api.service";
-import { MyFilterPipe } from "./shared/my-filter.pipe";
+import { IrcApiService } from "./shared/services/irc-api.service";
 import { GenericWidgetWrapperComponent } from "./widget_wrappers/generic/generic.component";
-import { ToggleFullscreenDirective } from "./shared/toggle-fullscreen.directive";
+import { ToggleFullscreenDirective } from "./shared/directives/toggle-fullscreen.directive";
 import { FullscreenButtonComponent } from "./fullscreen-button/fullscreen-button.component";
 import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.component";
 import { JitsiWidgetWrapperComponent } from "./widget_wrappers/jitsi/jitsi.component";
@@ -56,7 +55,6 @@ const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigCo
         PageHeaderComponent,
         SpinnerComponent,
         ScalarCloseComponent,
-        MyFilterPipe,
         GenericWidgetWrapperComponent,
         ToggleFullscreenDirective,
         FullscreenButtonComponent,

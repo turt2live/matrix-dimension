@@ -6,8 +6,8 @@ import {
     MembershipStateResponse, RoomEncryptionStatusResponse,
     ScalarSuccessResponse,
     WidgetsResponse
-} from "./models/scalar_responses";
-import { EditableWidget } from "./models/widget";
+} from "../models/scalar_responses";
+import { EditableWidget } from "../models/widget";
 
 @Injectable()
 export class ScalarService {

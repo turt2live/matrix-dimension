@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { WidgetComponent } from "../widget.component";
-import { ScalarService } from "../../../shared/scalar.service";
+import { ScalarService } from "../../../shared/services/scalar.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
 import { WIDGET_CUSTOM } from "../../../shared/models/widget";
