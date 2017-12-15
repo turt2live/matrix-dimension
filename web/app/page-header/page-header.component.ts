@@ -12,7 +12,6 @@ export class PageHeaderComponent {
 
     constructor(private router: Router, private activatedRoute: ActivatedRoute) {
         this.router.events.filter(ev => ev instanceof NavigationEnd).subscribe((ev: NavigationEnd) => {
-            console.log(ev);
             let currentRoute = this.activatedRoute.root;
             let url = "";
 
@@ -23,8 +22,7 @@ export class PageHeaderComponent {
                     url += "/" + route.snapshot.url.map(s => s.path).join("/");
                     if (route.outlet !== PRIMARY_OUTLET) return;
                     if (!route.routeConfig || !route.routeConfig.data) return;
-                    if (url === ev.url) this.pageName = route.snapshot.data.name;
-                    console.log(url);
+                    if (url === ev.urlAfterRedirects.split("?")[0]) this.pageName = route.snapshot.data.name;
                 });
             }
         });
