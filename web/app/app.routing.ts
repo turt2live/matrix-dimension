@@ -8,7 +8,10 @@ import { GCalWidgetWrapperComponent } from "./widget_wrappers/gcal/gcal.componen
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
-    {path: "riot", component: RiotComponent},
+    {
+        path: "riot", component: RiotComponent, data: {breadcrumb: "Home"},
+        children: [{path: "test", component: RiotComponent, data: {breadcrumb: "Testing"}}]
+    },
     {path: "widgets/generic", component: GenericWidgetWrapperComponent},
     {path: "widgets/video", component: VideoWidgetWrapperComponent},
     {path: "widgets/jitsi", component: JitsiWidgetWrapperComponent},

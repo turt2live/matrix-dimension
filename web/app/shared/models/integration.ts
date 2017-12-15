@@ -1,4 +1,5 @@
 export interface Integration {
+    // These are from the server
     type: string;
     integrationType: string;
     userId: string;
@@ -6,13 +7,14 @@ export interface Integration {
     avatar: string;
     about: string; // nullable
     supportsEncryptedRooms: boolean;
+    requirements: any; // nullable
 
-    // Set by us
-    isEnabled: boolean;
-    isBroken: boolean;
-    hasConfig: boolean;
-    requirements?: any; // nullable
-    bridgeError: string; // nullable
+    // These are set in the UI
+    isSupported: boolean;
+    notSupportedReason: string;
+    hasAdditionalConfig: boolean;
+    isEnabled: boolean; // for the flip-a-bit integrations
+    isUpdating: boolean;
 }
 
 export interface RSSIntegration extends Integration {

@@ -12,6 +12,11 @@ export class ApiService {
             .map(res => res.status === 200).toPromise();
     }
 
+    getTokenOwner(scalarToken: String): Promise<string> {
+        return this.http.get("/api/v1/dimension/whoami", {params:{scalar_token:scalarToken}})
+            .map(res => res.status === 200 ? res.json()["userId"] : null).toPromise();
+    }
+
     getIntegrations(roomId: string, scalarToken: string): Promise<Integration[]> {
         return this.http.get("/api/v1/dimension/integrations/" + roomId, {params: {scalar_token: scalarToken}})
             .map(res => res.json()).toPromise();

@@ -33,6 +33,25 @@ class DimensionApi {
         app.get("/api/v1/dimension/integrations/:roomId/:type/:integrationType/state", this._getIntegrationState.bind(this));
         app.get("/api/v1/dimension/widgets/embeddable", this._checkEmbeddable.bind(this));
         app.get("/api/v1/dimension/integration/:type/:integrationType", this._getIntegration.bind(this));
+        app.get("/api/v1/dimension/whoami", this._getTokenOwner.bind(this));
+    }
+
+    _getTokenOwner(req, res) {
+        res.setHeader("Content-Type", "application/json");
+
+        var scalarToken = req.query.scalar_token;
+        if (!scalarToken) {
+            res.status(400).send({error: 'Missing scalar token'});
+            return;
+        }
+
+        this._db.getTokenOwner(scalarToken).then(userId => {
+            res.status(200).send({userId: userId});
+        }).catch(err => {
+            log.error("DimensionApi", err);
+            console.error(err);
+            res.status(401).send({error: 'Invalid token or other error'});
+        });
     }
 
     _checkEmbeddable(req, res) {
@@ -113,7 +132,8 @@ class DimensionApi {
         }
     }
 
-    _getIntegration(req, res) {res.setHeader("Content-Type", "application/json");
+    _getIntegration(req, res) {
+        res.setHeader("Content-Type", "application/json");
         // Unauthed endpoint.
 
         var type = req.params.type;

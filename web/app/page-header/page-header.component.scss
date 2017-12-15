@@ -1,0 +1,28 @@
+// component styles are encapsulated and only applied to their components
+.header {
+  width: 100%;
+  margin-top: 30px;
+  border-top: 1px solid #e7eaec;
+  border-bottom: 1px solid #e7eaec;
+  background-color: #fff;
+}
+
+.header .title {
+  margin: 0;
+  width: 83.333333%; // col-sm-10
+  padding: 15px;
+}
+
+.header .title .pageName {
+  font-weight: 100;
+  padding: 0;
+  margin: 0;
+}
+
+.header .quickAction {
+  padding: 0;
+  margin: 0;
+  float: right;
+  text-align: right;
+  width: 16.666667%; // col-sm-2
+}

@@ -26,6 +26,9 @@ import { FullscreenButtonComponent } from "./fullscreen-button/fullscreen-button
 import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.component";
 import { JitsiWidgetWrapperComponent } from "./widget_wrappers/jitsi/jitsi.component";
 import { GCalWidgetWrapperComponent } from "./widget_wrappers/gcal/gcal.component";
+import { PageHeaderComponent } from "./page-header/page-header.component";
+import { SpinnerComponent } from "./spinner/spinner.component";
+import { BreadcrumbsModule } from "ng2-breadcrumbs";
 
 const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigComponents();
 
@@ -41,6 +44,7 @@ const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigCo
         BrowserAnimationsModule,
         ModalModule.forRoot(),
         BootstrapModalModule,
+        BreadcrumbsModule,
     ],
     declarations: [
         ...WIDGET_CONFIGURATION_COMPONENTS,
@@ -48,6 +52,8 @@ const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigCo
         HomeComponent,
         RiotComponent,
         IntegrationComponent,
+        PageHeaderComponent,
+        SpinnerComponent,
         ScalarCloseComponent,
         MyFilterPipe,
         GenericWidgetWrapperComponent,

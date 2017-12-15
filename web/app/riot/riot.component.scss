@@ -1,20 +1,10 @@
 // component styles are encapsulated and only applied to their components
-.integration-container {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
-#wrapper {
-  padding: 30px;
-}
-
 my-scalar-close {
   position: fixed;
-  top: 15px;
+  top: 10px;
   right: 15px;
 }
 
-h4 {
-  margin-left: 5px;
+.page-content {
+  padding: 30px;
 }

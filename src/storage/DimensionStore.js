@@ -93,6 +93,18 @@ class DimensionStore {
     }
 
     /**
+     * Gets the user ID that owns a given token, returning a falsey value if no one owns the token.
+     * @param {string} scalarToken the scalar token to check
+     * @returns {Promise<String>} resolves to the user ID, or a falsey value if no user ID was found
+     */
+    getTokenOwner(scalarToken) {
+        return this.__Tokens.find({where:{scalarToken: scalarToken}}).then(token => {
+            if (!token) return Promise.reject(new Error("Token not found"));
+            return Promise.resolve(token.matrixUserId);
+        })
+    }
+
+    /**
      * Gets the upstream token for a given scalar token
      * @param {string} scalarToken the scalar token to lookup
      * @returns {Promise<string>} resolves to the upstream token, or null if not found
