@@ -101,7 +101,7 @@ class DimensionStore {
         return this.__Tokens.find({where:{scalarToken: scalarToken}}).then(token => {
             if (!token) return Promise.reject(new Error("Token not found"));
             return Promise.resolve(token.matrixUserId);
-        })
+        });
     }
 
     /**

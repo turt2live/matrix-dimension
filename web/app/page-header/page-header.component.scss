@@ -11,6 +11,7 @@
   margin: 0;
   width: 83.333333%; // col-sm-10
   padding: 15px;
+  display: inline-block;
 }
 
 .header .title .pageName {
@@ -24,5 +25,7 @@
   margin: 0;
   float: right;
   text-align: right;
-  width: 16.666667%; // col-sm-2
+  display: inline-block;
+  width: 15.666667%; // col-sm-2
+  position: relative;
 }
