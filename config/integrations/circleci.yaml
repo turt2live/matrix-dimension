@@ -1,6 +1,6 @@
 type: "complex-bot"
 integrationType: "circleci"
-enabled: true
+enabled: false # disabled because the API is considered unstable/inoperable. Use at your own risk!
 name: "CircleCI"
 about: "Sends CircleCI build results into the room"
 avatar: "img/avatars/circleci.png"
