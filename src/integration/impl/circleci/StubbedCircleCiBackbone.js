@@ -4,7 +4,7 @@
 class StubbedCircleCiBackbone {
 
     /**
-     * Creates a new stubbed RSS backbone
+     * Creates a new stubbed CircleCI backbone
      */
     constructor() {
     }

@@ -4,7 +4,7 @@ var _ = require("lodash");
 var log = require("../../../util/LogService");
 
 /**
- * Backbone for Travis CI bots running on vector.im through scalar
+ * Backbone for CircleCI bots running on vector.im through scalar
  */
 class VectorCircleCiBackbone extends StubbedCircleCiBackbone {
 
