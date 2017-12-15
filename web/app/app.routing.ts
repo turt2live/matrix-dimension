@@ -17,7 +17,7 @@ const routes: Routes = [
             {
                 path: "home",
                 component: RiotHomeComponent,
-                data: {breadcrumb: "Home"},
+                data: {breadcrumb: "Home", name: "Dimension"},
             },
         ],
     },
