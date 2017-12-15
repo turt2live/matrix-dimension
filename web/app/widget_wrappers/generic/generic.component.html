@@ -1,8 +1,7 @@
 <div class="wrapper">
     <div class="control-page" *ngIf="isLoading || !canEmbed">
         <div class="loading-badge" *ngIf="isLoading">
-            <i class="fa fa-circle-o-notch fa-spin"></i>
-            Loading...
+            <my-spinner></my-spinner>
         </div>
         <div class="embed-failed" *ngIf="!isLoading && !canEmbed">
             <p class="ban"><i class="fa fa-ban"></i></p>

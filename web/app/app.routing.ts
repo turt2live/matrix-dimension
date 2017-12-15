@@ -21,10 +21,15 @@ const routes: Routes = [
             },
         ],
     },
-    {path: "widgets/generic", component: GenericWidgetWrapperComponent},
-    {path: "widgets/video", component: VideoWidgetWrapperComponent},
-    {path: "widgets/jitsi", component: JitsiWidgetWrapperComponent},
-    {path: "widgets/gcal", component: GCalWidgetWrapperComponent},
+    {
+        path: "widgets",
+        children: [
+            {path: "generic", component: GenericWidgetWrapperComponent},
+            {path: "video", component: VideoWidgetWrapperComponent},
+            {path: "jitsi", component: JitsiWidgetWrapperComponent},
+            {path: "gcal", component: GCalWidgetWrapperComponent},
+        ]
+    },
 ];
 
 export const routing = RouterModule.forRoot(routes);

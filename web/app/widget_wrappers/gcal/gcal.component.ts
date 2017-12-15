@@ -4,8 +4,8 @@ import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 
 @Component({
     selector: "my-gcal-widget-wrapper",
-    templateUrl: "gcal.component.html",
-    styleUrls: ["gcal.component.scss"],
+    templateUrl: "../fullpage-iframe/fullpage-iframe.component.html",
+    styleUrls: ["../fullpage-iframe/fullpage-iframe.component.scss"],
 })
 export class GCalWidgetWrapperComponent {
 

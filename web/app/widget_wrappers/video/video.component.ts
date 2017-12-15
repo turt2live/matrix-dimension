@@ -4,8 +4,8 @@ import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 
 @Component({
     selector: "my-video-widget-wrapper",
-    templateUrl: "video.component.html",
-    styleUrls: ["video.component.scss"],
+    templateUrl: "../fullpage-iframe/fullpage-iframe.component.html",
+    styleUrls: ["../fullpage-iframe/fullpage-iframe.component.scss"],
 })
 export class VideoWidgetWrapperComponent {
 
