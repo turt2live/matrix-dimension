@@ -4,6 +4,7 @@ import { RssConfigComponent } from "../configs/rss/rss-config.component";
 import { ContainerContent } from "ngx-modialog";
 import { IrcConfigComponent } from "../configs/irc/irc-config.component";
 import { TravisCiConfigComponent } from "../configs/travisci/travisci-config.component";
+import { CircleCiConfigComponent } from "../configs/circleci/circleci-config.component";
 import { CustomWidgetConfigComponent } from "../configs/widget/custom_widget/custom_widget-config.component";
 import { YoutubeWidgetConfigComponent } from "../configs/widget/youtube/youtube-config.component";
 import { TwitchWidgetConfigComponent } from "../configs/widget/twitch/twitch-config.component";
@@ -27,6 +28,9 @@ export class IntegrationService {
             },
             "travisci": {
                 component: TravisCiConfigComponent,
+            },
+            "circleci": {
+                component: CircleCiConfigComponent,
             },
         },
         "bridge": {

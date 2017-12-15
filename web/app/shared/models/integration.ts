@@ -26,6 +26,12 @@ export interface TravisCiIntegration extends Integration {
     webhookUrl: string; // immutable
 }
 
+export interface CircleCiIntegration extends Integration {
+    repoTemplates: { repoKey: string, template: string, newTemplate: string }[]; // newTemplate is local
+    immutableRepoTemplates: { repoKey: string, template: string, ownerId: string }[];
+    webhookUrl: string; // immutable
+}
+
 export interface IRCIntegration extends Integration {
     availableNetworks: { name: string, id: string }[];
     channels: { [networkId: string]: string[] };

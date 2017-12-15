@@ -1,0 +1,63 @@
+<div class="config-wrapper">
+    <img src="/img/close.svg" (click)="dialog.close()" class="close-icon">
+    <div class="config-header">
+        <img [src]="integration.avatar">
+        <h4>Configure CircleCI hooks</h4>
+    </div>
+    <div class="config-content">
+        <form (submit)="addRepository()" novalidate name="addRepoForm">
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom: 12px;">
+                    <h6>.circleci/config.yml configuration</h6>
+                    The following will need to be added to your .circleci/config.yml file:
+                    <pre class="yaml">{{ circleYaml }}</pre>
+                </div>
+                <div class="col-md-8" style="margin-bottom: 12px;">
+                    <h6>Your CircleCI hooks</h6>
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control"
+                               placeholder="owner/repo-name"
+                               [(ngModel)]="repoKey" name="repoKey"
+                               [disabled]="isUpdating">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-success" [disabled]="isUpdating">
+                                <i class="fa fa-plus-circle"></i> Add Repository
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-12 removable" *ngFor="let repo of integration.repoTemplates trackById">
+                    {{ repo.repoKey }}
+                    <button type="button" class="btn btn-outline-info btn-sm" (click)="editTemplate(repo.repoKey)"
+                            style="margin-top: -5px;" [disabled]="isUpdating" *ngIf="!isTemplateToggled(repo.repoKey)">
+                        <i class="fa fa-pencil"></i> Edit
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeRepository(repo.repoKey)"
+                            style="margin-top: -5px;" [disabled]="isUpdating">
+                        <i class="fa fa-times"></i> Remove Repository
+                    </button>
+                    <div *ngIf="isTemplateToggled(repo.repoKey)">
+                        <textarea [(ngModel)]="repo.newTemplate" name="template-{{repo.repoKey}}"
+                                  style="width: 100%; height: 100px; margin-top: 5px;"></textarea>
+                        <button type="button" class="btn btn-primary btn-sm" (click)="saveTemplate(repo.repoKey)">Save
+                        </button>
+                        <button type="button" class="btn btn-outline btn-sm" (click)="toggleTemplate(repo.repoKey)">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-12" *ngIf="integration.immutableRepoTemplates.length > 0">
+                    <h6 class="other-items-title">Hooks from other users in the room</h6>
+                </div>
+                <div class="col-md-12 list" *ngFor="let repo of integration.immutableRepoTemplates trackById">
+                    {{ repo.repoKey }} <span class="text-muted">(added by {{ repo.ownerId }})</span>
+                    <button type="button" class="btn btn-outline-info btn-sm" (click)="toggleTemplate(repo.repoKey)"
+                            style="margin-top: -5px;" [disabled]="isUpdating">
+                        {{ isTemplateToggled(repo.repoKey) ? "Hide" : "Show" }} Template
+                    </button>
+                    <pre *ngIf="isTemplateToggled(repo.repoKey)">{{ repo.template }}</pre>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
