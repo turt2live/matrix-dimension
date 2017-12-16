@@ -7,7 +7,6 @@ import { ActivatedRoute } from "@angular/router";
 import { ApiService } from "../../shared/services/api.service";
 import { ScalarService } from "../../shared/services/scalar.service";
 import * as _ from "lodash";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
 const CATEGORY_MAP = {
     "Widgets": ["widget"],
@@ -33,14 +32,13 @@ export class RiotHomeComponent {
     private userId: string;
     private requestedScreen: string = null;
     private requestedIntegration: string = null;
-    private integrationsForCategory: { [category: string]: Integration[] } = {};
+    public integrationsForCategory: { [category: string]: Integration[] } = {};
     private categoryMap: { [categoryName: string]: string[] } = CATEGORY_MAP;
 
     constructor(private activatedRoute: ActivatedRoute,
                 private api: ApiService,
                 private scalar: ScalarService,
-                private toaster: ToasterService,
-                private sanitizer: DomSanitizer) {
+                private toaster: ToasterService) {
         let params: any = this.activatedRoute.snapshot.queryParams;
 
         this.requestedScreen = params.screen;
@@ -73,10 +71,6 @@ export class RiotHomeComponent {
                 this.errorMessage = "Unable to communicate with Dimension due to an unknown error.";
             });
         }
-    }
-
-    public getSafeUrl(url: string): SafeResourceUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }
 
     public hasIntegrations(): boolean {
@@ -196,7 +190,8 @@ export class RiotHomeComponent {
             if (opened) return;
             if (component.integration.type !== type || component.integration.integrationType !== integrationType) return;
             console.log("Configuring integration " + this.requestedIntegration + " type=" + type + " integrationType=" + integrationType);
-            component.configureIntegration(this.requestedIntegration);
+            //component.configureIntegration(this.requestedIntegration);
+            // TODO: Support editing integrations
             opened = true;
         });
         if (!opened) {

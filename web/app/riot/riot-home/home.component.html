@@ -35,14 +35,10 @@
     <div *ngFor="let category of getCategories()">
         <div class="ibox" *ngIf="getIntegrationsIn(category).length > 0">
             <div class="ibox-title">
-                <h4>{{ category }}</h4>
+                <h5>{{ category }}</h5>
             </div>
             <div class="ibox-content">
-                <div class="integration" *ngFor="let integration of getIntegrationsIn(category)">
-                    <img class="integration-avatar" [src]="getSafeUrl(integration.avatar)"/>
-                    <div class="integration-name">{{ integration.name }}</div>
-                    <div class="integration-description">{{ integration.about }}</div>
-                </div>
+                <my-integration-bag [integrations]="getIntegrationsIn(category)"></my-integration-bag>
             </div>
         </div>
     </div>

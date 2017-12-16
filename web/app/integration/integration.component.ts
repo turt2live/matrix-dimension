@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Integration } from "../shared/models/integration";
-import { overlayConfigFactory } from "ngx-modialog";
-import { BSModalContext, Modal } from "ngx-modialog/plugins/bootstrap";
-import { IntegrationService } from "../shared/services/integration.service";
+import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
 export class ConfigModalContext extends BSModalContext {
     public integration: Integration;
@@ -20,30 +19,12 @@ export class ConfigModalContext extends BSModalContext {
 export class IntegrationComponent {
 
     @Input() integration: Integration;
-    @Input() roomId: string;
-    @Input() scalarToken: string;
-    @Output() updated: EventEmitter<any> = new EventEmitter();
+    @Output() selected: EventEmitter<any> = new EventEmitter<any>();
 
-    constructor(public modal: Modal) {
+    constructor(private sanitizer: DomSanitizer) {
     }
 
-    public update(): void {
-        this.integration.isEnabled = !this.integration.isEnabled;
-        this.updated.emit();
-    }
-
-    public configureIntegration(integrationId: string = null): void {
-        this.modal.open(IntegrationService.getConfigComponent(this.integration), overlayConfigFactory({
-            integration: this.integration,
-            roomId: this.roomId,
-            scalarToken: this.scalarToken,
-            isBlocking: false,
-            integrationId: integrationId,
-            size: "lg"
-        }, BSModalContext));
-    }
-
-    public canHaveErrors(integration: Integration): boolean {
-        return integration.type === "bridge" || integration.type === "widget";
+    public getSafeUrl(url: string): SafeResourceUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }
 }

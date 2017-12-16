@@ -6,5 +6,4 @@ import { Component } from "@angular/core";
     styleUrls: ["./riot.component.scss"],
 })
 export class RiotComponent {
-
 }

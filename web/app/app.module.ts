@@ -13,7 +13,6 @@ import { UiSwitchModule } from "angular2-ui-switch";
 import { ScalarService } from "./shared/services/scalar.service";
 import { ToasterModule } from "angular2-toaster";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { IntegrationComponent } from "./integration/integration.component";
 import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component";
 import { IntegrationService } from "./shared/services/integration.service";
 import { BootstrapModalModule } from "ngx-modialog/plugins/bootstrap";
@@ -29,6 +28,8 @@ import { PageHeaderComponent } from "./page-header/page-header.component";
 import { SpinnerComponent } from "./spinner/spinner.component";
 import { BreadcrumbsModule } from "ng2-breadcrumbs";
 import { RiotHomeComponent } from "./riot/riot-home/home.component";
+import { IntegrationBagComponent } from "./integration-bag/integration-bag.component";
+import { IntegrationComponent } from "./integration/integration.component";
 
 const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigComponents();
 
@@ -52,6 +53,7 @@ const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigCo
         HomeComponent,
         RiotComponent,
         IntegrationComponent,
+        IntegrationBagComponent,
         PageHeaderComponent,
         SpinnerComponent,
         ScalarCloseComponent,
