@@ -15,6 +15,7 @@ import {
 } from "../models/widget";
 import { GoogleDocsWidgetConfigComponent } from "../../configs/widget/googledocs/googledocs-config.component";
 import { GoogleCalendarWidgetConfigComponent } from "../../configs/widget/googlecalendar/googlecalendar-config.component";
+import { CircleCiConfigComponent } from "../../configs/circleci/circleci-config.component";
 
 @Injectable()
 export class IntegrationService {
@@ -27,6 +28,9 @@ export class IntegrationService {
             },
             "travisci": {
                 component: TravisCiConfigComponent,
+            },
+            "circleci": {
+                component: CircleCiConfigComponent,
             },
         },
         "bridge": {
