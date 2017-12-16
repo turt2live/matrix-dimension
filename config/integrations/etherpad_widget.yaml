@@ -3,7 +3,7 @@ type: "widget"
 integrationType: "etherpad"
 enabled: true
 name: "Etherpad"
-about: "Etherpad is a collaborative text editor. With this widget you can embed Etherpad directly in to your Matrix chat rooms so that you can securely collaborate on documents."
+about: "Collaborate on documents with members of your room."
 avatar: "img/avatars/etherpad.png"
 
 # This is the URL people will be provided when adding a new Etherpad widget. The supported variables

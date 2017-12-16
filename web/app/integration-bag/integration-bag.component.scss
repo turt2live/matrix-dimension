@@ -14,6 +14,23 @@
   padding: 5px;
   width: calc(325px - 14px);
   position: relative;
+  cursor: pointer;
+}
+
+.integration .integration-arrow {
+  display: none;
+  position: absolute;
+  top: calc(50% - 12px); // icon happens to be 24px tall
+  right: 0;
+  color: #bbb;
+}
+
+.integration:hover {
+  box-shadow: 0 0 9px #888;
+}
+
+.integration:hover .integration-arrow {
+  display: block;
 }
 
 .integration .integration-avatar {
@@ -26,12 +43,13 @@
   display: inline-block;
   font-size: 1.1em;
   font-weight: 100;
-  padding-left: 5px;
+  padding-left: 10px;
 }
 
 .integration .integration-description {
   display: block;
   font-size: 0.8em;
-  margin-left: 55px;
+  margin-left: 60px;
+  margin-right: 5px;
   color: #999;
 }
