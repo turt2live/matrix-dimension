@@ -3,6 +3,28 @@ web:
   port: 8184
   address: '0.0.0.0'
 
+# Homeserver configuration (used to proxy some requests to the homeserver for processing)
+homeserver:
+  name: "t2bot.io"
+  accessToken: "something"
+
+# These users can modify the integrations this Dimension supports.
+# To access the admin interface, open Dimension in Riot and click the settings icon.
+admins:
+  - "@someone:domain.com"
+
+# IPs and CIDR ranges listed here will be blocked from being widgets.
+# Note: Widgets may still be embedded with restricted content, although not through Dimension directly.
+widgetBlacklist:
+- 10.0.0.0/8
+- 172.16.0.0/12
+- 192.168.0.0/16
+- 127.0.0.0/8
+
+# Where the database for Dimension is
+database:
+  file: "dimension.db"
+
 # Settings for controlling how logging works
 logging:
   file: logs/dimension.log
@@ -12,28 +34,3 @@ logging:
   rotate:
     size: 52428800 # bytes, default is 50mb
     count: 5
-
-# Demo bot configuration. Used purely to show how to configure a self-hosted bot in Dimension
-demobot:
-  enabled: false
-  userId: "@dimension:t2bot.io"
-  homeserverUrl: "https://t2bot.io"
-  accessToken: "something"
-
-# Upstream configuration. This should almost never change.
-upstreams:
-- name: vector
-  url: "https://scalar.vector.im/api"
-
-# Homeserver configuration (used to proxy some requests to the homeserver for processing)
-homeserver:
-  name: "t2bot.io"
-  accessToken: "something"
-
-# IPs and CIDR ranges listed here will be blocked from being widgets.
-# Note: Widgets may still be embedded with restricted content, although not through Dimension directly.
-widgetBlacklist:
-- 10.0.0.0/8
-- 172.16.0.0/12
-- 192.168.0.0/16
-- 127.0.0.0/8

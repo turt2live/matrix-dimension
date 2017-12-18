@@ -6,7 +6,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
-var isProd = process.env.npm_lifecycle_event == 'build';
+var isProd = process.env.npm_lifecycle_event === 'build';
 
 module.exports = function () {
     var config = {};
@@ -21,7 +21,7 @@ module.exports = function () {
     };
 
     config.output = {
-        path: root('web-dist'),
+        path: path.join(root('build'), 'web'),
         publicPath: isProd ? '/' : '/', //http://0.0.0.0:8080',
         filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
         chunkFilename: isProd ? '[id].[hash].chunk.js' : '[id].chunk.js'

@@ -11,7 +11,7 @@
   border: 1px solid #eee;
   border-radius: 5px;
   margin: 7px;
-  padding: 5px;
+  padding: 6px;
   width: calc(325px - 14px);
   position: relative;
   cursor: pointer;
@@ -21,7 +21,7 @@
   display: none;
   position: absolute;
   top: calc(50% - 12px); // icon happens to be 24px tall
-  right: 0;
+  right: 1px;
   color: #bbb;
 }
 
