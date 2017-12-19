@@ -5,6 +5,10 @@ import User from "./models/User";
 import UserScalarToken from "./models/UserScalarToken";
 import Upstream from "./models/Upstream";
 import * as Promise from "bluebird";
+import WidgetRecord from "./models/WidgetRecord";
+import * as path from "path";
+import * as Umzug from "umzug";
+import { Widget } from "../integrations/Widget";
 
 class _DimensionStore {
     private sequelize: Sequelize;
@@ -22,12 +26,23 @@ class _DimensionStore {
             User,
             UserScalarToken,
             Upstream,
+            WidgetRecord,
         ]);
     }
 
     public updateSchema(): Promise<any> {
         LogService.info("DimensionStore", "Updating schema...");
-        return this.sequelize.sync();
+
+        const migrator = new Umzug({
+            storage: "sequelize",
+            storageOptions: {sequelize: this.sequelize},
+            migrations: {
+                params: [this.sequelize.getQueryInterface()],
+                path: path.join(__dirname, "migrations"),
+            }
+        });
+
+        return migrator.up();
     }
 
     public doesUserHaveTokensForAllUpstreams(userId: string): Promise<boolean> {
@@ -56,7 +71,10 @@ class _DimensionStore {
 
     public getTokenOwner(scalarToken: string): Promise<User> {
         let user: User = null;
-        return UserScalarToken.findAll({where: {isDimensionToken: true, scalarToken: scalarToken}, include: [User]}).then(tokens => {
+        return UserScalarToken.findAll({
+            where: {isDimensionToken: true, scalarToken: scalarToken},
+            include: [User]
+        }).then(tokens => {
             if (!tokens || tokens.length === 0) {
                 return Promise.reject("Invalid token");
             }
@@ -69,6 +87,12 @@ class _DimensionStore {
             }
             return Promise.resolve(user);
         });
+    }
+
+    public getWidgets(isEnabled?: boolean): Promise<Widget[]> {
+        let conditions = {};
+        if (isEnabled === true || isEnabled === false) conditions = {where: {isEnabled: isEnabled}};
+        return WidgetRecord.findAll(conditions).then(widgets => widgets.map(w => new Widget(w)));
     }
 }
 

@@ -22,7 +22,7 @@ export default class Webserver {
     private loadRoutes() {
         const apis = ["scalar", "dimension"].map(a => path.join(__dirname, a, "*.js"));
         const router = express.Router();
-        Server.loadServices(router, apis);
+        apis.forEach(a => Server.loadServices(router, [a]));
         const routes = _.uniq(router.stack.map(r => r.route.path));
         for (const route of routes) {
             this.app.options(route, (_req, res) => res.sendStatus(200));

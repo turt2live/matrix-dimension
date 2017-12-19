@@ -40,6 +40,14 @@ export class ScalarService {
         });
     }
 
+    public static invalidTokenErrorHandler(error: any): any {
+        if (error !== "Invalid token") {
+            LogService.error("ScalarWidgetService", "Error processing request");
+            LogService.error("ScalarWidgetService", error);
+        }
+        throw new ApiError(401, {message: "Invalid token"});
+    }
+
     @POST
     @Path("register")
     public register(request: RegisterRequest): Promise<ScalarRegisterResponse> {
@@ -94,13 +102,7 @@ export class ScalarService {
     public getAccount(@QueryParam("scalar_token") scalarToken: string): Promise<ScalarAccountResponse> {
         return ScalarService.getTokenOwner(scalarToken).then(userId => {
             return {user_id: userId};
-        }, err => {
-            if (err !== "Invalid token") {
-                LogService.error("ScalarService", "Error getting account information for user");
-                LogService.error("ScalarService", err);
-            }
-            throw new ApiError(401, {message: "Invalid token"});
-        });
+        }, ScalarService.invalidTokenErrorHandler);
     }
 
 }

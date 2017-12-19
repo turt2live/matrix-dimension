@@ -1,7 +1,6 @@
 import { GET, Path, QueryParam } from "typescript-rest";
 import * as Promise from "bluebird";
 import { LogService } from "matrix-js-snippets";
-import { ApiError } from "../ApiError";
 import { MemoryCache } from "../../MemoryCache";
 import { MatrixLiteClient } from "../../matrix/MatrixLiteClient";
 import config from "../../config";
@@ -67,15 +66,9 @@ export class ScalarWidgetService {
 
     @GET
     @Path("title_lookup")
-    public register(@QueryParam("scalar_token") scalarToken: string, @QueryParam("curl") url: string): Promise<UrlPreviewResponse> {
+    public titleLookup(@QueryParam("scalar_token") scalarToken: string, @QueryParam("curl") url: string): Promise<UrlPreviewResponse> {
         return ScalarService.getTokenOwner(scalarToken).then(_userId => {
             return ScalarWidgetService.getUrlTitle(url);
-        }, err => {
-            if (err !== "Invalid token") {
-                LogService.error("ScalarWidgetService", "Error getting account information for user");
-                LogService.error("ScalarWidgetService", err);
-            }
-            throw new ApiError(401, {message: "Invalid token"});
-        })
+        }, ScalarService.invalidTokenErrorHandler);
     }
 }
