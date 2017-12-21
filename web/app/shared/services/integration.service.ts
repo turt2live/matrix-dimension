@@ -27,7 +27,7 @@ export class IntegrationService {
             },
         },
         "widget": {
-            "customwidget": {
+            "custom": {
                 //component: CustomWidgetConfigComponent,
                 types: WIDGET_CUSTOM,
             },
