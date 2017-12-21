@@ -1,4 +1,10 @@
 // component styles are encapsulated and only applied to their components
-img {
+.scalarClose {
+  font-size: 35px;
   cursor: pointer;
+  color: #ccc;
+}
+
+.scalarClose:hover {
+  color: #888;
 }
