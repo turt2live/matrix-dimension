@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
-import { RSSIntegration } from "../../shared/models/integration";
+import { RSSIntegration } from "../../shared/models/legacyintegration";
 import { ModalComponent, DialogRef } from "ngx-modialog";
 import { ConfigModalContext } from "../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
-import { ApiService } from "../../shared/services/api.service";
+import { ApiService } from "../../shared/services/legacy/api.service";
 
 @Component({
     selector: "my-rss-config",

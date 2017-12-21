@@ -6,17 +6,17 @@ import {
     MembershipStateResponse, RoomEncryptionStatusResponse,
     ScalarSuccessResponse,
     WidgetsResponse
-} from "../models/scalar_responses";
+} from "../models/scalar_client_responses";
 import { EditableWidget } from "../models/widget";
 
 @Injectable()
-export class ScalarService {
+export class ScalarClientApiService {
 
     private static actionMap: { [key: string]: { resolve: (obj: any) => void, reject: (obj: any) => void } } = {};
 
     public static getAndRemoveActionHandler(requestKey: string): { resolve: (obj: any) => void, reject: (obj: any) => void } {
-        let handler = ScalarService.actionMap[requestKey];
-        ScalarService.actionMap[requestKey] = null;
+        let handler = ScalarClientApiService.actionMap[requestKey];
+        ScalarClientApiService.actionMap[requestKey] = null;
         return handler;
     }
 
@@ -96,7 +96,7 @@ export class ScalarService {
                 return;
             }
 
-            ScalarService.actionMap[requestKey] = {
+            ScalarClientApiService.actionMap[requestKey] = {
                 resolve: resolve,
                 reject: reject
             };
@@ -117,7 +117,7 @@ window.addEventListener("message", event => {
     let requestKey = event.data["request_id"];
     if (!requestKey) return;
 
-    let action = ScalarService.getAndRemoveActionHandler(requestKey);
+    let action = ScalarClientApiService.getAndRemoveActionHandler(requestKey);
     if (!action) return;
 
     if (event.data.response && event.data.response.error) action.reject(event.data);

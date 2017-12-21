@@ -8,16 +8,14 @@ import { routing } from "./app.routing";
 import { createNewHosts, removeNgStyles } from "@angularclass/hmr";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { RiotComponent } from "./riot/riot.component";
-import { ApiService } from "./shared/services/api.service";
 import { UiSwitchModule } from "angular2-ui-switch";
-import { ScalarService } from "./shared/services/scalar.service";
+import { ScalarClientApiService } from "./shared/services/scalar-client-api.service";
 import { ToasterModule } from "angular2-toaster";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component";
-import { IntegrationService } from "./shared/services/integration.service";
+import { LegacyIntegrationService } from "./shared/services/legacy/integration.service";
 import { BootstrapModalModule } from "ngx-modialog/plugins/bootstrap";
 import { ModalModule } from "ngx-modialog";
-import { IrcApiService } from "./shared/services/irc-api.service";
 import { GenericWidgetWrapperComponent } from "./widget_wrappers/generic/generic.component";
 import { ToggleFullscreenDirective } from "./shared/directives/toggle-fullscreen.directive";
 import { FullscreenButtonComponent } from "./fullscreen-button/fullscreen-button.component";
@@ -30,8 +28,11 @@ import { BreadcrumbsModule } from "ng2-breadcrumbs";
 import { RiotHomeComponent } from "./riot/riot-home/home.component";
 import { IntegrationBagComponent } from "./integration-bag/integration-bag.component";
 import { IntegrationComponent } from "./integration/integration.component";
+import { ScalarServerApiService } from "./shared/services/scalar-server-api.service";
+import { DimensionApiService } from "./shared/services/dimension-api.service";
+import { AdminApiService } from "./shared/services/admin-api.service";
 
-const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigComponents();
+const WIDGET_CONFIGURATION_COMPONENTS: any[] = LegacyIntegrationService.getAllConfigComponents();
 
 @NgModule({
     imports: [
@@ -68,10 +69,10 @@ const WIDGET_CONFIGURATION_COMPONENTS: any[] = IntegrationService.getAllConfigCo
         // Vendor
     ],
     providers: [
-        ApiService,
-        ScalarService,
-        IntegrationService,
-        IrcApiService,
+        ScalarClientApiService,
+        ScalarServerApiService,
+        DimensionApiService,
+        AdminApiService,
         {provide: Window, useValue: window},
 
         // Vendor

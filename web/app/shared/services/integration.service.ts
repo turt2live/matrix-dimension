@@ -1,21 +1,9 @@
-import { Injectable } from "@angular/core";
-import { Integration } from "../models/integration";
-import { RssConfigComponent } from "../../configs/rss/rss-config.component";
-import { ContainerContent } from "ngx-modialog";
-import { IrcConfigComponent } from "../../configs/irc/irc-config.component";
-import { TravisCiConfigComponent } from "../../configs/travisci/travisci-config.component";
-import { CustomWidgetConfigComponent } from "../../configs/widget/custom_widget/custom_widget-config.component";
-import { YoutubeWidgetConfigComponent } from "../../configs/widget/youtube/youtube-config.component";
-import { TwitchWidgetConfigComponent } from "../../configs/widget/twitch/twitch-config.component";
-import { EtherpadWidgetConfigComponent } from "../../configs/widget/etherpad/etherpad-config.component";
-import { JitsiWidgetConfigComponent } from "../../configs/widget/jitsi/jitsi-config.component";
+import { Component, Injectable } from "@angular/core";
 import {
     WIDGET_CUSTOM, WIDGET_ETHERPAD, WIDGET_GOOGLE_CALENDAR, WIDGET_GOOGLE_DOCS, WIDGET_JITSI, WIDGET_TWITCH,
     WIDGET_YOUTUBE
 } from "../models/widget";
-import { GoogleDocsWidgetConfigComponent } from "../../configs/widget/googledocs/googledocs-config.component";
-import { GoogleCalendarWidgetConfigComponent } from "../../configs/widget/googlecalendar/googlecalendar-config.component";
-import { CircleCiConfigComponent } from "../../configs/circleci/circleci-config.component";
+import { Integration } from "../models/integration";
 
 @Injectable()
 export class IntegrationService {
@@ -24,53 +12,53 @@ export class IntegrationService {
         "bot": {}, // empty == supported
         "complex-bot": {
             "rss": {
-                component: RssConfigComponent,
+                //component: RssConfigComponent,
             },
             "travisci": {
-                component: TravisCiConfigComponent,
+                //component: TravisCiConfigComponent,
             },
             "circleci": {
-                component: CircleCiConfigComponent,
+                //component: CircleCiConfigComponent,
             },
         },
         "bridge": {
             "irc": {
-                component: IrcConfigComponent,
+                //component: IrcConfigComponent,
             },
         },
         "widget": {
             "customwidget": {
-                component: CustomWidgetConfigComponent,
+                //component: CustomWidgetConfigComponent,
                 types: WIDGET_CUSTOM,
             },
             "youtube": {
-                component: YoutubeWidgetConfigComponent,
+                //component: YoutubeWidgetConfigComponent,
                 types: WIDGET_YOUTUBE
             },
             "etherpad": {
-                component: EtherpadWidgetConfigComponent,
+                //component: EtherpadWidgetConfigComponent,
                 types: WIDGET_ETHERPAD,
             },
             "twitch": {
-                component: TwitchWidgetConfigComponent,
+                //component: TwitchWidgetConfigComponent,
                 types: WIDGET_TWITCH,
             },
             "jitsi": {
-                component: JitsiWidgetConfigComponent,
+                //component: JitsiWidgetConfigComponent,
                 types: WIDGET_JITSI,
             },
             "googledocs": {
-                component: GoogleDocsWidgetConfigComponent,
+                //component: GoogleDocsWidgetConfigComponent,
                 types: WIDGET_GOOGLE_DOCS,
             },
             "googlecalendar": {
-                component: GoogleCalendarWidgetConfigComponent,
+                //component: GoogleCalendarWidgetConfigComponent,
                 types: WIDGET_GOOGLE_CALENDAR,
             },
         },
     };
 
-    static getAllConfigComponents(): ContainerContent[] {
+    static getAllConfigComponents(): Component[] {
         const components = [];
 
         for (const iType of Object.keys(IntegrationService.supportedIntegrationsMap)) {
@@ -84,34 +72,30 @@ export class IntegrationService {
     }
 
     static isSupported(integration: Integration): boolean {
-        const forType = IntegrationService.supportedIntegrationsMap[integration.type];
+        const forType = IntegrationService.supportedIntegrationsMap[integration.category];
         if (!forType) return false;
 
         if (Object.keys(forType).length === 0) return true;
 
-        return forType[integration.integrationType]; // has sub type
+        return forType[integration.type]; // has sub type
     }
 
-    static hasConfig(integration: Integration): boolean {
-        return integration.type !== "bot";
+    static getConfigComponent(integration: Integration): Component {
+        return IntegrationService.supportedIntegrationsMap[integration.category][integration.type].component;
     }
 
-    static getConfigComponent(integration: Integration): ContainerContent {
-        return IntegrationService.supportedIntegrationsMap[integration.type][integration.integrationType].component;
-    }
-
-    static getIntegrationForScreen(screen: string): { type: string, integrationType: string } {
+    static getIntegrationForScreen(screen: string): { category: string, type: string } {
         for (const iType of Object.keys(IntegrationService.supportedIntegrationsMap)) {
             for (const iiType of Object.keys(IntegrationService.supportedIntegrationsMap[iType])) {
                 const integrationTypes = IntegrationService.supportedIntegrationsMap[iType][iiType].types;
                 const integrationScreens = integrationTypes.map(t => "type_" + t);
-                if (integrationScreens.includes(screen)) return {type: iType, integrationType: iiType};
+                if (integrationScreens.includes(screen)) return {category: iType, type: iiType};
             }
         }
 
         return null;
     }
 
-    constructor() {
+    private constructor() {
     }
 }

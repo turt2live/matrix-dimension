@@ -1,24 +1,24 @@
 import { Injectable } from "@angular/core";
-import { Integration } from "./models/integration";
-import { RssConfigComponent } from "../configs/rss/rss-config.component";
+import { LegacyIntegration } from "../../models/legacyintegration";
+import { RssConfigComponent } from "../../../configs/rss/rss-config.component";
 import { ContainerContent } from "ngx-modialog";
-import { IrcConfigComponent } from "../configs/irc/irc-config.component";
-import { TravisCiConfigComponent } from "../configs/travisci/travisci-config.component";
-import { CircleCiConfigComponent } from "../configs/circleci/circleci-config.component";
-import { CustomWidgetConfigComponent } from "../configs/widget/custom_widget/custom_widget-config.component";
-import { YoutubeWidgetConfigComponent } from "../configs/widget/youtube/youtube-config.component";
-import { TwitchWidgetConfigComponent } from "../configs/widget/twitch/twitch-config.component";
-import { EtherpadWidgetConfigComponent } from "../configs/widget/etherpad/etherpad-config.component";
-import { JitsiWidgetConfigComponent } from "../configs/widget/jitsi/jitsi-config.component";
+import { IrcConfigComponent } from "../../../configs/irc/irc-config.component";
+import { TravisCiConfigComponent } from "../../../configs/travisci/travisci-config.component";
+import { CustomWidgetConfigComponent } from "../../../configs/widget/custom_widget/custom_widget-config.component";
+import { YoutubeWidgetConfigComponent } from "../../../configs/widget/youtube/youtube-config.component";
+import { TwitchWidgetConfigComponent } from "../../../configs/widget/twitch/twitch-config.component";
+import { EtherpadWidgetConfigComponent } from "../../../configs/widget/etherpad/etherpad-config.component";
+import { JitsiWidgetConfigComponent } from "../../../configs/widget/jitsi/jitsi-config.component";
 import {
     WIDGET_CUSTOM, WIDGET_ETHERPAD, WIDGET_GOOGLE_CALENDAR, WIDGET_GOOGLE_DOCS, WIDGET_JITSI, WIDGET_TWITCH,
     WIDGET_YOUTUBE
-} from "./models/widget";
-import { GoogleDocsWidgetConfigComponent } from "../configs/widget/googledocs/googledocs-config.component";
-import { GoogleCalendarWidgetConfigComponent } from "../configs/widget/googlecalendar/googlecalendar-config.component";
+} from "../../models/widget";
+import { GoogleDocsWidgetConfigComponent } from "../../../configs/widget/googledocs/googledocs-config.component";
+import { GoogleCalendarWidgetConfigComponent } from "../../../configs/widget/googlecalendar/googlecalendar-config.component";
+import { CircleCiConfigComponent } from "../../../configs/circleci/circleci-config.component";
 
 @Injectable()
-export class IntegrationService {
+export class LegacyIntegrationService {
 
     private static supportedIntegrationsMap = {
         "bot": {}, // empty == supported
@@ -73,9 +73,9 @@ export class IntegrationService {
     static getAllConfigComponents(): ContainerContent[] {
         const components = [];
 
-        for (const iType of Object.keys(IntegrationService.supportedIntegrationsMap)) {
-            for (const iiType of Object.keys(IntegrationService.supportedIntegrationsMap[iType])) {
-                const component = IntegrationService.supportedIntegrationsMap[iType][iiType].component;
+        for (const iType of Object.keys(LegacyIntegrationService.supportedIntegrationsMap)) {
+            for (const iiType of Object.keys(LegacyIntegrationService.supportedIntegrationsMap[iType])) {
+                const component = LegacyIntegrationService.supportedIntegrationsMap[iType][iiType].component;
                 if (component) components.push(component);
             }
         }
@@ -83,8 +83,8 @@ export class IntegrationService {
         return components;
     }
 
-    static isSupported(integration: Integration): boolean {
-        const forType = IntegrationService.supportedIntegrationsMap[integration.type];
+    static isSupported(integration: LegacyIntegration): boolean {
+        const forType = LegacyIntegrationService.supportedIntegrationsMap[integration.type];
         if (!forType) return false;
 
         if (Object.keys(forType).length === 0) return true;
@@ -92,18 +92,18 @@ export class IntegrationService {
         return forType[integration.integrationType]; // has sub type
     }
 
-    static hasConfig(integration: Integration): boolean {
+    static hasConfig(integration: LegacyIntegration): boolean {
         return integration.type !== "bot";
     }
 
-    static getConfigComponent(integration: Integration): ContainerContent {
-        return IntegrationService.supportedIntegrationsMap[integration.type][integration.integrationType].component;
+    static getConfigComponent(integration: LegacyIntegration): ContainerContent {
+        return LegacyIntegrationService.supportedIntegrationsMap[integration.type][integration.integrationType].component;
     }
 
     static getIntegrationForScreen(screen: string): { type: string, integrationType: string } {
-        for (const iType of Object.keys(IntegrationService.supportedIntegrationsMap)) {
-            for (const iiType of Object.keys(IntegrationService.supportedIntegrationsMap[iType])) {
-                const integrationTypes = IntegrationService.supportedIntegrationsMap[iType][iiType].types;
+        for (const iType of Object.keys(LegacyIntegrationService.supportedIntegrationsMap)) {
+            for (const iiType of Object.keys(LegacyIntegrationService.supportedIntegrationsMap[iType])) {
+                const integrationTypes = LegacyIntegrationService.supportedIntegrationsMap[iType][iiType].types;
                 const integrationScreens = integrationTypes.map(t => "type_" + t);
                 if (integrationScreens.includes(screen)) return {type: iType, integrationType: iiType};
             }

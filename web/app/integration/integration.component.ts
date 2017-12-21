@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { Integration } from "../shared/models/integration";
+import { LegacyIntegration } from "../shared/models/legacyintegration";
 import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
 export class ConfigModalContext extends BSModalContext {
-    public integration: Integration;
+    public integration: LegacyIntegration;
     public roomId: string;
     public userId: string;
     public scalarToken: string;
@@ -18,7 +18,7 @@ export class ConfigModalContext extends BSModalContext {
 })
 export class IntegrationComponent {
 
-    @Input() integration: Integration;
+    @Input() integration: LegacyIntegration;
     @Output() selected: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private sanitizer: DomSanitizer) {

@@ -1,49 +1,40 @@
 export interface Integration {
-    // These are from the server
+    category: "bot" | "complex-bot" | "bridge" | "widget";
     type: string;
-    integrationType: string;
-    userId: string;
-    name: string;
-    avatar: string;
-    about: string; // nullable
-    supportsEncryptedRooms: boolean;
-    requirements: any; // nullable
+    requirements: IntegrationRequirement[];
+    isEncryptionSupported: boolean;
+    displayName: string;
+    avatarUrl: string;
+    description: string;
+    isEnabled: boolean;
+    isPublic: boolean;
 
-    // These are set in the UI
-    isSupported: boolean;
-    notSupportedReason: string;
-    hasAdditionalConfig: boolean;
-    isEnabled: boolean; // for the flip-a-bit integrations
-    isUpdating: boolean;
+    // Used by us
+    _inRoom: boolean;
+    _isUpdating: boolean;
+    _isSupported: boolean;
+    _notSupportedReason: string;
 }
 
-export interface RSSIntegration extends Integration {
-    feeds: string[];
-    immutableFeeds: { url: string, ownerId: string }[];
+export interface Widget extends Integration {
+    options: any;
 }
 
-export interface TravisCiIntegration extends Integration {
-    repoTemplates: { repoKey: string, template: string, newTemplate: string }[]; // newTemplate is local
-    immutableRepoTemplates: { repoKey: string, template: string, ownerId: string }[];
-    webhookUrl: string; // immutable
+export interface EtherpadWidget extends Widget {
+    options: {
+        defaultUrl: string;
+    };
 }
 
-export interface CircleCiIntegration extends Integration {
-    repoTemplates: { repoKey: string, template: string, newTemplate: string }[]; // newTemplate is local
-    immutableRepoTemplates: { repoKey: string, template: string, ownerId: string }[];
-    webhookUrl: string; // immutable
+export interface JitsiWidget extends Widget {
+    options: {
+        jitsiDomain: string;
+        scriptUrl: string;
+    };
 }
 
-export interface IRCIntegration extends Integration {
-    availableNetworks: { name: string, id: string }[];
-    channels: { [networkId: string]: string[] };
-}
-
-export interface EtherpadWidgetIntegration extends Integration {
-    defaultUrl: string;
-}
-
-export interface JitsiWidgetIntegration extends Integration {
-    jitsiDomain: string;
-    scriptUrl: string
+export interface IntegrationRequirement {
+    condition: "publicRoom" | "canSendEventTypes";
+    argument: any;
+    expectedValue: any;
 }

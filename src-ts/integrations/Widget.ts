@@ -5,6 +5,11 @@ export interface EtherpadWidgetOptions {
     defaultUrl: string;
 }
 
+export interface JitsiWidgetOptions {
+    jitsiDomain: string;
+    scriptUrl: string;
+}
+
 export class Widget extends Integration {
     public options: any;
 
@@ -14,8 +19,11 @@ export class Widget extends Integration {
         this.options = widgetRecord.optionsJson ? JSON.parse(widgetRecord.optionsJson) : {};
         this.requirements = [{
             condition: "canSendEventTypes",
-            argument: ["im.vector.widget"],
+            argument: [{isState: true, type: "im.vector.widget"}],
             expectedValue: true,
         }];
+
+        // Technically widgets are supported in encrypted rooms, although at risk.
+        this.isEncryptionSupported = true;
     }
 }

@@ -1,7 +1,7 @@
-import { ScalarService } from "../../shared/services/scalar.service";
+import { ScalarClientApiService } from "../../shared/services/scalar-client-api.service";
 import { convertScalarWidgetsToDtos, EditableWidget } from "../../shared/models/widget";
 import { ToasterService } from "angular2-toaster";
-import { Integration } from "../../shared/models/integration";
+import { LegacyIntegration } from "../../shared/models/legacyintegration";
 
 const SCALAR_WIDGET_LINKS = [
     "https://scalar-staging.riot.im/scalar/api/widgets/__TYPE__.html?url=",
@@ -23,9 +23,9 @@ export class WidgetComponent {
 
     constructor(window: Window,
                 protected toaster: ToasterService,
-                protected scalarApi: ScalarService,
+                protected scalarApi: ScalarClientApiService,
                 public roomId: string,
-                public integration: Integration,
+                public integration: LegacyIntegration,
                 editWidgetId: string,
                 private widgetIds: string[],
                 private defaultName: string,

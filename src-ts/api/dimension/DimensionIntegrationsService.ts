@@ -1,4 +1,4 @@
-import { GET, Path, QueryParam } from "typescript-rest";
+import { GET, Path, PathParam, QueryParam } from "typescript-rest";
 import * as Promise from "bluebird";
 import { ScalarService } from "../scalar/ScalarService";
 import { DimensionStore } from "../../db/DimensionStore";
@@ -33,6 +33,13 @@ export class DimensionIntegrationsService {
         return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
             return this.getIntegrations(null);
         });
+    }
+
+    @GET
+    @Path("room/:roomId")
+    public getIntegrationsInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string) :Promise<IntegrationsResponse>{
+        console.log(roomId);
+        return this.getEnabledIntegrations(scalarToken);
     }
 
     private getIntegrations(isEnabledCheck?: boolean): Promise<IntegrationsResponse> {

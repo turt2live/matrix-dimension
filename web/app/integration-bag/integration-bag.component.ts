@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { Integration } from "../shared/models/integration";
+import { LegacyIntegration } from "../shared/models/legacyintegration";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { Integration } from "../shared/models/integration";
 
 @Component({
     selector: "my-integration-bag",
@@ -9,7 +10,7 @@ import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 })
 export class IntegrationBagComponent {
 
-    @Input() integrations: Integration[];
+    @Input() integrations: LegacyIntegration[];
     @Output() integrationClicked: EventEmitter<Integration> = new EventEmitter<Integration>();
 
     constructor(private sanitizer: DomSanitizer) {

@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { WidgetComponent } from "../widget.component";
-import { ScalarService } from "../../../shared/services/scalar.service";
+import { ScalarClientApiService } from "../../../shared/services/scalar-client-api.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
 import { EditableWidget, WIDGET_JITSI } from "../../../shared/models/widget";
-import { JitsiWidgetIntegration } from "../../../shared/models/integration";
+import { JitsiWidgetIntegration } from "../../../shared/models/legacyintegration";
 import * as gobyInit from "goby";
 import * as url from "url";
 
@@ -26,7 +26,7 @@ export class JitsiWidgetConfigComponent extends WidgetComponent implements Modal
 
     constructor(public dialog: DialogRef<ConfigModalContext>,
                 toaster: ToasterService,
-                scalarService: ScalarService,
+                scalarService: ScalarClientApiService,
                 window: Window) {
         super(
             window,

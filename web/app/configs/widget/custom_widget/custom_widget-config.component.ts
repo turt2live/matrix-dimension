@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { WidgetComponent } from "../widget.component";
-import { ScalarService } from "../../../shared/services/scalar.service";
+import { ScalarClientApiService } from "../../../shared/services/scalar-client-api.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
 import { WIDGET_CUSTOM } from "../../../shared/models/widget";
@@ -15,7 +15,7 @@ export class CustomWidgetConfigComponent extends WidgetComponent implements Moda
 
     constructor(public dialog: DialogRef<ConfigModalContext>,
                 toaster: ToasterService,
-                scalarService: ScalarService,
+                scalarService: ScalarClientApiService,
                 window: Window) {
         super(
             window,

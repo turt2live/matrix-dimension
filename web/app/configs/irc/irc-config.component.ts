@@ -1,11 +1,11 @@
 import { Component, OnDestroy } from "@angular/core";
-import { IRCIntegration } from "../../shared/models/integration";
+import { IRCIntegration } from "../../shared/models/legacyintegration";
 import { ModalComponent, DialogRef } from "ngx-modialog";
 import { ConfigModalContext } from "../../integration/integration.component";
-import { IrcApiService } from "../../shared/services/irc-api.service";
+import { IrcApiService } from "../../shared/services/legacy/irc-api.service";
 import { ToasterService } from "angular2-toaster";
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
-import { ApiService } from "../../shared/services/api.service";
+import { ApiService } from "../../shared/services/legacy/api.service";
 import { Subscription } from "rxjs";
 
 @Component({

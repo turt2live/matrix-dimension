@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { WidgetComponent } from "../widget.component";
-import { ScalarService } from "../../../shared/services/scalar.service";
+import { ScalarClientApiService } from "../../../shared/services/scalar-client-api.service";
 import { ConfigModalContext } from "../../../integration/integration.component";
 import { ToasterService } from "angular2-toaster";
 import { WIDGET_ETHERPAD } from "../../../shared/models/widget";
-import { EtherpadWidgetIntegration } from "../../../shared/models/integration";
+import { EtherpadWidgetIntegration } from "../../../shared/models/legacyintegration";
 
 @Component({
     selector: "my-etherpadwidget-config",
@@ -18,7 +18,7 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent implements Mo
 
     constructor(public dialog: DialogRef<ConfigModalContext>,
                 toaster: ToasterService,
-                scalarService: ScalarService,
+                scalarService: ScalarClientApiService,
                 window: Window) {
         super(
             window,

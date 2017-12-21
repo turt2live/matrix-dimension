@@ -1,10 +1,8 @@
 <div class="integration-bag">
-    <!--<my-integration *ngFor="let integration of integrations"-->
-                    <!--[integration]="integration" (selected)="onClick(integration)"></my-integration>-->
     <div class="integration" *ngFor="let integration of integrations">
-        <img class="integration-avatar" [src]="getSafeUrl(integration.avatar)"/>
-        <div class="integration-name">{{ integration.name }}</div>
-        <div class="integration-description">{{ integration.about }}</div>
+        <img class="integration-avatar" [src]="getSafeUrl(integration.avatarUrl)"/>
+        <div class="integration-name">{{ integration.displayName }}</div>
+        <div class="integration-description">{{ integration.description }}</div>
         <div class="integration-arrow"><i class="fa fa-chevron-right"></i></div>
     </div>
 </div>

@@ -12,6 +12,7 @@ export default {
                 "avatarUrl": {type: DataType.STRING, allowNull: false},
                 "description": {type: DataType.STRING, allowNull: false},
                 "isEnabled": {type: DataType.BOOLEAN, allowNull: false},
+                "isPublic": {type: DataType.BOOLEAN, allowNull: false},
                 "optionsJson": {type: DataType.STRING, allowNull: true},
             }))
             .then(() => queryInterface.bulkInsert("dimension_widgets", [
@@ -63,6 +64,15 @@ export default {
                     isPublic: true,
                     avatarUrl: "/img/avatars/twitch.png",
                     description: "Embed a Twitch livestream into your room.",
+                },
+                {
+                    type: "jitsi",
+                    name: "Jitsi Conference",
+                    isEnabled: true,
+                    isPublic: true,
+                    avatarUrl: "/img/avatars/jitsi.png",
+                    description: "Hold a video conference with Jitsi Meet",
+                    optionsJson: '{"jitsiDomain":"jitsi.riot.im", "scriptUrl":"https://jitsi.riot.im/libs/external_api.min.js"}',
                 },
             ]));
     },

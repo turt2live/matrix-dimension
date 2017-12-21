@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import * as $ from "jquery";
-import { ApiService } from "../../shared/services/api.service";
-import { JitsiWidgetIntegration } from "../../shared/models/integration";
+import { ApiService } from "../../shared/services/legacy/api.service";
+import { JitsiWidgetIntegration } from "../../shared/models/legacyintegration";
 
 declare var JitsiMeetExternalAPI: any;
 

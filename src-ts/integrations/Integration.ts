@@ -5,6 +5,7 @@ export class Integration {
     public category: "bot" | "complex-bot" | "bridge" | "widget";
     public type: string;
     public requirements: IntegrationRequirement[];
+    public isEncryptionSupported = false;
 
     // These are meant to be set by us
     public displayName: string;
@@ -26,5 +27,9 @@ export class Integration {
 export interface IntegrationRequirement {
     condition: "publicRoom" | "canSendEventTypes";
     argument: any;
+
+    // For publicRoom this is true or false (boolean)
+    // For canSendEventTypes this is an array of {isState: boolean, type: string}
+    // For userInRoom this is the user ID
     expectedValue: any;
 }

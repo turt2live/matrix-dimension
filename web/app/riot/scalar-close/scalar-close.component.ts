@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ScalarService } from "../../shared/services/scalar.service";
+import { ScalarClientApiService } from "../../shared/services/scalar-client-api.service";
 
 @Component({
     selector: "my-scalar-close",
@@ -8,7 +8,7 @@ import { ScalarService } from "../../shared/services/scalar.service";
 })
 export class ScalarCloseComponent {
 
-    constructor(private scalar: ScalarService) {
+    constructor(private scalar: ScalarClientApiService) {
     }
 
     public closeScalar() {

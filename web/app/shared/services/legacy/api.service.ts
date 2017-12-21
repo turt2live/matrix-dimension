@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
-import { Integration } from "../models/integration";
+import { LegacyIntegration } from "../../models/legacyintegration";
 
 @Injectable()
 export class ApiService {
@@ -17,7 +17,7 @@ export class ApiService {
             .map(res => res.status === 200 ? res.json()["userId"] : null).toPromise();
     }
 
-    getIntegrations(roomId: string, scalarToken: string): Promise<Integration[]> {
+    getIntegrations(roomId: string, scalarToken: string): Promise<LegacyIntegration[]> {
         return this.http.get("/api/v1/dimension/integrations/" + roomId, {params: {scalar_token: scalarToken}})
             .map(res => res.json()).toPromise();
     }
@@ -46,7 +46,7 @@ export class ApiService {
             .map(res => res.json()).toPromise();
     }
 
-    getIntegration(type: string, integrationType: string): Promise<Integration> {
+    getIntegration(type: string, integrationType: string): Promise<LegacyIntegration> {
         const url = "/api/v1/dimension/integration/" + type + "/" + integrationType;
         return this.http.get(url).map(res => res.json()).toPromise();
     }
