@@ -39,6 +39,7 @@ import { GoogleCalendarWidgetConfigComponent } from "./configs/widget/google_cal
 import { GoogleDocsWidgetConfigComponent } from "./configs/widget/google_docs/gdoc.widget.component";
 import { JitsiWidgetConfigComponent } from "./configs/widget/jitsi/jitsi.widget.component";
 import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch.widget.component";
+import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube.widget.component";
 
 @NgModule({
     imports: [
@@ -77,6 +78,7 @@ import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch.widg
         GoogleDocsWidgetConfigComponent,
         JitsiWidgetConfigComponent,
         TwitchWidgetConfigComponent,
+        YoutubeWidgetConfigComponent,
 
         // Vendor
     ],

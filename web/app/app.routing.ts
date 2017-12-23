@@ -12,6 +12,7 @@ import { GoogleCalendarWidgetConfigComponent } from "./configs/widget/google_cal
 import { GoogleDocsWidgetConfigComponent } from "./configs/widget/google_docs/gdoc.widget.component";
 import { JitsiWidgetConfigComponent } from "./configs/widget/jitsi/jitsi.widget.component";
 import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch.widget.component";
+import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube.widget.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -57,6 +58,11 @@ const routes: Routes = [
                         path: "twitch",
                         component: TwitchWidgetConfigComponent,
                         data: {breadcrumb: "Twitch Livestream Widgets", name: "Twitch Livestream Widgets"}
+                    },
+                    {
+                        path: "youtube",
+                        component: YoutubeWidgetConfigComponent,
+                        data: {breadcrumb: "Youtube Video Widgets", name: "Youtube Video Widgets"}
                     },
                 ],
             },

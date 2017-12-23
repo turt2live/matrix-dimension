@@ -34,7 +34,7 @@ export class TwitchWidgetConfigComponent extends WidgetComponent {
 
     private setTwitchUrl(widget: EditableWidget) {
         if (!widget.dimension.newData.channelName || widget.dimension.newData.channelName.trim().length === 0) {
-            throw new Error("Please enter a shared calendar ID");
+            throw new Error("Please enter a channel name");
         }
 
         widget.dimension.newUrl = "https://player.twitch.tv/?channel=$channelName";
