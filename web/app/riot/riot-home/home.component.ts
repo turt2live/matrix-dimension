@@ -147,8 +147,7 @@ export class RiotHomeComponent {
                 this.toaster.pop("error", errorMessage);
             });
         } else {
-            // TODO: Navigate to edit screen
-            console.log("EDIT SCREEN FOR " + integration.displayName);
+            console.log("Navigating to edit screen for " + integration.category + " " + integration.type);
             this.router.navigate(['riot-app', integration.category, integration.type]);
         }
     }
