@@ -15,7 +15,7 @@ export class DimensionApiService extends AuthedApi {
     }
 
     public getWidget(type: string): Promise<Widget> {
-        return this.http.get("/api/v1/dimension/widget/" + type).map(r => r.json()).toPromise();
+        return this.http.get("/api/v1/dimension/integrations/widget/" + type).map(r => r.json()).toPromise();
     }
 
     public isEmbeddable(url: string): Promise<any> { // 200 = success, anything else = error

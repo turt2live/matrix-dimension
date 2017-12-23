@@ -220,6 +220,29 @@ export class WidgetComponent implements OnInit {
     }
 
     /**
+     * Performs the templating calculation on a URL as best as it can. Variables that cannot be converted
+     * will be left unchanged, such as the $matrix_display_name and $matrix_avatar_url. This is intended to
+     * be used for Scalar compatibility operations.
+     * @param {string} urlTemplate The URL with variables to template
+     * @param {*} data The data to consider while templating
+     * @returns {string} The URL with the variables replaced
+     */
+    protected templateUrl(urlTemplate: string, data: any): string {
+        let result = urlTemplate;
+
+        result = result.replace("$matrix_room_id", SessionStorage.roomId);
+        result = result.replace("$matrix_user_id", SessionStorage.userId);
+        // result = result.replace("$matrix_display_name", "NOT SUPPORTED");
+        // result = result.replace("$matrix_avatar_url", "NOT SUPPORTED");
+
+        for (const key of Object.keys(data)) {
+            result = result.replace("$" + key, data[key]);
+        }
+
+        return result;
+    }
+
+    /**
      * Adds the widget stored in newWidget to the room.
      * @returns {Promise<*>} Resolves when the widget has been added and newWidget is populated
      * with a new widget.
@@ -264,7 +287,7 @@ export class WidgetComponent implements OnInit {
     public saveWidget(widget: EditableWidget): Promise<any> {
         // Make sure we call "before add" before validating the URL
         try {
-            this.OnWidgetBeforeEdit(this.newWidget);
+            this.OnWidgetBeforeEdit(widget);
         } catch (error) {
             this.toaster.pop("warning", error.message);
             return;

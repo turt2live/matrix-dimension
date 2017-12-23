@@ -5,6 +5,8 @@ import { DimensionStore } from "../../db/DimensionStore";
 import { DimensionAdminService } from "./DimensionAdminService";
 import { Widget } from "../../integrations/Widget";
 import { MemoryCache } from "../../MemoryCache";
+import { Integration } from "../../integrations/Integration";
+import { ApiError } from "../ApiError";
 
 interface IntegrationsResponse {
     widgets: Widget[],
@@ -40,6 +42,22 @@ export class DimensionIntegrationsService {
     public getIntegrationsInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string): Promise<IntegrationsResponse> {
         console.log(roomId);
         return this.getEnabledIntegrations(scalarToken);
+    }
+
+    @GET
+    @Path(":category/:type")
+    public getIntegration(@PathParam("category") category: string, @PathParam("type") type: string): Promise<Integration> {
+        return this.getIntegrations(true).then(response => {
+            for (const key of Object.keys(response)) {
+                for (const integration of <Integration[]>response[key]) {
+                    if (integration.category === category && integration.type === type) {
+                        return integration;
+                    }
+                }
+            }
+
+            throw new ApiError(404, "Integration not found");
+        });
     }
 
     private getIntegrations(isEnabledCheck?: boolean): Promise<IntegrationsResponse> {
