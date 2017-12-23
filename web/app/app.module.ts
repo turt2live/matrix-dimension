@@ -26,7 +26,6 @@ import { SpinnerComponent } from "./elements/spinner/spinner.component";
 import { BreadcrumbsModule } from "ng2-breadcrumbs";
 import { RiotHomeComponent } from "./riot/riot-home/home.component";
 import { IntegrationBagComponent } from "./integration-bag/integration-bag.component";
-import { IntegrationComponent } from "./integration/integration.component";
 import { ScalarServerApiService } from "./shared/services/scalar-server-api.service";
 import { DimensionApiService } from "./shared/services/dimension-api.service";
 import { AdminApiService } from "./shared/services/admin-api.service";
@@ -53,7 +52,6 @@ import { ConfigScreenWidgetComponent } from "./configs/widget/config_screen/conf
         AppComponent,
         HomeComponent,
         RiotComponent,
-        IntegrationComponent,
         IntegrationBagComponent,
         PageHeaderComponent,
         SpinnerComponent,

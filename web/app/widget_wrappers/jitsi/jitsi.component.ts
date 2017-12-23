@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import * as $ from "jquery";
-import { ApiService } from "../../shared/services/legacy/api.service";
-import { JitsiWidgetIntegration } from "../../shared/models/legacyintegration";
+import { DimensionApiService } from "../../shared/services/dimension-api.service";
+import { JitsiWidget } from "../../shared/models/integration";
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -22,7 +22,7 @@ export class JitsiWidgetWrapperComponent implements OnInit {
     private userId: string;
     private jitsiApiObj: any;
 
-    constructor(activatedRoute: ActivatedRoute, private api: ApiService) {
+    constructor(activatedRoute: ActivatedRoute, private api: DimensionApiService) {
         let params: any = activatedRoute.snapshot.queryParams;
 
         this.domain = params.domain;
@@ -33,9 +33,9 @@ export class JitsiWidgetWrapperComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.api.getIntegration("widget", "jitsi").then(integration => {
-            const widget = <JitsiWidgetIntegration>integration;
-            $.getScript(widget.scriptUrl);
+        this.api.getWidget("jitsi").then(integration => {
+            const widget = <JitsiWidget>integration;
+            $.getScript(widget.options.scriptUrl);
         });
     }
 
