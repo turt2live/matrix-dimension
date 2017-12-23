@@ -1,4 +1,4 @@
-import { NewWidgetComponent } from "../widget.component";
+import { WidgetComponent } from "../widget.component";
 import { Component, ContentChild, Input, TemplateRef } from "@angular/core";
 
 @Component({
@@ -8,7 +8,7 @@ import { Component, ContentChild, Input, TemplateRef } from "@angular/core";
 })
 export class ConfigScreenWidgetComponent {
 
-    @Input() widgetComponent: NewWidgetComponent;
+    @Input() widgetComponent: WidgetComponent;
     @ContentChild(TemplateRef) widgetParamsTemplate: TemplateRef<any>;
 
     constructor() {

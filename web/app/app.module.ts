@@ -35,6 +35,7 @@ import { CustomWidgetConfigComponent } from "./configs/widget/custom/custom.widg
 import { ConfigScreenWidgetComponent } from "./configs/widget/config_screen/config_screen.widget.component";
 import { EtherpadWidgetConfigComponent } from "./configs/widget/etherpad/etherpad.widget.component";
 import { NameService } from "./shared/services/name.service";
+import { GoogleCalendarWidgetConfigComponent } from "./configs/widget/google_calendar/gcal.widget.component";
 
 @NgModule({
     imports: [
@@ -69,6 +70,7 @@ import { NameService } from "./shared/services/name.service";
         ConfigScreenWidgetComponent,
         CustomWidgetConfigComponent,
         EtherpadWidgetConfigComponent,
+        GoogleCalendarWidgetConfigComponent,
 
         // Vendor
     ],

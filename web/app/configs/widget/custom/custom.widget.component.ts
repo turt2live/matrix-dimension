@@ -1,4 +1,4 @@
-import { NewWidgetComponent } from "../widget.component";
+import { WidgetComponent } from "../widget.component";
 import { WIDGET_CUSTOM } from "../../../shared/models/widget";
 import { Component } from "@angular/core";
 
@@ -6,7 +6,7 @@ import { Component } from "@angular/core";
     templateUrl: "custom.widget.component.html",
     styleUrls: ["custom.widget.component.scss"],
 })
-export class CustomWidgetConfigComponent extends NewWidgetComponent {
+export class CustomWidgetConfigComponent extends WidgetComponent {
     constructor() {
         super(WIDGET_CUSTOM, "Custom Widget", "generic");
     }

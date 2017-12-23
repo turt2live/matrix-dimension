@@ -12,7 +12,9 @@ const SCALAR_WIDGET_LINKS = [
     "https://demo.riot.im/scalar/api/widgets/__TYPE__.html?url=",
 ];
 
-export class NewWidgetComponent implements OnInit {
+export const DISABLE_AUTOMATIC_WRAPPING = "";
+
+export class WidgetComponent implements OnInit {
 
     public isLoading = true;
     public isUpdating = false;
@@ -223,6 +225,14 @@ export class NewWidgetComponent implements OnInit {
      * with a new widget.
      */
     public addWidget(): Promise<any> {
+        // Make sure we call "before add" before validating the URL
+        try {
+            this.OnWidgetBeforeAdd(this.newWidget);
+        } catch (error) {
+            this.toaster.pop("warning", error.message);
+            return;
+        }
+
         if (!this.newWidget.dimension.newUrl || this.newWidget.dimension.newUrl.trim().length === 0) {
             this.toaster.pop("warning", "Please enter a URL for the widget");
             return;
@@ -231,7 +241,6 @@ export class NewWidgetComponent implements OnInit {
         this.packWidget(this.newWidget);
 
         this.isUpdating = true;
-        this.OnWidgetBeforeAdd(this.newWidget);
         return this.scalarApi.setWidget(SessionStorage.roomId, this.newWidget)
             .then(() => this.widgets.push(this.newWidget))
             .then(() => {
@@ -253,6 +262,14 @@ export class NewWidgetComponent implements OnInit {
      * @returns {Promise<any>} Resolves when the widget has been updated in the room.
      */
     public saveWidget(widget: EditableWidget): Promise<any> {
+        // Make sure we call "before add" before validating the URL
+        try {
+            this.OnWidgetBeforeEdit(this.newWidget);
+        } catch (error) {
+            this.toaster.pop("warning", error.message);
+            return;
+        }
+
         if (!widget.dimension.newUrl || widget.dimension.newUrl.trim().length === 0) {
             this.toaster.pop("warning", "Please enter a URL for the widget");
             return;
@@ -261,7 +278,6 @@ export class NewWidgetComponent implements OnInit {
         this.packWidget(widget);
 
         this.isUpdating = true;
-        this.OnWidgetBeforeEdit(widget);
         return this.scalarApi.setWidget(SessionStorage.roomId, widget)
             .then(() => {
                 this.isUpdating = false;
@@ -326,8 +342,8 @@ export class NewWidgetComponent implements OnInit {
     }
 
     /**
-     * Called before the widget is added to the room, but after the Dimension-specific
-     * settings have been copied over to the primary fields.
+     * Called before the widget is added to the room, and before the Dimension properties
+     * have been copied over. This is a good time to do validation.
      * @param {EditableWidget} _widget The widget that is about to be added
      */
     protected OnWidgetBeforeAdd(_widget: EditableWidget): void {
@@ -354,8 +370,8 @@ export class NewWidgetComponent implements OnInit {
     }
 
     /**
-     * Called before the given widget has been updated in the room, but after the
-     * Dimension-specific settings have been copied over to the primary fields.
+     * Called before the given widget has been updated in the room, and before the Dimension
+     * properties have been copied over. This is a good time to do validation.
      * This is not called for widgets being deleted.
      * @param {EditableWidget} _widget The widget about to be edited
      */

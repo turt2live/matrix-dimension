@@ -1,4 +1,4 @@
-import { NewWidgetComponent } from "../widget.component";
+import { WidgetComponent } from "../widget.component";
 import { EditableWidget, WIDGET_ETHERPAD } from "../../../shared/models/widget";
 import { Component } from "@angular/core";
 import { EtherpadWidget } from "../../../shared/models/integration";
@@ -9,7 +9,7 @@ import { NameService } from "../../../shared/services/name.service";
     templateUrl: "etherpad.widget.component.html",
     styleUrls: ["etherpad.widget.component.scss"],
 })
-export class EtherpadWidgetConfigComponent extends NewWidgetComponent {
+export class EtherpadWidgetConfigComponent extends WidgetComponent {
 
     private etherpadWidget: EtherpadWidget = <EtherpadWidget>SessionStorage.editIntegration;
 

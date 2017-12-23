@@ -8,6 +8,7 @@ import { GCalWidgetWrapperComponent } from "./widget_wrappers/gcal/gcal.componen
 import { RiotHomeComponent } from "./riot/riot-home/home.component";
 import { CustomWidgetConfigComponent } from "./configs/widget/custom/custom.widget.component";
 import { EtherpadWidgetConfigComponent } from "./configs/widget/etherpad/etherpad.widget.component";
+import { GoogleCalendarWidgetConfigComponent } from "./configs/widget/google_calendar/gcal.widget.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -33,6 +34,11 @@ const routes: Routes = [
                         path: "etherpad",
                         component: EtherpadWidgetConfigComponent,
                         data: {breadcrumb: "Etherpad Widgets", name: "Etherpad Widgets"}
+                    },
+                    {
+                        path: "googlecalendar",
+                        component: GoogleCalendarWidgetConfigComponent,
+                        data: {breadcrumb: "Google Calendar Widgets", name: "Google Calendar Widgets"}
                     },
                 ],
             },
