@@ -147,7 +147,7 @@ export class NewWidgetComponent {
             type: this.widgetTypes[0],
             name: this.defaultName,
             url: window.location.origin,
-            //ownerId: this.userId, // we don't have a user id
+            ownerId: SessionStorage.userId,
             dimension: {
                 newUrl: "",
                 newName: "",

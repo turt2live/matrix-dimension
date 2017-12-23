@@ -13,7 +13,7 @@ export class ApiService {
     }
 
     getTokenOwner(scalarToken: String): Promise<string> {
-        return this.http.get("/api/v1/dimension/whoami", {params:{scalar_token:scalarToken}})
+        return this.http.get("/api/v1/dimension/whoami", {params: {scalar_token: scalarToken}})
             .map(res => res.status === 200 ? res.json()["userId"] : null).toPromise();
     }
 
