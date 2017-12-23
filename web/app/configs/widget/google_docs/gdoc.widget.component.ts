@@ -8,6 +8,6 @@ import { Component } from "@angular/core";
 })
 export class GoogleDocsWidgetConfigComponent extends WidgetComponent {
     constructor() {
-        super(WIDGET_GOOGLE_DOCS, "Google Docs Widget", "generic", "googleDocs");
+        super(WIDGET_GOOGLE_DOCS, "Google Doc", "generic", "googleDocs");
     }
 }

@@ -8,7 +8,11 @@ import { Component } from "@angular/core";
 })
 export class GoogleCalendarWidgetConfigComponent extends WidgetComponent {
     constructor() {
-        super(WIDGET_GOOGLE_CALENDAR, "Google Calendar Widget", DISABLE_AUTOMATIC_WRAPPING, "googleCalendar");
+        super(WIDGET_GOOGLE_CALENDAR, "Google Calendar", DISABLE_AUTOMATIC_WRAPPING, "googleCalendar");
+    }
+
+    protected  OnNewWidgetPrepared(widget: EditableWidget) {
+        widget.dimension.newData.src = "";
     }
 
     protected OnWidgetsDiscovered(widgets: EditableWidget[]) {

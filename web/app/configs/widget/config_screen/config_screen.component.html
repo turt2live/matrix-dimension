@@ -22,6 +22,7 @@
     <my-ibox *ngFor="let widget of widgetComponent.widgets trackById" [isCollapsible]="true" [defaultCollapsed]="widget.id !== widgetComponent.defaultExpandedWidgetId">
         <h5 class="my-ibox-title">
             <i class="far fa-edit"></i> {{ widget.name || widget.url || widgetComponent.defaultName }}
+            <span *ngIf="widget.data.title">- {{ widget.data.title }}</span>
         </h5>
         <div class="my-ibox-content">
             <form (submit)="widgetComponent.saveWidget(widget)" novalidate name="editForm">

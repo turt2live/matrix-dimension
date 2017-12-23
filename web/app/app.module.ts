@@ -38,6 +38,7 @@ import { NameService } from "./shared/services/name.service";
 import { GoogleCalendarWidgetConfigComponent } from "./configs/widget/google_calendar/gcal.widget.component";
 import { GoogleDocsWidgetConfigComponent } from "./configs/widget/google_docs/gdoc.widget.component";
 import { JitsiWidgetConfigComponent } from "./configs/widget/jitsi/jitsi.widget.component";
+import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch.widget.component";
 
 @NgModule({
     imports: [
@@ -75,6 +76,7 @@ import { JitsiWidgetConfigComponent } from "./configs/widget/jitsi/jitsi.widget.
         GoogleCalendarWidgetConfigComponent,
         GoogleDocsWidgetConfigComponent,
         JitsiWidgetConfigComponent,
+        TwitchWidgetConfigComponent,
 
         // Vendor
     ],

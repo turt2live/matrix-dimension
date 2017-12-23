@@ -11,6 +11,7 @@ import { EtherpadWidgetConfigComponent } from "./configs/widget/etherpad/etherpa
 import { GoogleCalendarWidgetConfigComponent } from "./configs/widget/google_calendar/gcal.widget.component";
 import { GoogleDocsWidgetConfigComponent } from "./configs/widget/google_docs/gdoc.widget.component";
 import { JitsiWidgetConfigComponent } from "./configs/widget/jitsi/jitsi.widget.component";
+import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch.widget.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -51,6 +52,11 @@ const routes: Routes = [
                         path: "jitsi",
                         component: JitsiWidgetConfigComponent,
                         data: {breadcrumb: "Jitsi Widgets", name: "Jitsi Widgets"}
+                    },
+                    {
+                        path: "twitch",
+                        component: TwitchWidgetConfigComponent,
+                        data: {breadcrumb: "Twitch Livestream Widgets", name: "Twitch Livestream Widgets"}
                     },
                 ],
             },
