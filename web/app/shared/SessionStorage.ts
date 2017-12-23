@@ -6,7 +6,7 @@ export class SessionStorage {
     public static userId: string;
     public static roomId: string;
     public static editIntegration: Integration;
-    public static editWidgetId: string;
+    public static editIntegrationId: string;
     public static editsRequested: number = 0;
 
     private constructor() {

@@ -71,11 +71,12 @@ export class NewWidgetComponent {
             }
 
             // See if we should request editing a particular widget
-            if (SessionStorage.editWidgetId && SessionStorage.editsRequested === 1) {
+            console.log(SessionStorage.editIntegrationId +" " +SessionStorage.editsRequested);
+            if (SessionStorage.editIntegrationId && SessionStorage.editsRequested === 1) {
                 let editWidget: EditableWidget = null;
                 let otherWidgets: EditableWidget[] = [];
                 for (let widget of this.widgets) {
-                    if (widget.id === SessionStorage.editWidgetId) {
+                    if (widget.id === SessionStorage.editIntegrationId) {
                         editWidget = widget;
                     } else otherWidgets.push(widget);
                 }
@@ -318,7 +319,7 @@ export class NewWidgetComponent {
      * @param {EditableWidget} widget The widget to check
      * @returns {boolean} True if the widget has been edited
      */
-    public hasChanges(widget: EditableWidget):boolean {
+    public hasChanges(widget: EditableWidget): boolean {
         if (widget.dimension.newUrl !== this.unwrapUrl(widget.url)) return true;
         if (widget.dimension.newName !== widget.name) return true;
         if (widget.dimension.newTitle !== widget.data.title) return true;

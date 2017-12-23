@@ -29,7 +29,7 @@ export class RiotHomeComponent {
     private roomId: string;
     private userId: string;
     private requestedScreen: string = null;
-    private requestedIntegration: string = null;
+    private requestedIntegrationId: string = null;
     public integrationsForCategory: { [category: string]: Integration[] } = {};
     private categoryMap: { [categoryName: string]: string[] } = CATEGORY_MAP;
 
@@ -42,7 +42,7 @@ export class RiotHomeComponent {
         let params: any = this.activatedRoute.snapshot.queryParams;
 
         this.requestedScreen = params.screen;
-        this.requestedIntegration = params.integ_id;
+        this.requestedIntegrationId = params.integ_id;
 
         if (SessionStorage.roomId && SessionStorage.userId) {
             this.roomId = SessionStorage.roomId;
@@ -208,8 +208,9 @@ export class RiotHomeComponent {
         console.log("Searching for integration for requested screen");
         for (const integration of this.getIntegrations()) {
             if (integration.category === category && integration.type === type) {
-                console.log("Configuring integration " + this.requestedIntegration + " category=" + category + " type=" + type);
+                console.log("Configuring integration " + this.requestedIntegrationId + " category=" + category + " type=" + type);
                 SessionStorage.editIntegration = integration;
+                SessionStorage.editIntegrationId = this.requestedIntegrationId;
                 this.modifyIntegration(integration);
                 return;
             }

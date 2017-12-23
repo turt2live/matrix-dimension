@@ -53,11 +53,13 @@ export class IntegrationService {
     }
 
     static getIntegrationForScreen(screen: string): { category: string, type: string } {
-        for (const iType of Object.keys(IntegrationService.supportedIntegrationsMap)) {
-            for (const iiType of Object.keys(IntegrationService.supportedIntegrationsMap[iType])) {
-                const integrationTypes = IntegrationService.supportedIntegrationsMap[iType][iiType].types;
+        for (const category of Object.keys(IntegrationService.supportedIntegrationsMap)) {
+            for (const type of Object.keys(IntegrationService.supportedIntegrationsMap[category])) {
+                const integrationTypes = IntegrationService.supportedIntegrationsMap[category][type].types;
+                if (!integrationTypes) continue;
+
                 const integrationScreens = integrationTypes.map(t => "type_" + t);
-                if (integrationScreens.includes(screen)) return {category: iType, type: iiType};
+                if (integrationScreens.includes(screen)) return {category: category, type: type};
             }
         }
 
