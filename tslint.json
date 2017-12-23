@@ -3,7 +3,7 @@
     "node_modules/codelyzer"
   ],
   "rules": {
-    "class-name": true,
+    "class-name": false,
     "comment-format": [
       true,
       "check-space"
@@ -54,7 +54,7 @@
       "check-else",
       "check-whitespace"
     ],
-    "quotemark": [],
+    "quotemark": false,
     "radix": true,
     "semicolon": [
       "always"

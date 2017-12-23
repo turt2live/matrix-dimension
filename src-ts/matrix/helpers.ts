@@ -35,7 +35,7 @@ export function getFederationUrl(serverName: string): Promise<string> {
     });
 }
 
-export function doFederatedApiCall(method: string, serverName: string, endpoint: string, query?: object, body?:object):Promise<any> {
+export function doFederatedApiCall(method: string, serverName: string, endpoint: string, query?: object, body?: object): Promise<any> {
     return getFederationUrl(serverName).then(federationUrl => {
         return new Promise((resolve, reject) => {
             request({

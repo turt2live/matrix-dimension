@@ -4,5 +4,5 @@ export interface ScalarRegisterResponse {
 
 export interface ScalarAccountResponse {
     user_id: string;
-    //credit: number; // present on scalar-web
+    // credit: number; // present on scalar-web
 }

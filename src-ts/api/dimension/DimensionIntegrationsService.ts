@@ -37,7 +37,7 @@ export class DimensionIntegrationsService {
 
     @GET
     @Path("room/:roomId")
-    public getIntegrationsInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string) :Promise<IntegrationsResponse>{
+    public getIntegrationsInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string): Promise<IntegrationsResponse> {
         console.log(roomId);
         return this.getEnabledIntegrations(scalarToken);
     }
