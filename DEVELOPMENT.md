@@ -16,7 +16,7 @@ cp config/default.yaml config/development.yaml
 nano config/development.yaml
 
 # Run the webserver (it watches for changes)
-npm run start:dev
+npm run start:web
 
 # Run the backend (does not watch for changes)
 npm run build:app && node build/app/index.js
