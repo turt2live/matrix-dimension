@@ -1,59 +1,18 @@
-<ng-template #widgetParams let-widget="widget">
-    <label class="label-block">
-        Widget Name
-        <input type="text" class="form-control"
-               placeholder="{{ defaultName }}"
-               [(ngModel)]="widget.dimension.newName" name="widget-name-{{widget.id}}"
-               [disabled]="isUpdating"/>
-    </label>
-    <label class="label-block">
-        Widget URL
-        <input type="text" class="form-control"
-               placeholder="https://matrix.org"
-               [(ngModel)]="widget.dimension.newUrl" name="widget-url-{{widget.id}}"
-               [disabled]="isUpdating"/>
-    </label>
-</ng-template>
-
-<!-- Annoyingly, this has to be copy/pasted to all the integration configs -->
-<div *ngIf="isLoading">
-    <my-spinner></my-spinner>
-</div>
-<div *ngIf="!isLoading">
-    <my-ibox [isCollapsible]="true" [defaultCollapsed]="defaultExpandedWidgetId">
-        <h5 class="my-ibox-title">
-            <i class="far fa-plus-square"></i> Add {{ defaultName }}
-        </h5>
-        <div class="my-ibox-content">
-            <form (submit)="addWidget()" novalidate name="addForm">
-                <ng-container *ngTemplateOutlet="widgetParams;context:{widget:newWidget}"></ng-container>
-
-                <div style="margin-top: 25px">
-                    <button type="submit" class="btn btn-sm btn-success" [disabled]="isUpdating">
-                        <i class="fa fa-plus"></i> Add Widget
-                    </button>
-                </div>
-            </form>
-        </div>
-    </my-ibox>
-
-    <my-ibox *ngFor="let widget of widgets trackById" [isCollapsible]="true" [defaultCollapsed]="widget.id !== defaultExpandedWidgetId">
-        <h5 class="my-ibox-title">
-            <i class="far fa-edit"></i> {{ widget.name || widget.url || defaultName }}
-        </h5>
-        <div class="my-ibox-content">
-            <form (submit)="saveWidget(widget)" novalidate name="editForm">
-                <ng-container *ngTemplateOutlet="widgetParams;context:{widget:widget}"></ng-container>
-
-                <div style="margin-top: 25px">
-                    <button type="submit" class="btn btn-sm btn-primary" [disabled]="isUpdating">
-                        <i class="far fa-save"></i> Save Widget
-                    </button>
-                    <button type="button" class="btn btn-sm btn-danger" [disabled]="isUpdating" (click)="removeWidget(widget)">
-                        <i class="far fa-trash-alt"></i> Remove Widget
-                    </button>
-                </div>
-            </form>
-        </div>
-    </my-ibox>
-</div>
+<my-widget-config [widgetComponent]="this">
+    <ng-template #widgetParamsTemplate let-widget="widget">
+        <label class="label-block">
+            Widget Name
+            <input type="text" class="form-control"
+                   placeholder="{{ defaultName }}"
+                   [(ngModel)]="widget.dimension.newName" name="widget-name-{{widget.id}}"
+                   [disabled]="isUpdating"/>
+        </label>
+        <label class="label-block">
+            Widget URL
+            <input type="text" class="form-control"
+                   placeholder="https://matrix.org"
+                   [(ngModel)]="widget.dimension.newUrl" name="widget-url-{{widget.id}}"
+                   [disabled]="isUpdating"/>
+        </label>
+    </ng-template>
+</my-widget-config>

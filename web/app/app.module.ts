@@ -33,6 +33,7 @@ import { AdminApiService } from "./shared/services/admin-api.service";
 import { ServiceLocator } from "./shared/services/locator.service";
 import { IboxComponent } from "./elements/ibox/ibox.component";
 import { CustomWidgetConfigComponent } from "./configs/widget/custom/custom.widget.component";
+import { ConfigScreenWidgetComponent } from "./configs/widget/config_screen/config_screen.widget.component";
 
 @NgModule({
     imports: [
@@ -65,6 +66,7 @@ import { CustomWidgetConfigComponent } from "./configs/widget/custom/custom.widg
         GCalWidgetWrapperComponent,
         RiotHomeComponent,
         IboxComponent,
+        ConfigScreenWidgetComponent,
         CustomWidgetConfigComponent,
 
         // Vendor
