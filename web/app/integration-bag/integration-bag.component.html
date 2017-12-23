@@ -1,5 +1,5 @@
 <div class="integration-bag">
-    <div class="integration" *ngFor="let integration of integrations">
+    <div class="integration" *ngFor="let integration of integrations" (click)="onClick(integration)">
         <img class="integration-avatar" [src]="getSafeUrl(integration.avatarUrl)"/>
         <div class="integration-name">{{ integration.displayName }}</div>
         <div class="integration-description">{{ integration.description }}</div>

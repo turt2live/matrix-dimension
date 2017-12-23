@@ -1,4 +1,4 @@
-import { ApplicationRef, NgModule } from "@angular/core";
+import { ApplicationRef, Injector, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { HttpModule } from "@angular/http";
 import { FormsModule } from "@angular/forms";
@@ -13,17 +13,16 @@ import { ScalarClientApiService } from "./shared/services/scalar-client-api.serv
 import { ToasterModule } from "angular2-toaster";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component";
-import { LegacyIntegrationService } from "./shared/services/legacy/integration.service";
 import { BootstrapModalModule } from "ngx-modialog/plugins/bootstrap";
 import { ModalModule } from "ngx-modialog";
 import { GenericWidgetWrapperComponent } from "./widget_wrappers/generic/generic.component";
 import { ToggleFullscreenDirective } from "./shared/directives/toggle-fullscreen.directive";
-import { FullscreenButtonComponent } from "./fullscreen-button/fullscreen-button.component";
+import { FullscreenButtonComponent } from "./elements/fullscreen-button/fullscreen-button.component";
 import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.component";
 import { JitsiWidgetWrapperComponent } from "./widget_wrappers/jitsi/jitsi.component";
 import { GCalWidgetWrapperComponent } from "./widget_wrappers/gcal/gcal.component";
 import { PageHeaderComponent } from "./page-header/page-header.component";
-import { SpinnerComponent } from "./spinner/spinner.component";
+import { SpinnerComponent } from "./elements/spinner/spinner.component";
 import { BreadcrumbsModule } from "ng2-breadcrumbs";
 import { RiotHomeComponent } from "./riot/riot-home/home.component";
 import { IntegrationBagComponent } from "./integration-bag/integration-bag.component";
@@ -31,8 +30,8 @@ import { IntegrationComponent } from "./integration/integration.component";
 import { ScalarServerApiService } from "./shared/services/scalar-server-api.service";
 import { DimensionApiService } from "./shared/services/dimension-api.service";
 import { AdminApiService } from "./shared/services/admin-api.service";
-
-const WIDGET_CONFIGURATION_COMPONENTS: any[] = LegacyIntegrationService.getAllConfigComponents();
+import { ServiceLocator } from "./shared/services/locator.service";
+import { IboxComponent } from "./elements/ibox/ibox.component";
 
 @NgModule({
     imports: [
@@ -49,7 +48,6 @@ const WIDGET_CONFIGURATION_COMPONENTS: any[] = LegacyIntegrationService.getAllCo
         BreadcrumbsModule,
     ],
     declarations: [
-        ...WIDGET_CONFIGURATION_COMPONENTS,
         AppComponent,
         HomeComponent,
         RiotComponent,
@@ -65,6 +63,7 @@ const WIDGET_CONFIGURATION_COMPONENTS: any[] = LegacyIntegrationService.getAllCo
         JitsiWidgetWrapperComponent,
         GCalWidgetWrapperComponent,
         RiotHomeComponent,
+        IboxComponent,
 
         // Vendor
     ],
@@ -78,12 +77,11 @@ const WIDGET_CONFIGURATION_COMPONENTS: any[] = LegacyIntegrationService.getAllCo
         // Vendor
     ],
     bootstrap: [AppComponent],
-    entryComponents: [
-        ...WIDGET_CONFIGURATION_COMPONENTS,
-    ]
+    entryComponents: []
 })
 export class AppModule {
-    constructor(public appRef: ApplicationRef) {
+    constructor(public appRef: ApplicationRef, injector: Injector) {
+        ServiceLocator.injector = injector;
     }
 
     hmrOnInit(store) {

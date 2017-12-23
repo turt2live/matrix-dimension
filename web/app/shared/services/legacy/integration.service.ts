@@ -1,21 +1,21 @@
 import { Injectable } from "@angular/core";
 import { LegacyIntegration } from "../../models/legacyintegration";
-import { RssConfigComponent } from "../../../configs/rss/rss-config.component";
+import { RssConfigComponent } from "../../../configs-old/rss/rss-config.component";
 import { ContainerContent } from "ngx-modialog";
-import { IrcConfigComponent } from "../../../configs/irc/irc-config.component";
-import { TravisCiConfigComponent } from "../../../configs/travisci/travisci-config.component";
-import { CustomWidgetConfigComponent } from "../../../configs/widget/custom_widget/custom_widget-config.component";
-import { YoutubeWidgetConfigComponent } from "../../../configs/widget/youtube/youtube-config.component";
-import { TwitchWidgetConfigComponent } from "../../../configs/widget/twitch/twitch-config.component";
-import { EtherpadWidgetConfigComponent } from "../../../configs/widget/etherpad/etherpad-config.component";
-import { JitsiWidgetConfigComponent } from "../../../configs/widget/jitsi/jitsi-config.component";
+import { IrcConfigComponent } from "../../../configs-old/irc/irc-config.component";
+import { TravisCiConfigComponent } from "../../../configs-old/travisci/travisci-config.component";
+import { CustomWidgetConfigComponent } from "../../../configs-old/widget/custom_widget/custom_widget-config.component";
+import { YoutubeWidgetConfigComponent } from "../../../configs-old/widget/youtube/youtube-config.component";
+import { TwitchWidgetConfigComponent } from "../../../configs-old/widget/twitch/twitch-config.component";
+import { EtherpadWidgetConfigComponent } from "../../../configs-old/widget/etherpad/etherpad-config.component";
+import { JitsiWidgetConfigComponent } from "../../../configs-old/widget/jitsi/jitsi-config.component";
 import {
     WIDGET_CUSTOM, WIDGET_ETHERPAD, WIDGET_GOOGLE_CALENDAR, WIDGET_GOOGLE_DOCS, WIDGET_JITSI, WIDGET_TWITCH,
     WIDGET_YOUTUBE
 } from "../../models/widget";
-import { GoogleDocsWidgetConfigComponent } from "../../../configs/widget/googledocs/googledocs-config.component";
-import { GoogleCalendarWidgetConfigComponent } from "../../../configs/widget/googlecalendar/googlecalendar-config.component";
-import { CircleCiConfigComponent } from "../../../configs/circleci/circleci-config.component";
+import { GoogleDocsWidgetConfigComponent } from "../../../configs-old/widget/googledocs/googledocs-config.component";
+import { GoogleCalendarWidgetConfigComponent } from "../../../configs-old/widget/googlecalendar/googlecalendar-config.component";
+import { CircleCiConfigComponent } from "../../../configs-old/circleci/circleci-config.component";
 
 @Injectable()
 export class LegacyIntegrationService {

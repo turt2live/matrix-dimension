@@ -1,4 +1,4 @@
-import { Component, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import {
     WIDGET_CUSTOM, WIDGET_ETHERPAD, WIDGET_GOOGLE_CALENDAR, WIDGET_GOOGLE_DOCS, WIDGET_JITSI, WIDGET_TWITCH,
     WIDGET_YOUTUBE
@@ -11,65 +11,37 @@ export class IntegrationService {
     private static supportedIntegrationsMap = {
         "bot": {}, // empty == supported
         "complex-bot": {
-            "rss": {
-                //component: RssConfigComponent,
-            },
-            "travisci": {
-                //component: TravisCiConfigComponent,
-            },
-            "circleci": {
-                //component: CircleCiConfigComponent,
-            },
+            "rss": {},
+            "travisci": {},
+            "circleci": {},
         },
         "bridge": {
-            "irc": {
-                //component: IrcConfigComponent,
-            },
+            "irc": {},
         },
         "widget": {
             "custom": {
-                //component: CustomWidgetConfigComponent,
                 types: WIDGET_CUSTOM,
             },
             "youtube": {
-                //component: YoutubeWidgetConfigComponent,
                 types: WIDGET_YOUTUBE
             },
             "etherpad": {
-                //component: EtherpadWidgetConfigComponent,
                 types: WIDGET_ETHERPAD,
             },
             "twitch": {
-                //component: TwitchWidgetConfigComponent,
                 types: WIDGET_TWITCH,
             },
             "jitsi": {
-                //component: JitsiWidgetConfigComponent,
                 types: WIDGET_JITSI,
             },
             "googledocs": {
-                //component: GoogleDocsWidgetConfigComponent,
                 types: WIDGET_GOOGLE_DOCS,
             },
             "googlecalendar": {
-                //component: GoogleCalendarWidgetConfigComponent,
                 types: WIDGET_GOOGLE_CALENDAR,
             },
         },
     };
-
-    static getAllConfigComponents(): Component[] {
-        const components = [];
-
-        for (const iType of Object.keys(IntegrationService.supportedIntegrationsMap)) {
-            for (const iiType of Object.keys(IntegrationService.supportedIntegrationsMap[iType])) {
-                const component = IntegrationService.supportedIntegrationsMap[iType][iiType].component;
-                if (component) components.push(component);
-            }
-        }
-
-        return components;
-    }
 
     static isSupported(integration: Integration): boolean {
         const forType = IntegrationService.supportedIntegrationsMap[integration.category];
@@ -78,10 +50,6 @@ export class IntegrationService {
         if (Object.keys(forType).length === 0) return true;
 
         return forType[integration.type]; // has sub type
-    }
-
-    static getConfigComponent(integration: Integration): Component {
-        return IntegrationService.supportedIntegrationsMap[integration.category][integration.type].component;
     }
 
     static getIntegrationForScreen(screen: string): { category: string, type: string } {

@@ -9,15 +9,26 @@ import { RiotHomeComponent } from "./riot/riot-home/home.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
-    {path: "riot", pathMatch: "full", redirectTo: "riot-app/home"},
+    {path: "riot", pathMatch: "full", redirectTo: "riot-app"},
     {
         path: "riot-app",
         component: RiotComponent,
+        data: {breadcrumb: "Home", name: "Dimension"},
         children: [
             {
-                path: "home",
+                path: "",
                 component: RiotHomeComponent,
-                data: {breadcrumb: "Home", name: "Dimension"},
+            },
+            {
+                path: "widget",
+                children: [],
+                // children: [
+                //     {
+                //         path: "custom",
+                //         component: NewTestWidgetComponent,
+                //         data: {breadcrumb: "Custom Widgets", name: "Custom Widgets"}
+                //     },
+                // ],
             },
         ],
     },

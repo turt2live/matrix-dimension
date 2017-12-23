@@ -1,9 +1,7 @@
-import { EventEmitter } from "@angular/core";
+import { ScalarClientApiService } from "../../shared/services/scalar-client-api.service";
 import { convertScalarWidgetsToDtos, EditableWidget } from "../../shared/models/widget";
 import { ToasterService } from "angular2-toaster";
-import { ScalarClientApiService } from "../../shared/services/scalar-client-api.service";
-import { ServiceLocator } from "../../shared/services/locator.service";
-import { SessionStorage } from "../../shared/SessionStorage";
+import { LegacyIntegration } from "../../shared/models/legacyintegration";
 
 const SCALAR_WIDGET_LINKS = [
     "https://scalar-staging.riot.im/scalar/api/widgets/__TYPE__.html?url=",
@@ -12,7 +10,7 @@ const SCALAR_WIDGET_LINKS = [
     "https://demo.riot.im/scalar/api/widgets/__TYPE__.html?url=",
 ];
 
-export class NewWidgetComponent {
+export class WidgetComponent {
 
     public isLoading = true;
     public isUpdating = false;
@@ -23,21 +21,13 @@ export class NewWidgetComponent {
     private scalarWrapperUrls: string[] = [];
     private wrapperUrl = "";
 
-    protected toaster = ServiceLocator.injector.get(ToasterService);
-    private window = ServiceLocator.injector.get(Window);
-    private scalarApi = ServiceLocator.injector.get(ScalarClientApiService);
-
-    protected OnNewWidgetPrepared = new EventEmitter<EditableWidget>();
-    protected OnWidgetsDiscovered = new EventEmitter<EditableWidget[]>();
-    protected OnWidgetBeforeAdd = new EventEmitter<EditableWidget>();
-    protected OnWidgetAfterAdd = new EventEmitter<EditableWidget>();
-    protected OnWidgetPreparedForEdit = new EventEmitter<EditableWidget>();
-    protected OnWidgetBeforeEdit = new EventEmitter<EditableWidget>();
-    protected OnWidgetAfterEdit = new EventEmitter<EditableWidget>();
-    protected OnWidgetBeforeDelete = new EventEmitter<EditableWidget>();
-    protected OnWidgetAfterDelete = new EventEmitter<EditableWidget>();
-
-    constructor(private widgetTypes: string[],
+    constructor(window: Window,
+                protected toaster: ToasterService,
+                protected scalarApi: ScalarClientApiService,
+                public roomId: string,
+                public integration: LegacyIntegration,
+                editWidgetId: string,
+                private widgetIds: string[],
                 private defaultName: string,
                 private wrapperId = "generic",
                 private scalarWrapperId = null) {
@@ -45,7 +35,7 @@ export class NewWidgetComponent {
         this.isUpdating = false;
 
         if (wrapperId) {
-            this.wrapperUrl = this.window.location.origin + "/widgets/" + wrapperId + "?url=";
+            this.wrapperUrl = window.location.origin + "/widgets/" + wrapperId + "?url=";
 
             if (!scalarWrapperId) scalarWrapperId = wrapperId;
             for (let widgetLink of SCALAR_WIDGET_LINKS) {
@@ -54,31 +44,23 @@ export class NewWidgetComponent {
         }
 
         this.prepareNewWidget();
-        this.getWidgetsOfType(widgetTypes).then(widgets => {
+        this.getWidgetsOfType(widgetIds).then(widgets => {
             this.widgets = widgets;
             for (let widget of this.widgets) {
                 this.unpackWidget(widget);
             }
 
-            this.OnWidgetsDiscovered.emit(this.widgets);
+            this.onWidgetsDiscovered();
             this.isLoading = false;
             this.isUpdating = false;
 
             // See if we should request editing a particular widget
-            if (SessionStorage.editWidgetId && SessionStorage.editsRequested === 1) {
-                let editWidget: EditableWidget = null;
-                let otherWidgets: EditableWidget[] = [];
+            if (editWidgetId) {
                 for (let widget of this.widgets) {
-                    if (widget.id === SessionStorage.editWidgetId) {
-                        editWidget = widget;
-                    } else otherWidgets.push(widget);
-                }
-
-                if (editWidget) {
-                    console.log("Requesting edit for " + editWidget.id);
-                    this.widgets = [editWidget];
-                    otherWidgets.forEach(w => this.widgets.push(w));
-                    this.editWidget(editWidget);
+                    if (widget.id === editWidgetId) {
+                        console.log("Requesting edit for " + widget.id);
+                        this.editWidget(widget);
+                    }
                 }
             }
         });
@@ -109,17 +91,17 @@ export class NewWidgetComponent {
         widget.name = widget.dimension.newName || this.defaultName;
         widget.data = widget.dimension.newData || {};
         widget.url = this.wrapUrl(widget.dimension.newUrl, Object.keys(widget.data).map(k => "$" + k));
-        widget.type = this.widgetTypes[0]; // always set the type to be the latest type
+        widget.type = this.widgetIds[0]; // always set the type to be the latest type
 
         // Populate our stuff
         widget.data["dimension:app:metadata"] = {
-            inRoomId: SessionStorage.roomId,
+            inRoomId: this.roomId,
             wrapperUrlBase: this.wrapperUrl,
             wrapperId: this.wrapperId,
             scalarWrapperId: this.scalarWrapperId,
             integration: {
-                category: SessionStorage.editIntegration.category,
-                type: SessionStorage.editIntegration.type,
+                type: this.integration.type,
+                integrationType: this.integration.integrationType,
             },
             lastUpdatedTs: new Date().getTime(),
         };
@@ -137,8 +119,8 @@ export class NewWidgetComponent {
      */
     protected prepareNewWidget() {
         this.newWidget = <EditableWidget>{
-            id: "dimension-" + this.widgetTypes[0] + "-" + (new Date().getTime()),
-            type: this.widgetTypes[0],
+            id: "dimension-" + this.widgetIds[0] + "-" + (new Date().getTime()),
+            type: this.widgetIds[0],
             name: this.defaultName,
             url: window.location.origin,
             //ownerId: this.userId, // we don't have a user id
@@ -149,7 +131,7 @@ export class NewWidgetComponent {
                 newData: {},
             },
         };
-        this.OnNewWidgetPrepared.emit(this.newWidget);
+        this.onNewWidgetPrepared();
     }
 
     /**
@@ -159,7 +141,7 @@ export class NewWidgetComponent {
      * @return {Promise<EditableWidget[]>} The widgets discovered
      */
     private getWidgetsOfType(types: string[]): Promise<EditableWidget[]> {
-        return this.scalarApi.getWidgets(SessionStorage.roomId)
+        return this.scalarApi.getWidgets(this.roomId)
             .then(resp => convertScalarWidgetsToDtos(resp))
             .then(widgets => widgets.filter(w => types.indexOf(w.type) !== -1));
     }
@@ -228,12 +210,12 @@ export class NewWidgetComponent {
         this.packWidget(this.newWidget);
 
         this.isUpdating = true;
-        this.OnWidgetBeforeAdd.emit(this.newWidget);
-        return this.scalarApi.setWidget(SessionStorage.roomId, this.newWidget)
+        this.onWidgetBeforeAdd();
+        return this.scalarApi.setWidget(this.roomId, this.newWidget)
             .then(() => this.widgets.push(this.newWidget))
             .then(() => {
                 this.isUpdating = false;
-                this.OnWidgetAfterAdd.emit(this.newWidget);
+                this.onWidgetAfterAdd();
                 this.prepareNewWidget();
                 this.toaster.pop("success", "Widget added!");
             })
@@ -258,12 +240,12 @@ export class NewWidgetComponent {
         this.packWidget(widget);
 
         this.isUpdating = true;
-        this.OnWidgetBeforeEdit.emit(widget);
-        return this.scalarApi.setWidget(SessionStorage.roomId, widget)
+        this.onWidgetBeforeEdit(widget);
+        return this.scalarApi.setWidget(this.roomId, widget)
             .then(() => this.toggleWidget(widget))
             .then(() => {
                 this.isUpdating = false;
-                this.OnWidgetAfterEdit.emit(widget);
+                this.onWidgetAfterEdit(widget);
                 this.toaster.pop("success", "Widget updated!");
             })
             .catch(err => {
@@ -280,12 +262,12 @@ export class NewWidgetComponent {
      */
     public removeWidget(widget: EditableWidget): Promise<any> {
         this.isUpdating = true;
-        this.OnWidgetBeforeDelete.emit(widget);
-        return this.scalarApi.deleteWidget(SessionStorage.roomId, widget)
+        this.onWidgetBeforeDelete(widget);
+        return this.scalarApi.deleteWidget(this.roomId, widget)
             .then(() => this.widgets.splice(this.widgets.indexOf(widget), 1))
             .then(() => {
                 this.isUpdating = false;
-                this.OnWidgetAfterDelete.emit(widget);
+                this.onWidgetAfterDelete(widget);
                 this.toaster.pop("success", "Widget deleted!");
             })
             .catch(err => {
@@ -315,7 +297,7 @@ export class NewWidgetComponent {
 
         if (targetState === "edit") {
             this.unpackWidget(widget);
-            this.OnWidgetPreparedForEdit.emit(widget);
+            this.onWidgetPreparedForEdit(widget);
 
             if (idx === -1) this.toggledWidgetIds.push(widget.id);
         }
@@ -329,5 +311,85 @@ export class NewWidgetComponent {
      */
     public isWidgetToggled(widget: EditableWidget) {
         return this.toggledWidgetIds.indexOf(widget.id) !== -1;
+    }
+
+    // Component hooks below here
+    // ------------------------------------------------------------------
+
+    /**
+     * Called when a new widget has been created in the newWidget field
+     */
+    protected onNewWidgetPrepared(): void {
+        // Component hook
+    }
+
+    /**
+     * Called after all the widgets have been discovered and unpacked for the room.
+     */
+    protected onWidgetsDiscovered(): void {
+        // Component hook
+    }
+
+    /**
+     * Called before the widget is added to the room, but after the Dimension-specific
+     * settings have been copied over to the primary fields.
+     */
+    protected onWidgetBeforeAdd(): void {
+        // Component hook
+    }
+
+    /**
+     * Called after the widget has been added to the room, but before the newWidget field
+     * has been set to a new widget.
+     */
+    protected onWidgetAfterAdd(): void {
+        // Component hook
+    }
+
+    /**
+     * Called when the given widget has been asked to be prepared for editing. At this point
+     * the widget is not being persisted to the room, it is just updating the EditingWidget's
+     * properties for the user's ability to edit it.
+     * @param {EditableWidget} _widget The widget that has been prepared for editing
+     */
+    protected onWidgetPreparedForEdit(_widget: EditableWidget): void {
+        // Component hook
+    }
+
+    /**
+     * Called before the given widget has been updated in the room, but after the
+     * Dimension-specific settings have been copied over to the primary fields.
+     * This is not called for widgets being deleted.
+     * @param {EditableWidget} _widget The widget about to be edited
+     */
+    protected onWidgetBeforeEdit(_widget: EditableWidget): void {
+        // Component hook
+    }
+
+    /**
+     * Called after a given widget has been updated in the room. This is not called for
+     * widgets being deleted.
+     * @param {EditableWidget} _widget The widget that has been updated.
+     */
+    protected onWidgetAfterEdit(_widget: EditableWidget): void {
+        // Component hook
+    }
+
+    /**
+     * Called before the given widget has been removed from the room. No changes to the
+     * widget have been made at this point.
+     * @param {EditableWidget} _widget The widget about to be deleted.
+     */
+    protected onWidgetBeforeDelete(_widget: EditableWidget): void {
+        // Component hook
+    }
+
+    /**
+     * Called after a given widget has been deleted from the room. The widget will be in
+     * the deleted state and will no longer be tracked anywhere on the component.
+     * @param {EditableWidget} _widget The widget that has been deleted.
+     */
+    protected onWidgetAfterDelete(_widget: EditableWidget): void {
+        // Component hook
     }
 }

@@ -11,7 +11,7 @@
 }
 
 .ibox .ibox-title h5 {
-  display: inline-block;
+  display: inline;
   font-size: 1.1em;
   padding: 5px;
   margin: 0;
@@ -19,4 +19,10 @@
 
 .ibox .ibox-content {
   padding: 15px;
+}
+
+.ibox .ibox-title .ibox-icon {
+  float: right;
+  margin-top: 4px;
+  cursor: pointer;
 }

@@ -1,0 +1,12 @@
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>{{ title }}</h5>
+        <ng-content select=".my-ibox-addl-title"></ng-content>
+        <i class="ibox-icon fa" *ngIf="isCollapsible"
+           [ngClass]="[collapsed ? 'fa-chevron-right' : 'fa-chevron-down']"
+           (click)="collapsed = !collapsed"></i>
+    </div>
+    <div class="ibox-content" *ngIf="!collapsed">
+        <ng-content select=".my-ibox-content"></ng-content>
+    </div>
+</div>

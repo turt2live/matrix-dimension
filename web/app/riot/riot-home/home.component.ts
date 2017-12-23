@@ -1,13 +1,13 @@
 import { Component } from "@angular/core";
 import { ToasterService } from "angular2-toaster";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ScalarClientApiService } from "../../shared/services/scalar-client-api.service";
 import * as _ from "lodash";
 import { ScalarServerApiService } from "../../shared/services/scalar-server-api.service";
-import { AuthedApi } from "../../shared/services/AuthedApi";
 import { DimensionApiService } from "../../shared/services/dimension-api.service";
 import { Integration, IntegrationRequirement } from "../../shared/models/integration";
 import { IntegrationService } from "../../shared/services/integration.service";
+import { SessionStorage } from "../../shared/SessionStorage";
 
 const CATEGORY_MAP = {
     "Widgets": ["widget"],
@@ -37,11 +37,20 @@ export class RiotHomeComponent {
                 private scalarApi: ScalarServerApiService,
                 private scalar: ScalarClientApiService,
                 private dimensionApi: DimensionApiService,
-                private toaster: ToasterService) {
+                private toaster: ToasterService,
+                private router: Router) {
         let params: any = this.activatedRoute.snapshot.queryParams;
 
         this.requestedScreen = params.screen;
         this.requestedIntegration = params.integ_id;
+
+        if (SessionStorage.roomId && SessionStorage.userId) {
+            this.roomId = SessionStorage.roomId;
+            this.userId = SessionStorage.userId;
+            console.log("Already checked scalar token and other params - continuing startup");
+            this.prepareIntegrations();
+            return;
+        }
 
         if (!params.scalar_token || !params.room_id) {
             console.error("Unable to load Dimension. Missing room ID or scalar token.");
@@ -50,10 +59,12 @@ export class RiotHomeComponent {
             this.errorMessage = "Unable to load Dimension - missing room ID or token.";
         } else {
             this.roomId = params.room_id;
-            AuthedApi.SCALAR_TOKEN = params.scalar_token;
+            SessionStorage.scalarToken = params.scalar_token;
+            SessionStorage.roomId = this.roomId;
 
             this.scalarApi.getAccount().then(response => {
                 const userId = response.user_id;
+                SessionStorage.userId = userId;
                 if (!userId) {
                     console.error("No user returned for token. Is the token registered in Dimension?");
                     this.isError = true;
@@ -101,8 +112,9 @@ export class RiotHomeComponent {
         return result;
     }
 
-
     public modifyIntegration(integration: Integration) {
+        SessionStorage.editIntegration = integration;
+        SessionStorage.editsRequested++;
         console.log(this.userId + " is trying to modify " + integration.displayName);
 
         if (integration.category === "bot") {
@@ -137,6 +149,7 @@ export class RiotHomeComponent {
         } else {
             // TODO: Navigate to edit screen
             console.log("EDIT SCREEN FOR " + integration.displayName);
+            this.router.navigate(['riot-app', integration.category, integration.type]);
         }
     }
 
@@ -192,10 +205,12 @@ export class RiotHomeComponent {
             console.log("Unknown screen requested: " + this.requestedScreen);
         }
 
+        console.log("Searching for integration for requested screen");
         for (const integration of this.getIntegrations()) {
             if (integration.category === category && integration.type === type) {
                 console.log("Configuring integration " + this.requestedIntegration + " category=" + category + " type=" + type);
-                // TODO: Actually edit integration
+                SessionStorage.editIntegration = integration;
+                this.modifyIntegration(integration);
                 return;
             }
         }
