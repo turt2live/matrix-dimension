@@ -18,8 +18,8 @@ export class NewWidgetComponent {
     public isUpdating = false;
     public widgets: EditableWidget[];
     public newWidget: EditableWidget;
+    public defaultExpandedWidgetId: string;
 
-    private toggledWidgetIds: string[] = [];
     private scalarWrapperUrls: string[] = [];
     private wrapperUrl = "";
 
@@ -38,7 +38,7 @@ export class NewWidgetComponent {
     protected OnWidgetAfterDelete = new EventEmitter<EditableWidget>();
 
     constructor(private widgetTypes: string[],
-                private defaultName: string,
+                public defaultName: string,
                 private wrapperId = "generic",
                 private scalarWrapperId = null) {
         this.isLoading = true;
@@ -64,6 +64,12 @@ export class NewWidgetComponent {
             this.isLoading = false;
             this.isUpdating = false;
 
+            // We reset after discovering to ensure that the widget component can correctly
+            // set the state of the widget prior to us unpacking it (again)
+            for (let widget of this.widgets) {
+                this.resetWidget(widget);
+            }
+
             // See if we should request editing a particular widget
             if (SessionStorage.editWidgetId && SessionStorage.editsRequested === 1) {
                 let editWidget: EditableWidget = null;
@@ -78,7 +84,7 @@ export class NewWidgetComponent {
                     console.log("Requesting edit for " + editWidget.id);
                     this.widgets = [editWidget];
                     otherWidgets.forEach(w => this.widgets.push(w));
-                    this.editWidget(editWidget);
+                    this.defaultExpandedWidgetId = editWidget.id;
                 }
             }
         });
@@ -171,7 +177,6 @@ export class NewWidgetComponent {
      * @return {string} The unwrapped URL
      */
     private unwrapUrl(url: string): string {
-        console.log(this.scalarWrapperUrls);
         if (!this.wrapperUrl) return url;
 
         const urls = [this.wrapperUrl].concat(this.scalarWrapperUrls);
@@ -225,6 +230,11 @@ export class NewWidgetComponent {
      * with a new widget.
      */
     public addWidget(): Promise<any> {
+        if (!this.newWidget.dimension.newUrl || this.newWidget.dimension.newUrl.trim().length === 0) {
+            this.toaster.pop("warning", "Please enter a URL for the widget");
+            return;
+        }
+
         this.packWidget(this.newWidget);
 
         this.isUpdating = true;
@@ -260,7 +270,6 @@ export class NewWidgetComponent {
         this.isUpdating = true;
         this.OnWidgetBeforeEdit.emit(widget);
         return this.scalarApi.setWidget(SessionStorage.roomId, widget)
-            .then(() => this.toggleWidget(widget))
             .then(() => {
                 this.isUpdating = false;
                 this.OnWidgetAfterEdit.emit(widget);
@@ -296,38 +305,28 @@ export class NewWidgetComponent {
     }
 
     /**
-     * Puts a widget in the edit state.
-     * @param {EditableWidget} widget
+     * Resets a widget to before it had changes made to it
+     * @param {EditableWidget} widget The widget to reset
      */
-    public editWidget(widget: EditableWidget) {
-        this.toggleWidget(widget, "edit");
+    public resetWidget(widget: EditableWidget) {
+        this.unpackWidget(widget);
+        this.OnWidgetPreparedForEdit.emit(widget);
     }
 
     /**
-     * Toggles a widget between the "edit" and "canceled" state. If a targetState is
-     * defined, the widget is forced into that state.
-     * @param {EditableWidget} widget The widget to set the state of.
-     * @param {"edit"|"cancel"|null} targetState The target state, optional
-     */
-    public toggleWidget(widget: EditableWidget, targetState: "edit" | "cancel" | null = null) {
-        let idx = this.toggledWidgetIds.indexOf(widget.id);
-        if (targetState === null) targetState = idx === -1 ? "edit" : "cancel";
-
-        if (targetState === "edit") {
-            this.unpackWidget(widget);
-            this.OnWidgetPreparedForEdit.emit(widget);
-
-            if (idx === -1) this.toggledWidgetIds.push(widget.id);
-        }
-        else this.toggledWidgetIds.splice(idx, 1);
-    }
-
-    /**
-     * Determines if a widget is in the edit state
+     * Determines if a widget has had any changes made to it
      * @param {EditableWidget} widget The widget to check
-     * @returns {boolean} true if the widget is in the edit state
+     * @returns {boolean} True if the widget has been edited
      */
-    public isWidgetToggled(widget: EditableWidget) {
-        return this.toggledWidgetIds.indexOf(widget.id) !== -1;
+    public hasChanges(widget: EditableWidget):boolean {
+        if (widget.dimension.newUrl !== this.unwrapUrl(widget.url)) return true;
+        if (widget.dimension.newName !== widget.name) return true;
+        if (widget.dimension.newTitle !== widget.data.title) return true;
+
+        const currentData = JSON.parse(JSON.stringify(widget.data || "{}"));
+        const newData = JSON.parse(JSON.stringify(widget.dimension.newData || "{}"));
+        if (currentData !== newData) return true;
+
+        return false;
     }
 }

@@ -6,6 +6,7 @@ import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.compo
 import { JitsiWidgetWrapperComponent } from "./widget_wrappers/jitsi/jitsi.component";
 import { GCalWidgetWrapperComponent } from "./widget_wrappers/gcal/gcal.component";
 import { RiotHomeComponent } from "./riot/riot-home/home.component";
+import { CustomWidgetConfigComponent } from "./configs/widget/custom/custom.widget.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -21,14 +22,13 @@ const routes: Routes = [
             },
             {
                 path: "widget",
-                children: [],
-                // children: [
-                //     {
-                //         path: "custom",
-                //         component: NewTestWidgetComponent,
-                //         data: {breadcrumb: "Custom Widgets", name: "Custom Widgets"}
-                //     },
-                // ],
+                children: [
+                    {
+                        path: "custom",
+                        component: CustomWidgetConfigComponent,
+                        data: {breadcrumb: "Custom Widgets", name: "Custom Widgets"}
+                    },
+                ],
             },
         ],
     },
