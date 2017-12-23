@@ -71,7 +71,6 @@ export class NewWidgetComponent {
             }
 
             // See if we should request editing a particular widget
-            console.log(SessionStorage.editIntegrationId +" " +SessionStorage.editsRequested);
             if (SessionStorage.editIntegrationId && SessionStorage.editsRequested === 1) {
                 let editWidget: EditableWidget = null;
                 let otherWidgets: EditableWidget[] = [];

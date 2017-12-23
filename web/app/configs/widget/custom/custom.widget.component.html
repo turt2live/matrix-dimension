@@ -1,7 +1,3 @@
-<div *ngIf="isLoading">
-    <my-spinner></my-spinner>
-</div>
-
 <ng-template #widgetParams let-widget="widget">
     <label class="label-block">
         Widget Name
@@ -19,6 +15,10 @@
     </label>
 </ng-template>
 
+<!-- Annoyingly, this has to be copy/pasted to all the integration configs -->
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
 <div *ngIf="!isLoading">
     <my-ibox title="Add {{ defaultName }}" [isCollapsible]="true" [defaultCollapsed]="defaultExpandedWidgetId">
         <div class="my-ibox-content">
@@ -38,14 +38,14 @@
              [isCollapsible]="true" [defaultCollapsed]="widget.id !== defaultExpandedWidgetId"
              title="{{ widget.name || widget.url || defaultName }}">
         <div class="my-ibox-content">
-            <form (submit)="saveWidget(widget)" novalidate name="addForm">
+            <form (submit)="saveWidget(widget)" novalidate name="editForm">
                 <ng-container *ngTemplateOutlet="widgetParams;context:{widget:widget}"></ng-container>
 
                 <div style="margin-top: 25px">
                     <button type="submit" class="btn btn-sm btn-primary" [disabled]="isUpdating">
                         <i class="fa fa-save"></i> Save Widget
                     </button>
-                    <button type="button" class="btn btn-sm btn-danger" [disabled]="isUpdating">
+                    <button type="button" class="btn btn-sm btn-danger" [disabled]="isUpdating" (click)="removeWidget(widget)">
                         <i class="fa fa-times"></i> Remove Widget
                     </button>
                 </div>
