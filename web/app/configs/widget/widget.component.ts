@@ -1,9 +1,9 @@
-import { EventEmitter } from "@angular/core";
 import { convertScalarWidgetsToDtos, EditableWidget } from "../../shared/models/widget";
 import { ToasterService } from "angular2-toaster";
 import { ScalarClientApiService } from "../../shared/services/scalar-client-api.service";
 import { ServiceLocator } from "../../shared/services/locator.service";
 import { SessionStorage } from "../../shared/SessionStorage";
+import { OnInit } from "@angular/core";
 
 const SCALAR_WIDGET_LINKS = [
     "https://scalar-staging.riot.im/scalar/api/widgets/__TYPE__.html?url=",
@@ -12,7 +12,7 @@ const SCALAR_WIDGET_LINKS = [
     "https://demo.riot.im/scalar/api/widgets/__TYPE__.html?url=",
 ];
 
-export class NewWidgetComponent {
+export class NewWidgetComponent implements OnInit {
 
     public isLoading = true;
     public isUpdating = false;
@@ -27,40 +27,32 @@ export class NewWidgetComponent {
     private window = ServiceLocator.injector.get(Window);
     private scalarApi = ServiceLocator.injector.get(ScalarClientApiService);
 
-    protected OnNewWidgetPrepared = new EventEmitter<EditableWidget>();
-    protected OnWidgetsDiscovered = new EventEmitter<EditableWidget[]>();
-    protected OnWidgetBeforeAdd = new EventEmitter<EditableWidget>();
-    protected OnWidgetAfterAdd = new EventEmitter<EditableWidget>();
-    protected OnWidgetPreparedForEdit = new EventEmitter<EditableWidget>();
-    protected OnWidgetBeforeEdit = new EventEmitter<EditableWidget>();
-    protected OnWidgetAfterEdit = new EventEmitter<EditableWidget>();
-    protected OnWidgetBeforeDelete = new EventEmitter<EditableWidget>();
-    protected OnWidgetAfterDelete = new EventEmitter<EditableWidget>();
-
     constructor(private widgetTypes: string[],
                 public defaultName: string,
                 private wrapperId = "generic",
                 private scalarWrapperId = null) {
         this.isLoading = true;
         this.isUpdating = false;
+    }
 
-        if (wrapperId) {
-            this.wrapperUrl = this.window.location.origin + "/widgets/" + wrapperId + "?url=";
+    public ngOnInit(): void {
+        if (this.wrapperId) {
+            this.wrapperUrl = this.window.location.origin + "/widgets/" + this.wrapperId + "?url=";
 
-            if (!scalarWrapperId) scalarWrapperId = wrapperId;
+            if (!this.scalarWrapperId) this.scalarWrapperId = this.wrapperId;
             for (let widgetLink of SCALAR_WIDGET_LINKS) {
-                this.scalarWrapperUrls.push(widgetLink.replace("__TYPE__", scalarWrapperId));
+                this.scalarWrapperUrls.push(widgetLink.replace("__TYPE__", this.scalarWrapperId));
             }
         }
 
         this.prepareNewWidget();
-        this.getWidgetsOfType(widgetTypes).then(widgets => {
+        this.getWidgetsOfType(this.widgetTypes).then(widgets => {
             this.widgets = widgets;
             for (let widget of this.widgets) {
                 this.unpackWidget(widget);
             }
 
-            this.OnWidgetsDiscovered.emit(this.widgets);
+            this.OnWidgetsDiscovered(this.widgets);
             this.isLoading = false;
             this.isUpdating = false;
 
@@ -155,7 +147,8 @@ export class NewWidgetComponent {
                 newData: {},
             },
         };
-        this.OnNewWidgetPrepared.emit(this.newWidget);
+        console.log("Emitting new widget prepared event");
+        this.OnNewWidgetPrepared(this.newWidget);
     }
 
     /**
@@ -238,12 +231,12 @@ export class NewWidgetComponent {
         this.packWidget(this.newWidget);
 
         this.isUpdating = true;
-        this.OnWidgetBeforeAdd.emit(this.newWidget);
+        this.OnWidgetBeforeAdd(this.newWidget);
         return this.scalarApi.setWidget(SessionStorage.roomId, this.newWidget)
             .then(() => this.widgets.push(this.newWidget))
             .then(() => {
                 this.isUpdating = false;
-                this.OnWidgetAfterAdd.emit(this.newWidget);
+                this.OnWidgetAfterAdd(this.newWidget);
                 this.prepareNewWidget();
                 this.toaster.pop("success", "Widget added!");
             })
@@ -268,11 +261,11 @@ export class NewWidgetComponent {
         this.packWidget(widget);
 
         this.isUpdating = true;
-        this.OnWidgetBeforeEdit.emit(widget);
+        this.OnWidgetBeforeEdit(widget);
         return this.scalarApi.setWidget(SessionStorage.roomId, widget)
             .then(() => {
                 this.isUpdating = false;
-                this.OnWidgetAfterEdit.emit(widget);
+                this.OnWidgetAfterEdit(widget);
                 this.toaster.pop("success", "Widget updated!");
             })
             .catch(err => {
@@ -289,12 +282,12 @@ export class NewWidgetComponent {
      */
     public removeWidget(widget: EditableWidget): Promise<any> {
         this.isUpdating = true;
-        this.OnWidgetBeforeDelete.emit(widget);
+        this.OnWidgetBeforeDelete(widget);
         return this.scalarApi.deleteWidget(SessionStorage.roomId, widget)
             .then(() => this.widgets.splice(this.widgets.indexOf(widget), 1))
             .then(() => {
                 this.isUpdating = false;
-                this.OnWidgetAfterDelete.emit(widget);
+                this.OnWidgetAfterDelete(widget);
                 this.toaster.pop("success", "Widget deleted!");
             })
             .catch(err => {
@@ -310,6 +303,90 @@ export class NewWidgetComponent {
      */
     public resetWidget(widget: EditableWidget) {
         this.unpackWidget(widget);
-        this.OnWidgetPreparedForEdit.emit(widget);
+        this.OnWidgetPreparedForEdit(widget);
+    }
+
+    // Component hooks below here
+    // ------------------------------------------------------------------
+
+    /**
+     * Called when a new widget has been created in the newWidget field
+     * @param {EditableWidget} _widget The widget that has been prepared
+     */
+    protected OnNewWidgetPrepared(_widget: EditableWidget): void {
+        // Component hook
+    }
+
+    /**
+     * Called after all the widgets have been discovered and unpacked for the room.
+     * @param {EditableWidget[]} _widgets The widgets that were discovered
+     */
+    protected OnWidgetsDiscovered(_widgets: EditableWidget[]): void {
+        // Component hook
+    }
+
+    /**
+     * Called before the widget is added to the room, but after the Dimension-specific
+     * settings have been copied over to the primary fields.
+     * @param {EditableWidget} _widget The widget that is about to be added
+     */
+    protected OnWidgetBeforeAdd(_widget: EditableWidget): void {
+        // Component hook
+    }
+
+    /**
+     * Called after the widget has been added to the room, but before the newWidget field
+     * has been set to a new widget.
+     * @param {EditableWidget} _widget The widget that has been added.
+     */
+    protected OnWidgetAfterAdd(_widget: EditableWidget): void {
+        // Component hook
+    }
+
+    /**
+     * Called when the given widget has been asked to be prepared for editing. At this point
+     * the widget is not being persisted to the room, it is just updating the EditingWidget's
+     * properties for the user's ability to edit it.
+     * @param {EditableWidget} _widget The widget that has been prepared for editing
+     */
+    protected OnWidgetPreparedForEdit(_widget: EditableWidget): void {
+        // Component hook
+    }
+
+    /**
+     * Called before the given widget has been updated in the room, but after the
+     * Dimension-specific settings have been copied over to the primary fields.
+     * This is not called for widgets being deleted.
+     * @param {EditableWidget} _widget The widget about to be edited
+     */
+    protected OnWidgetBeforeEdit(_widget: EditableWidget): void {
+        // Component hook
+    }
+
+    /**
+     * Called after a given widget has been updated in the room. This is not called for
+     * widgets being deleted.
+     * @param {EditableWidget} _widget The widget that has been updated.
+     */
+    protected OnWidgetAfterEdit(_widget: EditableWidget): void {
+        // Component hook
+    }
+
+    /**
+     * Called before the given widget has been removed from the room. No changes to the
+     * widget have been made at this point.
+     * @param {EditableWidget} _widget The widget about to be deleted.
+     */
+    protected OnWidgetBeforeDelete(_widget: EditableWidget): void {
+        // Component hook
+    }
+
+    /**
+     * Called after a given widget has been deleted from the room. The widget will be in
+     * the deleted state and will no longer be tracked anywhere on the component.
+     * @param {EditableWidget} _widget The widget that has been deleted.
+     */
+    protected OnWidgetAfterDelete(_widget: EditableWidget): void {
+        // Component hook
     }
 }

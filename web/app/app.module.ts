@@ -33,6 +33,8 @@ import { ServiceLocator } from "./shared/services/locator.service";
 import { IboxComponent } from "./elements/ibox/ibox.component";
 import { CustomWidgetConfigComponent } from "./configs/widget/custom/custom.widget.component";
 import { ConfigScreenWidgetComponent } from "./configs/widget/config_screen/config_screen.widget.component";
+import { EtherpadWidgetConfigComponent } from "./configs/widget/etherpad/etherpad.widget.component";
+import { NameService } from "./shared/services/name.service";
 
 @NgModule({
     imports: [
@@ -66,6 +68,7 @@ import { ConfigScreenWidgetComponent } from "./configs/widget/config_screen/conf
         IboxComponent,
         ConfigScreenWidgetComponent,
         CustomWidgetConfigComponent,
+        EtherpadWidgetConfigComponent,
 
         // Vendor
     ],
@@ -74,6 +77,7 @@ import { ConfigScreenWidgetComponent } from "./configs/widget/config_screen/conf
         ScalarServerApiService,
         DimensionApiService,
         AdminApiService,
+        NameService,
         {provide: Window, useValue: window},
 
         // Vendor
