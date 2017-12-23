@@ -313,21 +313,4 @@ export class NewWidgetComponent {
         this.unpackWidget(widget);
         this.OnWidgetPreparedForEdit.emit(widget);
     }
-
-    /**
-     * Determines if a widget has had any changes made to it
-     * @param {EditableWidget} widget The widget to check
-     * @returns {boolean} True if the widget has been edited
-     */
-    public hasChanges(widget: EditableWidget): boolean {
-        if (widget.dimension.newUrl !== this.unwrapUrl(widget.url)) return true;
-        if (widget.dimension.newName !== widget.name) return true;
-        if (widget.dimension.newTitle !== widget.data.title) return true;
-
-        const currentData = JSON.parse(JSON.stringify(widget.data || "{}"));
-        const newData = JSON.parse(JSON.stringify(widget.dimension.newData || "{}"));
-        if (currentData !== newData) return true;
-
-        return false;
-    }
 }

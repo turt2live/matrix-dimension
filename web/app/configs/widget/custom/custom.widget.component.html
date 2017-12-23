@@ -2,28 +2,34 @@
     <my-spinner></my-spinner>
 </div>
 
+<ng-template #widgetParams let-widget="widget">
+    <label class="label-block">
+        Widget Name
+        <input type="text" class="form-control"
+               placeholder="{{ defaultName }}"
+               [(ngModel)]="widget.dimension.newName" name="widget-name-{{widget.id}}"
+               [disabled]="isUpdating"/>
+    </label>
+    <label class="label-block">
+        Widget URL
+        <input type="text" class="form-control"
+               placeholder="https://matrix.org"
+               [(ngModel)]="widget.dimension.newUrl" name="widget-url-{{widget.id}}"
+               [disabled]="isUpdating"/>
+    </label>
+</ng-template>
+
 <div *ngIf="!isLoading">
     <my-ibox title="Add {{ defaultName }}" [isCollapsible]="true" [defaultCollapsed]="defaultExpandedWidgetId">
         <div class="my-ibox-content">
             <form (submit)="addWidget()" novalidate name="addForm">
-                <label class="label-block">
-                    Widget Name
-                    <input type="text" class="form-control"
-                           placeholder="{{ defaultName }}"
-                           [(ngModel)]="newWidget.dimension.newName" name="widget-name-new"
-                           [disabled]="isUpdating"/>
-                </label>
-                <label class="label-block">
-                    Widget URL
-                    <input type="text" class="form-control"
-                           placeholder="https://matrix.org"
-                           [(ngModel)]="newWidget.dimension.newUrl" name="widget-url-new"
-                           [disabled]="isUpdating"/>
-                </label>
+                <ng-container *ngTemplateOutlet="widgetParams;context:{widget:newWidget}"></ng-container>
 
-                <button type="submit" class="btn btn-sm btn-success" [disabled]="isUpdating">
-                    <i class="fa fa-plus"></i> Add Widget
-                </button>
+                <div style="margin-top: 25px">
+                    <button type="submit" class="btn btn-sm btn-success" [disabled]="isUpdating">
+                        <i class="fa fa-plus"></i> Add Widget
+                    </button>
+                </div>
             </form>
         </div>
     </my-ibox>
@@ -33,31 +39,16 @@
              title="{{ widget.name || widget.url || defaultName }}">
         <div class="my-ibox-content">
             <form (submit)="saveWidget(widget)" novalidate name="addForm">
-                <label class="label-block">
-                    Widget Name
-                    <input type="text" class="form-control"
-                           placeholder="{{ defaultName }}"
-                           [(ngModel)]="widget.dimension.newName" name="widget-name-{{widget.id}}"
-                           [disabled]="isUpdating"/>
-                </label>
-                <label class="label-block">
-                    Widget URL
-                    <input type="text" class="form-control"
-                           placeholder="https://matrix.org"
-                           [(ngModel)]="widget.dimension.newUrl" name="widget-url-{{widget.id}}"
-                           [disabled]="isUpdating"/>
-                </label>
+                <ng-container *ngTemplateOutlet="widgetParams;context:{widget:widget}"></ng-container>
 
-                <button type="submit" class="btn btn-sm btn-primary" [disabled]="isUpdating">
-                    <i class="fa fa-save"></i> Save Widget
-                </button>
-                <button type="button" class="btn btn-sm btn-danger" [disabled]="isUpdating">
-                    <i class="fa fa-times"></i> Remove Widget
-                </button>
-                <button type="button" class="btn btn-sm btn-white" [disabled]="isUpdating" (click)="resetWidget(widget)"
-                        *ngIf="hasChanges(widget)">
-                    <i class="fa fa-undo"></i> Undo Changes
-                </button>
+                <div style="margin-top: 25px">
+                    <button type="submit" class="btn btn-sm btn-primary" [disabled]="isUpdating">
+                        <i class="fa fa-save"></i> Save Widget
+                    </button>
+                    <button type="button" class="btn btn-sm btn-danger" [disabled]="isUpdating">
+                        <i class="fa fa-times"></i> Remove Widget
+                    </button>
+                </div>
             </form>
         </div>
     </my-ibox>
