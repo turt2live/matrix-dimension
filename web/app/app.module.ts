@@ -40,6 +40,10 @@ import { GoogleDocsWidgetConfigComponent } from "./configs/widget/google_docs/gd
 import { JitsiWidgetConfigComponent } from "./configs/widget/jitsi/jitsi.widget.component";
 import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch.widget.component";
 import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube.widget.component";
+import { AdminComponent } from "./admin/admin.component";
+import { AdminHomeComponent } from "./admin/home/home.component";
+import { Test1Component } from "./admin/test1/home.component";
+import { Test2Component } from "./admin/test2/home.component";
 
 @NgModule({
     imports: [
@@ -79,6 +83,11 @@ import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube.w
         JitsiWidgetConfigComponent,
         TwitchWidgetConfigComponent,
         YoutubeWidgetConfigComponent,
+        AdminComponent,
+        AdminHomeComponent,
+
+        Test1Component,
+        Test2Component,
 
         // Vendor
     ],

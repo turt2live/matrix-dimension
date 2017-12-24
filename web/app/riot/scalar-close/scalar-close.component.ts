@@ -12,6 +12,7 @@ export class ScalarCloseComponent {
     }
 
     public closeScalar() {
+        console.log("Closing scalar...");
         this.scalar.close();
     }
 }

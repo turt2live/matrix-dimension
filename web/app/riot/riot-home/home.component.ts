@@ -8,6 +8,7 @@ import { DimensionApiService } from "../../shared/services/dimension-api.service
 import { Integration, IntegrationRequirement } from "../../shared/models/integration";
 import { IntegrationService } from "../../shared/services/integration.service";
 import { SessionStorage } from "../../shared/SessionStorage";
+import { AdminApiService } from "../../shared/services/admin-api.service";
 
 const CATEGORY_MAP = {
     "Widgets": ["widget"],
@@ -37,6 +38,7 @@ export class RiotHomeComponent {
                 private scalarApi: ScalarServerApiService,
                 private scalar: ScalarClientApiService,
                 private dimensionApi: DimensionApiService,
+                private adminApi: AdminApiService,
                 private toaster: ToasterService,
                 private router: Router) {
         let params: any = this.activatedRoute.snapshot.queryParams;
@@ -73,6 +75,7 @@ export class RiotHomeComponent {
                 } else {
                     this.userId = userId;
                     console.log("Scalar token belongs to " + userId);
+                    this.checkAdmin();
                     this.prepareIntegrations();
                 }
             }).catch(err => {
@@ -82,6 +85,13 @@ export class RiotHomeComponent {
                 this.errorMessage = "Unable to communicate with Dimension due to an unknown error.";
             });
         }
+    }
+
+    private checkAdmin() {
+        this.adminApi.isAdmin().then(() => {
+            console.log(SessionStorage.userId + " is an admin for this Dimension instance");
+            SessionStorage.isAdmin = true;
+        }).catch(() => SessionStorage.isAdmin = false);
     }
 
     public hasIntegrations(): boolean {

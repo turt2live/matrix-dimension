@@ -1,0 +1,49 @@
+//$bgColor: #625F72;
+//$hoverColor: #6E8ABC;
+//$accentColor: #8ABBFF;
+
+$bgColor: #233046;
+$hoverColor: #374752;
+$accentColor: #DE6657;
+
+.adminNav {
+  width: 200px;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  top: 120px;
+  left: 0;
+  bottom: 0;
+  background-color: $bgColor;
+}
+
+.adminNav li {
+  list-style: none;
+  background-color: $bgColor;
+  border-left: 5px solid $bgColor;
+  padding: 5px 5px 5px 11px;
+  color: #fff;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.adminNav li:hover,
+.adminNav li.active {
+  opacity: 1;
+  background-color: $hoverColor;
+  border-left: 5px solid $hoverColor;
+}
+
+.adminNav li.active {
+  border-left: 5px solid $accentColor;
+}
+
+.adminContent {
+  position: fixed;
+  top: 120px;
+  left: 200px;
+  bottom: 0;
+  right: 0;
+  padding: 15px;
+  overflow: auto;
+}

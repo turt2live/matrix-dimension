@@ -13,6 +13,10 @@ import { GoogleDocsWidgetConfigComponent } from "./configs/widget/google_docs/gd
 import { JitsiWidgetConfigComponent } from "./configs/widget/jitsi/jitsi.widget.component";
 import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch.widget.component";
 import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube.widget.component";
+import { AdminComponent } from "./admin/admin.component";
+import { AdminHomeComponent } from "./admin/home/home.component";
+import { Test1Component } from "./admin/test1/home.component";
+import { Test2Component } from "./admin/test2/home.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -25,6 +29,27 @@ const routes: Routes = [
             {
                 path: "",
                 component: RiotHomeComponent,
+            },
+            {
+                path: "admin",
+                component: AdminComponent,
+                data: {breadcrumb:"Admin", name: "Settings"},
+                children: [
+                    {
+                        path: "",
+                        component: AdminHomeComponent,
+                    },
+                    {
+                        path: "test1",
+                        component: Test1Component,
+                        data: {breadcrumb:"Test1", name: "Test1"},
+                    },
+                    {
+                        path: "test2",
+                        component: Test2Component,
+                        data: {breadcrumb:"Test2", name: "Test2"},
+                    },
+                ],
             },
             {
                 path: "widget",
