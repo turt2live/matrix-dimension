@@ -10,8 +10,8 @@ config/integrations/*_development.yaml
 config/integrations/*_production.yaml
 build/
 dimension.db
-src-ts/**/*.js
-src-ts/**/*.js.map
+src/**/*.js
+src/**/*.js.map
 web/**/*.js
 web/**/*.js.map
 
