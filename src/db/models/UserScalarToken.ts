@@ -33,7 +33,4 @@ export default class UserScalarToken extends Model<UserScalarToken> {
     @Column
     @ForeignKey(() => Upstream)
     upstreamId?: number;
-
-    @BelongsTo(() => Upstream)
-    upstream: Upstream;
 }

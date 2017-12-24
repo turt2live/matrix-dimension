@@ -1,4 +1,4 @@
-import { AllowNull, BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AllowNull, Column, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
 import AppService from "./AppService";
 
 @Table({
@@ -25,7 +25,4 @@ export default class AppServiceUser extends Model<AppServiceUser> {
     @Column
     @ForeignKey(() => AppService)
     appserviceId: string;
-
-    @BelongsTo(() => AppService)
-    appservice: AppService;
 }

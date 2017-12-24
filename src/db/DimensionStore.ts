@@ -10,6 +10,10 @@ import * as path from "path";
 import * as Umzug from "umzug";
 import AppService from "./models/AppService";
 import AppServiceUser from "./models/AppServiceUser";
+import NebConfiguration from "./models/NebConfiguration";
+import NebIntegration from "./models/NebIntegration";
+import NebBotUser from "./models/NebBotUser";
+import NebNotificationUser from "./models/NebNotificationUser";
 
 class _DimensionStore {
     private sequelize: Sequelize;
@@ -30,6 +34,10 @@ class _DimensionStore {
             WidgetRecord,
             AppService,
             AppServiceUser,
+            NebConfiguration,
+            NebIntegration,
+            NebBotUser,
+            NebNotificationUser,
         ]);
     }
 
