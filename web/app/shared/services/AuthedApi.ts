@@ -11,4 +11,10 @@ export class AuthedApi {
         qs["scalar_token"] = SessionStorage.scalarToken;
         return this.http.get(url, {params: qs});
     }
+
+    protected authedPost(url: string, body?: any): Observable<Response> {
+        if (!body) body = {};
+        const qs = {scalar_token: SessionStorage.scalarToken};
+        return this.http.post(url, body, {params: qs});
+    }
 }

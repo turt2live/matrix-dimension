@@ -94,6 +94,31 @@ class _DimensionStore {
         if (isEnabled === true || isEnabled === false) conditions = {where: {isEnabled: isEnabled}};
         return WidgetRecord.findAll(conditions).then(widgets => widgets.map(w => new Widget(w)));
     }
+
+    public setWidgetEnabled(type: string, isEnabled: boolean): Promise<any> {
+        return this.getWidget(type).then(widget => {
+            widget.isEnabled = isEnabled;
+            return widget.save();
+        });
+    }
+
+    public setWidgetOptions(type: string, options: any): Promise<any> {
+        const optionsJson = JSON.stringify(options);
+        return this.getWidget(type).then(widget => {
+            widget.optionsJson = optionsJson;
+            return widget.save();
+        });
+    }
+
+    private getWidget(type: string): Promise<WidgetRecord> {
+        return WidgetRecord.findAll({where: {type: type}}).then(widgets => {
+            if (!widgets || widgets.length !== 1) {
+                return Promise.reject("Widget not found or too many results");
+            }
+
+            return Promise.resolve(widgets[0]);
+        });
+    }
 }
 
 export const DimensionStore = new _DimensionStore();

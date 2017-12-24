@@ -1,4 +1,4 @@
-import { GET, Path, PathParam, QueryParam } from "typescript-rest";
+import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
 import * as Promise from "bluebird";
 import { ScalarService } from "../scalar/ScalarService";
 import { DimensionStore } from "../../db/DimensionStore";
@@ -12,6 +12,14 @@ interface IntegrationsResponse {
     widgets: Widget[],
 }
 
+interface SetEnabledRequest {
+    enabled: boolean;
+}
+
+interface SetOptionsRequest {
+    options: any;
+}
+
 @Path("/api/v1/dimension/integrations")
 export class DimensionIntegrationsService {
 
@@ -19,6 +27,26 @@ export class DimensionIntegrationsService {
 
     public static clearIntegrationCache() {
         DimensionIntegrationsService.integrationCache.clear();
+    }
+
+    @POST
+    @Path(":category/:type/enabled")
+    public setEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("category") category: string, @PathParam("type") type: string, body: SetEnabledRequest): Promise<any> {
+        return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
+            if (category === "widget") {
+                return DimensionStore.setWidgetEnabled(type, body.enabled);
+            } else throw new ApiError(400, "Unrecongized category");
+        }).then(() => DimensionIntegrationsService.clearIntegrationCache());
+    }
+
+    @POST
+    @Path(":category/:type/options")
+    public setOptions(@QueryParam("scalar_token") scalarToken: string, @PathParam("category") category: string, @PathParam("type") type: string, body: SetOptionsRequest): Promise<any> {
+        return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
+            if (category === "widget") {
+                return DimensionStore.setWidgetOptions(type, body.options);
+            } else throw new ApiError(400, "Unrecongized category");
+        }).then(() => DimensionIntegrationsService.clearIntegrationCache());
     }
 
     @GET

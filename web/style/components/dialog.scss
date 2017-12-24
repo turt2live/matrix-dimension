@@ -1,0 +1,21 @@
+.dialog {
+  .dialog-header {
+    border-bottom: 1px solid #ddd;
+    padding: 20px;
+
+    h4 {
+      margin: 0;
+    }
+  }
+
+  .dialog-content {
+    padding: 20px;
+
+  }
+
+  .dialog-footer {
+    padding: 20px;
+    border-top: 1px solid #bbb;
+    background-color: #ddd;
+  }
+}

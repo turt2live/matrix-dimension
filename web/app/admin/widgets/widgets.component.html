@@ -1,0 +1,34 @@
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!isLoading">
+    <my-ibox title="Widgets">
+        <div class="my-ibox-content">
+            <p>Widgets are small webpages that can be embedded in a Matrix room. Here you can configure which widgets
+                Dimension will offer to users.</p>
+
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let widget of widgets trackById">
+                    <td>{{ widget.displayName }}</td>
+                    <td>{{ widget.description }}</td>
+                    <td class="text-right">
+                        <span class="editButton" (click)="editWidget(widget)" *ngIf="widget.isEnabled && hasConfiguration(widget)">
+                            <i class="fa fa-pencil-alt"></i>
+                        </span>
+                        <ui-switch [checked]="widget.isEnabled" size="small" [disabled]="isUpdating"
+                                   (change)="disableWidget(widget)"></ui-switch>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </my-ibox>
+</div>

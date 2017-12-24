@@ -42,6 +42,9 @@ import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch.widg
 import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube.widget.component";
 import { AdminComponent } from "./admin/admin.component";
 import { AdminHomeComponent } from "./admin/home/home.component";
+import { AdminWidgetsComponent } from "./admin/widgets/widgets.component";
+import { AdminWidgetEtherpadConfigComponent } from "./admin/widgets/etherpad/etherpad.component";
+import { AdminWidgetJitsiConfigComponent } from "./admin/widgets/jitsi/jitsi.component";
 
 @NgModule({
     imports: [
@@ -83,6 +86,9 @@ import { AdminHomeComponent } from "./admin/home/home.component";
         YoutubeWidgetConfigComponent,
         AdminComponent,
         AdminHomeComponent,
+        AdminWidgetsComponent,
+        AdminWidgetEtherpadConfigComponent,
+        AdminWidgetJitsiConfigComponent,
 
         // Vendor
     ],
@@ -97,7 +103,10 @@ import { AdminHomeComponent } from "./admin/home/home.component";
         // Vendor
     ],
     bootstrap: [AppComponent],
-    entryComponents: []
+    entryComponents: [
+        AdminWidgetEtherpadConfigComponent,
+        AdminWidgetJitsiConfigComponent,
+    ]
 })
 export class AppModule {
     constructor(public appRef: ApplicationRef, injector: Injector) {

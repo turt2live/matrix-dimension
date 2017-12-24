@@ -15,6 +15,7 @@ import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch.widg
 import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube.widget.component";
 import { AdminComponent } from "./admin/admin.component";
 import { AdminHomeComponent } from "./admin/home/home.component";
+import { AdminWidgetsComponent } from "./admin/widgets/widgets.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -36,6 +37,11 @@ const routes: Routes = [
                     {
                         path: "",
                         component: AdminHomeComponent,
+                    },
+                    {
+                        path: "widgets",
+                        component: AdminWidgetsComponent,
+                        data: {breadcrumb: "Widgets", name: "Widgets"},
                     },
                 ],
             },
