@@ -1,14 +1,14 @@
 import { Component } from "@angular/core";
 import { ToasterService } from "angular2-toaster";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ScalarClientApiService } from "../../shared/services/scalar-client-api.service";
+import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
 import * as _ from "lodash";
-import { ScalarServerApiService } from "../../shared/services/scalar-server-api.service";
-import { DimensionApiService } from "../../shared/services/dimension-api.service";
-import { Integration, IntegrationRequirement } from "../../shared/models/integration";
-import { IntegrationService } from "../../shared/services/integration.service";
+import { ScalarServerApiService } from "../../shared/services/scalar/scalar-server-api.service";
+import { FE_Integration, FE_IntegrationRequirement } from "../../shared/models/integration";
+import { IntegrationsRegistry } from "../../shared/registry/integrations.registry";
 import { SessionStorage } from "../../shared/SessionStorage";
-import { AdminApiService } from "../../shared/services/admin-api.service";
+import { AdminApiService } from "../../shared/services/admin/admin-api.service";
+import { IntegrationsApiService } from "../../shared/services/integrations/integrations-api.service";
 
 const CATEGORY_MAP = {
     "Widgets": ["widget"],
@@ -31,13 +31,13 @@ export class RiotHomeComponent {
     private userId: string;
     private requestedScreen: string = null;
     private requestedIntegrationId: string = null;
-    public integrationsForCategory: { [category: string]: Integration[] } = {};
+    public integrationsForCategory: { [category: string]: FE_Integration[] } = {};
     private categoryMap: { [categoryName: string]: string[] } = CATEGORY_MAP;
 
     constructor(private activatedRoute: ActivatedRoute,
                 private scalarApi: ScalarServerApiService,
                 private scalar: ScalarClientApiService,
-                private dimensionApi: DimensionApiService,
+                private integrationsApi: IntegrationsApiService,
                 private adminApi: AdminApiService,
                 private toaster: ToasterService,
                 private router: Router) {
@@ -106,12 +106,12 @@ export class RiotHomeComponent {
         return Object.keys(this.categoryMap);
     }
 
-    public getIntegrationsIn(category: string): Integration[] {
+    public getIntegrationsIn(category: string): FE_Integration[] {
         return this.integrationsForCategory[category];
     }
 
-    private getIntegrations(): Integration[] {
-        const result: Integration[] = [];
+    private getIntegrations(): FE_Integration[] {
+        const result: FE_Integration[] = [];
 
         for (const category of this.getCategories()) {
             for (const integration of this.getIntegrationsIn(category)) {
@@ -122,7 +122,7 @@ export class RiotHomeComponent {
         return result;
     }
 
-    public modifyIntegration(integration: Integration) {
+    public modifyIntegration(integration: FE_Integration) {
         SessionStorage.editIntegration = integration;
         SessionStorage.editsRequested++;
         console.log(this.userId + " is trying to modify " + integration.displayName);
@@ -165,10 +165,10 @@ export class RiotHomeComponent {
     private prepareIntegrations() {
         this.scalar.isRoomEncrypted(this.roomId).then(payload => {
             this.isRoomEncrypted = payload.response;
-            return this.dimensionApi.getIntegrations(this.roomId);
+            return this.integrationsApi.getIntegrations(this.roomId);
         }).then(response => {
-            const integrations: Integration[] = _.flatten(Object.keys(response).map(k => response[k]));
-            const supportedIntegrations: Integration[] = _.filter(integrations, i => IntegrationService.isSupported(i));
+            const integrations: FE_Integration[] = _.flatten(Object.keys(response).map(k => response[k]));
+            const supportedIntegrations: FE_Integration[] = _.filter(integrations, i => IntegrationsRegistry.isSupported(i));
 
             // Flag integrations that aren't supported in encrypted rooms
             if (this.isRoomEncrypted) {
@@ -206,7 +206,7 @@ export class RiotHomeComponent {
         let type = null;
         if (!this.requestedScreen) return;
 
-        const targetIntegration = IntegrationService.getIntegrationForScreen(this.requestedScreen);
+        const targetIntegration = IntegrationsRegistry.getIntegrationForScreen(this.requestedScreen);
         if (targetIntegration) {
             category = targetIntegration.category;
             type = targetIntegration.type;
@@ -228,7 +228,7 @@ export class RiotHomeComponent {
         console.log("Failed to find integration component for category=" + category + " type=" + type);
     }
 
-    private updateIntegrationState(integration: Integration) {
+    private updateIntegrationState(integration: FE_Integration) {
         if (!integration.requirements) return;
 
         let promises = integration.requirements.map(r => this.checkRequirement(r));
@@ -243,7 +243,7 @@ export class RiotHomeComponent {
         });
     }
 
-    private checkRequirement(requirement: IntegrationRequirement) {
+    private checkRequirement(requirement: FE_IntegrationRequirement) {
         switch (requirement.condition) {
             case "publicRoom":
                 return this.scalar.getJoinRule(this.roomId).then(payload => {

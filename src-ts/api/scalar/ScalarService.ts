@@ -10,8 +10,8 @@ import { ApiError } from "../ApiError";
 import * as randomString from "random-string";
 import { OpenId } from "../../models/OpenId";
 import { ScalarAccountResponse, ScalarRegisterResponse } from "../../models/ScalarResponses";
-import { DimensionStore } from "../../db/DimensionStore";
 import { MemoryCache } from "../../MemoryCache";
+import { ScalarStore } from "../../db/ScalarStore";
 
 interface RegisterRequest {
     access_token: string;
@@ -33,7 +33,7 @@ export class ScalarService {
         const cachedUserId = ScalarService.accountCache.get(scalarToken);
         if (cachedUserId) return Promise.resolve(cachedUserId);
 
-        return DimensionStore.getTokenOwner(scalarToken).then(user => {
+        return ScalarStore.getTokenOwner(scalarToken).then(user => {
             if (!user) return Promise.reject("Invalid token");
             ScalarService.accountCache.put(scalarToken, user.userId, 30 * 60 * 1000); // 30 minutes
             return Promise.resolve(user.userId);

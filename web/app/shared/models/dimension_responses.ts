@@ -1,5 +1,5 @@
-import { Widget } from "./integration";
+import { FE_Widget } from "./integration";
 
-export interface DimensionIntegrationsResponse {
-    widgets: Widget[];
+export interface FE_IntegrationsResponse {
+    widgets: FE_Widget[];
 }

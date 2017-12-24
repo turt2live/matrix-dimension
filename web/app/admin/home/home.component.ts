@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { AdminApiService } from "../../shared/services/admin-api.service";
-import { DimensionConfigResponse } from "../../shared/models/admin_responses";
+import { AdminApiService } from "../../shared/services/admin/admin-api.service";
+import { FE_DimensionConfig } from "../../shared/models/admin_responses";
 
 @Component({
     templateUrl: "./home.component.html",
@@ -9,7 +9,7 @@ import { DimensionConfigResponse } from "../../shared/models/admin_responses";
 export class AdminHomeComponent {
 
     public isLoading = true;
-    public config: DimensionConfigResponse;
+    public config: FE_DimensionConfig;
 
     constructor(adminApi: AdminApiService) {
         adminApi.getConfig().then(config => {

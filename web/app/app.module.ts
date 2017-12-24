@@ -9,7 +9,7 @@ import { createNewHosts, removeNgStyles } from "@angularclass/hmr";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { RiotComponent } from "./riot/riot.component";
 import { UiSwitchModule } from "angular2-ui-switch";
-import { ScalarClientApiService } from "./shared/services/scalar-client-api.service";
+import { ScalarClientApiService } from "./shared/services/scalar/scalar-client-api.service";
 import { ToasterModule } from "angular2-toaster";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component";
@@ -26,10 +26,9 @@ import { SpinnerComponent } from "./elements/spinner/spinner.component";
 import { BreadcrumbsModule } from "ng2-breadcrumbs";
 import { RiotHomeComponent } from "./riot/riot-home/home.component";
 import { IntegrationBagComponent } from "./integration-bag/integration-bag.component";
-import { ScalarServerApiService } from "./shared/services/scalar-server-api.service";
-import { DimensionApiService } from "./shared/services/dimension-api.service";
-import { AdminApiService } from "./shared/services/admin-api.service";
-import { ServiceLocator } from "./shared/services/locator.service";
+import { ScalarServerApiService } from "./shared/services/scalar/scalar-server-api.service";
+import { AdminApiService } from "./shared/services/admin/admin-api.service";
+import { ServiceLocator } from "./shared/registry/ServiceLocator";
 import { IboxComponent } from "./elements/ibox/ibox.component";
 import { CustomWidgetConfigComponent } from "./configs/widget/custom/custom.widget.component";
 import { ConfigScreenWidgetComponent } from "./configs/widget/config_screen/config_screen.widget.component";
@@ -45,6 +44,9 @@ import { AdminHomeComponent } from "./admin/home/home.component";
 import { AdminWidgetsComponent } from "./admin/widgets/widgets.component";
 import { AdminWidgetEtherpadConfigComponent } from "./admin/widgets/etherpad/etherpad.component";
 import { AdminWidgetJitsiConfigComponent } from "./admin/widgets/jitsi/jitsi.component";
+import { AdminIntegrationsApiService } from "./shared/services/admin/admin-integrations-api.service";
+import { IntegrationsApiService } from "./shared/services/integrations/integrations-api.service";
+import { WidgetApiService } from "./shared/services/integrations/widget-api.service";
 
 @NgModule({
     imports: [
@@ -93,10 +95,12 @@ import { AdminWidgetJitsiConfigComponent } from "./admin/widgets/jitsi/jitsi.com
         // Vendor
     ],
     providers: [
+        AdminApiService,
+        AdminIntegrationsApiService,
+        IntegrationsApiService,
+        WidgetApiService,
         ScalarClientApiService,
         ScalarServerApiService,
-        DimensionApiService,
-        AdminApiService,
         NameService,
         {provide: Window, useValue: window},
 

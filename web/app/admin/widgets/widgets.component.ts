@@ -1,14 +1,14 @@
 import { Component } from "@angular/core";
-import { AdminApiService } from "../../shared/services/admin-api.service";
-import { Widget } from "../../shared/models/integration";
+import { FE_Widget } from "../../shared/models/integration";
 import { ToasterService } from "angular2-toaster";
 import { AdminWidgetEtherpadConfigComponent } from "./etherpad/etherpad.component";
 import { Modal, overlayConfigFactory } from "ngx-modialog";
 import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { AdminWidgetJitsiConfigComponent } from "./jitsi/jitsi.component";
+import { AdminIntegrationsApiService } from "../../shared/services/admin/admin-integrations-api.service";
 
 export class WidgetConfigDialogContext extends BSModalContext {
-    public widget: Widget;
+    public widget: FE_Widget;
 }
 
 @Component({
@@ -19,19 +19,19 @@ export class AdminWidgetsComponent {
 
     public isLoading = true;
     public isUpdating = false;
-    public widgets: Widget[];
+    public widgets: FE_Widget[];
 
-    constructor(private adminApi: AdminApiService, private toaster: ToasterService, private modal: Modal) {
-        adminApi.getAllIntegrations().then(integrations => {
+    constructor(private adminIntegrationsApi: AdminIntegrationsApiService, private toaster: ToasterService, private modal: Modal) {
+        this.adminIntegrationsApi.getAllIntegrations().then(integrations => {
             this.isLoading = false;
             this.widgets = integrations.widgets;
         });
     }
 
-    public disableWidget(widget: Widget) {
+    public disableWidget(widget: FE_Widget) {
         widget.isEnabled = !widget.isEnabled;
         this.isUpdating = true;
-        this.adminApi.toggleIntegration(widget.category, widget.type, widget.isEnabled).then(() => {
+        this.adminIntegrationsApi.toggleIntegration(widget.category, widget.type, widget.isEnabled).then(() => {
             this.isUpdating = false;
             this.toaster.pop("success", "Widget updated");
         }).catch(err => {
@@ -42,7 +42,7 @@ export class AdminWidgetsComponent {
         })
     }
 
-    public editWidget(widget: Widget) {
+    public editWidget(widget: FE_Widget) {
         let component = null;
 
         if (widget.type === "etherpad") component = AdminWidgetEtherpadConfigComponent;
@@ -62,7 +62,7 @@ export class AdminWidgetsComponent {
         }, WidgetConfigDialogContext));
     }
 
-    public hasConfiguration(widget: Widget) {
+    public hasConfiguration(widget: FE_Widget) {
         // Currently only Jitsi and Etherpad have additional configuration
         return widget.type === "jitsi" || widget.type === "etherpad";
     }

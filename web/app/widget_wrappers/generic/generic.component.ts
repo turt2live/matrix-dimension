@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { DimensionApiService } from "../../shared/services/dimension-api.service";
+import { WidgetApiService } from "../../shared/services/integrations/widget-api.service";
 
 @Component({
     selector: "my-generic-widget-wrapper",
@@ -14,10 +14,10 @@ export class GenericWidgetWrapperComponent {
     public canEmbed = false;
     public embedUrl: SafeUrl = null;
 
-    constructor(api: DimensionApiService, activatedRoute: ActivatedRoute, sanitizer: DomSanitizer) {
+    constructor(widgetApi: WidgetApiService, activatedRoute: ActivatedRoute, sanitizer: DomSanitizer) {
         let params: any = activatedRoute.snapshot.queryParams;
 
-        api.isEmbeddable(params.url).then(result => {
+        widgetApi.isEmbeddable(params.url).then(result => {
             this.canEmbed = result.canEmbed;
             this.isLoading = false;
             this.embedUrl = sanitizer.bypassSecurityTrustResourceUrl(params.url);

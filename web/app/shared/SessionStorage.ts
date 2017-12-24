@@ -1,4 +1,4 @@
-import { Integration } from "./models/integration";
+import { FE_Integration } from "./models/integration";
 
 export class SessionStorage {
 
@@ -6,7 +6,7 @@ export class SessionStorage {
     public static userId: string;
     public static roomId: string;
     public static isAdmin: boolean;
-    public static editIntegration: Integration;
+    public static editIntegration: FE_Integration;
     public static editIntegrationId: string;
     public static editsRequested = 0;
 

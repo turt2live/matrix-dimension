@@ -1,7 +1,7 @@
 import { DISABLE_AUTOMATIC_WRAPPING, WidgetComponent } from "../widget.component";
 import { EditableWidget, WIDGET_JITSI } from "../../../shared/models/widget";
 import { Component } from "@angular/core";
-import { JitsiWidget } from "../../../shared/models/integration";
+import { FE_JitsiWidget } from "../../../shared/models/integration";
 import { SessionStorage } from "../../../shared/SessionStorage";
 import { NameService } from "../../../shared/services/name.service";
 import * as url from "url";
@@ -12,7 +12,7 @@ import * as url from "url";
 })
 export class JitsiWidgetConfigComponent extends WidgetComponent {
 
-    private jitsiWidget: JitsiWidget = <JitsiWidget>SessionStorage.editIntegration;
+    private jitsiWidget: FE_JitsiWidget = <FE_JitsiWidget>SessionStorage.editIntegration;
 
     constructor(private nameService: NameService) {
         super(WIDGET_JITSI, "Jitsi Video Conference", DISABLE_AUTOMATIC_WRAPPING);

@@ -1,7 +1,7 @@
 import { convertScalarWidgetsToDtos, EditableWidget } from "../../shared/models/widget";
 import { ToasterService } from "angular2-toaster";
-import { ScalarClientApiService } from "../../shared/services/scalar-client-api.service";
-import { ServiceLocator } from "../../shared/services/locator.service";
+import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
+import { ServiceLocator } from "../../shared/registry/ServiceLocator";
 import { SessionStorage } from "../../shared/SessionStorage";
 import { OnInit } from "@angular/core";
 

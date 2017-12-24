@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { AdminApiService } from "../shared/services/admin-api.service";
+import { AdminApiService } from "../shared/services/admin/admin-api.service";
 
 @Component({
     templateUrl: "./admin.component.html",

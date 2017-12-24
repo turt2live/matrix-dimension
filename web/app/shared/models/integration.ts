@@ -1,7 +1,7 @@
-export interface Integration {
+export interface FE_Integration {
     category: "bot" | "complex-bot" | "bridge" | "widget";
     type: string;
-    requirements: IntegrationRequirement[];
+    requirements: FE_IntegrationRequirement[];
     isEncryptionSupported: boolean;
     displayName: string;
     avatarUrl: string;
@@ -16,24 +16,24 @@ export interface Integration {
     _notSupportedReason: string;
 }
 
-export interface Widget extends Integration {
+export interface FE_Widget extends FE_Integration {
     options: any;
 }
 
-export interface EtherpadWidget extends Widget {
+export interface FE_EtherpadWidget extends FE_Widget {
     options: {
         defaultUrl: string;
     };
 }
 
-export interface JitsiWidget extends Widget {
+export interface FE_JitsiWidget extends FE_Widget {
     options: {
         jitsiDomain: string;
         scriptUrl: string;
     };
 }
 
-export interface IntegrationRequirement {
+export interface FE_IntegrationRequirement {
     condition: "publicRoom" | "canSendEventTypes";
     argument: any;
     expectedValue: any;

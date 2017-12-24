@@ -1,4 +1,4 @@
-export interface DimensionConfigResponse {
+export interface FE_DimensionConfig {
     admins: string[];
     widgetBlacklist: string[];
     homesever: {
@@ -8,6 +8,6 @@ export interface DimensionConfigResponse {
     };
 }
 
-export interface DimensionVersionResponse {
+export interface FE_DimensionVersion {
     version: string;
 }

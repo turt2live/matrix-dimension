@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { Integration } from "../shared/models/integration";
+import { FE_Integration } from "../shared/models/integration";
 
 @Component({
     selector: "my-integration-bag",
@@ -9,8 +9,8 @@ import { Integration } from "../shared/models/integration";
 })
 export class IntegrationBagComponent {
 
-    @Input() integrations: Integration[];
-    @Output() integrationClicked: EventEmitter<Integration> = new EventEmitter<Integration>();
+    @Input() integrations: FE_Integration[];
+    @Output() integrationClicked: EventEmitter<FE_Integration> = new EventEmitter<FE_Integration>();
 
     constructor(private sanitizer: DomSanitizer) {
     }
@@ -19,7 +19,7 @@ export class IntegrationBagComponent {
         return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }
 
-    public onClick(integration: Integration) {
+    public onClick(integration: FE_Integration) {
         this.integrationClicked.emit(integration);
     }
 }

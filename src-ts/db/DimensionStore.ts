@@ -8,7 +8,8 @@ import * as Promise from "bluebird";
 import WidgetRecord from "./models/WidgetRecord";
 import * as path from "path";
 import * as Umzug from "umzug";
-import { Widget } from "../integrations/Widget";
+import AppService from "./models/AppService";
+import AppServiceUser from "./models/AppServiceUser";
 
 class _DimensionStore {
     private sequelize: Sequelize;
@@ -27,6 +28,8 @@ class _DimensionStore {
             UserScalarToken,
             Upstream,
             WidgetRecord,
+            AppService,
+            AppServiceUser,
         ]);
     }
 
@@ -44,81 +47,11 @@ class _DimensionStore {
 
         return migrator.up();
     }
-
-    public doesUserHaveTokensForAllUpstreams(userId: string): Promise<boolean> {
-        let upstreamTokenIds: number[] = [];
-        let hasDimensionToken = false;
-        return UserScalarToken.findAll({where: {userId: userId}}).then(results => {
-            upstreamTokenIds = results.filter(t => !t.isDimensionToken).map(t => t.upstreamId);
-            hasDimensionToken = results.filter(t => t.isDimensionToken).length >= 1;
-            return Upstream.findAll();
-        }).then(upstreams => {
-            if (!hasDimensionToken) {
-                LogService.warn("DimensionStore", "User " + userId + " is missing a Dimension scalar token");
-                return false;
-            }
-
-            for (const upstream of upstreams) {
-                if (upstreamTokenIds.indexOf(upstream.id) === -1) {
-                    LogService.warn("DimensionStore", "User " + userId + " is missing a scalar token for upstream " + upstream.id + " (" + upstream.name + ")");
-                    return false;
-                }
-            }
-
-            return true;
-        });
-    }
-
-    public getTokenOwner(scalarToken: string): Promise<User> {
-        let user: User = null;
-        return UserScalarToken.findAll({
-            where: {isDimensionToken: true, scalarToken: scalarToken},
-            include: [User]
-        }).then(tokens => {
-            if (!tokens || tokens.length === 0) {
-                return Promise.reject("Invalid token");
-            }
-
-            user = tokens[0].user;
-            return this.doesUserHaveTokensForAllUpstreams(user.userId);
-        }).then(hasUpstreams => {
-            if (!hasUpstreams) {
-                return Promise.reject("Invalid token"); // missing one or more upstreams == no validation
-            }
-            return Promise.resolve(user);
-        });
-    }
-
-    public getWidgets(isEnabled?: boolean): Promise<Widget[]> {
-        let conditions = {};
-        if (isEnabled === true || isEnabled === false) conditions = {where: {isEnabled: isEnabled}};
-        return WidgetRecord.findAll(conditions).then(widgets => widgets.map(w => new Widget(w)));
-    }
-
-    public setWidgetEnabled(type: string, isEnabled: boolean): Promise<any> {
-        return this.getWidget(type).then(widget => {
-            widget.isEnabled = isEnabled;
-            return widget.save();
-        });
-    }
-
-    public setWidgetOptions(type: string, options: any): Promise<any> {
-        const optionsJson = JSON.stringify(options);
-        return this.getWidget(type).then(widget => {
-            widget.optionsJson = optionsJson;
-            return widget.save();
-        });
-    }
-
-    private getWidget(type: string): Promise<WidgetRecord> {
-        return WidgetRecord.findAll({where: {type: type}}).then(widgets => {
-            if (!widgets || widgets.length !== 1) {
-                return Promise.reject("Widget not found or too many results");
-            }
-
-            return Promise.resolve(widgets[0]);
-        });
-    }
 }
 
 export const DimensionStore = new _DimensionStore();
+
+export function resolveIfExists<T>(record: T): Promise<T> {
+    if (!record) return Promise.reject("Record not found");
+    return Promise.resolve(record);
+}
