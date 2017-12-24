@@ -5,9 +5,6 @@ import { resolveIfExists } from "./DimensionStore";
 
 export class WidgetStore {
 
-    private constructor() {
-    }
-
     public static listAll(isEnabled?: boolean): Promise<Widget[]> {
         let conditions = {};
         if (isEnabled === true || isEnabled === false) conditions = {where: {isEnabled: isEnabled}};
@@ -27,6 +24,9 @@ export class WidgetStore {
             widget.optionsJson = optionsJson;
             return widget.save();
         });
+    }
+
+    private constructor() {
     }
 
 }

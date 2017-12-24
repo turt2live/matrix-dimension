@@ -6,9 +6,6 @@ import User from "./models/User";
 
 export class ScalarStore {
 
-    private constructor() {
-    }
-
     public static doesUserHaveTokensForAllUpstreams(userId: string): Promise<boolean> {
         let upstreamTokenIds: number[] = [];
         let hasDimensionToken = false;
@@ -53,4 +50,6 @@ export class ScalarStore {
         });
     }
 
+    private constructor() {
+    }
 }

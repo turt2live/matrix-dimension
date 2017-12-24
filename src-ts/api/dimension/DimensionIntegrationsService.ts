@@ -20,6 +20,23 @@ export class DimensionIntegrationsService {
         DimensionIntegrationsService.integrationCache.clear();
     }
 
+    public static getIntegrations(isEnabledCheck?: boolean): Promise<IntegrationsResponse> {
+        const cachedResponse = DimensionIntegrationsService.integrationCache.get("integrations_" + isEnabledCheck);
+        if (cachedResponse) {
+            return cachedResponse;
+        }
+        const response = <IntegrationsResponse>{
+            widgets: [],
+        };
+        return Promise.resolve()
+            .then(() => WidgetStore.listAll(isEnabledCheck))
+            .then(widgets => response.widgets = widgets)
+
+            // Cache and return response
+            .then(() => DimensionIntegrationsService.integrationCache.put("integrations_" + isEnabledCheck, response))
+            .then(() => response);
+    }
+
     @GET
     @Path("enabled")
     public getEnabledIntegrations(@QueryParam("scalar_token") scalarToken: string): Promise<IntegrationsResponse> {
@@ -51,22 +68,5 @@ export class DimensionIntegrationsService {
 
             throw new ApiError(404, "Integration not found");
         });
-    }
-
-    public static getIntegrations(isEnabledCheck?: boolean): Promise<IntegrationsResponse> {
-        const cachedResponse = DimensionIntegrationsService.integrationCache.get("integrations_" + isEnabledCheck);
-        if (cachedResponse) {
-            return cachedResponse;
-        }
-        const response = <IntegrationsResponse>{
-            widgets: [],
-        };
-        return Promise.resolve()
-            .then(() => WidgetStore.listAll(isEnabledCheck))
-            .then(widgets => response.widgets = widgets)
-
-            // Cache and return response
-            .then(() => DimensionIntegrationsService.integrationCache.put("integrations_" + isEnabledCheck, response))
-            .then(() => response);
     }
 }

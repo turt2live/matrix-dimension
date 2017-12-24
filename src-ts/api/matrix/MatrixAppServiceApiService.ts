@@ -9,6 +9,10 @@ interface AppServiceTransaction {
     events: SimplifiedMatrixEvent[];
 }
 
+// Note: There's no actual defined prefix for this API. The following was chosen to be
+// somewhat consistent with the other matrix APIs. In reality, the homeserver will just
+// hit the URL given in the registration - be sure to define it to match this prefix.
+// Eg: `url: "http://localhost:8184/_matrix/appservice/r0"`
 @Path("/_matrix/appservice/r0")
 export class MatrixAppServiceApiService {
 

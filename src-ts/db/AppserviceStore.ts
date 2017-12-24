@@ -8,9 +8,6 @@ import config from "../config";
 
 export class AppserviceStore {
 
-    private constructor() {
-    }
-
     public static create(userPrefix: string): Promise<AppService> {
         const id = "dimension-" + randomString({length: 25});
         const asToken = randomString({length: 100});
@@ -59,5 +56,8 @@ export class AppserviceStore {
                 accessToken: response.access_token,
             });
         });
+    }
+
+    private constructor() {
     }
 }
