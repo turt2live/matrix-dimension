@@ -8,7 +8,7 @@ import { Component } from "@angular/core";
 export class HomeComponent {
 
     public hostname: string = window.location.origin;
-    public integrationsConfig: string = `
+    public integrationsConfig = `
     "integrations_ui_url": "${this.hostname}/riot",
     "integrations_rest_url": "${this.hostname}/api/v1/scalar",
     "integrations_widgets_urls": ["${this.hostname}/widgets"],

@@ -42,8 +42,6 @@ import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch.widg
 import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube.widget.component";
 import { AdminComponent } from "./admin/admin.component";
 import { AdminHomeComponent } from "./admin/home/home.component";
-import { Test1Component } from "./admin/test1/home.component";
-import { Test2Component } from "./admin/test2/home.component";
 
 @NgModule({
     imports: [
@@ -85,9 +83,6 @@ import { Test2Component } from "./admin/test2/home.component";
         YoutubeWidgetConfigComponent,
         AdminComponent,
         AdminHomeComponent,
-
-        Test1Component,
-        Test2Component,
 
         // Vendor
     ],

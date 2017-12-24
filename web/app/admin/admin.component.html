@@ -1,8 +1,7 @@
 <ul class="adminNav">
     <li (click)="goto('')" [ngClass]="[isActive('', true) ? 'active' : '']">Dashboard</li>
-    <li (click)="goto('test1')" [ngClass]="[isActive('test1') ? 'active' : '']">Test 1</li>
-    <li (click)="goto('test2')" [ngClass]="[isActive('test2') ? 'active' : '']">Test 2</li>
 </ul>
+<span class="version">{{ version }}</span>
 
 <div class="adminContent">
     <router-outlet></router-outlet>

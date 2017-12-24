@@ -1,5 +1,5 @@
 <div class="ibox">
-    <div class="ibox-title" (click)="collapsed = !collapsed"
+    <div class="ibox-title" (click)="isCollapsible ? (collapsed = !collapsed) : false"
          [ngClass]="[isCollapsible ? 'ibox-title-collapsible' : '']">
         <h5 *ngIf="title">
             {{ title }}

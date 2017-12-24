@@ -14,8 +14,6 @@ export class MatrixOpenIdClient {
             "/_matrix/federation/v1/openid/userinfo",
             {access_token: this.openId.access_token}
         ).then(response => {
-            // Annoyingly, the response isn't JSON for this
-            response = JSON.parse(response);
             return response['sub'];
         });
     }

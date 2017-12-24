@@ -25,6 +25,7 @@
     "config": "^1.28.1",
     "dns-then": "^0.1.0",
     "express": "^4.16.2",
+    "git-rev-sync": "^1.9.1",
     "js-yaml": "^3.10.0",
     "lodash": "^4.17.4",
     "matrix-js-sdk": "^0.9.2",

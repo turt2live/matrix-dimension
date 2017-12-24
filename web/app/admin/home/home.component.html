@@ -1,1 +1,33 @@
-<h1>This is the admin section</h1>
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!isLoading">
+    <my-ibox title="Configuration">
+        <div class="my-ibox-content">
+            <p>Parts of your configuration are displayed below. To change these values, edit your configuration and restart Dimension.</p>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Administrators</strong>
+                    <ul>
+                        <li *ngFor="let user of config.admins trackById">{{ user }}</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <strong>Widget Blacklist</strong>
+                    <ul>
+                        <li *ngFor="let ip of config.widgetBlacklist trackById">{{ ip }}</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <strong>Homeserver</strong><br />
+                    Name: {{ config.homeserver.name }}<br />
+                    Federation URL: {{ config.homeserver.federationUrl }}<br />
+                    <!-- Dimension makes no distinction for the csapi -->
+                    Client/Server URL: {{ config.homeserver.federationUrl }}<br />
+                    User ID: {{ config.homeserver.userId }}
+                </div>
+            </div>
+        </div>
+    </my-ibox>
+</div>

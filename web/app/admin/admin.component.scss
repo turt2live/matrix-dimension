@@ -47,3 +47,14 @@ $accentColor: #DE6657;
   padding: 15px;
   overflow: auto;
 }
+
+.version {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 200px;
+  text-align: center;
+  color: #7d7d7d;
+  font-size: 11px;
+  font-family: monospace;
+}

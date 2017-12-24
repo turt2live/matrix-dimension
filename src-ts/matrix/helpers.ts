@@ -53,6 +53,7 @@ export function doFederatedApiCall(method: string, serverName: string, endpoint:
                     LogService.error("matrix", "Got status code " + res.statusCode + " while calling " + endpoint);
                     reject(new Error("Error in request: invalid status code"));
                 } else {
+                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
                     resolve(res.body);
                 }
             });
