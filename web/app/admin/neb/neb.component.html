@@ -1,0 +1,45 @@
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!isLoading">
+    <my-ibox title="go-neb configurations">
+        <div class="my-ibox-content">
+            <p><a href="https://github.com/matrix-org/go-neb" target="_blank">go-neb</a> is a multi-purpose bot that can
+                provide various services, such as reaction GIFs and Github notifications. There are two options for
+                go-neb support in Dimension: using matrix.org's or self-hosting it. Each go-neb instance can have
+                multiple services associated with it (ie: one go-neb here can do everything).</p>
+
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="text-center" style="width: 120px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngIf="!configurations || configurations.length === 0">
+                    <td colspan="2"><i>No go-neb configurations.</i></td>
+                </tr>
+                <tr *ngFor="let neb of configurations trackById">
+                    <td>{{ neb.upstreamId ? "matrix.org's go-neb" : "Self-hosted go-neb" }}</td>
+                    <td class="text-center">
+                        <span class="appsvcConfigButton" (click)="showAppserviceConfig(neb)"
+                              *ngIf="!neb.upstreamId">
+                            <i class="far fa-file"></i>
+                        </span>
+                        <span class="editButton" [routerLink]="[neb.id, 'edit']" title="edit">
+                            <i class="fa fa-pencil-alt"></i>
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-success btn-sm" (click)="addModularHostedNeb()" *ngIf="!hasModularNeb">
+                <i class="fa fa-plus"></i> Add matrix.org's go-neb
+            </button>
+            <button type="button" class="btn btn-success btn-sm" (click)="addSelfHostedNeb()">
+                <i class="fa fa-plus"></i> Add self-hosted go-neb
+            </button>
+        </div>
+    </my-ibox>
+</div>

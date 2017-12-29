@@ -1,6 +1,7 @@
 <ul class="adminNav">
     <li (click)="goto('')" [ngClass]="[isActive('', true) ? 'active' : '']">Dashboard</li>
     <li (click)="goto('widgets')" [ngClass]="[isActive('widgets') ? 'active' : '']">Widgets</li>
+    <li (click)="goto('neb')" [ngClass]="[isActive('neb') ? 'active' : '']">go-neb</li>
 </ul>
 <span class="version">{{ version }}</span>
 

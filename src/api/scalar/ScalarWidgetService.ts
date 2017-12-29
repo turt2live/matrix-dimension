@@ -1,7 +1,7 @@
 import { GET, Path, QueryParam } from "typescript-rest";
 import * as Promise from "bluebird";
 import { LogService } from "matrix-js-snippets";
-import { MemoryCache } from "../../MemoryCache";
+import { CACHE_WIDGET_TITLES, Cache } from "../../MemoryCache";
 import { MatrixLiteClient } from "../../matrix/MatrixLiteClient";
 import config from "../../config";
 import { ScalarService } from "./ScalarService";
@@ -22,10 +22,8 @@ interface UrlPreviewResponse {
 @Path("/api/v1/scalar/widgets")
 export class ScalarWidgetService {
 
-    private static urlCache = new MemoryCache();
-
     private static getUrlTitle(url: string): Promise<UrlPreviewResponse> {
-        const cachedResult = ScalarWidgetService.urlCache.get(url);
+        const cachedResult = Cache.for(CACHE_WIDGET_TITLES).get(url);
         if (cachedResult) {
             cachedResult.cached_response = true;
             return Promise.resolve(cachedResult);
@@ -44,7 +42,7 @@ export class ScalarWidgetService {
                 },
                 error: {message: null},
             };
-            ScalarWidgetService.urlCache.put(url, cachedItem, expirationTime);
+            Cache.for(CACHE_WIDGET_TITLES).put(url, cachedItem, expirationTime);
             return cachedItem;
         }).catch(err => {
             LogService.error("ScalarWidgetService", "Error getting URL preview");

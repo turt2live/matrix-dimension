@@ -30,7 +30,7 @@ export class ScalarStore {
         });
     }
 
-    public static getTokenOwner(scalarToken: string): Promise<User> {
+    public static getTokenOwner(scalarToken: string, ignoreUpstreams?: boolean): Promise<User> {
         let user: User = null;
         return UserScalarToken.findAll({
             where: {isDimensionToken: true, scalarToken: scalarToken},
@@ -41,6 +41,7 @@ export class ScalarStore {
             }
 
             user = tokens[0].user;
+            if (ignoreUpstreams) return true; // they have all the upstreams as far as we're concerned
             return ScalarStore.doesUserHaveTokensForAllUpstreams(user.userId);
         }).then(hasUpstreams => {
             if (!hasUpstreams) {

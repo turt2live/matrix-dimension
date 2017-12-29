@@ -1,0 +1,37 @@
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!isLoading">
+    <my-ibox title="go-neb configuration">
+        <div class="my-ibox-content">
+            <p>go-neb supports many different types of bots, each of which is listed below. Here you can configure which
+                bots this go-neb instance should use.</p>
+
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let bot of nebConfig.integrations trackById">
+                    <td>{{ bot.displayName }}</td>
+                    <td>{{ bot.description }}</td>
+                    <td class="text-right">
+                        <span class="editButton" (click)="editBot(widget)"
+                              *ngIf="bot.isEnabled && hasConfig(bot) && !isUpstream">
+                            <i class="fa fa-pencil-alt"></i>
+                        </span>
+                        <ui-switch [checked]="bot.isEnabled" size="small" [disabled]="isUpdating"
+                                   (change)="toggleBot(bot)" *ngIf="!isOverlapping(bot)"></ui-switch>
+                        <ui-switch [checked]="false" size="small" [disabled]="true" *ngIf="isOverlapping(bot)"
+                                   ngbTooltip="This bot is handled by another go-neb instance"></ui-switch>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </my-ibox>
+</div>

@@ -10,7 +10,7 @@ import { ApiError } from "../ApiError";
 import * as randomString from "random-string";
 import { OpenId } from "../../models/OpenId";
 import { ScalarAccountResponse, ScalarRegisterResponse } from "../../models/ScalarResponses";
-import { MemoryCache } from "../../MemoryCache";
+import { Cache, CACHE_SCALAR_ACCOUNTS } from "../../MemoryCache";
 import { ScalarStore } from "../../db/ScalarStore";
 
 interface RegisterRequest {
@@ -23,19 +23,13 @@ interface RegisterRequest {
 @Path("/api/v1/scalar")
 export class ScalarService {
 
-    private static accountCache = new MemoryCache();
-
-    public static clearAccountCache(): void {
-        ScalarService.accountCache.clear();
-    }
-
-    public static getTokenOwner(scalarToken: string): Promise<string> {
-        const cachedUserId = ScalarService.accountCache.get(scalarToken);
+    public static getTokenOwner(scalarToken: string, ignoreUpstreams?: boolean): Promise<string> {
+        const cachedUserId = Cache.for(CACHE_SCALAR_ACCOUNTS).get(scalarToken);
         if (cachedUserId) return Promise.resolve(cachedUserId);
 
-        return ScalarStore.getTokenOwner(scalarToken).then(user => {
+        return ScalarStore.getTokenOwner(scalarToken, ignoreUpstreams).then(user => {
             if (!user) return Promise.reject("Invalid token");
-            ScalarService.accountCache.put(scalarToken, user.userId, 30 * 60 * 1000); // 30 minutes
+            Cache.for(CACHE_SCALAR_ACCOUNTS).put(scalarToken, user.userId, 30 * 60 * 1000); // 30 minutes
             return Promise.resolve(user.userId);
         });
     }

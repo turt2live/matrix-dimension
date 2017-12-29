@@ -16,6 +16,8 @@ import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube.w
 import { AdminComponent } from "./admin/admin.component";
 import { AdminHomeComponent } from "./admin/home/home.component";
 import { AdminWidgetsComponent } from "./admin/widgets/widgets.component";
+import { AdminNebComponent } from "./admin/neb/neb.component";
+import { AdminEditNebComponent } from "./admin/neb/edit/edit.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -42,6 +44,21 @@ const routes: Routes = [
                         path: "widgets",
                         component: AdminWidgetsComponent,
                         data: {breadcrumb: "Widgets", name: "Widgets"},
+                    },
+                    {
+                        path: "neb",
+                        data: {breadcrumb: "go-neb", name: "go-neb configuration"},
+                        children: [
+                            {
+                                path: "",
+                                component: AdminNebComponent,
+                            },
+                            {
+                                path: ":nebId/edit",
+                                component: AdminEditNebComponent,
+                                data: {breadcrumb: "Edit go-neb", name: "Edit go-neb"},
+                            }
+                        ]
                     },
                 ],
             },

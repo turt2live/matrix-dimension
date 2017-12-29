@@ -2,7 +2,7 @@ import { GET, Path, PathParam, QueryParam } from "typescript-rest";
 import * as Promise from "bluebird";
 import { ScalarService } from "../scalar/ScalarService";
 import { Widget } from "../../integrations/Widget";
-import { MemoryCache } from "../../MemoryCache";
+import { CACHE_INTEGRATIONS, Cache } from "../../MemoryCache";
 import { Integration } from "../../integrations/Integration";
 import { ApiError } from "../ApiError";
 import { WidgetStore } from "../../db/WidgetStore";
@@ -14,14 +14,8 @@ export interface IntegrationsResponse {
 @Path("/api/v1/dimension/integrations")
 export class DimensionIntegrationsService {
 
-    private static integrationCache = new MemoryCache();
-
-    public static clearIntegrationCache() {
-        DimensionIntegrationsService.integrationCache.clear();
-    }
-
     public static getIntegrations(isEnabledCheck?: boolean): Promise<IntegrationsResponse> {
-        const cachedResponse = DimensionIntegrationsService.integrationCache.get("integrations_" + isEnabledCheck);
+        const cachedResponse = Cache.for(CACHE_INTEGRATIONS).get("integrations_" + isEnabledCheck);
         if (cachedResponse) {
             return cachedResponse;
         }
@@ -33,7 +27,7 @@ export class DimensionIntegrationsService {
             .then(widgets => response.widgets = widgets)
 
             // Cache and return response
-            .then(() => DimensionIntegrationsService.integrationCache.put("integrations_" + isEnabledCheck, response))
+            .then(() => Cache.for(CACHE_INTEGRATIONS).put("integrations_" + isEnabledCheck, response))
             .then(() => response);
     }
 

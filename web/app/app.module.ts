@@ -47,6 +47,11 @@ import { AdminWidgetJitsiConfigComponent } from "./admin/widgets/jitsi/jitsi.com
 import { AdminIntegrationsApiService } from "./shared/services/admin/admin-integrations-api.service";
 import { IntegrationsApiService } from "./shared/services/integrations/integrations-api.service";
 import { WidgetApiService } from "./shared/services/integrations/widget-api.service";
+import { AdminAppserviceApiService } from "./shared/services/admin/admin-appservice-api.service";
+import { AdminNebApiService } from "./shared/services/admin/admin-neb-api.service";
+import { AdminUpstreamApiService } from "./shared/services/admin/admin-upstream-api.service";
+import { AdminNebComponent } from "./admin/neb/neb.component";
+import { AdminEditNebComponent } from "./admin/neb/edit/edit.component";
 
 @NgModule({
     imports: [
@@ -91,6 +96,8 @@ import { WidgetApiService } from "./shared/services/integrations/widget-api.serv
         AdminWidgetsComponent,
         AdminWidgetEtherpadConfigComponent,
         AdminWidgetJitsiConfigComponent,
+        AdminNebComponent,
+        AdminEditNebComponent,
 
         // Vendor
     ],
@@ -102,6 +109,9 @@ import { WidgetApiService } from "./shared/services/integrations/widget-api.serv
         ScalarClientApiService,
         ScalarServerApiService,
         NameService,
+        AdminAppserviceApiService,
+        AdminNebApiService,
+        AdminUpstreamApiService,
         {provide: Window, useValue: window},
 
         // Vendor

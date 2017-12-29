@@ -4,6 +4,7 @@ import { ApiError } from "../ApiError";
 import { DimensionAdminService } from "./DimensionAdminService";
 import { DimensionIntegrationsService, IntegrationsResponse } from "./DimensionIntegrationsService";
 import { WidgetStore } from "../../db/WidgetStore";
+import { CACHE_INTEGRATIONS, Cache } from "../../MemoryCache";
 
 interface SetEnabledRequest {
     enabled: boolean;
@@ -23,7 +24,7 @@ export class DimensionIntegrationsAdminService {
             if (category === "widget") {
                 return WidgetStore.setOptions(type, body.options);
             } else throw new ApiError(400, "Unrecongized category");
-        }).then(() => DimensionIntegrationsService.clearIntegrationCache());
+        }).then(() => Cache.for(CACHE_INTEGRATIONS).clear());
     }
 
     @POST
@@ -33,7 +34,7 @@ export class DimensionIntegrationsAdminService {
             if (category === "widget") {
                 return WidgetStore.setEnabled(type, body.enabled);
             } else throw new ApiError(400, "Unrecongized category");
-        }).then(() => DimensionIntegrationsService.clearIntegrationCache());
+        }).then(() => Cache.for(CACHE_INTEGRATIONS).clear());
     }
 
     @GET

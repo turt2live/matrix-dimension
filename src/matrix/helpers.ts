@@ -1,13 +1,11 @@
 import * as dns from "dns-then";
 import * as Promise from "bluebird";
 import { LogService } from "matrix-js-snippets";
-import { MemoryCache } from "../MemoryCache";
+import { Cache, CACHE_FEDERATION } from "../MemoryCache";
 import * as request from "request";
 
-const federationUrlCache = new MemoryCache();
-
 export function getFederationUrl(serverName: string): Promise<string> {
-    const cachedUrl = federationUrlCache.get(serverName);
+    const cachedUrl = Cache.for(CACHE_FEDERATION).get(serverName);
     if (cachedUrl) {
         LogService.verbose("matrix", "Cached federation URL for " + serverName + " is " + cachedUrl);
         return Promise.resolve(cachedUrl);
@@ -30,7 +28,7 @@ export function getFederationUrl(serverName: string): Promise<string> {
     }).then(() => {
         if (!serverUrl) serverUrl = "https://" + serverName + ":8448";
         LogService.verbose("matrix", "Federation URL for " + serverName + " is " + serverUrl + " - caching for " + expirationMs + " ms");
-        federationUrlCache.put(serverName, serverUrl, expirationMs);
+        Cache.for(CACHE_FEDERATION).put(serverName, serverUrl, expirationMs);
         return serverUrl;
     });
 }

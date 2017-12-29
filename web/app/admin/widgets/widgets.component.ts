@@ -28,7 +28,7 @@ export class AdminWidgetsComponent {
         });
     }
 
-    public disableWidget(widget: FE_Widget) {
+    public toggleWidget(widget: FE_Widget) {
         widget.isEnabled = !widget.isEnabled;
         this.isUpdating = true;
         this.adminIntegrationsApi.toggleIntegration(widget.category, widget.type, widget.isEnabled).then(() => {
@@ -39,7 +39,7 @@ export class AdminWidgetsComponent {
             widget.isEnabled = !widget.isEnabled; // revert change
             this.isUpdating = false;
             this.toaster.pop("error", "Error updating widget");
-        })
+        });
     }
 
     public editWidget(widget: FE_Widget) {

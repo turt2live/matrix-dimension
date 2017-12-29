@@ -28,7 +28,7 @@ export class DimensionAdminService {
     }
 
     public static validateAndGetAdminTokenOwner(scalarToken: string): Promise<string> {
-        return ScalarService.getTokenOwner(scalarToken).then(userId => {
+        return ScalarService.getTokenOwner(scalarToken, true).then(userId => {
             if (!DimensionAdminService.isAdmin(userId))
                 throw new ApiError(401, {message: "You must be an administrator to use this API"});
             else return userId;
