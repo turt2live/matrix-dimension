@@ -44,6 +44,11 @@ export class DimensionAppserviceAdminService {
     @POST
     @Path("new")
     public createAppservice(@QueryParam("scalar_token") scalarToken: string, request: AppserviceCreateRequest): Promise<AppserviceResponse> {
+        // Trim off the @ sign if it's on the prefix
+        if (request.userPrefix[0] === "@") {
+            request.userPrefix = request.userPrefix.substring(1);
+        }
+
         return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
             return AppserviceStore.getAllByUserPrefix(request.userPrefix);
         }).then(appservices => {

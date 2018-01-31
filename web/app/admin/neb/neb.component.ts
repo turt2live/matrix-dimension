@@ -4,6 +4,7 @@ import { AdminNebApiService } from "../../shared/services/admin/admin-neb-api.se
 import { AdminUpstreamApiService } from "../../shared/services/admin/admin-upstream-api.service";
 import { AdminAppserviceApiService } from "../../shared/services/admin/admin-appservice-api.service";
 import { FE_Appservice, FE_NebConfiguration, FE_Upstream } from "../../shared/models/admin_responses";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
     templateUrl: "./neb.component.html",
@@ -21,7 +22,9 @@ export class AdminNebComponent {
     constructor(private nebApi: AdminNebApiService,
                 private upstreamApi: AdminUpstreamApiService,
                 private appserviceApi: AdminAppserviceApiService,
-                private toaster: ToasterService) {
+                private toaster: ToasterService,
+                private router: Router,
+                private activatedRoute:ActivatedRoute) {
 
         this.reload().then(() => this.isLoading = false).catch(error => {
             console.error(error);
@@ -69,7 +72,7 @@ export class AdminNebComponent {
     }
 
     public addSelfHostedNeb() {
-        console.log("ADD Hosted");
+        this.router.navigate(["new", "selfhosted"], {relativeTo: this.activatedRoute});
     }
 
     public addModularHostedNeb() {

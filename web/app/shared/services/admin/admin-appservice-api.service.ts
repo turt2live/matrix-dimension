@@ -12,4 +12,8 @@ export class AdminAppserviceApiService extends AuthedApi {
     public getAppservices(): Promise<FE_Appservice[]> {
         return this.authedGet("/api/v1/dimension/admin/appservices/all").map(r => r.json()).toPromise();
     }
+
+    public createAppservice(userPrefix: string): Promise<FE_Appservice> {
+        return this.authedPost("/api/v1/dimension/admin/appservices/new", {userPrefix: userPrefix}).map(r => r.json()).toPromise();
+    }
 }

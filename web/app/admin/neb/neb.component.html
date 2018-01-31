@@ -21,7 +21,10 @@
                     <td colspan="2"><i>No go-neb configurations.</i></td>
                 </tr>
                 <tr *ngFor="let neb of configurations trackById">
-                    <td>{{ neb.upstreamId ? "matrix.org's go-neb" : "Self-hosted go-neb" }}</td>
+                    <td>
+                        {{ neb.upstreamId ? "matrix.org's go-neb" : "Self-hosted go-neb" }}
+                        <span class="text-muted" style="display: inline-block;" *ngIf="!neb.upstreamId">({{ neb.adminUrl }})</span>
+                    </td>
                     <td class="text-center">
                         <span class="appsvcConfigButton" (click)="showAppserviceConfig(neb)"
                               *ngIf="!neb.upstreamId">

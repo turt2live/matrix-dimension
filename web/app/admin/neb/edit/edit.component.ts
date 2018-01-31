@@ -19,8 +19,8 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
     public nebConfig: FE_NebConfiguration;
 
     private subscription: any;
-    private overlappingTypes: string[];
-    private botTypes: string[];
+    private overlappingTypes: string[] = [];
+    private botTypes: string[] = [];
 
     constructor(private nebApi: AdminNebApiService, private route: ActivatedRoute, private toaster: ToasterService) {
     }
