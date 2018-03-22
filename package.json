@@ -10,6 +10,7 @@
     "build": "rimraf build && npm run-script build:web && npm run-script build:app",
     "build:web": "webpack --progress --profile --bail",
     "build:app": "tsc -p tsconfig-app.json",
+    "lint": "npm run-script lint:app",
     "lint:app": "tslint --project ./tsconfig-app.json -t stylish"
   },
   "repository": {

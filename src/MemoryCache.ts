@@ -1,8 +1,8 @@
-import * as cache from "memory-cache";
+import * as memoryCache from "memory-cache";
 
 export class MemoryCache {
 
-    private internalCache = new cache.Cache();
+    private internalCache = new memoryCache.Cache();
 
     constructor() {
     }
