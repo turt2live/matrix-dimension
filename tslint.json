@@ -5,8 +5,7 @@
   "rules": {
     "class-name": false,
     "comment-format": [
-      true,
-      "check-space"
+      true
     ],
     "curly": false,
     "eofline": false,
@@ -20,7 +19,7 @@
     "member-access": false,
     "member-ordering": [
       true,
-      "static-before-instance",
+      "static-after-instance",
       "variables-before-functions"
     ],
     "no-arg": true,
