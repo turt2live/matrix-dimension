@@ -29,7 +29,7 @@ export class YoutubeWidgetConfigComponent extends WidgetComponent {
                 // Older Dimension widget - infer link
                 const parsedUrl = url.parse(widget.url, true);
                 if (parsedUrl.query["url"]) {
-                    widget.data.videoUrl = this.parseVideoUrl(decodeURIComponent(parsedUrl.query["url"]));
+                    widget.data.videoUrl = this.parseVideoUrl(decodeURIComponent(<string>parsedUrl.query["url"]));
                 } else console.warn("Cannot parse URL for " + widget.id);
             }
         }

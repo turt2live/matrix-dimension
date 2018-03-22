@@ -25,7 +25,7 @@ export class JitsiWidgetConfigComponent extends WidgetComponent {
             const conferenceId = parsedUrl.query["conferenceId"];
             const confId = parsedUrl.query["confId"];
             const domain = parsedUrl.query["domain"];
-            let isAudioConf = parsedUrl.query["isAudioConf"];
+            let isAudioConf: string | boolean = <string>parsedUrl.query["isAudioConf"];
 
             // Convert isAudioConf to boolean
             if (isAudioConf === "true") isAudioConf = true;
