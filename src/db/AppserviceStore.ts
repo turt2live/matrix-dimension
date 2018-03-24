@@ -26,7 +26,7 @@ export class AppserviceStore {
     }
 
     public static async getByHomeserverToken(hsToken: string): Promise<AppService> {
-        const appservice = AppService.findOne({where: {hsToken: hsToken}});
+        const appservice = await AppService.findOne({where: {hsToken: hsToken}});
         if (!appservice) throw new Error("Appservice not found");
         return appservice;
     }
