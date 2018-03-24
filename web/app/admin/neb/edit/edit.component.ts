@@ -20,7 +20,6 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
 
     private subscription: any;
     private overlappingTypes: string[] = [];
-    private botTypes: string[] = [];
 
     constructor(private nebApi: AdminNebApiService, private route: ActivatedRoute, private toaster: ToasterService) {
     }
@@ -70,8 +69,7 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
                     this.nebConfig = config;
                 } else {
                     for (const type of config.integrations) {
-                        this.botTypes.push(type.type);
-                        handledTypes.push(type.type);
+                        if (type.isEnabled) handledTypes.push(type.type);
                     }
                 }
             }
