@@ -21,7 +21,6 @@
   "dependencies": {
     "@types/body-parser": "^1.16.8",
     "@types/node": "^8.9.5",
-    "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "config": "^1.30.0",
     "dns-then": "^0.1.0",

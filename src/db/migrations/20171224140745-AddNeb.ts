@@ -1,6 +1,5 @@
 import { QueryInterface } from "sequelize";
 import { DataType } from "sequelize-typescript";
-import * as Promise from "bluebird";
 
 export default {
     up: (queryInterface: QueryInterface) => {

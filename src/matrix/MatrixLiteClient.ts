@@ -1,4 +1,3 @@
-import * as Promise from "bluebird";
 import { doFederatedApiCall, getFederationUrl as getFedUrl } from "./helpers";
 
 export interface MatrixUrlPreview {

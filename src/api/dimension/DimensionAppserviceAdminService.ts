@@ -1,5 +1,4 @@
 import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
-import * as Promise from "bluebird";
 import { DimensionAdminService } from "./DimensionAdminService";
 import AppService from "../../db/models/AppService";
 import { AppserviceStore } from "../../db/AppserviceStore";
@@ -33,49 +32,44 @@ export class DimensionAppserviceAdminService {
 
     @GET
     @Path("all")
-    public getAppservices(@QueryParam("scalar_token") scalarToken: string): Promise<AppserviceResponse[]> {
-        return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
-            return AppService.findAll();
-        }).then(appservices => {
-            return appservices.map(this.mapAppservice);
-        });
+    public async getAppservices(@QueryParam("scalar_token") scalarToken: string): Promise<AppserviceResponse[]> {
+        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        return (await AppService.findAll()).map(a => this.mapAppservice(a));
     }
 
     @POST
     @Path("new")
-    public createAppservice(@QueryParam("scalar_token") scalarToken: string, request: AppserviceCreateRequest): Promise<AppserviceResponse> {
+    public async createAppservice(@QueryParam("scalar_token") scalarToken: string, request: AppserviceCreateRequest): Promise<AppserviceResponse> {
+        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+
         // Trim off the @ sign if it's on the prefix
         if (request.userPrefix[0] === "@") {
             request.userPrefix = request.userPrefix.substring(1);
         }
 
-        return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
-            return AppserviceStore.getAllByUserPrefix(request.userPrefix);
-        }).then(appservices => {
-            if (appservices && appservices.length > 0) {
-                throw new ApiError(400, "User prefix is already in use");
-            }
+        const appservices = await AppserviceStore.getAllByUserPrefix(request.userPrefix);
+        if (appservices && appservices.length > 0) {
+            throw new ApiError(400, "User prefix is already in use");
+        }
 
-            return AppserviceStore.create(AppserviceStore.getSafeUserId(request.userPrefix));
-        }).then(this.mapAppservice);
+        const appservice = await AppserviceStore.create(AppserviceStore.getSafeUserId(request.userPrefix));
+        return this.mapAppservice(appservice);
     }
 
     @GET
     @Path(":appserviceId/users")
-    public getUsers(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string): Promise<UserResponse[]> {
-        return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
-            return AppserviceStore.getUsers(asId);
-        }).then(users => {
-            return users.map(this.mapUser);
-        });
+    public async getUsers(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string): Promise<UserResponse[]> {
+        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        return (await AppserviceStore.getUsers(asId)).map(u => this.mapUser(u));
     }
 
     @POST
     @Path(":appserviceId/users/register")
-    public registerUser(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string, request: NewUserRequest): Promise<UserResponse> {
-        return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
-            return AppserviceStore.registerUser(asId, request.userId);
-        }).then(this.mapUser);
+    public async registerUser(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string, request: NewUserRequest): Promise<UserResponse> {
+        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+
+        const user = await AppserviceStore.registerUser(asId, request.userId);
+        return this.mapUser(user);
     }
 
     private mapAppservice(as: AppService): AppserviceResponse {

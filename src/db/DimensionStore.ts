@@ -4,7 +4,6 @@ import { LogService } from "matrix-js-snippets";
 import User from "./models/User";
 import UserScalarToken from "./models/UserScalarToken";
 import Upstream from "./models/Upstream";
-import * as Promise from "bluebird";
 import WidgetRecord from "./models/WidgetRecord";
 import * as path from "path";
 import * as Umzug from "umzug";

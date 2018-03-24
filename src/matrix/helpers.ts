@@ -1,5 +1,4 @@
 import * as dns from "dns-then";
-import * as Promise from "bluebird";
 import { LogService } from "matrix-js-snippets";
 import { Cache, CACHE_FEDERATION } from "../MemoryCache";
 import * as request from "request";

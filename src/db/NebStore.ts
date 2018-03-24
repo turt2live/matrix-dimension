@@ -1,4 +1,3 @@
-import * as Promise from "bluebird";
 import { resolveIfExists } from "./DimensionStore";
 import { NebConfig } from "../models/neb";
 import NebConfiguration from "./models/NebConfiguration";
@@ -77,13 +76,13 @@ export class NebStore {
         },
     };
 
-    public static getAllConfigs(): Promise<NebConfig[]> {
+    public static async getAllConfigs(): Promise<NebConfig[]> {
         return NebConfiguration.findAll().then(configs => {
             return Promise.all((configs || []).map(c => NebStore.getConfig(c.id)));
         });
     }
 
-    public static getConfig(id: number): Promise<NebConfig> {
+    public static async getConfig(id: number): Promise<NebConfig> {
         let nebConfig: NebConfiguration;
         return NebConfiguration.findByPrimary(id).then(resolveIfExists).then(conf => {
             nebConfig = conf;
@@ -95,7 +94,7 @@ export class NebStore {
         });
     }
 
-    public static createForUpstream(upstreamId: number): Promise<NebConfig> {
+    public static async createForUpstream(upstreamId: number): Promise<NebConfig> {
         return Upstream.findByPrimary(upstreamId).then(resolveIfExists).then(upstream => {
             return NebConfiguration.create({
                 upstreamId: upstream.id,
@@ -105,7 +104,7 @@ export class NebStore {
         });
     }
 
-    public static createForAppservice(appserviceId: string, adminUrl: string): Promise<NebConfig> {
+    public static async createForAppservice(appserviceId: string, adminUrl: string): Promise<NebConfig> {
         return AppService.findByPrimary(appserviceId).then(resolveIfExists).then(appservice => {
             return NebConfiguration.create({
                 appserviceId: appservice.id,
@@ -116,7 +115,7 @@ export class NebStore {
         });
     }
 
-    public static getOrCreateIntegration(configurationId: number, integrationType: string): Promise<NebIntegration> {
+    public static async getOrCreateIntegration(configurationId: number, integrationType: string): Promise<NebIntegration> {
         if (!NebStore.INTEGRATIONS[integrationType]) return Promise.reject(new Error("Integration not supported"));
 
         return NebConfiguration.findByPrimary(configurationId).then(resolveIfExists).then(config => {

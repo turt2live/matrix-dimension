@@ -1,4 +1,3 @@
-import * as Promise from "bluebird";
 import UserScalarToken from "./models/UserScalarToken";
 import { LogService } from "matrix-js-snippets";
 import Upstream from "./models/Upstream";
@@ -6,7 +5,7 @@ import User from "./models/User";
 
 export class ScalarStore {
 
-    public static doesUserHaveTokensForAllUpstreams(userId: string): Promise<boolean> {
+    public static async doesUserHaveTokensForAllUpstreams(userId: string): Promise<boolean> {
         let upstreamTokenIds: number[] = [];
         let hasDimensionToken = false;
         return UserScalarToken.findAll({where: {userId: userId}}).then(results => {
@@ -30,7 +29,7 @@ export class ScalarStore {
         });
     }
 
-    public static getTokenOwner(scalarToken: string, ignoreUpstreams?: boolean): Promise<User> {
+    public static async getTokenOwner(scalarToken: string, ignoreUpstreams?: boolean): Promise<User> {
         let user: User = null;
         return UserScalarToken.findAll({
             where: {isDimensionToken: true, scalarToken: scalarToken},

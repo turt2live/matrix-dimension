@@ -1,7 +1,6 @@
 import { GET, Path, QueryParam } from "typescript-rest";
-import * as Promise from "bluebird";
 import { LogService } from "matrix-js-snippets";
-import { CACHE_WIDGET_TITLES, Cache } from "../../MemoryCache";
+import { Cache, CACHE_WIDGET_TITLES } from "../../MemoryCache";
 import { MatrixLiteClient } from "../../matrix/MatrixLiteClient";
 import config from "../../config";
 import { ScalarService } from "./ScalarService";
@@ -22,15 +21,21 @@ interface UrlPreviewResponse {
 @Path("/api/v1/scalar/widgets")
 export class ScalarWidgetService {
 
-    private static getUrlTitle(url: string): Promise<UrlPreviewResponse> {
+    @GET
+    @Path("title_lookup")
+    public async titleLookup(@QueryParam("scalar_token") scalarToken: string, @QueryParam("curl") url: string): Promise<UrlPreviewResponse> {
+        await ScalarService.getTokenOwner(scalarToken);
+
         const cachedResult = Cache.for(CACHE_WIDGET_TITLES).get(url);
         if (cachedResult) {
             cachedResult.cached_response = true;
-            return Promise.resolve(cachedResult);
+            return cachedResult;
         }
 
         const client = new MatrixLiteClient(config.homeserver.name, config.homeserver.accessToken);
-        return client.getUrlPreview(url).then(preview => {
+
+        try {
+            const preview = await client.getUrlPreview(url);
             const expirationTime = 60 * 80 * 1000; // 1 hour
             const expirationAsString = moment().add(expirationTime, "milliseconds").toISOString();
             const cachedItem = {
@@ -44,7 +49,7 @@ export class ScalarWidgetService {
             };
             Cache.for(CACHE_WIDGET_TITLES).put(url, cachedItem, expirationTime);
             return cachedItem;
-        }).catch(err => {
+        } catch (err) {
             LogService.error("ScalarWidgetService", "Error getting URL preview");
             LogService.error("ScalarWidgetService", err);
             return <UrlPreviewResponse>{
@@ -53,20 +58,12 @@ export class ScalarWidgetService {
                 page_title_cache_item: {
                     expires: null,
                     cached_response_err: "Failed to get URL preview",
-                    cached_title: null
+                    cached_title: null,
                 },
                 error: {
                     message: "Failed to get URL preview",
                 },
             };
-        })
-    }
-
-    @GET
-    @Path("title_lookup")
-    public titleLookup(@QueryParam("scalar_token") scalarToken: string, @QueryParam("curl") url: string): Promise<UrlPreviewResponse> {
-        return ScalarService.getTokenOwner(scalarToken).then(_userId => {
-            return ScalarWidgetService.getUrlTitle(url);
-        }, ScalarService.invalidTokenErrorHandler);
+        }
     }
 }

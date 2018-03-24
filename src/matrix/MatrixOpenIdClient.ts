@@ -1,4 +1,3 @@
-import * as Promise from "bluebird";
 import { doFederatedApiCall } from "./helpers";
 import { OpenId } from "../models/OpenId";
 

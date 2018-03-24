@@ -1,5 +1,4 @@
 import { GET, Path, POST, QueryParam } from "typescript-rest";
-import * as Promise from "bluebird";
 import { DimensionAdminService } from "./DimensionAdminService";
 import { Cache, CACHE_UPSTREAM } from "../../MemoryCache";
 import Upstream from "../../db/models/Upstream";
@@ -24,33 +23,32 @@ export class DimensionUpstreamAdminService {
 
     @GET
     @Path("all")
-    public getUpstreams(@QueryParam("scalar_token") scalarToken: string): Promise<UpstreamRepsonse[]> {
-        return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
-            const cachedUpstreams = Cache.for(CACHE_UPSTREAM).get("upstreams");
-            if (cachedUpstreams) return cachedUpstreams;
-            return Upstream.findAll().then(upstreams => {
-                const mapped = upstreams.map(this.mapUpstream);
-                Cache.for(CACHE_UPSTREAM).put("upstreams", mapped);
+    public async getUpstreams(@QueryParam("scalar_token") scalarToken: string): Promise<UpstreamRepsonse[]> {
+        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
 
-                return mapped;
-            });
-        });
+        const cachedUpstreams = Cache.for(CACHE_UPSTREAM).get("upstreams");
+        if (cachedUpstreams) return cachedUpstreams;
+
+        const upstreams = await Upstream.findAll();
+        const mapped = upstreams.map(u => this.mapUpstream(u));
+        Cache.for(CACHE_UPSTREAM).put("upstreams", mapped);
+        return mapped;
     }
 
     @POST
     @Path("new")
-    public createUpstream(@QueryParam("scalar_token") scalarToken: string, request: NewUpstreamRequest): Promise<UpstreamRepsonse> {
-        return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
-            return Upstream.create({
-                name: request.name,
-                type: request.type,
-                scalarUrl: request.scalarUrl,
-                apiUrl: request.apiUrl,
-            });
-        }).then(upstream => {
-            Cache.for(CACHE_UPSTREAM).clear();
-            return this.mapUpstream(upstream);
+    public async createUpstream(@QueryParam("scalar_token") scalarToken: string, request: NewUpstreamRequest): Promise<UpstreamRepsonse> {
+        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+
+        const upstream = await Upstream.create({
+            name: request.name,
+            type: request.type,
+            scalarUrl: request.scalarUrl,
+            apiUrl: request.apiUrl,
         });
+
+        Cache.for(CACHE_UPSTREAM).clear();
+        return this.mapUpstream(upstream);
     }
 
     private mapUpstream(upstream: Upstream): UpstreamRepsonse {

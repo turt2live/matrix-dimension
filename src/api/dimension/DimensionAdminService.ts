@@ -1,5 +1,4 @@
 import { GET, Path, QueryParam } from "typescript-rest";
-import * as Promise from "bluebird";
 import { ScalarService } from "../scalar/ScalarService";
 import config from "../../config";
 import { ApiError } from "../ApiError";
@@ -27,51 +26,41 @@ export class DimensionAdminService {
         return config.admins.indexOf(userId) >= 0;
     }
 
-    public static validateAndGetAdminTokenOwner(scalarToken: string): Promise<string> {
-        return ScalarService.getTokenOwner(scalarToken, true).then(userId => {
-            if (!DimensionAdminService.isAdmin(userId))
-                throw new ApiError(401, {message: "You must be an administrator to use this API"});
-            else return userId;
-        }, ScalarService.invalidTokenErrorHandler);
+    public static async validateAndGetAdminTokenOwner(scalarToken: string): Promise<string> {
+        const userId = await ScalarService.getTokenOwner(scalarToken, true);
+        if (!DimensionAdminService.isAdmin(userId))
+            throw new ApiError(401, "You must be an administrator to use this API");
+        return userId;
     }
 
     @GET
     @Path("check")
-    public checkIfAdmin(@QueryParam("scalar_token") scalarToken: string): Promise<{}> {
-        return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
-            return {}; // A 200 OK essentially means "you're an admin".
-        });
+    public async checkIfAdmin(@QueryParam("scalar_token") scalarToken: string): Promise<{}> {
+        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        return {}; // A 200 OK essentially means "you're an admin".
     }
 
     @GET
     @Path("version")
-    public getVersion(@QueryParam("scalar_token") scalarToken: string): Promise<DimensionVersionResponse> {
-        return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
-            return {version: CURRENT_VERSION};
-        });
+    public async getVersion(@QueryParam("scalar_token") scalarToken: string): Promise<DimensionVersionResponse> {
+        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        return {version: CURRENT_VERSION};
     }
 
     @GET
     @Path("config")
-    public getConfig(@QueryParam("scalar_token") scalarToken: string): Promise<DimensionConfigResponse> {
+    public async getConfig(@QueryParam("scalar_token") scalarToken: string): Promise<DimensionConfigResponse> {
+        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+
         const client = new MatrixLiteClient(config.homeserver.name, config.homeserver.accessToken);
-        const response: DimensionConfigResponse = {
+        return {
             admins: config.admins,
             widgetBlacklist: config.widgetBlacklist,
             homeserver: {
                 name: config.homeserver.name,
-                userId: "", // populated below
-                federationUrl: "", // populated below
+                userId: await client.whoAmI(),
+                federationUrl: await client.getFederationUrl(),
             },
         };
-
-        return DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken).then(_userId => {
-            return client.whoAmI();
-        }).then(userId => {
-            response.homeserver.userId = userId;
-            return client.getFederationUrl();
-        }).then(url => {
-            response.homeserver.federationUrl = url;
-        }).then(() => response);
     }
 }

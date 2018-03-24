@@ -1,6 +1,5 @@
 import { OpenId } from "../models/OpenId";
 import { ScalarRegisterResponse } from "../models/ScalarResponses";
-import * as Promise from "bluebird";
 import * as request from "request";
 import { LogService } from "matrix-js-snippets";
 import Upstream from "../db/models/Upstream";

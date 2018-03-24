@@ -1,5 +1,4 @@
 import { GET, Path, POST, QueryParam } from "typescript-rest";
-import * as Promise from "bluebird";
 import { MatrixOpenIdClient } from "../../matrix/MatrixOpenIdClient";
 import Upstream from "../../db/models/Upstream";
 import { ScalarClient } from "../../scalar/ScalarClient";
@@ -23,80 +22,62 @@ interface RegisterRequest {
 @Path("/api/v1/scalar")
 export class ScalarService {
 
-    public static getTokenOwner(scalarToken: string, ignoreUpstreams?: boolean): Promise<string> {
+    public static async getTokenOwner(scalarToken: string, ignoreUpstreams?: boolean): Promise<string> {
         const cachedUserId = Cache.for(CACHE_SCALAR_ACCOUNTS).get(scalarToken);
-        if (cachedUserId) return Promise.resolve(cachedUserId);
+        if (cachedUserId) return cachedUserId;
 
-        return ScalarStore.getTokenOwner(scalarToken, ignoreUpstreams).then(user => {
-            if (!user) return Promise.reject("Invalid token");
-            Cache.for(CACHE_SCALAR_ACCOUNTS).put(scalarToken, user.userId, 30 * 60 * 1000); // 30 minutes
-            return Promise.resolve(user.userId);
-        });
-    }
+        const user = await ScalarStore.getTokenOwner(scalarToken, ignoreUpstreams);
+        if (!user) throw new ApiError(401, "Invalid token");
 
-    public static invalidTokenErrorHandler(error: any): any {
-        if (error !== "Invalid token") {
-            LogService.error("ScalarWidgetService", "Error processing request");
-            LogService.error("ScalarWidgetService", error);
-        }
-        throw new ApiError(401, {message: "Invalid token"});
+        Cache.for(CACHE_SCALAR_ACCOUNTS).put(scalarToken, user.userId, 30 * 60 * 1000); // 30 minutes
+        return user.userId;
     }
 
     @POST
     @Path("register")
-    public register(request: RegisterRequest): Promise<ScalarRegisterResponse> {
-        let userId = null;
+    public async register(request: RegisterRequest): Promise<ScalarRegisterResponse> {
         const mxClient = new MatrixOpenIdClient(<OpenId>request);
-        return mxClient.getUserId().then(mxUserId => {
-            userId = mxUserId;
-            return User.findByPrimary(userId).then(user => {
-                if (!user) {
-                    // There's a small chance we'll get a validation error because of:
-                    // https://github.com/vector-im/riot-web/issues/5846
-                    LogService.verbose("ScalarService", "User " + userId + " never seen before - creating");
-                    return User.create({userId: userId});
-                }
-            });
-        }).then(() => {
-            return Upstream.findAll();
-        }).then(upstreams => {
-            return Promise.all(upstreams.map(u => {
-                return UserScalarToken.findAll({where: {userId: userId, upstreamId: u.id}}).then(tokens => {
-                    if (!tokens || tokens.length === 0) {
-                        LogService.info("ScalarService", "Registering " + userId + " for token at upstream " + u.id + " (" + u.name + ")");
-                        const client = new ScalarClient(u);
-                        return client.register(<OpenId>request).then(registerResponse => {
-                            return UserScalarToken.create({
-                                userId: userId,
-                                scalarToken: registerResponse.scalar_token,
-                                isDimensionToken: false,
-                                upstreamId: u.id,
-                            });
-                        });
-                    }
+        const mxUserId = await mxClient.getUserId();
+
+        const user = await User.findByPrimary(mxUserId);
+        if (!user) {
+            // There's a small chance we'll get a validation error because of:
+            // https://github.com/vector-im/riot-web/issues/5846
+            LogService.verbose("ScalarService", "User " + mxUserId + " never seen before - creating");
+            await User.create({userId: mxUserId});
+        }
+
+        const upstreams = await Upstream.findAll();
+        await Promise.all(upstreams.map(async upstream => {
+            const tokens = await UserScalarToken.findAll({where: {userId: mxUserId, upstreamId: upstream.id}});
+            if (!tokens || tokens.length === 0) {
+                LogService.info("ScalarService", "Registering " + mxUserId + " for a token at upstream " + upstream.id + " (" + upstream.name + ")");
+                const client = new ScalarClient(upstream);
+                const response = await client.register(<OpenId>request);
+                return UserScalarToken.create({
+                    userId: mxUserId,
+                    scalarToken: response.scalar_token,
+                    isDimensionToken: false,
+                    upstreamId: upstream.id,
                 });
-            }));
-        }).then(() => {
-            const dimensionToken = randomString({length: 25});
-            return UserScalarToken.create({
-                userId: userId,
-                scalarToken: dimensionToken,
-                isDimensionToken: true,
-            });
-        }).then(userToken => {
-            return {scalar_token: userToken.scalarToken};
-        }).catch(err => {
-            LogService.error("ScalarService", err);
-            throw new ApiError(401, {message: "Failed to authenticate user"});
+            }
+        }));
+
+        const dimensionToken = randomString({length: 25});
+        const dimensionScalarToken = await UserScalarToken.create({
+            userId: mxUserId,
+            scalarToken: dimensionToken,
+            isDimensionToken: true,
         });
+
+        return {scalar_token: dimensionScalarToken.scalarToken};
     }
 
     @GET
     @Path("account")
-    public getAccount(@QueryParam("scalar_token") scalarToken: string): Promise<ScalarAccountResponse> {
-        return ScalarService.getTokenOwner(scalarToken).then(userId => {
-            return {user_id: userId};
-        }, ScalarService.invalidTokenErrorHandler);
+    public async getAccount(@QueryParam("scalar_token") scalarToken: string): Promise<ScalarAccountResponse> {
+        const userId = await ScalarService.getTokenOwner(scalarToken);
+        return {user_id: userId};
     }
 
 }
