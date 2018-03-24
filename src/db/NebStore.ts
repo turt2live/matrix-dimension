@@ -4,6 +4,11 @@ import NebIntegration from "./models/NebIntegration";
 import Upstream from "./models/Upstream";
 import AppService from "./models/AppService";
 import { LogService } from "matrix-js-snippets";
+import { NebClient } from "../neb/NebClient";
+import NebBotUser from "./models/NebBotUser";
+import NebNotificationUser from "./models/NebNotificationUser";
+import { AppserviceStore } from "./AppserviceStore";
+import config from "../config";
 
 export interface SupportedIntegration {
     type: string;
@@ -37,11 +42,12 @@ export class NebStore {
             avatarUrl: "/img/avatars/guggy.png",
             description: "Send a reaction GIF using !guggy <query>",
         },
-        "github": {
-            name: "Github",
-            avatarUrl: "/img/avatars/github.png",
-            description: "Github issue management and announcements for a repository",
-        },
+        // TODO: Support Github
+        // "github": {
+        //     name: "Github",
+        //     avatarUrl: "/img/avatars/github.png",
+        //     description: "Github issue management and announcements for a repository",
+        // },
         "google": {
             name: "Google",
             avatarUrl: "/img/avatars/google.png",
@@ -171,6 +177,67 @@ export class NebStore {
         }
 
         return result;
+    }
+
+    public static async setIntegrationEnabled(configurationId: number, integrationType: string, isEnabled: boolean): Promise<any> {
+        const integration = await this.getOrCreateIntegration(configurationId, integrationType);
+        integration.isEnabled = isEnabled;
+        await integration.save();
+
+        const neb = await this.getConfig(configurationId);
+        if (!neb.appserviceId) return; // Done - nothing to do from here
+        const client = new NebClient(neb);
+
+        const botUsers = await NebBotUser.findAll({where: {integrationId: integration.id}});
+        for (const user of botUsers) {
+            await client.updateUser(user.appserviceUserId, isEnabled, true);
+        }
+
+        const notificationUsers = await NebNotificationUser.findAll({where: {integrationId: integration.id}});
+        for (const user of notificationUsers) {
+            await client.updateUser(user.appserviceUserId, isEnabled, false);
+        }
+    }
+
+    public static async getOrCreateBotUser(configurationId: number, integrationType: string): Promise<NebBotUser> {
+        const neb = await NebStore.getConfig(configurationId);
+        if (!neb.appserviceId) throw new Error("Instance not bound to an appservice");
+
+        const integration = await this.getOrCreateIntegration(configurationId, integrationType);
+        const users = await NebBotUser.findAll({where: {integrationId: integration.id}});
+        if (!users || users.length === 0) {
+            const appservice = await AppserviceStore.getAppservice(neb.appserviceId);
+            const userId = "@" + appservice.userPrefix + "_" + integrationType + ":" + config.homeserver.name;
+            const appserviceUser = await AppserviceStore.getOrCreateUser(neb.appserviceId, userId);
+
+            const client = new NebClient(neb);
+            await client.updateUser(userId, integration.isEnabled, true); // creates the user in go-neb
+
+            const serviceId = appservice.id + "_integration_" + integrationType;
+            return NebBotUser.create({
+                serviceId: serviceId,
+                appserviceUserId: appserviceUser.id,
+                integrationId: integration.id,
+            });
+        }
+
+        return users[0];
+    }
+
+    public static async setIntegrationConfig(configurationId: number, integrationType: string, newConfig: any): Promise<any> {
+        const botUser = await NebStore.getOrCreateBotUser(configurationId, integrationType);
+        const neb = await NebStore.getConfig(configurationId);
+        const client = new NebClient(neb);
+
+        return client.setServiceConfig(botUser.serviceId, botUser.appserviceUserId, integrationType, newConfig);
+    }
+
+    public static async getIntegrationConfig(configurationId: number, integrationType: string): Promise<any> {
+        const botUser = await NebStore.getOrCreateBotUser(configurationId, integrationType);
+        const neb = await NebStore.getConfig(configurationId);
+        const client = new NebClient(neb);
+
+        return client.getServiceConfig(botUser.serviceId);
     }
 
     private constructor() {

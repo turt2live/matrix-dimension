@@ -31,4 +31,12 @@ export class AdminNebApiService extends AuthedApi {
     public toggleIntegration(nebId: number, integrationType: string, setEnabled: boolean): Promise<any> {
         return this.authedPost("/api/v1/dimension/admin/neb/" + nebId + "/integration/" + integrationType + "/enabled", {enabled: setEnabled}).map(r => r.json()).toPromise();
     }
+
+    public setIntegrationConfiguration(nebId: number, integrationType: string, configuration: any): Promise<any> {
+        return this.authedPost("/api/v1/dimension/admin/neb/" + nebId + "/integration/" + integrationType + "/config", configuration).map(r => r.json()).toPromise();
+    }
+
+    public getIntegrationConfiguration(nebId: number, integrationType: string): Promise<any> {
+        return this.authedGet("/api/v1/dimension/admin/neb/" + nebId + "/integration/" + integrationType + "/config").map(r => r.json()).toPromise();
+    }
 }

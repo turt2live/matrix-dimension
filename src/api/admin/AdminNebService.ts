@@ -49,13 +49,21 @@ export class AdminNebService {
     @Path(":id/integration/:type/enabled")
     public async setIntegrationEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("id") nebId: number, @PathParam("type") integrationType: string, request: SetEnabledRequest): Promise<any> {
         await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+        return NebStore.setIntegrationEnabled(nebId, integrationType, request.enabled);
+    }
 
-        const integration = await NebStore.getOrCreateIntegration(nebId, integrationType);
-        integration.isEnabled = request.enabled;
-        await integration.save();
-        Cache.for(CACHE_NEB).clear();
+    @POST
+    @Path(":id/integration/:type/config")
+    public async setIntegrationConfig(@QueryParam("scalar_token") scalarToken: string, @PathParam("id") nebId: number, @PathParam("type") integrationType: string, newConfig: any): Promise<any> {
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+        return NebStore.setIntegrationConfig(nebId, integrationType, newConfig);
+    }
 
-        return {}; // 200 OK
+    @GET
+    @Path(":id/integration/:type/config")
+    public async getIntegrationConfig(@QueryParam("scalar_token") scalarToken: string, @PathParam("id") nebId: number, @PathParam("type") integrationType: string): Promise<any> {
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+        return NebStore.getIntegrationConfig(nebId, integrationType);
     }
 
     @POST

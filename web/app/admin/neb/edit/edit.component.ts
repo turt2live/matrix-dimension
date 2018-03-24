@@ -42,18 +42,36 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
         return NEB_HAS_CONFIG.indexOf(bot.type) !== -1;
     }
 
-    public toggleBot(bot: FE_Integration) {
+    public async toggleBot(bot: FE_Integration) {
         bot.isEnabled = !bot.isEnabled;
         this.isUpdating = true;
-        this.nebApi.toggleIntegration(this.nebConfig.id, bot.type, bot.isEnabled).then(() => {
+
+        try {
+            await this.nebApi.toggleIntegration(this.nebConfig.id, bot.type, bot.isEnabled);
             this.isUpdating = false;
             this.toaster.pop("success", "Integration updated");
-        }).catch(err => {
+        } catch (err) {
             console.error(err);
             bot.isEnabled = !bot.isEnabled; // revert change
             this.isUpdating = false;
             this.toaster.pop("error", "Error updating integration");
-        });
+            return;
+        }
+
+        // Only update the service configuration if
+        if (bot.isEnabled) {
+            if (this.hasConfig(bot)) {
+                this.editBot(bot);
+            } else {
+                try {
+                    await this.nebApi.setIntegrationConfiguration(this.nebConfig.id, bot.type, {});
+                } catch (err) {
+                    console.error(err);
+                    this.toaster.pop("warning", "Failed to configure the integration", "Manual troubleshooting may be requred");
+                    return;
+                }
+            }
+        }
     }
 
     public editBot(bot: FE_Integration) {

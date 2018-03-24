@@ -46,13 +46,11 @@ export class AppserviceStore {
     }
 
     public static async registerUser(appserviceId: string, userId: string): Promise<AppServiceUser> {
-        userId = AppserviceStore.getSafeUserId(userId);
-
         const appservice = await AppService.findOne({where: {id: appserviceId}});
         if (!appservice) throw new Error("Appservice not found");
 
         const client = new MatrixAppserviceClient(config.homeserver.name, appservice);
-        const localpart = userId.substring(1).split(":")[0];
+        const localpart = AppserviceStore.getSafeUserId(userId.substring(1).split(":")[0]);
         const response = await client.registerUser(localpart);
 
         return AppServiceUser.create({
@@ -60,6 +58,12 @@ export class AppserviceStore {
             appserviceId: appserviceId,
             accessToken: response.access_token,
         });
+    }
+
+    public static async getOrCreateUser(appserviceId: string, userId: string): Promise<AppServiceUser> {
+        const user = await AppServiceUser.findOne({where: {appserviceId: appserviceId, id: userId}});
+        if (!user) return AppserviceStore.registerUser(appserviceId, userId);
+        return user;
     }
 
     public static async getAppservice(id: string): Promise<AppService> {
