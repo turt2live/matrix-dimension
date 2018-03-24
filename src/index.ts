@@ -7,10 +7,11 @@ import { CURRENT_VERSION } from "./version";
 LogService.configure(config.logging);
 LogService.info("index", "Starting dimension " + CURRENT_VERSION);
 
-const webserver = new Webserver();
+async function startup() {
+    await DimensionStore.updateSchema();
 
-DimensionStore.updateSchema()
-    .then(() => webserver.start())
-    .then(() => {
-        LogService.info("index", "Dimension is ready!");
-    });
+    const webserver = new Webserver();
+    await webserver.start();
+}
+
+startup().then(() => LogService.info("index", "Dimension is ready!"));
