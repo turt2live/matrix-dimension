@@ -7,9 +7,9 @@
   "scripts": {
     "start:web": "webpack-dev-server --inline --progress --port 8080 --host 0.0.0.0",
     "start:app": "npm run-script build && node build/app/index.js",
-    "build": "rimraf build && npm run-script build:web && npm run-script build:app",
-    "build:web": "webpack --progress --profile --bail",
-    "build:app": "tsc -p tsconfig-app.json",
+    "build": "npm run-script build:web && npm run-script build:app",
+    "build:web": "rimraf build/web && webpack --progress --profile --bail",
+    "build:app": "rimraf build/app && tsc -p tsconfig-app.json",
     "lint": "npm run-script lint:app && npm run-script lint:web",
     "lint:app": "tslint --project ./tsconfig-app.json -t stylish",
     "lint:web": "tslint --project ./tsconfig.json -t stylish"

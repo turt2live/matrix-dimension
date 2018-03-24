@@ -1,5 +1,5 @@
 import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
-import { DimensionAdminService } from "./DimensionAdminService";
+import { AdminService } from "./AdminService";
 import { Cache, CACHE_NEB } from "../../MemoryCache";
 import { NebStore } from "../../db/NebStore";
 import { NebConfig } from "../../models/neb";
@@ -21,12 +21,12 @@ interface SetEnabledRequest {
 
 
 @Path("/api/v1/dimension/admin/neb")
-export class DimensionNebAdminService {
+export class AdminNebService {
 
     @GET
     @Path("all")
     public async getNebConfigs(@QueryParam("scalar_token") scalarToken: string): Promise<NebConfig[]> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         const cachedConfigs = Cache.for(CACHE_NEB).get("configurations");
         if (cachedConfigs) return cachedConfigs;
@@ -48,7 +48,7 @@ export class DimensionNebAdminService {
     @POST
     @Path(":id/integration/:type/enabled")
     public async setIntegrationEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("id") nebId: number, @PathParam("type") integrationType: string, request: SetEnabledRequest): Promise<any> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         const integration = await NebStore.getOrCreateIntegration(nebId, integrationType);
         integration.isEnabled = request.enabled;
@@ -61,7 +61,7 @@ export class DimensionNebAdminService {
     @POST
     @Path("new/upstream")
     public async newConfigForUpstream(@QueryParam("scalar_token") scalarToken: string, request: CreateWithUpstream): Promise<NebConfig> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         try {
             const neb = await NebStore.createForUpstream(request.upstreamId);
@@ -76,7 +76,7 @@ export class DimensionNebAdminService {
     @POST
     @Path("new/appservice")
     public async newConfigForAppservice(@QueryParam("scalar_token") scalarToken: string, request: CreateWithAppservice): Promise<NebConfig> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         try {
             const neb = await NebStore.createForAppservice(request.appserviceId, request.adminUrl);

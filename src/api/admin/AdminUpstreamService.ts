@@ -1,5 +1,5 @@
 import { GET, Path, POST, QueryParam } from "typescript-rest";
-import { DimensionAdminService } from "./DimensionAdminService";
+import { AdminService } from "./AdminService";
 import { Cache, CACHE_UPSTREAM } from "../../MemoryCache";
 import Upstream from "../../db/models/Upstream";
 
@@ -19,12 +19,12 @@ interface NewUpstreamRequest {
 }
 
 @Path("/api/v1/dimension/admin/upstreams")
-export class DimensionUpstreamAdminService {
+export class AdminUpstreamService {
 
     @GET
     @Path("all")
     public async getUpstreams(@QueryParam("scalar_token") scalarToken: string): Promise<UpstreamRepsonse[]> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         const cachedUpstreams = Cache.for(CACHE_UPSTREAM).get("upstreams");
         if (cachedUpstreams) return cachedUpstreams;
@@ -38,7 +38,7 @@ export class DimensionUpstreamAdminService {
     @POST
     @Path("new")
     public async createUpstream(@QueryParam("scalar_token") scalarToken: string, request: NewUpstreamRequest): Promise<UpstreamRepsonse> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         const upstream = await Upstream.create({
             name: request.name,

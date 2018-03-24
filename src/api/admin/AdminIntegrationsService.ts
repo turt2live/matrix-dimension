@@ -1,7 +1,7 @@
 import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
 import { ApiError } from "../ApiError";
-import { DimensionAdminService } from "./DimensionAdminService";
-import { DimensionIntegrationsService, IntegrationsResponse } from "./DimensionIntegrationsService";
+import { AdminService } from "./AdminService";
+import { DimensionIntegrationsService, IntegrationsResponse } from "../dimension/DimensionIntegrationsService";
 import { WidgetStore } from "../../db/WidgetStore";
 import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
 
@@ -14,12 +14,12 @@ interface SetOptionsRequest {
 }
 
 @Path("/api/v1/dimension/admin/integrations")
-export class DimensionIntegrationsAdminService {
+export class AdminIntegrationsService {
 
     @POST
     @Path(":category/:type/options")
     public async setOptions(@QueryParam("scalar_token") scalarToken: string, @PathParam("category") category: string, @PathParam("type") type: string, body: SetOptionsRequest): Promise<any> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         if (category === "widget") await WidgetStore.setOptions(type, body.options);
         else throw new ApiError(400, "Unrecognized category");
@@ -32,7 +32,7 @@ export class DimensionIntegrationsAdminService {
     @POST
     @Path(":category/:type/enabled")
     public async setEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("category") category: string, @PathParam("type") type: string, body: SetEnabledRequest): Promise<any> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         if (category === "widget") await WidgetStore.setEnabled(type, body.enabled);
         else throw new ApiError(400, "Unrecognized category");
@@ -44,7 +44,7 @@ export class DimensionIntegrationsAdminService {
     @GET
     @Path("all")
     public async getAllIntegrations(@QueryParam("scalar_token") scalarToken: string): Promise<IntegrationsResponse> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
         return DimensionIntegrationsService.getIntegrations(null);
     }
 }

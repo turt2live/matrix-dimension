@@ -1,5 +1,5 @@
 import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
-import { DimensionAdminService } from "./DimensionAdminService";
+import { AdminService } from "./AdminService";
 import AppService from "../../db/models/AppService";
 import { AppserviceStore } from "../../db/AppserviceStore";
 import { ApiError } from "../ApiError";
@@ -28,19 +28,19 @@ interface AppserviceCreateRequest {
 }
 
 @Path("/api/v1/dimension/admin/appservices")
-export class DimensionAppserviceAdminService {
+export class AdminAppserviceService {
 
     @GET
     @Path("all")
     public async getAppservices(@QueryParam("scalar_token") scalarToken: string): Promise<AppserviceResponse[]> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
         return (await AppService.findAll()).map(a => this.mapAppservice(a));
     }
 
     @POST
     @Path("new")
     public async createAppservice(@QueryParam("scalar_token") scalarToken: string, request: AppserviceCreateRequest): Promise<AppserviceResponse> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         // Trim off the @ sign if it's on the prefix
         if (request.userPrefix[0] === "@") {
@@ -59,14 +59,14 @@ export class DimensionAppserviceAdminService {
     @GET
     @Path(":appserviceId/users")
     public async getUsers(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string): Promise<UserResponse[]> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
         return (await AppserviceStore.getUsers(asId)).map(u => this.mapUser(u));
     }
 
     @POST
     @Path(":appserviceId/users/register")
     public async registerUser(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string, request: NewUserRequest): Promise<UserResponse> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         const user = await AppserviceStore.registerUser(asId, request.userId);
         return this.mapUser(user);

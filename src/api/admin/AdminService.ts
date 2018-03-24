@@ -20,7 +20,7 @@ interface DimensionConfigResponse {
 }
 
 @Path("/api/v1/dimension/admin")
-export class DimensionAdminService {
+export class AdminService {
 
     public static isAdmin(userId: string) {
         return config.admins.indexOf(userId) >= 0;
@@ -28,7 +28,7 @@ export class DimensionAdminService {
 
     public static async validateAndGetAdminTokenOwner(scalarToken: string): Promise<string> {
         const userId = await ScalarService.getTokenOwner(scalarToken, true);
-        if (!DimensionAdminService.isAdmin(userId))
+        if (!AdminService.isAdmin(userId))
             throw new ApiError(401, "You must be an administrator to use this API");
         return userId;
     }
@@ -36,21 +36,21 @@ export class DimensionAdminService {
     @GET
     @Path("check")
     public async checkIfAdmin(@QueryParam("scalar_token") scalarToken: string): Promise<{}> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
         return {}; // A 200 OK essentially means "you're an admin".
     }
 
     @GET
     @Path("version")
     public async getVersion(@QueryParam("scalar_token") scalarToken: string): Promise<DimensionVersionResponse> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
         return {version: CURRENT_VERSION};
     }
 
     @GET
     @Path("config")
     public async getConfig(@QueryParam("scalar_token") scalarToken: string): Promise<DimensionConfigResponse> {
-        await DimensionAdminService.validateAndGetAdminTokenOwner(scalarToken);
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         const client = new MatrixLiteClient(config.homeserver.name, config.homeserver.accessToken);
         return {
