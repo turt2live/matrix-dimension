@@ -26,7 +26,7 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.subscription = this.route.params.subscribe(params => {
-            this.loadNeb(params["nebId"]);
+            this.loadNeb(Number(params["nebId"]));
         });
     }
 
