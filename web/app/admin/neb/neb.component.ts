@@ -24,7 +24,7 @@ export class AdminNebComponent {
                 private appserviceApi: AdminAppserviceApiService,
                 private toaster: ToasterService,
                 private router: Router,
-                private activatedRoute:ActivatedRoute) {
+                private activatedRoute: ActivatedRoute) {
 
         this.reload().then(() => this.isLoading = false).catch(error => {
             console.error(error);
@@ -69,6 +69,12 @@ export class AdminNebComponent {
 
     public showAppserviceConfig(neb: FE_NebConfiguration) {
         console.log(neb);
+    }
+
+    public getEnabledBotsString(neb: FE_NebConfiguration): string {
+        const result = neb.integrations.filter(i => i.isEnabled).map(i => i.displayName).join(", ");
+        if (!result) return "None";
+        return result;
     }
 
     public addSelfHostedNeb() {

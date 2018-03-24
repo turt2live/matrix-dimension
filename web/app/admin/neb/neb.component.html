@@ -13,6 +13,7 @@
                 <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Enabled Bots</th>
                     <th class="text-center" style="width: 120px;">Actions</th>
                 </tr>
                 </thead>
@@ -24,6 +25,9 @@
                     <td>
                         {{ neb.upstreamId ? "matrix.org's go-neb" : "Self-hosted go-neb" }}
                         <span class="text-muted" style="display: inline-block;" *ngIf="!neb.upstreamId">({{ neb.adminUrl }})</span>
+                    </td>
+                    <td>
+                        {{ getEnabledBotsString(neb) }}
                     </td>
                     <td class="text-center">
                         <span class="appsvcConfigButton" (click)="showAppserviceConfig(neb)"
