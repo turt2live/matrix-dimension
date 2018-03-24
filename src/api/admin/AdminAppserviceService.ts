@@ -3,7 +3,6 @@ import { AdminService } from "./AdminService";
 import AppService from "../../db/models/AppService";
 import { AppserviceStore } from "../../db/AppserviceStore";
 import { ApiError } from "../ApiError";
-import AppServiceUser from "../../db/models/AppServiceUser";
 import { MatrixAppserviceClient } from "../../matrix/MatrixAppserviceClient";
 import config from "../../config";
 import { LogService } from "matrix-js-snippets";
@@ -13,17 +12,6 @@ interface AppserviceResponse {
     hsToken: string;
     asToken: string;
     userPrefix: string;
-}
-
-interface UserResponse {
-    userId: string;
-    accessToken: string;
-    displayName: string;
-    avatarUrl: string;
-}
-
-interface NewUserRequest {
-    userId: string;
 }
 
 interface AppserviceCreateRequest {
@@ -73,22 +61,6 @@ export class AdminAppserviceService {
         return this.mapAppservice(appservice);
     }
 
-    @GET
-    @Path(":appserviceId/users")
-    public async getUsers(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string): Promise<UserResponse[]> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-        return (await AppserviceStore.getUsers(asId)).map(u => this.mapUser(u));
-    }
-
-    @POST
-    @Path(":appserviceId/users/register")
-    public async registerUser(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string, request: NewUserRequest): Promise<UserResponse> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
-        const user = await AppserviceStore.registerUser(asId, request.userId);
-        return this.mapUser(user);
-    }
-
     @POST
     @Path(":appserviceId/test")
     public async test(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string): Promise<any> {
@@ -108,15 +80,6 @@ export class AdminAppserviceService {
             hsToken: as.hsToken,
             asToken: as.asToken,
             userPrefix: as.userPrefix,
-        };
-    }
-
-    private mapUser(user: AppServiceUser): UserResponse {
-        return {
-            userId: user.id,
-            accessToken: user.accessToken,
-            displayName: user.displayName,
-            avatarUrl: user.avatarUrl,
         };
     }
 }
