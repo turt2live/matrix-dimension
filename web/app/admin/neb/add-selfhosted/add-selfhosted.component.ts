@@ -11,8 +11,8 @@ import {
 
 
 @Component({
-    templateUrl: "./add_selfhosted.component.html",
-    styleUrls: ["./add_selfhosted.component.scss"],
+    templateUrl: "./add-selfhosted.component.html",
+    styleUrls: ["./add-selfhosted.component.scss"],
 })
 export class AdminAddSelfhostedNebComponent {
 

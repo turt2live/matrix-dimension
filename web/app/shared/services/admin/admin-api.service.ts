@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
-import { AuthedApi } from "../AuthedApi";
-import { FE_DimensionConfig, FE_DimensionVersion } from "../../models/admin_responses";
+import { AuthedApi } from "../authed-api";
+import { FE_DimensionConfig, FE_DimensionVersion } from "../../models/admin-responses";
 
 @Injectable()
 export class AdminApiService extends AuthedApi {

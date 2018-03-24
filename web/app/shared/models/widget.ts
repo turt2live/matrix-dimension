@@ -1,4 +1,4 @@
-import { WidgetsResponse } from "./scalar_client_responses";
+import { WidgetsResponse } from "./server-client-responses";
 
 export const WIDGET_CUSTOM = ["customwidget", "dimension-customwidget"];
 export const WIDGET_ETHERPAD = ["etherpad", "dimension-etherpad"];

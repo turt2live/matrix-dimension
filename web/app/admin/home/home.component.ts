@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { AdminApiService } from "../../shared/services/admin/admin-api.service";
-import { FE_DimensionConfig } from "../../shared/models/admin_responses";
+import { FE_DimensionConfig } from "../../shared/models/admin-responses";
 
 @Component({
     templateUrl: "./home.component.html",

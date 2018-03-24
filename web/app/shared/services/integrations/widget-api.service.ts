@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
-import { AuthedApi } from "../AuthedApi";
+import { AuthedApi } from "../authed-api";
 import { FE_Widget } from "../../models/integration";
 import { IntegrationsApiService } from "./integrations-api.service";
 

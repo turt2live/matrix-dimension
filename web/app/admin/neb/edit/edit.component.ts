@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FE_NebConfiguration } from "../../../shared/models/admin_responses";
+import { FE_NebConfiguration } from "../../../shared/models/admin-responses";
 import { AdminNebApiService } from "../../../shared/services/admin/admin-neb-api.service";
 import { ActivatedRoute } from "@angular/router";
 import { ToasterService } from "angular2-toaster";

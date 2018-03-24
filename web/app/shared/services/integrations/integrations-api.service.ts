@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
-import { AuthedApi } from "../AuthedApi";
-import { FE_IntegrationsResponse } from "../../models/dimension_responses";
+import { AuthedApi } from "../authed-api";
+import { FE_IntegrationsResponse } from "../../models/dimension-responses";
 import { FE_Integration, FE_Widget } from "../../models/integration";
 
 @Injectable()

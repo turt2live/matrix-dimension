@@ -3,8 +3,8 @@ import { Component, ContentChild, Input, TemplateRef } from "@angular/core";
 
 @Component({
     selector: "my-widget-config",
-    templateUrl: "config_screen.component.html",
-    styleUrls: ["config_screen.widget.component.scss"],
+    templateUrl: "config-screen.component.html",
+    styleUrls: ["config-screen.widget.component.scss"],
 })
 export class ConfigScreenWidgetComponent {
 

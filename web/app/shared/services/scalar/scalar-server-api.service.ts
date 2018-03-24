@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
-import { FE_ScalarAccountResponse } from "../../models/scalar_server_responses";
-import { AuthedApi } from "../AuthedApi";
+import { FE_ScalarAccountResponse } from "../../models/scalar-server-responses";
+import { AuthedApi } from "../authed-api";
 
 @Injectable()
 export class ScalarServerApiService extends AuthedApi {

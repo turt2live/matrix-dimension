@@ -3,7 +3,7 @@ import { ToasterService } from "angular2-toaster";
 import { AdminNebApiService } from "../../shared/services/admin/admin-neb-api.service";
 import { AdminUpstreamApiService } from "../../shared/services/admin/admin-upstream-api.service";
 import { AdminAppserviceApiService } from "../../shared/services/admin/admin-appservice-api.service";
-import { FE_Appservice, FE_NebConfiguration, FE_Upstream } from "../../shared/models/admin_responses";
+import { FE_Appservice, FE_NebConfiguration, FE_Upstream } from "../../shared/models/admin-responses";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
     AdminNebAppserviceConfigComponent,

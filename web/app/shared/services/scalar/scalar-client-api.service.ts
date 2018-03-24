@@ -6,7 +6,7 @@ import {
     MembershipStateResponse, RoomEncryptionStatusResponse,
     ScalarSuccessResponse,
     WidgetsResponse
-} from "../../models/scalar_client_responses";
+} from "../../models/server-client-responses";
 import { EditableWidget } from "../../models/widget";
 
 @Injectable()

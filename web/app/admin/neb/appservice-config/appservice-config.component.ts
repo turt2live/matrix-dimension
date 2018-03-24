@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { ToasterService } from "angular2-toaster";
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { FE_Appservice, FE_NebConfiguration } from "../../../shared/models/admin_responses";
+import { FE_Appservice, FE_NebConfiguration } from "../../../shared/models/admin-responses";
 import { AdminAppserviceApiService } from "../../../shared/services/admin/admin-appservice-api.service";
 import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 

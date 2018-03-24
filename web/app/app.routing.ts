@@ -1,15 +1,15 @@
 import { RouterModule, Routes } from "@angular/router";
 import { HomeComponent } from "./home/home.component";
 import { RiotComponent } from "./riot/riot.component";
-import { GenericWidgetWrapperComponent } from "./widget_wrappers/generic/generic.component";
-import { VideoWidgetWrapperComponent } from "./widget_wrappers/video/video.component";
-import { JitsiWidgetWrapperComponent } from "./widget_wrappers/jitsi/jitsi.component";
-import { GCalWidgetWrapperComponent } from "./widget_wrappers/gcal/gcal.component";
+import { GenericWidgetWrapperComponent } from "./widget-wrappers/generic/generic.component";
+import { VideoWidgetWrapperComponent } from "./widget-wrappers/video/video.component";
+import { JitsiWidgetWrapperComponent } from "./widget-wrappers/jitsi/jitsi.component";
+import { GCalWidgetWrapperComponent } from "./widget-wrappers/gcal/gcal.component";
 import { RiotHomeComponent } from "./riot/riot-home/home.component";
 import { CustomWidgetConfigComponent } from "./configs/widget/custom/custom.widget.component";
 import { EtherpadWidgetConfigComponent } from "./configs/widget/etherpad/etherpad.widget.component";
-import { GoogleCalendarWidgetConfigComponent } from "./configs/widget/google_calendar/gcal.widget.component";
-import { GoogleDocsWidgetConfigComponent } from "./configs/widget/google_docs/gdoc.widget.component";
+import { GoogleCalendarWidgetConfigComponent } from "./configs/widget/google-calendar/gcal.widget.component";
+import { GoogleDocsWidgetConfigComponent } from "./configs/widget/google-docs/gdoc.widget.component";
 import { JitsiWidgetConfigComponent } from "./configs/widget/jitsi/jitsi.widget.component";
 import { TwitchWidgetConfigComponent } from "./configs/widget/twitch/twitch.widget.component";
 import { YoutubeWidgetConfigComponent } from "./configs/widget/youtube/youtube.widget.component";
@@ -18,7 +18,7 @@ import { AdminHomeComponent } from "./admin/home/home.component";
 import { AdminWidgetsComponent } from "./admin/widgets/widgets.component";
 import { AdminNebComponent } from "./admin/neb/neb.component";
 import { AdminEditNebComponent } from "./admin/neb/edit/edit.component";
-import { AdminAddSelfhostedNebComponent } from "./admin/neb/add_selfhosted/add_selfhosted.component";
+import { AdminAddSelfhostedNebComponent } from "./admin/neb/add-selfhosted/add-selfhosted.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
