@@ -57,8 +57,3 @@ class _DimensionStore {
 }
 
 export const DimensionStore = new _DimensionStore();
-
-export function resolveIfExists<T>(record: T): Promise<T> {
-    if (!record) return Promise.reject("Record not found");
-    return Promise.resolve(record);
-}

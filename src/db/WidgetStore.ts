@@ -1,28 +1,30 @@
 import WidgetRecord from "./models/WidgetRecord";
 import { Widget } from "../integrations/Widget";
-import { resolveIfExists } from "./DimensionStore";
 
 export class WidgetStore {
 
     public static async listAll(isEnabled?: boolean): Promise<Widget[]> {
         let conditions = {};
         if (isEnabled === true || isEnabled === false) conditions = {where: {isEnabled: isEnabled}};
-        return WidgetRecord.findAll(conditions).then(widgets => widgets.map(w => new Widget(w)));
+        return (await WidgetRecord.findAll(conditions)).map(w => new Widget(w));
     }
 
     public static async setEnabled(type: string, isEnabled: boolean): Promise<any> {
-        return WidgetRecord.findOne({where: {type: type}}).then(resolveIfExists).then(widget => {
-            widget.isEnabled = isEnabled;
-            return widget.save();
-        });
+        const widget = await WidgetRecord.findOne({where: {type: type}});
+        if (!widget) throw new Error("Widget not found");
+
+        widget.isEnabled = isEnabled;
+        return widget.save();
     }
 
     public static async setOptions(type: string, options: any): Promise<any> {
         const optionsJson = JSON.stringify(options);
-        return WidgetRecord.findOne({where: {type: type}}).then(resolveIfExists).then(widget => {
-            widget.optionsJson = optionsJson;
-            return widget.save();
-        });
+
+        const widget = await WidgetRecord.findOne({where: {type: type}});
+        if (!widget) throw new Error("Widget not found");
+
+        widget.optionsJson = optionsJson;
+        return await widget.save();
     }
 
     private constructor() {

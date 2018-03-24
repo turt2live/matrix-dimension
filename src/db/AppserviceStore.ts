@@ -2,7 +2,6 @@ import AppService from "./models/AppService";
 import AppServiceUser from "./models/AppServiceUser";
 import * as randomString from "random-string";
 import { MatrixAppserviceClient } from "../matrix/MatrixAppserviceClient";
-import { resolveIfExists } from "./DimensionStore";
 import config from "../config";
 
 export class AppserviceStore {
@@ -21,11 +20,15 @@ export class AppserviceStore {
     }
 
     public static async getUser(appserviceId: string, userId: string): Promise<AppServiceUser> {
-        return AppServiceUser.findOne({where: {appserviceId: appserviceId, id: userId}}).then(resolveIfExists);
+        const user = await AppServiceUser.findOne({where: {appserviceId: appserviceId, id: userId}});
+        if (!user) throw new Error("User not found");
+        return user;
     }
 
     public static async getByHomeserverToken(hsToken: string): Promise<AppService> {
-        return AppService.findOne({where: {hsToken: hsToken}}).then(resolveIfExists);
+        const appservice = AppService.findOne({where: {hsToken: hsToken}});
+        if (!appservice) throw new Error("Appservice not found");
+        return appservice;
     }
 
     public static async getAllByUserPrefix(userPrefix: string): Promise<AppService[]> {
@@ -44,16 +47,18 @@ export class AppserviceStore {
 
     public static async registerUser(appserviceId: string, userId: string): Promise<AppServiceUser> {
         userId = AppserviceStore.getSafeUserId(userId);
-        return AppService.findOne({where: {id: appserviceId}}).then(resolveIfExists).then(appservice => {
-            const client = new MatrixAppserviceClient(config.homeserver.name, appservice);
-            const localpart = userId.substring(1).split(":")[0];
-            return client.registerUser(localpart);
-        }).then(response => {
-            return AppServiceUser.create({
-                id: userId,
-                appserviceId: appserviceId,
-                accessToken: response.access_token,
-            });
+
+        const appservice = await AppService.findOne({where: {id: appserviceId}});
+        if (!appservice) throw new Error("Appservice not found");
+
+        const client = new MatrixAppserviceClient(config.homeserver.name, appservice);
+        const localpart = userId.substring(1).split(":")[0];
+        const response = await client.registerUser(localpart);
+
+        return AppServiceUser.create({
+            id: userId,
+            appserviceId: appserviceId,
+            accessToken: response.access_token,
         });
     }
 

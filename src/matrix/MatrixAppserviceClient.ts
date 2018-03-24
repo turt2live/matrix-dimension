@@ -13,7 +13,7 @@ export class MatrixAppserviceClient {
     constructor(private homeserverName: string, private appservice: AppService) {
     }
 
-    public registerUser(localpart: string): Promise<MatrixUserResponse> {
+    public async registerUser(localpart: string): Promise<MatrixUserResponse> {
         return doFederatedApiCall(
             "POST",
             this.homeserverName,

@@ -6,14 +6,13 @@ export class MatrixOpenIdClient {
     constructor(private openId: OpenId) {
     }
 
-    public getUserId(): Promise<string> {
-        return doFederatedApiCall(
+    public async getUserId(): Promise<string> {
+        const response = await doFederatedApiCall(
             "GET",
             this.openId.matrix_server_name,
             "/_matrix/federation/v1/openid/userinfo",
             {access_token: this.openId.access_token}
-        ).then(response => {
-            return response['sub'];
-        });
+        );
+        return response['sub'];
     }
 }

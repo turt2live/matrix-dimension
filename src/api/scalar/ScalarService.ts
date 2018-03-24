@@ -26,11 +26,14 @@ export class ScalarService {
         const cachedUserId = Cache.for(CACHE_SCALAR_ACCOUNTS).get(scalarToken);
         if (cachedUserId) return cachedUserId;
 
-        const user = await ScalarStore.getTokenOwner(scalarToken, ignoreUpstreams);
-        if (!user) throw new ApiError(401, "Invalid token");
-
-        Cache.for(CACHE_SCALAR_ACCOUNTS).put(scalarToken, user.userId, 30 * 60 * 1000); // 30 minutes
-        return user.userId;
+        try {
+            const user = await ScalarStore.getTokenOwner(scalarToken, ignoreUpstreams);
+            Cache.for(CACHE_SCALAR_ACCOUNTS).put(scalarToken, user.userId, 30 * 60 * 1000); // 30 minutes
+            return user.userId;
+        } catch (err) {
+            LogService.error("ScalarService", err);
+            throw new ApiError(401, "Invalid token");
+        }
     }
 
     @POST
