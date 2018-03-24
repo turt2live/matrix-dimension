@@ -1,7 +1,7 @@
 * dimension apis
 * integration management
 * admin ui
-* delete old src
 * import from old db/config (script)
 * document how to add integrations (as a dev)
 * update readme
+* Update avatar/displayname of go-neb instances
