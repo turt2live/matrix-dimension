@@ -22,11 +22,12 @@ export class NebStore {
     private static INTEGRATIONS_MODULAR_SUPPORTED = ["giphy", "guggy", "github", "google", "imgur", "rss", "travisci", "wikipedia"];
 
     private static INTEGRATIONS = {
-        "circleci": {
-            name: "Circle CI",
-            avatarUrl: "/img/avatars/circleci.png",
-            description: "Announces build results from Circle CI to the room.",
-        },
+        // TODO: Support Circle CI
+        // "circleci": {
+        //     name: "Circle CI",
+        //     avatarUrl: "/img/avatars/circleci.png",
+        //     description: "Announces build results from Circle CI to the room.",
+        // },
         "echo": {
             name: "Echo",
             avatarUrl: "/img/avatars/echo.png", // TODO: Make this image
