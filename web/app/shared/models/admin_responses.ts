@@ -7,6 +7,7 @@ export interface FE_DimensionConfig {
         name: string;
         userId: string;
         federationUrl: string;
+        clientServerUrl: string;
     };
 }
 

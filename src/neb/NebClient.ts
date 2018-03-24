@@ -2,7 +2,6 @@ import { NebConfig } from "../models/neb";
 import { AppserviceStore } from "../db/AppserviceStore";
 import { Client } from "./models/client";
 import config from "../config";
-import { getFederationUrl } from "../matrix/helpers";
 import { LogService } from "matrix-js-snippets";
 import { Service } from "./models/service";
 import * as request from "request";
@@ -19,7 +18,7 @@ export class NebClient {
     public async updateUser(userId: string, isEnabled: boolean, sync = true, autoAcceptInvites = true): Promise<any> {
         const nebRequest: Client = {
             UserID: userId,
-            HomeserverURL: await getFederationUrl(config.homeserver.name),
+            HomeserverURL: config.homeserver.clientServerUrl,
             AccessToken: (isEnabled ? await this.getAccessToken(userId) : "DISABLED"),
             Sync: isEnabled ? sync : false,
             AutoJoinRooms: autoAcceptInvites

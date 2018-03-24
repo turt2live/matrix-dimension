@@ -32,7 +32,7 @@ export class ScalarWidgetService {
             return cachedResult;
         }
 
-        const client = new MatrixLiteClient(config.homeserver.name, config.homeserver.accessToken);
+        const client = new MatrixLiteClient(config.homeserver.accessToken);
 
         try {
             const preview = await client.getUrlPreview(url);

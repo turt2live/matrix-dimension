@@ -4,7 +4,6 @@ import AppService from "../../db/models/AppService";
 import { AppserviceStore } from "../../db/AppserviceStore";
 import { ApiError } from "../ApiError";
 import { MatrixAppserviceClient } from "../../matrix/MatrixAppserviceClient";
-import config from "../../config";
 import { LogService } from "matrix-js-snippets";
 
 interface AppserviceResponse {
@@ -67,7 +66,7 @@ export class AdminAppserviceService {
         await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         const appservice = await AppserviceStore.getAppservice(asId);
-        const client = new MatrixAppserviceClient(config.homeserver.name, appservice);
+        const client = new MatrixAppserviceClient(appservice);
         const userId = await client.whoAmI();
 
         if (userId.startsWith("@" + appservice.userPrefix)) return {}; // 200 OK

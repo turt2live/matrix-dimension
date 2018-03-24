@@ -4,6 +4,7 @@ import config from "../../config";
 import { ApiError } from "../ApiError";
 import { MatrixLiteClient } from "../../matrix/MatrixLiteClient";
 import { CURRENT_VERSION } from "../../version";
+import { getFederationUrl } from "../../matrix/helpers";
 
 interface DimensionVersionResponse {
     version: string;
@@ -16,6 +17,7 @@ interface DimensionConfigResponse {
         name: string;
         userId: string;
         federationUrl: string;
+        clientServerUrl: string;
     };
 }
 
@@ -52,14 +54,15 @@ export class AdminService {
     public async getConfig(@QueryParam("scalar_token") scalarToken: string): Promise<DimensionConfigResponse> {
         await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
-        const client = new MatrixLiteClient(config.homeserver.name, config.homeserver.accessToken);
+        const client = new MatrixLiteClient(config.homeserver.accessToken);
         return {
             admins: config.admins,
             widgetBlacklist: config.widgetBlacklist,
             homeserver: {
                 name: config.homeserver.name,
                 userId: await client.whoAmI(),
-                federationUrl: await client.getFederationUrl(),
+                federationUrl: await getFederationUrl(config.homeserver.name),
+                clientServerUrl: config.homeserver.clientServerUrl,
             },
         };
     }

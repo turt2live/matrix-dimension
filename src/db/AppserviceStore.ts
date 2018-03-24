@@ -2,7 +2,6 @@ import AppService from "./models/AppService";
 import AppServiceUser from "./models/AppServiceUser";
 import * as randomString from "random-string";
 import { MatrixAppserviceClient } from "../matrix/MatrixAppserviceClient";
-import config from "../config";
 
 export class AppserviceStore {
 
@@ -49,7 +48,7 @@ export class AppserviceStore {
         const appservice = await AppService.findOne({where: {id: appserviceId}});
         if (!appservice) throw new Error("Appservice not found");
 
-        const client = new MatrixAppserviceClient(config.homeserver.name, appservice);
+        const client = new MatrixAppserviceClient(appservice);
         const localpart = AppserviceStore.getSafeUserId(userId.substring(1).split(":")[0]);
         const response = await client.registerUser(localpart);
 

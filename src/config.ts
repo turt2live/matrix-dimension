@@ -9,6 +9,8 @@ export interface DimensionConfig {
     homeserver: {
         name: string;
         accessToken: string;
+        clientServerUrl: string;
+        federationUrl: string;
     };
     widgetBlacklist: string[];
     database: {

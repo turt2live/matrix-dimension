@@ -23,9 +23,8 @@
                     <strong>Homeserver</strong><br />
                     Name: {{ config.homeserver.name }}<br />
                     Federation URL: {{ config.homeserver.federationUrl }}<br />
-                    <!-- Dimension makes no distinction for the csapi -->
-                    Client/Server URL: {{ config.homeserver.federationUrl }}<br />
-                    User ID: {{ config.homeserver.userId }}
+                    Client/Server URL: {{ config.homeserver.clientServerUrl }}<br />
+                    Utility User ID: {{ config.homeserver.userId }}
                 </div>
             </div>
         </div>

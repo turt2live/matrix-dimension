@@ -7,6 +7,8 @@ export class MatrixOpenIdClient {
     }
 
     public async getUserId(): Promise<string> {
+        // TODO: Implement/prefer https://github.com/matrix-org/matrix-doc/issues/1115
+        // #1115 also means this should become a client API call, not a federated one (finally)
         const response = await doFederatedApiCall(
             "GET",
             this.openId.matrix_server_name,

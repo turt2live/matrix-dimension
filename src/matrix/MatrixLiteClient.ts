@@ -1,4 +1,4 @@
-import { doFederatedApiCall, getFederationUrl as getFedUrl } from "./helpers";
+import { doClientApiCall } from "./helpers";
 
 export interface MatrixUrlPreview {
     // This is really the only parameter we care about
@@ -7,26 +7,20 @@ export interface MatrixUrlPreview {
 
 export class MatrixLiteClient {
 
-    constructor(private homeserverName: string, private accessToken: string) {
-    }
-
-    public async getFederationUrl(): Promise<string> {
-        return getFedUrl(this.homeserverName);
+    constructor(private accessToken: string) {
     }
 
     public async getUrlPreview(url: string): Promise<MatrixUrlPreview> {
-        return doFederatedApiCall(
+        return doClientApiCall(
             "GET",
-            this.homeserverName,
             "/_matrix/media/r0/preview_url",
             {access_token: this.accessToken, url: url}
         );
     }
 
     public async whoAmI(): Promise<string> {
-        const response = await doFederatedApiCall(
+        const response = await doClientApiCall(
             "GET",
-            this.homeserverName,
             "/_matrix/client/r0/account/whoami",
             {access_token: this.accessToken}
         );

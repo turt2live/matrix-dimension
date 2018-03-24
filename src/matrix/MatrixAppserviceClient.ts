@@ -1,4 +1,4 @@
-import { doFederatedApiCall } from "./helpers";
+import { doClientApiCall } from "./helpers";
 import AppService from "../db/models/AppService";
 
 export interface MatrixUserResponse {
@@ -10,13 +10,12 @@ export interface MatrixUserResponse {
 
 export class MatrixAppserviceClient {
 
-    constructor(private homeserverName: string, private appservice: AppService) {
+    constructor(private appservice: AppService) {
     }
 
     public async registerUser(localpart: string): Promise<MatrixUserResponse> {
-        return doFederatedApiCall(
+        return doClientApiCall(
             "POST",
-            this.homeserverName,
             "/_matrix/client/r0/register",
             {access_token: this.appservice.asToken},
             {type: "m.login.application_service", username: localpart},
@@ -24,9 +23,8 @@ export class MatrixAppserviceClient {
     }
 
     public async whoAmI(): Promise<string> {
-        const response = await doFederatedApiCall(
+        const response = await doClientApiCall(
             "GET",
-            this.homeserverName,
             "/_matrix/client/r0/account/whoami",
             {access_token: this.appservice.asToken},
         );

@@ -2,12 +2,24 @@ import * as dns from "dns-then";
 import { LogService } from "matrix-js-snippets";
 import { Cache, CACHE_FEDERATION } from "../MemoryCache";
 import * as request from "request";
+import config from "../config";
 
 export async function getFederationUrl(serverName: string): Promise<string> {
     const cachedUrl = Cache.for(CACHE_FEDERATION).get(serverName);
     if (cachedUrl) {
         LogService.verbose("matrix", "Cached federation URL for " + serverName + " is " + cachedUrl);
         return cachedUrl;
+    }
+
+    if (serverName === config.homeserver.name && config.homeserver.federationUrl) {
+        let url = config.homeserver.federationUrl;
+        if (url.endsWith("/")) {
+            url = url.substring(0, url.length - 1);
+        }
+
+        LogService.info("matrix", "Using configured federation URL for " + serverName);
+        Cache.for(CACHE_FEDERATION).put(serverName, url);
+        return url;
     }
 
     let serverUrl = null;
@@ -49,7 +61,33 @@ export async function doFederatedApiCall(method: string, serverName: string, end
                 LogService.error("matrix", err);
                 reject(err);
             } else if (res.statusCode !== 200) {
-                LogService.error("matrix", "Got status code " + res.statusCode + " while calling " + endpoint);
+                LogService.error("matrix", "Got status code " + res.statusCode + " while calling federated endpoint " + endpoint);
+                reject(new Error("Error in request: invalid status code"));
+            } else {
+                if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
+                resolve(res.body);
+            }
+        });
+    });
+}
+
+export async function doClientApiCall(method: string, endpoint: string, query?: object, body?: object): Promise<any> {
+    let url = config.homeserver.clientServerUrl;
+    if (url.endsWith("/")) url = url.substring(0, url.length - 1);
+
+    return new Promise((resolve, reject) => {
+        request({
+            method: method,
+            url: url + endpoint,
+            qs: query,
+            json: body,
+        }, (err, res, _body) => {
+            if (err) {
+                LogService.error("matrix", "Error calling " + endpoint);
+                LogService.error("matrix", err);
+                reject(err);
+            } else if (res.statusCode !== 200) {
+                LogService.error("matrix", "Got status code " + res.statusCode + " while calling client endpoint " + endpoint);
                 reject(new Error("Error in request: invalid status code"));
             } else {
                 if (typeof(res.body) === "string") res.body = JSON.parse(res.body);

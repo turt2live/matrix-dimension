@@ -3,9 +3,23 @@ web:
   port: 8184
   address: '0.0.0.0'
 
-# Homeserver configuration (used to proxy some requests to the homeserver for processing)
+# Homeserver configuration
 homeserver:
+  # The domain name of the homeserver. This is used in many places, such as with go-neb
+  # setups, to identify the homeserver.
   name: "t2bot.io"
+
+  # The URL that Dimension, go-neb, and other services provisioned by Dimension should
+  # use to access the homeserver with.
+  clientServerUrl: "https://t2bot.io"
+
+  # The URL that Dimension should use when trying to communicate with federated APIs on
+  # the homeserver. If not supplied or left empty Dimension will try to resolve the address
+  # through the normal federation process.
+  #federationUrl: "https://t2bot.io:8448"
+
+  # The access token Dimension should use for miscellaneous access to the homeserver. This
+  # should be for a valid user.
   accessToken: "something"
 
 # These users can modify the integrations this Dimension supports.
@@ -16,10 +30,10 @@ admins:
 # IPs and CIDR ranges listed here will be blocked from being widgets.
 # Note: Widgets may still be embedded with restricted content, although not through Dimension directly.
 widgetBlacklist:
-- 10.0.0.0/8
-- 172.16.0.0/12
-- 192.168.0.0/16
-- 127.0.0.0/8
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - 192.168.0.0/16
+  - 127.0.0.0/8
 
 # Where the database for Dimension is
 database:
