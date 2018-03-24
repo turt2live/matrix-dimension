@@ -87,45 +87,45 @@ export class NebStore {
     }
 
     public static async getConfig(id: number): Promise<NebConfig> {
-        const config = await NebConfiguration.findByPrimary(id);
-        if (!config) throw new Error("Configuration not found");
+        const nebConfig = await NebConfiguration.findByPrimary(id);
+        if (!nebConfig) throw new Error("Configuration not found");
 
         const integrations = await NebIntegration.findAll({where: {nebId: id}});
-        const fullIntegrations = await NebStore.getCompleteIntegrations(config, integrations);
+        const fullIntegrations = await NebStore.getCompleteIntegrations(nebConfig, integrations);
 
-        return new NebConfig(config, fullIntegrations);
+        return new NebConfig(nebConfig, fullIntegrations);
     }
 
     public static async createForUpstream(upstreamId: number): Promise<NebConfig> {
         const upstream = await Upstream.findByPrimary(upstreamId);
         if (!upstream) throw new Error("Upstream not found");
 
-        const config = await NebConfiguration.create({
+        const nebConfig = await NebConfiguration.create({
             upstreamId: upstream.id,
         });
 
-        return NebStore.getConfig(config.id);
+        return NebStore.getConfig(nebConfig.id);
     }
 
     public static async createForAppservice(appserviceId: string, adminUrl: string): Promise<NebConfig> {
         const appservice = await AppService.findByPrimary(appserviceId);
         if (!appservice) throw new Error("Appservice not found");
 
-        const config = await NebConfiguration.create({
+        const nebConfig = await NebConfiguration.create({
             appserviceId: appservice.id,
             adminUrl: adminUrl,
         });
 
-        return NebStore.getConfig(config.id);
+        return NebStore.getConfig(nebConfig.id);
     }
 
     public static async getOrCreateIntegration(configurationId: number, integrationType: string): Promise<NebIntegration> {
         if (!NebStore.INTEGRATIONS[integrationType]) throw new Error("Integration not supported");
 
-        const config = await NebConfiguration.findByPrimary(configurationId);
-        if (!config) throw new Error("Configuration not found");
+        const nebConfig = await NebConfiguration.findByPrimary(configurationId);
+        if (!nebConfig) throw new Error("Configuration not found");
 
-        let integration = await NebIntegration.findOne({where: {nebId: config.id, type: integrationType}});
+        let integration = await NebIntegration.findOne({where: {nebId: nebConfig.id, type: integrationType}});
         if (!integration) {
             LogService.info("NebStore", "Creating integration " + integrationType + " for NEB " + configurationId);
             integration = await NebIntegration.create({
@@ -171,9 +171,9 @@ export class NebStore {
         for (const type of Object.keys(NebStore.INTEGRATIONS)) {
             if (nebConfig.upstreamId && NebStore.INTEGRATIONS_MODULAR_SUPPORTED.indexOf(type) === -1) continue;
 
-            const config = JSON.parse(JSON.stringify(NebStore.INTEGRATIONS[type]));
-            config["type"] = type;
-            result.push(config);
+            const integrationConfig = JSON.parse(JSON.stringify(NebStore.INTEGRATIONS[type]));
+            integrationConfig["type"] = type;
+            result.push(integrationConfig);
         }
 
         return result;

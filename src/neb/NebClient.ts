@@ -17,7 +17,7 @@ export class NebClient {
     }
 
     public async updateUser(userId: string, isEnabled: boolean, sync = true, autoAcceptInvites = true): Promise<any> {
-        const request: Client = {
+        const nebRequest: Client = {
             UserID: userId,
             HomeserverURL: await getFederationUrl(config.homeserver.name),
             AccessToken: (isEnabled ? await this.getAccessToken(userId) : "DISABLED"),
@@ -25,25 +25,25 @@ export class NebClient {
             AutoJoinRooms: autoAcceptInvites
         };
 
-        return this.doRequest("/admin/configureClient", request);
+        return this.doRequest("/admin/configureClient", nebRequest);
     }
 
-    public async setServiceConfig(serviceId: string, userId: string, type: string, config: any): Promise<any> {
-        const request: Service = {
+    public async setServiceConfig(serviceId: string, userId: string, type: string, serviceConfig: any): Promise<any> {
+        const nebRequest: Service = {
             ID: serviceId,
             Type: type,
             UserID: userId,
-            Config: config,
+            Config: serviceConfig,
         };
 
-        return this.doRequest("/admin/configureService", request);
+        return this.doRequest("/admin/configureService", nebRequest);
     }
 
     public async getServiceConfig(serviceId: string): Promise<any> {
-        const request = {ID: serviceId};
+        const nebRequest = {ID: serviceId};
 
         try {
-            const service = await this.doRequest<Service>("/admin/getService", request);
+            const service = await this.doRequest<Service>("/admin/getService", nebRequest);
             return service.Config;
         } catch (err) {
             LogService.error("NebClient", err);
