@@ -21,7 +21,7 @@
 
     <my-ibox *ngFor="let widget of widgetComponent.widgets trackById" [isCollapsible]="true" [defaultCollapsed]="widget.id !== widgetComponent.defaultExpandedWidgetId">
         <h5 class="my-ibox-title">
-            <i class="far fa-edit"></i> {{ widget.name || widget.url || widgetComponent.defaultName }}
+            <i class="fa fa-pencil-alt"></i> {{ widget.name || widget.url || widgetComponent.defaultName }}
             <span *ngIf="widget.data.title">- {{ widget.data.title }}</span>
         </h5>
         <div class="my-ibox-content">
@@ -32,7 +32,7 @@
                     <button type="submit" class="btn btn-sm btn-primary" [disabled]="widgetComponent.isUpdating">
                         <i class="far fa-save"></i> Save Widget
                     </button>
-                    <button type="button" class="btn btn-sm btn-danger" [disabled]="widgetComponent.isUpdating" (click)="widgetComponent.removeWidget(widget)">
+                    <button type="button" class="btn btn-sm btn-outline-danger" [disabled]="widgetComponent.isUpdating" (click)="widgetComponent.removeWidget(widget)">
                         <i class="far fa-trash-alt"></i> Remove Widget
                     </button>
                 </div>
