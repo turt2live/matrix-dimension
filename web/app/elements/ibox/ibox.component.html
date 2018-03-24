@@ -6,8 +6,7 @@
         </h5>
         <ng-content select=".my-ibox-title" *ngIf="!title"></ng-content>
         <ng-content select=".my-ibox-addl-title"></ng-content>
-        <i class="ibox-icon fa" *ngIf="isCollapsible"
-           [ngClass]="[collapsed ? 'fa-chevron-right' : 'fa-chevron-down']"></i>
+        <i class="ibox-icon fa fa-chevron-down" *ngIf="isCollapsible"></i>
     </div>
     <div class="ibox-content" *ngIf="!collapsed" [@fadeInNotOutAnimation]>
         <ng-content select=".my-ibox-content"></ng-content>
