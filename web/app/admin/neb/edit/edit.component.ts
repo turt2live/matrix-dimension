@@ -65,7 +65,7 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
         this.nebApi.getConfigurations().then(configs => {
             const handledTypes: string[] = [];
             for (const config of configs) {
-                if (config.id == nebId) {
+                if (config.id === nebId) {
                     this.nebConfig = config;
                 } else {
                     for (const type of config.integrations) {

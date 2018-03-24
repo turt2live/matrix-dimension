@@ -10,4 +10,4 @@ install:
   - npm install
 script:
   - npm run build
-  - npm run lint:app
+  - npm run lint
