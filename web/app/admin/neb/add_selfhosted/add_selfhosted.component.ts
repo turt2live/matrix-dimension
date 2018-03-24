@@ -3,6 +3,11 @@ import { AdminAppserviceApiService } from "../../../shared/services/admin/admin-
 import { AdminNebApiService } from "../../../shared/services/admin/admin-neb-api.service";
 import { ToasterService } from "angular2-toaster";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Modal, overlayConfigFactory } from "ngx-modialog";
+import {
+    AdminNebAppserviceConfigComponent,
+    AppserviceConfigDialogContext
+} from "../appservice-config/appservice-config.component";
 
 
 @Component({
@@ -19,16 +24,23 @@ export class AdminAddSelfhostedNebComponent {
                 private nebApi: AdminNebApiService,
                 private toaster: ToasterService,
                 private router: Router,
-                private activatedRoute: ActivatedRoute) {
+                private activatedRoute: ActivatedRoute,
+                private modal: Modal) {
     }
 
     public save(): void {
         this.isSaving = true;
         this.asApi.createAppservice(this.userPrefix).then(appservice => {
             return this.nebApi.newAppserviceConfiguration(this.adminUrl, appservice);
-        }).then(() => {
+        }).then(neb => {
             this.toaster.pop("success", "New go-neb created");
-            this.router.navigate(["../.."], {relativeTo: this.activatedRoute});
+
+            this.modal.open(AdminNebAppserviceConfigComponent, overlayConfigFactory({
+                neb: neb,
+
+                isBlocking: true,
+                size: 'lg',
+            }, AppserviceConfigDialogContext)).result.then(() => this.router.navigate(["../.."], {relativeTo: this.activatedRoute}));
         }).catch(err => {
             console.error(err);
             this.isSaving = false;

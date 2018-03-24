@@ -5,6 +5,11 @@ import { AdminUpstreamApiService } from "../../shared/services/admin/admin-upstr
 import { AdminAppserviceApiService } from "../../shared/services/admin/admin-appservice-api.service";
 import { FE_Appservice, FE_NebConfiguration, FE_Upstream } from "../../shared/models/admin_responses";
 import { ActivatedRoute, Router } from "@angular/router";
+import {
+    AdminNebAppserviceConfigComponent,
+    AppserviceConfigDialogContext
+} from "./appservice-config/appservice-config.component";
+import { Modal, overlayConfigFactory } from "ngx-modialog";
 
 @Component({
     templateUrl: "./neb.component.html",
@@ -24,7 +29,8 @@ export class AdminNebComponent {
                 private appserviceApi: AdminAppserviceApiService,
                 private toaster: ToasterService,
                 private router: Router,
-                private activatedRoute: ActivatedRoute) {
+                private activatedRoute: ActivatedRoute,
+                private modal: Modal) {
 
         this.reload().then(() => this.isLoading = false).catch(error => {
             console.error(error);
@@ -68,7 +74,12 @@ export class AdminNebComponent {
     }
 
     public showAppserviceConfig(neb: FE_NebConfiguration) {
-        console.log(neb);
+        this.modal.open(AdminNebAppserviceConfigComponent, overlayConfigFactory({
+            neb: neb,
+
+            isBlocking: true,
+            size: 'lg',
+        }, AppserviceConfigDialogContext));
     }
 
     public getEnabledBotsString(neb: FE_NebConfiguration): string {

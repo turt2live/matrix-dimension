@@ -62,6 +62,12 @@ export class AppserviceStore {
         });
     }
 
+    public static async getAppservice(id: string): Promise<AppService> {
+        const appservice = await AppService.findByPrimary(id);
+        if (!appservice) throw new Error("Appservice not found");
+        return appservice;
+    }
+
     private constructor() {
     }
 }

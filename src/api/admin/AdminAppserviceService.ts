@@ -4,6 +4,9 @@ import AppService from "../../db/models/AppService";
 import { AppserviceStore } from "../../db/AppserviceStore";
 import { ApiError } from "../ApiError";
 import AppServiceUser from "../../db/models/AppServiceUser";
+import { MatrixAppserviceClient } from "../../matrix/MatrixAppserviceClient";
+import config from "../../config";
+import { LogService } from "matrix-js-snippets";
 
 interface AppserviceResponse {
     id: string;
@@ -35,6 +38,20 @@ export class AdminAppserviceService {
     public async getAppservices(@QueryParam("scalar_token") scalarToken: string): Promise<AppserviceResponse[]> {
         await AdminService.validateAndGetAdminTokenOwner(scalarToken);
         return (await AppService.findAll()).map(a => this.mapAppservice(a));
+    }
+
+    @GET
+    @Path(":appserviceId")
+    public async getAppservice(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string): Promise<AppserviceResponse> {
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+
+        try {
+            const appservice = await AppserviceStore.getAppservice(asId);
+            return this.mapAppservice(appservice);
+        } catch (err) {
+            LogService.error("AdminAppserviceService", err);
+            throw new ApiError(404, "Appservice not found");
+        }
     }
 
     @POST
@@ -70,6 +87,19 @@ export class AdminAppserviceService {
 
         const user = await AppserviceStore.registerUser(asId, request.userId);
         return this.mapUser(user);
+    }
+
+    @POST
+    @Path(":appserviceId/test")
+    public async test(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string): Promise<any> {
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+
+        const appservice = await AppserviceStore.getAppservice(asId);
+        const client = new MatrixAppserviceClient(config.homeserver.name, appservice);
+        const userId = await client.whoAmI();
+
+        if (userId.startsWith("@" + appservice.userPrefix)) return {}; // 200 OK
+        throw new ApiError(500, "User ID does not match the application service");
     }
 
     private mapAppservice(as: AppService): AppserviceResponse {

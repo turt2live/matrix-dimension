@@ -22,4 +22,14 @@ export class MatrixAppserviceClient {
             {type: "m.login.application_service", username: localpart},
         );
     }
+
+    public async whoAmI(): Promise<string> {
+        const response = await doFederatedApiCall(
+            "GET",
+            this.homeserverName,
+            "/_matrix/client/r0/account/whoami",
+            {access_token: this.appservice.asToken},
+        );
+        return response['user_id'];
+    }
 }

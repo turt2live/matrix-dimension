@@ -53,6 +53,7 @@ import { AdminUpstreamApiService } from "./shared/services/admin/admin-upstream-
 import { AdminNebComponent } from "./admin/neb/neb.component";
 import { AdminEditNebComponent } from "./admin/neb/edit/edit.component";
 import { AdminAddSelfhostedNebComponent } from "./admin/neb/add_selfhosted/add_selfhosted.component";
+import { AdminNebAppserviceConfigComponent } from "./admin/neb/appservice-config/appservice-config.component";
 
 @NgModule({
     imports: [
@@ -100,6 +101,7 @@ import { AdminAddSelfhostedNebComponent } from "./admin/neb/add_selfhosted/add_s
         AdminNebComponent,
         AdminEditNebComponent,
         AdminAddSelfhostedNebComponent,
+        AdminNebAppserviceConfigComponent,
 
         // Vendor
     ],
@@ -122,6 +124,7 @@ import { AdminAddSelfhostedNebComponent } from "./admin/neb/add_selfhosted/add_s
     entryComponents: [
         AdminWidgetEtherpadConfigComponent,
         AdminWidgetJitsiConfigComponent,
+        AdminNebAppserviceConfigComponent,
     ]
 })
 export class AppModule {
