@@ -91,19 +91,19 @@ export class NebStore {
     };
 
     public static async listSimpleBots(requestingUserId: string): Promise<SimpleBot[]> {
-        const configs = await NebStore.getAllConfigs();
+        const nebConfigs = await NebStore.getAllConfigs();
         const integrations: { integration: NebIntegration, userId: string }[] = [];
         const hasTypes: string[] = [];
 
-        for (const config of configs) {
-            for (const integration of config.dbIntegrations) {
+        for (const neb of nebConfigs) {
+            for (const integration of neb.dbIntegrations) {
                 if (!integration.isEnabled) continue;
 
                 const metadata = NebStore.INTEGRATIONS[integration.type];
                 if (!metadata || !metadata.simple) continue;
                 if (hasTypes.indexOf(integration.type) !== -1) continue;
 
-                const proxy = new NebProxy(config, requestingUserId);
+                const proxy = new NebProxy(neb, requestingUserId);
                 integrations.push({
                     integration: integration,
                     userId: await proxy.getBotUserId(integration),
