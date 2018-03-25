@@ -4,7 +4,7 @@
 [![TravisCI badge](https://travis-ci.org/turt2live/matrix-dimension.svg?branch=master)](https://travis-ci.org/turt2live/matrix-dimension)
 [![#dimension:t2bot.io](https://img.shields.io/badge/matrix-%23dimension:t2bot.io-brightgreen.svg)](https://matrix.to/#/#dimension:t2bot.io)
 
-An alternative integrations manager for [Riot.im](https://riot.im).
+An open source integrations manager for matrix clients, like Riot.
 
 # Configuring Riot to use Dimension
 
@@ -23,8 +23,7 @@ The remaining settings should be tailored for your Riot deployment. If you're se
 Prerequisites:
 * [NodeJS](https://nodejs.org/en/download/) 8 or higher
 * npm 5 or higher (`npm install -g npm@latest`)
-* TypeScript 2.6 or higher (`npm install -g typescript`)
-* A webserver running Riot
+* A webserver running Riot or another supported client
 
 ```bash
 # Download dimension 
@@ -68,36 +67,26 @@ That button should open Dimension. If you've configured everything correctly, yo
 
 1. **Check that federation is enabled and working on your homeserver.** Even in a private, or non-federated environment, the federation API still needs to be accessible. If federation is a major concern, limit the servers that can use the API by IP or install Dimension on the same server as your homeserver, only exposing federation to localhost.
 2. **Check your SRV records.** If you are using SRV records to point to your federation port, make sure that the hostname and port are correct, and that HTTPS is listening on that port. Dimension will use the first record it sees and will only communicate over HTTPS.
-3. **Log out of Riot and log back in.** When switching from the default integrations manager (Scalar) to Dimension the authentication tokens can change. Logging out and back in will reset this token, allowing Dimension to work. More advanced users can delete the "mx_scalar_token" localstorage key.
+3. **Verify the homeserver information in your configuration.** The name, access token, and client/server API URL all need to be set to point towards your homeserver. It may also be necessary to set the federation URL if you're running a private server.
 
 # Development
 
-For information on how to run Dimension in a local environment, and for information about how the project is structured, see DEVELOPMENT.md
+For more information about working on Dimension, see DEVELOPMENT.md.
 
 # Do I need an integrations manager?
 
 Integration managers aim to ease a user's interaction with the various services a homeserver may provide. Often times the integrations manager provided by Riot.im, named Modular, is more than suitable. However, there are a few cases where running your own makes more sense:
 
-* Wanting to self-host all aspects of your Riot install
+* Wanting to self-host all aspects of your services (client, homeserver, and integrations)
 * Wanting to advertise custom bots specific to your homeserver
-* Corporate or closed environments where Modular's integrations won't work
+* Corporate or closed environments where the default integration manager won't work
 
 # How do integration managers work?
 
 Integration managers sit between your users and your integrations (bots, bridges, etc). It helps guide users through the configuration of your integrations for their rooms. The integrations manager can only manage integrations it is configured for. For example, Modular can only provide configuration for the bridges and bots running on matrix.org, while Dimension can provide configuration for your own bots and bridges.
 
 The infrastructure diagram looks something like this:
-```
-+-----------+         +----------------------+                          +--------------------+
-|           |========>|                      |=========================>|                    |
-|           |         | Integrations Manager |                          | Bots, bridges, etc |
-|           |         |     (Dimension)      |    +-------------+       | (go-neb, irc, etc) |
-|  Clients  |         |                      |===>|             |<=====>|                    |
-|  (Riot)   |         +----------------------+    |  Homeserver |       +--------------------+
-|           |                                     |  (synapse)  |
-|           |============client/server API=======>|             |
-+-----------+                                     +-------------+
-```
+![infrastructure](https://t2bot.io/_matrix/media/v1/download/t2l.io/9c8ae7d5dfc9f0959c4764873e940416)
 
 # License
 

@@ -1,10 +1,10 @@
 // component styles are encapsulated and only applied to their components
 .header {
   text-align: center;
-  background-color: #fff;
+  background-color: #ea6424;
   margin-top: 30px;
-  border-top: 1px solid #e7eaec;
-  border-bottom: 1px solid #e7eaec;
+  border-top: 1px solid #ea4000;
+  border-bottom: 1px solid #ea4000;
 }
 
 .header img {
@@ -12,9 +12,25 @@
 }
 
 .wrapper {
-  margin-top: 20px;
+  min-width: 700px;
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+  background-color: white;
+  border-left: 1px solid #ea6424aa;
+  border-right: 1px solid #ea6424aa;
+  border-bottom: 1px solid #ea6424aa;
 }
 
-.center {
-  text-align: center;
+pre {
+  border: 1px solid #ea6424;
+  border-radius: 3px;
+  padding: 5px;
+  width: 600px;
+  background-color: #fff;
+}
+
+h4 {
+  padding-top: 15px;
+  font-size: 1.45em;
 }

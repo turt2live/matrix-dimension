@@ -1,4 +1,5 @@
-# The web settings for the service (API and UI)
+# The web settings for the service (API and UI).
+# It is best to have this run on localhost and use a reverse proxy to access Dimension.
 web:
   port: 8184
   address: '0.0.0.0'
