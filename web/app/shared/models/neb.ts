@@ -4,5 +4,4 @@ export const NEB_HAS_CONFIG = [
     "github",
     "google",
     "imgur",
-    "wikipedia",
 ];
