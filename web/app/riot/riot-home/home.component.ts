@@ -132,7 +132,7 @@ export class RiotHomeComponent {
             const bot = <FE_SimpleBot>integration;
             // TODO: "Are you sure?" dialog
 
-            let promise:Promise<any> = Promise.resolve();
+            let promise: Promise<any> = Promise.resolve();
             if (!integration._inRoom) {
                 promise = this.scalar.inviteUser(this.roomId, bot.userId);
             }
