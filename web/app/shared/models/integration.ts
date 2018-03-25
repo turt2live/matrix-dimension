@@ -16,6 +16,10 @@ export interface FE_Integration {
     _notSupportedReason: string;
 }
 
+export interface FE_SimpleBot extends FE_Integration {
+    userId: string;
+}
+
 export interface FE_Widget extends FE_Integration {
     options: any;
 }

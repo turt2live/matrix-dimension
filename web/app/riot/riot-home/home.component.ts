@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
 import * as _ from "lodash";
 import { ScalarServerApiService } from "../../shared/services/scalar/scalar-server-api.service";
-import { FE_Integration, FE_IntegrationRequirement } from "../../shared/models/integration";
+import { FE_Integration, FE_IntegrationRequirement, FE_SimpleBot } from "../../shared/models/integration";
 import { IntegrationsRegistry } from "../../shared/registry/integrations.registry";
 import { SessionStorage } from "../../shared/SessionStorage";
 import { AdminApiService } from "../../shared/services/admin/admin-api.service";
@@ -129,13 +129,15 @@ export class RiotHomeComponent {
 
         if (integration.category === "bot") {
             // It's a bot
+            const bot = <FE_SimpleBot>integration;
             // TODO: "Are you sure?" dialog
 
-            // let promise = null;
-            const promise = Promise.resolve();
-            // if (!integration._inRoom) {
-            //     promise = this.scalar.inviteUser(this.roomId, integration.userId);
-            // } else promise = this.api.removeIntegration(this.roomId, integration.type, integration.integrationType, this.scalarToken);
+            let promise:Promise<any> = Promise.resolve();
+            if (!integration._inRoom) {
+                promise = this.scalar.inviteUser(this.roomId, bot.userId);
+            }
+            // TODO: Handle removal of bots
+            // else promise = this.api.removeIntegration(this.roomId, integration.type, integration.integrationType, this.scalarToken);
             // We set this ahead of the promise for debouncing
 
             integration._inRoom = !integration._inRoom;
@@ -228,10 +230,15 @@ export class RiotHomeComponent {
         console.log("Failed to find integration component for category=" + category + " type=" + type);
     }
 
-    private updateIntegrationState(integration: FE_Integration) {
+    private async updateIntegrationState(integration: FE_Integration) {
         if (!integration.requirements) return;
 
         let promises = integration.requirements.map(r => this.checkRequirement(r));
+
+        if (integration.category === "bot") {
+            const state = await this.scalar.getMembershipState(this.roomId, (<FE_SimpleBot>integration).userId);
+            integration._inRoom = ["join", "invite"].indexOf(state.response.membership) !== -1;
+        }
 
         return Promise.all(promises).then(() => {
             integration._isSupported = true;

@@ -25,7 +25,7 @@ export class Integration {
 }
 
 export interface IntegrationRequirement {
-    condition: "publicRoom" | "canSendEventTypes";
+    condition: "publicRoom" | "canSendEventTypes" | "userInRoom";
     argument: any;
 
     // For publicRoom this is true or false (boolean)

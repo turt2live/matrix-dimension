@@ -5,6 +5,7 @@ import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
 import { Integration } from "../../integrations/Integration";
 import { ApiError } from "../ApiError";
 import { WidgetStore } from "../../db/WidgetStore";
+import { NebStore } from "../../db/NebStore";
 
 export interface IntegrationsResponse {
     widgets: Widget[],
@@ -14,14 +15,18 @@ export interface IntegrationsResponse {
 export class DimensionIntegrationsService {
 
     public static async getIntegrations(isEnabledCheck?: boolean): Promise<IntegrationsResponse> {
-        const cachedWidgets = Cache.for(CACHE_INTEGRATIONS).get("integrations_" + isEnabledCheck);
-        if (cachedWidgets) {
-            return {widgets: cachedWidgets};
+        const cachedIntegrations = Cache.for(CACHE_INTEGRATIONS).get("integrations_" + isEnabledCheck);
+        if (cachedIntegrations) {
+            return cachedIntegrations;
         }
 
-        const widgets = await WidgetStore.listAll(isEnabledCheck);
-        Cache.for(CACHE_INTEGRATIONS).put("integrations_" + isEnabledCheck, widgets);
-        return {widgets: widgets};
+        const integrations = {
+            widgets: await WidgetStore.listAll(isEnabledCheck),
+            bots: await NebStore.listSimpleBots(), // No enabled check - managed internally
+        };
+
+        Cache.for(CACHE_INTEGRATIONS).put("integrations_" + isEnabledCheck, integrations);
+        return integrations;
     }
 
     @GET

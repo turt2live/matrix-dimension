@@ -9,6 +9,7 @@ import NebBotUser from "./models/NebBotUser";
 import NebNotificationUser from "./models/NebNotificationUser";
 import { AppserviceStore } from "./AppserviceStore";
 import config from "../config";
+import { SimpleBot } from "../integrations/SimpleBot";
 
 export interface SupportedIntegration {
     type: string;
@@ -32,16 +33,19 @@ export class NebStore {
             name: "Echo",
             avatarUrl: "/img/avatars/echo.png", // TODO: Make this image
             description: "Repeats text given to it from !echo",
+            simple: true,
         },
         "giphy": {
             name: "Giphy",
             avatarUrl: "/img/avatars/giphy.png",
             description: "Posts a GIF from Giphy using !giphy <query>",
+            simple: true,
         },
         "guggy": {
             name: "Guggy",
             avatarUrl: "/img/avatars/guggy.png",
             description: "Send a reaction GIF using !guggy <query>",
+            simple: true,
         },
         // TODO: Support Github
         // "github": {
@@ -53,11 +57,13 @@ export class NebStore {
             name: "Google",
             avatarUrl: "/img/avatars/google.png",
             description: "Searches Google Images using !google image <query>",
+            simple: true,
         },
         "imgur": {
             name: "Imgur",
             avatarUrl: "/img/avatars/imgur.png",
             description: "Searches and posts images from Imgur using !imgur <query>",
+            simple: true,
         },
         // TODO: Support JIRA
         // "jira": {
@@ -79,8 +85,33 @@ export class NebStore {
             name: "Wikipedia",
             avatarUrl: "/img/avatars/wikipedia.png",
             description: "Searches wikipedia using !wikipedia <query>",
+            simple: true,
         },
     };
+
+    public static async listSimpleBots(): Promise<SimpleBot[]> {
+        const configs = await NebStore.getAllConfigs();
+        const integrations: { integration: NebIntegration, userId: string }[] = [];
+        const hasTypes: string[] = [];
+
+        for (const config of configs) {
+            for (const integration of config.dbIntegrations) {
+                if (!integration.isEnabled) continue;
+
+                const metadata = NebStore.INTEGRATIONS[integration.type];
+                if (!metadata || !metadata.simple) continue;
+                if (hasTypes.indexOf(integration.type) !== -1) continue;
+
+                // TODO: Handle case of upstream bots
+                const user = await NebStore.getOrCreateBotUser(config.id, integration.type);
+
+                integrations.push({integration: integration, userId: user.appserviceUserId});
+                hasTypes.push(integration.type);
+            }
+        }
+
+        return integrations.map(i => new SimpleBot(i.integration, i.userId));
+    }
 
     public static async getAllConfigs(): Promise<NebConfig[]> {
         const configs = await NebConfiguration.findAll();

@@ -8,6 +8,7 @@ export class NebConfig {
     public appserviceId?: string;
     public upstreamId?: number;
     public integrations: Integration[];
+    public dbIntegrations: NebIntegration[];
 
     public constructor(config: NebConfiguration, integrations: NebIntegration[]) {
         this.id = config.id;
@@ -15,5 +16,6 @@ export class NebConfig {
         this.appserviceId = config.appserviceId;
         this.upstreamId = config.upstreamId;
         this.integrations = integrations.map(i => new Integration(i));
+        this.dbIntegrations = integrations;
     }
 }
