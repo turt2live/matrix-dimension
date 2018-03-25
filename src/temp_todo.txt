@@ -1,5 +1,4 @@
 Release checklist:
-* Remove bots from rooms
 * Manage custom bots (not sure if anyone actually uses this?)
 * RSS bot
 * Travis CI

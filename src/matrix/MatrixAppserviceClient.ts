@@ -30,4 +30,13 @@ export class MatrixAppserviceClient {
         );
         return response['user_id'];
     }
+
+    public async leaveRoom(virtualUserId: string, roomId: string): Promise<any> {
+        return doClientApiCall(
+            "POST",
+            "/_matrix/client/r0/rooms/" + encodeURIComponent(roomId) + "/leave",
+            {access_token: this.appservice.asToken, user_id: virtualUserId},
+            {},
+        );
+    }
 }

@@ -7,6 +7,8 @@ import Upstream from "../db/models/Upstream";
 import UserScalarToken from "../db/models/UserScalarToken";
 import { NebClient } from "./NebClient";
 import { ModularIntegrationInfoResponse } from "../models/ModularResponses";
+import { AppserviceStore } from "../db/AppserviceStore";
+import { MatrixAppserviceClient } from "../matrix/MatrixAppserviceClient";
 
 export class NebProxy {
     constructor(private neb: NebConfig, private requestingUserId: string) {
@@ -26,6 +28,18 @@ export class NebProxy {
             }
         } else {
             return (await NebStore.getOrCreateBotUser(this.neb.id, integration.type)).appserviceUserId;
+        }
+    }
+
+    public async removeBotFromRoom(integration: NebIntegration, roomId: string) {
+        if (integration.nebId !== this.neb.id) throw new Error("Integration is not for this NEB proxy");
+
+        if (this.neb.upstreamId) {
+            await this.doUpstreamRequest("/removeIntegration", {type: integration.type, room_id: roomId});
+        } else {
+            const appservice = await AppserviceStore.getAppservice(this.neb.appserviceId);
+            const client = new MatrixAppserviceClient(appservice);
+            await client.leaveRoom(await this.getBotUserId(integration), roomId);
         }
     }
 

@@ -1,4 +1,4 @@
-import { GET, Path, PathParam, QueryParam } from "typescript-rest";
+import { DELETE, GET, Path, PathParam, QueryParam } from "typescript-rest";
 import { ScalarService } from "../scalar/ScalarService";
 import { Widget } from "../../integrations/Widget";
 import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
@@ -50,6 +50,18 @@ export class DimensionIntegrationsService {
         console.log(roomId);
         // TODO: Other integrations
         return this.getEnabledIntegrations(scalarToken);
+    }
+
+    @DELETE
+    @Path("room/:roomId/integrations/:category/:type")
+    public async removeIntegrationInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string): Promise<any> {
+        const userId = await ScalarService.getTokenOwner(scalarToken);
+
+        if (category === "widget") throw new ApiError(400, "Widgets should be removed client-side");
+        else if (category === "bot") await NebStore.removeSimpleBot(integrationType, roomId, userId);
+        else throw new ApiError(400, "Unrecognized category");
+
+        return {}; // 200 OK
     }
 
     @GET

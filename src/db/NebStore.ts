@@ -90,9 +90,9 @@ export class NebStore {
         },
     };
 
-    public static async listSimpleBots(requestingUserId: string): Promise<SimpleBot[]> {
+    public static async listEnabledNebSimpleBots(): Promise<{neb: NebConfig, integration: NebIntegration}[]>{
         const nebConfigs = await NebStore.getAllConfigs();
-        const integrations: { integration: NebIntegration, userId: string }[] = [];
+        const integrations: {neb: NebConfig, integration: NebIntegration}[] = [];
         const hasTypes: string[] = [];
 
         for (const neb of nebConfigs) {
@@ -103,16 +103,29 @@ export class NebStore {
                 if (!metadata || !metadata.simple) continue;
                 if (hasTypes.indexOf(integration.type) !== -1) continue;
 
-                const proxy = new NebProxy(neb, requestingUserId);
-                integrations.push({
-                    integration: integration,
-                    userId: await proxy.getBotUserId(integration),
-                });
+                integrations.push({neb, integration});
                 hasTypes.push(integration.type);
             }
         }
 
-        return integrations.map(i => new SimpleBot(i.integration, i.userId));
+        return integrations;
+    }
+
+    public static async listSimpleBots(requestingUserId: string): Promise<SimpleBot[]> {
+        const rawIntegrations = await NebStore.listEnabledNebSimpleBots();
+        return Promise.all(rawIntegrations.map(async i => {
+           const proxy = new NebProxy(i.neb, requestingUserId);
+           return new SimpleBot(i.integration, await proxy.getBotUserId(i.integration));
+        }));
+    }
+
+    public static async removeSimpleBot(type: string, roomId: string, requestingUserId: string): Promise<any> {
+        const rawIntegrations = await NebStore.listEnabledNebSimpleBots();
+        const integration = rawIntegrations.find(i => i.integration.type === type);
+        if (!integration) throw new Error("Integration not found");
+
+        const proxy = new NebProxy(integration.neb, requestingUserId);
+        return proxy.removeBotFromRoom(integration.integration, roomId);
     }
 
     public static async getAllConfigs(): Promise<NebConfig[]> {

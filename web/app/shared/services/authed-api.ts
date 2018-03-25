@@ -17,4 +17,10 @@ export class AuthedApi {
         const qs = {scalar_token: SessionStorage.scalarToken};
         return this.http.post(url, body, {params: qs});
     }
+
+    protected authedDelete(url: string, qs?: any): Observable<Response> {
+        if (!qs) qs = {};
+        qs["scalar_token"] = SessionStorage.scalarToken;
+        return this.http.delete(url, {params: qs});
+    }
 }

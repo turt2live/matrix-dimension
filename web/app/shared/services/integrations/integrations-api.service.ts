@@ -26,4 +26,8 @@ export class IntegrationsApiService extends AuthedApi {
         return this.http.get("/api/v1/dimension/widgets/embeddable", {params: {url: url}})
             .map(r => r.json()).toPromise();
     }
+
+    public removeIntegration(category: string, type: string, roomId: string): Promise<any> {
+        return this.authedDelete("/api/v1/dimension/integrations/room/" + roomId + "/integrations/" + category + "/" + type).map(r => r.json()).toPromise();
+    }
 }

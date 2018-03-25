@@ -135,9 +135,7 @@ export class RiotHomeComponent {
             let promise: Promise<any> = Promise.resolve();
             if (!integration._inRoom) {
                 promise = this.scalar.inviteUser(this.roomId, bot.userId);
-            }
-            // TODO: Handle removal of bots
-            // else promise = this.api.removeIntegration(this.roomId, integration.type, integration.integrationType, this.scalarToken);
+            } else promise = this.integrationsApi.removeIntegration(integration.category, integration.type, this.roomId);
             // We set this ahead of the promise for debouncing
 
             integration._inRoom = !integration._inRoom;
