@@ -86,7 +86,7 @@ Integration managers aim to ease a user's interaction with the various services 
 Integration managers sit between your users and your integrations (bots, bridges, etc). It helps guide users through the configuration of your integrations for their rooms. The integrations manager can only manage integrations it is configured for. For example, Modular can only provide configuration for the bridges and bots running on matrix.org, while Dimension can provide configuration for your own bots and bridges.
 
 The infrastructure diagram looks something like this:
-![infrastructure](https://t2bot.io/_matrix/media/r0/download/t2l.io/9c8ae7d5dfc9f0959c4764873e940416)
+![infrastructure](https://t2bot.io/_matrix/media/r0/download/t2l.io/3bb5674d85ee22c070e36be0d9582b4d)
 
 # License
 
