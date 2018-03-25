@@ -1,4 +1,4 @@
-![dimension](https://t2bot.io/_matrix/media/v1/download/t2l.io/GJYlwewrUhDpoBchfmBhxzZe)
+![dimension](https://t2bot.io/_matrix/media/r0/download/t2l.io/b3101d429588673087f457a4bdd52f45)
 
 
 [![TravisCI badge](https://travis-ci.org/turt2live/matrix-dimension.svg?branch=master)](https://travis-ci.org/turt2live/matrix-dimension)
@@ -45,7 +45,7 @@ In your Riot `config.json`, set the integration manager to be your Dimension URL
 
 After Riot has been configured to use Dimension, refresh Riot and click the "Integrations" button in the top right of the room. It should be an icon that looks like this:
 
-![3x3 square](https://t2bot.io/_matrix/media/v1/thumbnail/t2l.io/gOgboDPEMfiYOQryYwvvHkFz?width=800&height=600)
+![3x3 square](https://t2bot.io/_matrix/media/r0/download/t2l.io/gOgboDPEMfiYOQryYwvvHkFz)
 
 That button should open Dimension. If you've configured everything correctly, you'll see a gear icon in the top right of the window - click this to start editing your integrations.
 
@@ -86,7 +86,7 @@ Integration managers aim to ease a user's interaction with the various services 
 Integration managers sit between your users and your integrations (bots, bridges, etc). It helps guide users through the configuration of your integrations for their rooms. The integrations manager can only manage integrations it is configured for. For example, Modular can only provide configuration for the bridges and bots running on matrix.org, while Dimension can provide configuration for your own bots and bridges.
 
 The infrastructure diagram looks something like this:
-![infrastructure](https://t2bot.io/_matrix/media/v1/download/t2l.io/9c8ae7d5dfc9f0959c4764873e940416)
+![infrastructure](https://t2bot.io/_matrix/media/r0/download/t2l.io/9c8ae7d5dfc9f0959c4764873e940416)
 
 # License
 
