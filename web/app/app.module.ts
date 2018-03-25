@@ -56,6 +56,7 @@ import { AdminAddSelfhostedNebComponent } from "./admin/neb/add-selfhosted/add-s
 import { AdminNebAppserviceConfigComponent } from "./admin/neb/appservice-config/appservice-config.component";
 import { AdminNebGiphyConfigComponent } from "./admin/neb/config/giphy/giphy.component";
 import { AdminNebGuggyConfigComponent } from "./admin/neb/config/guggy/guggy.component";
+import { AdminNebGoogleConfigComponent } from "./admin/neb/config/google/google.component";
 
 @NgModule({
     imports: [
@@ -106,6 +107,7 @@ import { AdminNebGuggyConfigComponent } from "./admin/neb/config/guggy/guggy.com
         AdminNebAppserviceConfigComponent,
         AdminNebGiphyConfigComponent,
         AdminNebGuggyConfigComponent,
+        AdminNebGoogleConfigComponent,
 
         // Vendor
     ],
@@ -131,6 +133,7 @@ import { AdminNebGuggyConfigComponent } from "./admin/neb/config/guggy/guggy.com
         AdminNebAppserviceConfigComponent,
         AdminNebGiphyConfigComponent,
         AdminNebGuggyConfigComponent,
+        AdminNebGoogleConfigComponent,
     ]
 })
 export class AppModule {

@@ -10,6 +10,7 @@ import { AdminNebGiphyConfigComponent } from "../config/giphy/giphy.component";
 import { NebBotConfigurationDialogContext } from "../config/config-context";
 import { ContainerContent } from "ngx-modialog/src/models/tokens";
 import { AdminNebGuggyConfigComponent } from "../config/guggy/guggy.component";
+import { AdminNebGoogleConfigComponent } from "../config/google/google.component";
 
 
 @Component({
@@ -87,7 +88,9 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
 
         if (bot.type === "giphy") component = AdminNebGiphyConfigComponent;
         if (bot.type === "guggy") component = AdminNebGuggyConfigComponent;
+        if (bot.type === "google") component = AdminNebGoogleConfigComponent;
 
+        if (!component) throw new Error("No config component for " + bot.type);
         this.modal.open(component, overlayConfigFactory({
             neb: this.nebConfig,
             integration: bot,
