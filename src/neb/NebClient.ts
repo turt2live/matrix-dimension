@@ -15,6 +15,13 @@ export class NebClient {
         return user.accessToken;
     }
 
+    private getNebType(type: string): string {
+        if (type === "rss") return "rssbot";
+        if (type === "travisci") return "travis-ci";
+
+        return type;
+    }
+
     public async updateUser(userId: string, isEnabled: boolean, sync = true, autoAcceptInvites = true): Promise<any> {
         const nebRequest: Client = {
             UserID: userId,
@@ -30,7 +37,7 @@ export class NebClient {
     public async setServiceConfig(serviceId: string, userId: string, type: string, serviceConfig: any): Promise<any> {
         const nebRequest: Service = {
             ID: serviceId,
-            Type: type,
+            Type: this.getNebType(type),
             UserID: userId,
             Config: serviceConfig,
         };
