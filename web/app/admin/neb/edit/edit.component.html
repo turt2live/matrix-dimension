@@ -20,7 +20,7 @@
                     <td>{{ bot.displayName }}</td>
                     <td>{{ bot.description }}</td>
                     <td class="text-right">
-                        <span class="editButton" (click)="editBot(widget)"
+                        <span class="editButton" (click)="editBot(bot)"
                               *ngIf="bot.isEnabled && hasConfig(bot) && !isUpstream">
                             <i class="fa fa-pencil-alt"></i>
                         </span>

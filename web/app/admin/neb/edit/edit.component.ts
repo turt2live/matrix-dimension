@@ -5,6 +5,9 @@ import { ActivatedRoute } from "@angular/router";
 import { ToasterService } from "angular2-toaster";
 import { FE_Integration } from "../../../shared/models/integration";
 import { NEB_HAS_CONFIG } from "../../../shared/models/neb";
+import { Modal, overlayConfigFactory } from "ngx-modialog";
+import { AdminNebGiphyConfigComponent } from "../config/giphy/giphy.component";
+import { NebBotConfigurationDialogContext } from "../config/config-context";
 
 
 @Component({
@@ -21,7 +24,10 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
     private subscription: any;
     private overlappingTypes: string[] = [];
 
-    constructor(private nebApi: AdminNebApiService, private route: ActivatedRoute, private toaster: ToasterService) {
+    constructor(private nebApi: AdminNebApiService,
+                private route: ActivatedRoute,
+                private modal: Modal,
+                private toaster: ToasterService) {
     }
 
     public ngOnInit() {
@@ -39,7 +45,7 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
     }
 
     public hasConfig(bot: FE_Integration): boolean {
-        return NEB_HAS_CONFIG.indexOf(bot.type) !== -1;
+        return NEB_HAS_CONFIG.indexOf(bot.type) !== -1 && !this.isUpstream;
     }
 
     public async toggleBot(bot: FE_Integration) {
@@ -59,7 +65,7 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
         }
 
         // Only update the service configuration if
-        if (bot.isEnabled) {
+        if (bot.isEnabled && !this.isUpstream) {
             if (this.hasConfig(bot)) {
                 this.editBot(bot);
             } else {
@@ -75,7 +81,13 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
     }
 
     public editBot(bot: FE_Integration) {
-        console.log(bot);
+        this.modal.open(AdminNebGiphyConfigComponent, overlayConfigFactory({
+            neb: this.nebConfig,
+            integration: bot,
+
+            isBlocking: true,
+            size: 'lg',
+        }, NebBotConfigurationDialogContext));
     }
 
     private loadNeb(nebId: number) {
