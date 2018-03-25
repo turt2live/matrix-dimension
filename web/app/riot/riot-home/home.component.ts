@@ -237,7 +237,9 @@ export class RiotHomeComponent {
 
         if (integration.category === "bot") {
             const state = await this.scalar.getMembershipState(this.roomId, (<FE_SimpleBot>integration).userId);
-            integration._inRoom = ["join", "invite"].indexOf(state.response.membership) !== -1;
+            if (state && state.response && state.response.membership) {
+                integration._inRoom = ["join", "invite"].indexOf(state.response.membership) !== -1;
+            } else integration._inRoom = false;
         }
 
         return Promise.all(promises).then(() => {
