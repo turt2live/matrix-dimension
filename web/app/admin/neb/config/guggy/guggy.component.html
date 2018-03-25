@@ -1,0 +1,25 @@
+<div class="dialog">
+    <div class="dialog-header">
+        <h4>Guggy Configuration</h4>
+    </div>
+    <div class="dialog-content" *ngIf="isLoading">
+        <my-spinner></my-spinner>
+    </div>
+    <div class="dialog-content" *ngIf="!isLoading">
+        <label class="label-block">
+            Api Key
+            <span class="text-muted ">The API key for <a href="http://docs.guggy.com/" target="_blank">Guggy's API</a>.</span>
+            <input type="text" class="form-control"
+                   placeholder="your_api_key_here"
+                   [(ngModel)]="config.api_key" [disabled]="isUpdating"/>
+        </label>
+    </div>
+    <div class="dialog-footer" *ngIf="!isLoading">
+        <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm">
+            <i class="far fa-save"></i> Save
+        </button>
+        <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
+            <i class="far fa-times-circle"></i> Cancel
+        </button>
+    </div>
+</div>

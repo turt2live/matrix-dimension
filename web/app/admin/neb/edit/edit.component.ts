@@ -8,6 +8,8 @@ import { NEB_HAS_CONFIG } from "../../../shared/models/neb";
 import { Modal, overlayConfigFactory } from "ngx-modialog";
 import { AdminNebGiphyConfigComponent } from "../config/giphy/giphy.component";
 import { NebBotConfigurationDialogContext } from "../config/config-context";
+import { ContainerContent } from "ngx-modialog/src/models/tokens";
+import { AdminNebGuggyConfigComponent } from "../config/guggy/guggy.component";
 
 
 @Component({
@@ -81,7 +83,12 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
     }
 
     public editBot(bot: FE_Integration) {
-        this.modal.open(AdminNebGiphyConfigComponent, overlayConfigFactory({
+        let component: ContainerContent;
+
+        if (bot.type === "giphy") component = AdminNebGiphyConfigComponent;
+        if (bot.type === "guggy") component = AdminNebGuggyConfigComponent;
+
+        this.modal.open(component, overlayConfigFactory({
             neb: this.nebConfig,
             integration: bot,
 
