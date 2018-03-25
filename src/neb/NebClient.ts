@@ -15,7 +15,7 @@ export class NebClient {
         return user.accessToken;
     }
 
-    private getNebType(type: string): string {
+    public static getNebType(type: string): string {
         if (type === "rss") return "rssbot";
         if (type === "travisci") return "travis-ci";
 
@@ -37,7 +37,7 @@ export class NebClient {
     public async setServiceConfig(serviceId: string, userId: string, type: string, serviceConfig: any): Promise<any> {
         const nebRequest: Service = {
             ID: serviceId,
-            Type: this.getNebType(type),
+            Type: NebClient.getNebType(type),
             UserID: userId,
             Config: serviceConfig,
         };

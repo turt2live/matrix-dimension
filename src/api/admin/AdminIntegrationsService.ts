@@ -1,9 +1,10 @@
 import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
 import { ApiError } from "../ApiError";
 import { AdminService } from "./AdminService";
-import { DimensionIntegrationsService, IntegrationsResponse } from "../dimension/DimensionIntegrationsService";
+import { DimensionIntegrationsService } from "../dimension/DimensionIntegrationsService";
 import { WidgetStore } from "../../db/WidgetStore";
 import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
+import { Integration } from "../../integrations/Integration";
 
 interface SetEnabledRequest {
     enabled: boolean;
@@ -42,9 +43,11 @@ export class AdminIntegrationsService {
     }
 
     @GET
-    @Path("all")
-    public async getAllIntegrations(@QueryParam("scalar_token") scalarToken: string): Promise<IntegrationsResponse> {
+    @Path(":category/all")
+    public async getAllIntegrations(@QueryParam("scalar_token") scalarToken: string, @QueryParam("category") category: string): Promise<Integration[]> {
         await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-        return DimensionIntegrationsService.getIntegrations(null);
+
+        if (category === "widget") return await DimensionIntegrationsService.getWidgets(false);
+        else throw new ApiError(400, "Unrecongized category");
     }
 }

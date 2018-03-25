@@ -1,6 +1,6 @@
 import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
 import { AdminService } from "./AdminService";
-import { Cache, CACHE_NEB } from "../../MemoryCache";
+import { Cache, CACHE_INTEGRATIONS, CACHE_NEB } from "../../MemoryCache";
 import { NebStore } from "../../db/NebStore";
 import { NebConfig } from "../../models/neb";
 import { LogService } from "matrix-js-snippets";
@@ -51,6 +51,7 @@ export class AdminNebService {
         await AdminService.validateAndGetAdminTokenOwner(scalarToken);
         await NebStore.setIntegrationEnabled(nebId, integrationType, request.enabled);
         Cache.for(CACHE_NEB).clear();
+        Cache.for(CACHE_INTEGRATIONS).clear();
         return {}; // 200 OK
     }
 
@@ -60,6 +61,7 @@ export class AdminNebService {
         await AdminService.validateAndGetAdminTokenOwner(scalarToken);
         await NebStore.setIntegrationConfig(nebId, integrationType, newConfig);
         Cache.for(CACHE_NEB).clear();
+        Cache.for(CACHE_INTEGRATIONS).clear();
         return {}; // 200 OK
     }
 
@@ -78,6 +80,7 @@ export class AdminNebService {
         try {
             const neb = await NebStore.createForUpstream(request.upstreamId);
             Cache.for(CACHE_NEB).clear();
+            Cache.for(CACHE_INTEGRATIONS).clear();
             return neb;
         } catch (err) {
             LogService.error("DimensionNebAdminService", err);
@@ -93,6 +96,7 @@ export class AdminNebService {
         try {
             const neb = await NebStore.createForAppservice(request.appserviceId, request.adminUrl);
             Cache.for(CACHE_NEB).clear();
+            Cache.for(CACHE_INTEGRATIONS).clear();
             return neb;
         } catch (err) {
             LogService.error("DimensionNebAdminService", err);

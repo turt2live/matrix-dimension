@@ -10,6 +10,7 @@ import NebNotificationUser from "./models/NebNotificationUser";
 import { AppserviceStore } from "./AppserviceStore";
 import config from "../config";
 import { SimpleBot } from "../integrations/SimpleBot";
+import { NebProxy } from "../neb/NebProxy";
 
 export interface SupportedIntegration {
     type: string;
@@ -89,7 +90,7 @@ export class NebStore {
         },
     };
 
-    public static async listSimpleBots(): Promise<SimpleBot[]> {
+    public static async listSimpleBots(requestingUserId: string): Promise<SimpleBot[]> {
         const configs = await NebStore.getAllConfigs();
         const integrations: { integration: NebIntegration, userId: string }[] = [];
         const hasTypes: string[] = [];
@@ -102,10 +103,11 @@ export class NebStore {
                 if (!metadata || !metadata.simple) continue;
                 if (hasTypes.indexOf(integration.type) !== -1) continue;
 
-                // TODO: Handle case of upstream bots
-                const user = await NebStore.getOrCreateBotUser(config.id, integration.type);
-
-                integrations.push({integration: integration, userId: user.appserviceUserId});
+                const proxy = new NebProxy(config, requestingUserId);
+                integrations.push({
+                    integration: integration,
+                    userId: await proxy.getBotUserId(integration),
+                });
                 hasTypes.push(integration.type);
             }
         }

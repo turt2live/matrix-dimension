@@ -9,8 +9,8 @@ export class AdminIntegrationsApiService extends AuthedApi {
         super(http);
     }
 
-    public getAllIntegrations(): Promise<FE_IntegrationsResponse> {
-        return this.authedGet("/api/v1/dimension/admin/integrations/all").map(r => r.json()).toPromise();
+    public getAllWidgets(): Promise<FE_IntegrationsResponse> {
+        return this.authedGet("/api/v1/dimension/admin/integrations/widget/all").map(r => r.json()).toPromise();
     }
 
     public toggleIntegration(category: string, type: string, enabled: boolean): Promise<any> {

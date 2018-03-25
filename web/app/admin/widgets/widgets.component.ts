@@ -22,7 +22,7 @@ export class AdminWidgetsComponent {
     public widgets: FE_Widget[];
 
     constructor(private adminIntegrationsApi: AdminIntegrationsApiService, private toaster: ToasterService, private modal: Modal) {
-        this.adminIntegrationsApi.getAllIntegrations().then(integrations => {
+        this.adminIntegrationsApi.getAllWidgets().then(integrations => {
             this.isLoading = false;
             this.widgets = integrations.widgets;
         });
