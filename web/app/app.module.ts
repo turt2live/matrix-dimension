@@ -57,6 +57,7 @@ import { AdminNebAppserviceConfigComponent } from "./admin/neb/appservice-config
 import { AdminNebGiphyConfigComponent } from "./admin/neb/config/giphy/giphy.component";
 import { AdminNebGuggyConfigComponent } from "./admin/neb/config/guggy/guggy.component";
 import { AdminNebGoogleConfigComponent } from "./admin/neb/config/google/google.component";
+import { AdminNebImgurConfigComponent } from "./admin/neb/config/imgur/imgur.component";
 
 @NgModule({
     imports: [
@@ -108,6 +109,7 @@ import { AdminNebGoogleConfigComponent } from "./admin/neb/config/google/google.
         AdminNebGiphyConfigComponent,
         AdminNebGuggyConfigComponent,
         AdminNebGoogleConfigComponent,
+        AdminNebImgurConfigComponent,
 
         // Vendor
     ],
@@ -134,6 +136,7 @@ import { AdminNebGoogleConfigComponent } from "./admin/neb/config/google/google.
         AdminNebGiphyConfigComponent,
         AdminNebGuggyConfigComponent,
         AdminNebGoogleConfigComponent,
+        AdminNebImgurConfigComponent,
     ]
 })
 export class AppModule {

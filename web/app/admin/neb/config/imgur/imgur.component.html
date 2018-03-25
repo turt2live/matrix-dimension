@@ -1,0 +1,32 @@
+<div class="dialog">
+    <div class="dialog-header">
+        <h4>Imgur Configuration</h4>
+    </div>
+    <div class="dialog-content" *ngIf="isLoading">
+        <my-spinner></my-spinner>
+    </div>
+    <div class="dialog-content" *ngIf="!isLoading">
+        <label class="label-block">
+            Client ID
+            <span class="text-muted ">The client ID of your <a href="https://apidocs.imgur.com/" target="_blank">Imgur Application</a>.</span>
+            <input type="text" class="form-control"
+                   placeholder="your_client_id"
+                   [(ngModel)]="config.client_id" [disabled]="isUpdating"/>
+        </label>
+        <label class="label-block">
+            Client Secret
+            <span class="text-muted ">The client secret of your <a href="https://apidocs.imgur.com/" target="_blank">Imgur Application</a>.</span>
+            <input type="text" class="form-control"
+                   placeholder="your_client_secret"
+                   [(ngModel)]="config.client_secret" [disabled]="isUpdating"/>
+        </label>
+    </div>
+    <div class="dialog-footer" *ngIf="!isLoading">
+        <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm">
+            <i class="far fa-save"></i> Save
+        </button>
+        <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
+            <i class="far fa-times-circle"></i> Cancel
+        </button>
+    </div>
+</div>
