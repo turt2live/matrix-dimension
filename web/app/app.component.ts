@@ -9,5 +9,6 @@ import "../style/app.scss";
 export class AppComponent {
 
     constructor() {
+        console.log("Dimension AppComponent constructed");
     }
 }
