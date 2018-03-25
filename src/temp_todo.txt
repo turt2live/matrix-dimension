@@ -1,7 +1,8 @@
-* dimension apis
-* integration management
-* admin ui
-* import from old db/config (script)
-* document how to add integrations (as a dev)
-* update readme
-* Update avatar/displayname of go-neb instances
+Release checklist:
+* Remove bots from rooms
+* Manage custom bots (not sure if anyone actually uses this?)
+* RSS bot
+* Travis CI
+* Update documentation
+* Configuration migration (if possible)
+* Final testing (widgets, bots, etc)
