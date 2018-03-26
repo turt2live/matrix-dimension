@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { ToasterService } from "angular2-toaster";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
 import * as _ from "lodash";
@@ -9,6 +8,8 @@ import { IntegrationsRegistry } from "../../shared/registry/integrations.registr
 import { SessionStorage } from "../../shared/SessionStorage";
 import { AdminApiService } from "../../shared/services/admin/admin-api.service";
 import { IntegrationsApiService } from "../../shared/services/integrations/integrations-api.service";
+import { Modal, overlayConfigFactory } from "ngx-modialog";
+import { ConfigSimpleBotComponent, SimpleBotConfigDialogContext } from "../../configs/simple-bot/simple-bot.component";
 
 const CATEGORY_MAP = {
     "Widgets": ["widget"],
@@ -39,8 +40,8 @@ export class RiotHomeComponent {
                 private scalar: ScalarClientApiService,
                 private integrationsApi: IntegrationsApiService,
                 private adminApi: AdminApiService,
-                private toaster: ToasterService,
-                private router: Router) {
+                private router: Router,
+                private modal: Modal) {
         let params: any = this.activatedRoute.snapshot.queryParams;
 
         this.requestedScreen = params.screen;
@@ -128,34 +129,13 @@ export class RiotHomeComponent {
         console.log(this.userId + " is trying to modify " + integration.displayName);
 
         if (integration.category === "bot") {
-            // It's a bot
-            const bot = <FE_SimpleBot>integration;
-            // TODO: "Are you sure?" dialog
+            this.modal.open(ConfigSimpleBotComponent, overlayConfigFactory({
+                bot: <FE_SimpleBot>integration,
+                roomId: this.roomId,
 
-            let promise: Promise<any> = Promise.resolve();
-            if (!integration._inRoom) {
-                promise = this.scalar.inviteUser(this.roomId, bot.userId);
-            } else promise = this.integrationsApi.removeIntegration(integration.category, integration.type, this.roomId);
-            // We set this ahead of the promise for debouncing
-
-            integration._inRoom = !integration._inRoom;
-            integration._isUpdating = true;
-            promise.then(() => {
-                integration._isUpdating = false;
-                if (integration._inRoom) this.toaster.pop("success", integration.displayName + " was invited to the room");
-                else this.toaster.pop("success", integration.displayName + " was removed from the room");
-            }).catch(err => {
-                integration._inRoom = !integration._inRoom; // revert the status change
-                integration._isUpdating = false;
-                console.error(err);
-
-                let errorMessage = null;
-                if (err.json) errorMessage = err.json().error;
-                if (err.response && err.response.error) errorMessage = err.response.error.message;
-                if (!errorMessage) errorMessage = "Could not update integration status";
-
-                this.toaster.pop("error", errorMessage);
-            });
+                isBlocking: true,
+                size: 'lg',
+            }, SimpleBotConfigDialogContext));
         } else {
             console.log("Navigating to edit screen for " + integration.category + " " + integration.type);
             this.router.navigate(['riot-app', integration.category, integration.type]);
