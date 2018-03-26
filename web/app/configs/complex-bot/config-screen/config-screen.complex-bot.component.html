@@ -1,0 +1,21 @@
+<div *ngIf="botComponent.isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!botComponent.isLoading">
+    <my-ibox>
+        <h5 class="my-ibox-title">
+            {{ botComponent.bot.displayName }} configuration
+        </h5>
+        <div class="my-ibox-content">
+            <form (submit)="botComponent.save()" novalidate name="saveForm">
+                <ng-container *ngTemplateOutlet="botParamsTemplate"></ng-container>
+
+                <div style="margin-top: 25px">
+                    <button type="submit" class="btn btn-sm btn-success" [disabled]="botComponent.isUpdating">
+                        <i class="far fa-save"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </my-ibox>
+</div>

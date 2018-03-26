@@ -20,6 +20,12 @@ export interface FE_SimpleBot extends FE_Integration {
     userId: string;
 }
 
+export interface FE_ComplexBot<T> extends FE_Integration {
+    notificationUserId: string;
+    botUserId?: string;
+    config: T;
+}
+
 export interface FE_Widget extends FE_Integration {
     options: any;
 }

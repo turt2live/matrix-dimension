@@ -138,7 +138,7 @@ export class RiotHomeComponent {
             }, SimpleBotConfigDialogContext));
         } else {
             console.log("Navigating to edit screen for " + integration.category + " " + integration.type);
-            this.router.navigate(['riot-app', integration.category, integration.type]);
+            this.router.navigate(['riot-app', integration.category, integration.type], {queryParams: {roomId: this.roomId}});
         }
     }
 

@@ -11,6 +11,7 @@ import { AppserviceStore } from "./AppserviceStore";
 import config from "../config";
 import { SimpleBot } from "../integrations/SimpleBot";
 import { NebProxy } from "../neb/NebProxy";
+import { ComplexBot } from "../integrations/ComplexBot";
 
 export interface SupportedIntegration {
     type: string;
@@ -29,6 +30,7 @@ export class NebStore {
         //     name: "Circle CI",
         //     avatarUrl: "/img/avatars/circleci.png",
         //     description: "Announces build results from Circle CI to the room.",
+        //     simple: false,
         // },
         "echo": {
             name: "Echo",
@@ -53,6 +55,7 @@ export class NebStore {
         //     name: "Github",
         //     avatarUrl: "/img/avatars/github.png",
         //     description: "Github issue management and announcements for a repository",
+        //     simple: false,
         // },
         "google": {
             name: "Google",
@@ -71,16 +74,19 @@ export class NebStore {
         //     name: "Jira",
         //     avatarUrl: "/img/avatars/jira.png",
         //     description: "Jira issue management and announcements for a project",
+        //     simple: false,
         // },
         "rss": {
             name: "RSS",
             avatarUrl: "/img/avatars/rssbot.png",
             description: "Announces changes to RSS feeds in the room",
+            simple: false,
         },
         "travisci": {
             name: "Travis CI",
             avatarUrl: "/img/avatars/travisci.png",
             description: "Announces build results from Travis CI to the room",
+            simple: false,
         },
         "wikipedia": {
             name: "Wikipedia",
@@ -90,9 +96,9 @@ export class NebStore {
         },
     };
 
-    public static async listEnabledNebSimpleBots(): Promise<{neb: NebConfig, integration: NebIntegration}[]>{
+    private static async listEnabledNebBots(simple: boolean): Promise<{ neb: NebConfig, integration: NebIntegration }[]> {
         const nebConfigs = await NebStore.getAllConfigs();
-        const integrations: {neb: NebConfig, integration: NebIntegration}[] = [];
+        const integrations: { neb: NebConfig, integration: NebIntegration }[] = [];
         const hasTypes: string[] = [];
 
         for (const neb of nebConfigs) {
@@ -100,7 +106,7 @@ export class NebStore {
                 if (!integration.isEnabled) continue;
 
                 const metadata = NebStore.INTEGRATIONS[integration.type];
-                if (!metadata || !metadata.simple) continue;
+                if (!metadata || metadata.simple !== simple) continue;
                 if (hasTypes.indexOf(integration.type) !== -1) continue;
 
                 integrations.push({neb, integration});
@@ -111,11 +117,30 @@ export class NebStore {
         return integrations;
     }
 
+    public static async listEnabledNebSimpleBots(): Promise<{ neb: NebConfig, integration: NebIntegration }[]> {
+        return NebStore.listEnabledNebBots(true);
+    }
+
+    public static async listEnabledNebComplexBots(): Promise<{ neb: NebConfig, integration: NebIntegration }[]> {
+        return NebStore.listEnabledNebBots(false);
+    }
+
     public static async listSimpleBots(requestingUserId: string): Promise<SimpleBot[]> {
         const rawIntegrations = await NebStore.listEnabledNebSimpleBots();
         return Promise.all(rawIntegrations.map(async i => {
-           const proxy = new NebProxy(i.neb, requestingUserId);
-           return new SimpleBot(i.integration, await proxy.getBotUserId(i.integration));
+            const proxy = new NebProxy(i.neb, requestingUserId);
+            return new SimpleBot(i.integration, await proxy.getBotUserId(i.integration));
+        }));
+    }
+
+    public static async listComplexBots(requestingUserId: string, roomId: string): Promise<ComplexBot[]> {
+        const rawIntegrations = await NebStore.listEnabledNebComplexBots();
+        return Promise.all(rawIntegrations.map(async i => {
+            const proxy = new NebProxy(i.neb, requestingUserId);
+            const notifUserId = await proxy.getNotificationUserId(i.integration, roomId, requestingUserId);
+            const botUserId = null; // TODO: For github
+            // TODO: Get configuration
+            return new ComplexBot(i.integration, notifUserId, botUserId);
         }));
     }
 
@@ -265,6 +290,33 @@ export class NebStore {
                 serviceId: serviceId,
                 appserviceUserId: appserviceUser.id,
                 integrationId: integration.id,
+            });
+        }
+
+        return users[0];
+    }
+
+    public static async getOrCreateNotificationUser(configurationId: number, integrationType: string, forUserId: string): Promise<NebNotificationUser> {
+        const neb = await NebStore.getConfig(configurationId);
+        if (!neb.appserviceId) throw new Error("Instance not bound to an appservice");
+
+        const integration = await this.getOrCreateIntegration(configurationId, integrationType);
+        const users = await NebNotificationUser.findAll({where: {integrationId: integration.id, ownerId: forUserId}});
+        if (!users || users.length === 0) {
+            const safeUserId = AppserviceStore.getSafeUserId(forUserId);
+            const appservice = await AppserviceStore.getAppservice(neb.appserviceId);
+            const userId = "@" + appservice.userPrefix + "_" + integrationType + "_notifications_" + safeUserId + ":" + config.homeserver.name;
+            const appserviceUser = await AppserviceStore.getOrCreateUser(neb.appserviceId, userId);
+
+            const client = new NebClient(neb);
+            await client.updateUser(userId, integration.isEnabled, false); // creates the user in go-neb
+
+            const serviceId = appservice.id + "_integration_" + integrationType + "_notifications_" + safeUserId;
+            return NebNotificationUser.create({
+                serviceId: serviceId,
+                appserviceUserId: appserviceUser.id,
+                integrationId: integration.id,
+                ownerId: forUserId,
             });
         }
 

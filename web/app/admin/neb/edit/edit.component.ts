@@ -4,7 +4,7 @@ import { AdminNebApiService } from "../../../shared/services/admin/admin-neb-api
 import { ActivatedRoute } from "@angular/router";
 import { ToasterService } from "angular2-toaster";
 import { FE_Integration } from "../../../shared/models/integration";
-import { NEB_HAS_CONFIG } from "../../../shared/models/neb";
+import { NEB_HAS_CONFIG, NEB_IS_COMPLEX } from "../../../shared/models/neb";
 import { Modal, overlayConfigFactory } from "ngx-modialog";
 import { AdminNebGiphyConfigComponent } from "../config/giphy/giphy.component";
 import { NebBotConfigurationDialogContext } from "../config/config-context";
@@ -72,7 +72,7 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
         if (bot.isEnabled && !this.isUpstream) {
             if (this.hasConfig(bot)) {
                 this.editBot(bot);
-            } else {
+            } else if (NEB_IS_COMPLEX.indexOf(bot.type) === -1) {
                 try {
                     await this.nebApi.setIntegrationConfiguration(this.nebConfig.id, bot.type, {});
                 } catch (err) {

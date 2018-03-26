@@ -5,3 +5,8 @@ export const NEB_HAS_CONFIG = [
     "google",
     "imgur",
 ];
+
+export const NEB_IS_COMPLEX = [
+    "rss",
+    "travisci",
+];

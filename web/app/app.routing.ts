@@ -19,6 +19,7 @@ import { AdminWidgetsComponent } from "./admin/widgets/widgets.component";
 import { AdminNebComponent } from "./admin/neb/neb.component";
 import { AdminEditNebComponent } from "./admin/neb/edit/edit.component";
 import { AdminAddSelfhostedNebComponent } from "./admin/neb/add-selfhosted/add-selfhosted.component";
+import { RssComplexBotConfigComponent } from "./configs/complex-bot/rss/rss.complex-bot.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -105,6 +106,16 @@ const routes: Routes = [
                         path: "youtube",
                         component: YoutubeWidgetConfigComponent,
                         data: {breadcrumb: "Youtube Video Widgets", name: "Youtube Video Widgets"}
+                    },
+                ],
+            },
+            {
+                path: "complex-bot",
+                children: [
+                    {
+                        path: "rss",
+                        component: RssComplexBotConfigComponent,
+                        data: {breadcrumb: "RSS Bot Configuration", name: "RSS Bot Configuration"}
                     },
                 ],
             },

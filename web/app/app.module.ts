@@ -59,6 +59,8 @@ import { AdminNebGuggyConfigComponent } from "./admin/neb/config/guggy/guggy.com
 import { AdminNebGoogleConfigComponent } from "./admin/neb/config/google/google.component";
 import { AdminNebImgurConfigComponent } from "./admin/neb/config/imgur/imgur.component";
 import { ConfigSimpleBotComponent } from "./configs/simple-bot/simple-bot.component";
+import { ConfigScreenComplexBotComponent } from "./configs/complex-bot/config-screen/config-screen.complex-bot.component";
+import { RssComplexBotConfigComponent } from "./configs/complex-bot/rss/rss.complex-bot.component";
 
 @NgModule({
     imports: [
@@ -112,6 +114,8 @@ import { ConfigSimpleBotComponent } from "./configs/simple-bot/simple-bot.compon
         AdminNebGoogleConfigComponent,
         AdminNebImgurConfigComponent,
         ConfigSimpleBotComponent,
+        ConfigScreenComplexBotComponent,
+        RssComplexBotConfigComponent,
 
         // Vendor
     ],

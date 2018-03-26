@@ -15,7 +15,7 @@ export class NebProxy {
 
     }
 
-    public async getBotUserId(integration: NebIntegration) {
+    public async getBotUserId(integration: NebIntegration): Promise<string> {
         if (integration.nebId !== this.neb.id) throw new Error("Integration is not for this NEB proxy");
 
         if (this.neb.upstreamId) {
@@ -31,7 +31,29 @@ export class NebProxy {
         }
     }
 
-    public async removeBotFromRoom(integration: NebIntegration, roomId: string) {
+    public async getNotificationUserId(integration: NebIntegration, inRoomId: string, forUserId: string): Promise<string> {
+        if (integration.nebId !== this.neb.id) throw new Error("Integration is not for this NEB proxy");
+
+        if (this.neb.upstreamId) {
+            try {
+                const response = await this.doUpstreamRequest<ModularIntegrationInfoResponse>("/integrations/" + NebClient.getNebType(integration.type), {
+                    room_id: inRoomId,
+                });
+                return response.bot_user_id;
+            } catch (err) {
+                LogService.error("NebProxy", err);
+                return null;
+            }
+        } else {
+            return (await NebStore.getOrCreateNotificationUser(this.neb.id, integration.type, forUserId)).appserviceUserId;
+        }
+    }
+
+    // public async getComplexBotConfiguration(integration: NebIntegration, roomId: string): Promise<any> {
+    //
+    // }
+
+    public async removeBotFromRoom(integration: NebIntegration, roomId: string): Promise<any> {
         if (integration.nebId !== this.neb.id) throw new Error("Integration is not for this NEB proxy");
 
         if (this.neb.upstreamId) {

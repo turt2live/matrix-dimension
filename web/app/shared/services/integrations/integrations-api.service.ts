@@ -18,6 +18,10 @@ export class IntegrationsApiService extends AuthedApi {
         return this.http.get("/api/v1/dimension/integrations/" + category + "/" + type).map(r => r.json()).toPromise();
     }
 
+    public getIntegrationInRoom(category: string, type: string, roomId: string): Promise<FE_Integration> {
+        return this.authedGet("/api/v1/dimension/integrations/room/" + roomId + "/integrations/" + category + "/" + type).map(r => r.json()).toPromise();
+    }
+
     public getWidget(type: string): Promise<FE_Widget> {
         return this.getIntegration("widget", type).then(i => <FE_Widget>i);
     }

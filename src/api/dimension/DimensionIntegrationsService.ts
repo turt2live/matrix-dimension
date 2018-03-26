@@ -7,10 +7,12 @@ import { ApiError } from "../ApiError";
 import { WidgetStore } from "../../db/WidgetStore";
 import { SimpleBot } from "../../integrations/SimpleBot";
 import { NebStore } from "../../db/NebStore";
+import { ComplexBot } from "../../integrations/ComplexBot";
 
 export interface IntegrationsResponse {
     widgets: Widget[],
     bots: SimpleBot[],
+    complexBots: ComplexBot[],
 }
 
 @Path("/api/v1/dimension/integrations")
@@ -34,22 +36,35 @@ export class DimensionIntegrationsService {
         return bots;
     }
 
-    @GET
-    @Path("enabled")
-    public async getEnabledIntegrations(@QueryParam("scalar_token") scalarToken: string): Promise<IntegrationsResponse> {
-        const userId = await ScalarService.getTokenOwner(scalarToken);
-        return {
-            widgets: await DimensionIntegrationsService.getWidgets(true),
-            bots: await DimensionIntegrationsService.getSimpleBots(userId),
-        };
+    public static async getComplexBots(userId: string, roomId: string): Promise<ComplexBot[]> {
+        const cached = Cache.for(CACHE_INTEGRATIONS).get("complex_bots_" + roomId);
+        if (cached) return cached;
+
+        const bots = await NebStore.listComplexBots(userId, roomId);
+        Cache.for(CACHE_INTEGRATIONS).put("complex_bots_" + roomId, bots);
+        return bots;
     }
 
     @GET
     @Path("room/:roomId")
     public async getIntegrationsInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string): Promise<IntegrationsResponse> {
-        console.log(roomId);
-        // TODO: Other integrations
-        return this.getEnabledIntegrations(scalarToken);
+        const userId = await ScalarService.getTokenOwner(scalarToken);
+        return {
+            widgets: await DimensionIntegrationsService.getWidgets(true),
+            bots: await DimensionIntegrationsService.getSimpleBots(userId),
+            complexBots: await DimensionIntegrationsService.getComplexBots(userId, roomId),
+        };
+    }
+
+    @GET
+    @Path("room/:roomId/integrations/:category/:type")
+    public async getIntegrationInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string): Promise<any> {
+        const roomConfig = await this.getIntegrationsInRoom(scalarToken, roomId); // does auth for us
+
+        if (category === "widget") return roomConfig.widgets.find(i => i.type === integrationType);
+        else if (category === "bot") return roomConfig.bots.find(i => i.type === integrationType);
+        else if (category === "complex-bot") return roomConfig.complexBots.find(i => i.type === integrationType);
+        else throw new ApiError(400, "Unrecognized category");
     }
 
     @DELETE

@@ -1,7 +1,14 @@
 Release checklist:
-* Manage custom bots (not sure if anyone actually uses this?)
 * RSS bot
 * Travis CI
+* IRC Bridge
 * Update documentation
 * Configuration migration (if possible)
+* Lots of logging
 * Final testing (widgets, bots, etc)
+
+After release:
+* Manage custom bots
+* Github
+* Circle CI
+* Avatars/display names for managed go-neb bots
