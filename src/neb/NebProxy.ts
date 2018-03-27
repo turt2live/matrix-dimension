@@ -134,8 +134,8 @@ export class NebProxy {
             currentConfig = await client.getServiceConfig(notifUser.serviceId);
 
             if (feedUrls.length === 0) {
-                const client = new MatrixAppserviceClient(await AppserviceStore.getAppservice(this.neb.appserviceId));
-                await client.leaveRoom(notifUser.appserviceUserId, roomId);
+                const appserviceClient = new MatrixAppserviceClient(await AppserviceStore.getAppservice(this.neb.appserviceId));
+                await appserviceClient.leaveRoom(notifUser.appserviceUserId, roomId);
             }
         }
 
