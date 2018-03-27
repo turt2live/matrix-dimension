@@ -22,6 +22,10 @@ export class IntegrationsApiService extends AuthedApi {
         return this.authedGet("/api/v1/dimension/integrations/room/" + roomId + "/integrations/" + category + "/" + type).map(r => r.json()).toPromise();
     }
 
+    public setIntegrationConfiguration(category: string, type: string, roomId: string, newConfig: any): Promise<any> {
+        return this.authedPost("/api/v1/dimension/integrations/room/" + roomId + "/integrations/" + category + "/" + type + "/config", newConfig).map(r => r.json()).toPromise();
+    }
+
     public getWidget(type: string): Promise<FE_Widget> {
         return this.getIntegration("widget", type).then(i => <FE_Widget>i);
     }

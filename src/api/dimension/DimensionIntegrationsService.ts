@@ -1,4 +1,4 @@
-import { DELETE, GET, Path, PathParam, QueryParam } from "typescript-rest";
+import { DELETE, GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
 import { ScalarService } from "../scalar/ScalarService";
 import { Widget } from "../../integrations/Widget";
 import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
@@ -67,6 +67,18 @@ export class DimensionIntegrationsService {
         else throw new ApiError(400, "Unrecognized category");
     }
 
+    @POST
+    @Path("room/:roomId/integrations/:category/:type/config")
+    public async setIntegrationConfigurationInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string, newConfig: any): Promise<any> {
+        const userId = await ScalarService.getTokenOwner(scalarToken);
+
+        if (category === "complex-bot") await NebStore.setComplexBotConfig(userId, integrationType, roomId, newConfig);
+        else throw new ApiError(400, "Unrecognized category");
+
+        Cache.for(CACHE_INTEGRATIONS).clear(); // TODO: Improve which cache we invalidate
+        return {}; // 200 OK
+    }
+
     @DELETE
     @Path("room/:roomId/integrations/:category/:type")
     public async removeIntegrationInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string): Promise<any> {
@@ -74,8 +86,10 @@ export class DimensionIntegrationsService {
 
         if (category === "widget") throw new ApiError(400, "Widgets should be removed client-side");
         else if (category === "bot") await NebStore.removeSimpleBot(integrationType, roomId, userId);
+        else if (category === "complex-bot") throw new ApiError(400, "Complex bots should be removed automatically");
         else throw new ApiError(400, "Unrecognized category");
 
+        Cache.for(CACHE_INTEGRATIONS).clear(); // TODO: Improve which cache we invalidate
         return {}; // 200 OK
     }
 

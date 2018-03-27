@@ -73,6 +73,7 @@ export class NebClient {
                     reject(err);
                 } else if (res.statusCode !== 200) {
                     LogService.error("NebClient", "Got status code " + res.statusCode + " while performing request");
+                    LogService.error("NebClient", res.body);
                     reject(new Error("Request error"));
                 } else {
                     resolve(res.body);

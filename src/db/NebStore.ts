@@ -137,11 +137,20 @@ export class NebStore {
         const rawIntegrations = await NebStore.listEnabledNebComplexBots();
         return Promise.all(rawIntegrations.map(async i => {
             const proxy = new NebProxy(i.neb, requestingUserId);
-            const notifUserId = await proxy.getNotificationUserId(i.integration, roomId, requestingUserId);
+            const notifUserId = await proxy.getNotificationUserId(i.integration, roomId);
             const botUserId = null; // TODO: For github
-            // TODO: Get configuration
-            return new ComplexBot(i.integration, notifUserId, botUserId);
+            const botConfig = await proxy.getServiceConfiguration(i.integration, roomId);
+            return new ComplexBot(i.integration, notifUserId, botUserId, botConfig);
         }));
+    }
+
+    public static async setComplexBotConfig(requestingUserId: string, type: string, roomId: string, newConfig: any): Promise<any> {
+        const rawIntegrations = await NebStore.listEnabledNebComplexBots();
+        const integration = rawIntegrations.find(i => i.integration.type === type);
+        if (!integration) throw new Error("Integration not found");
+
+        const proxy = new NebProxy(integration.neb, requestingUserId);
+        return proxy.setServiceConfiguration(integration.integration, roomId, newConfig);
     }
 
     public static async removeSimpleBot(type: string, roomId: string, requestingUserId: string): Promise<any> {

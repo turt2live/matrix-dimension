@@ -2,7 +2,7 @@ import { Integration } from "./Integration";
 import NebIntegration from "../db/models/NebIntegration";
 
 export class ComplexBot extends Integration {
-    constructor(bot: NebIntegration, public notificationUserId: string, public botUserId?: string) {
+    constructor(bot: NebIntegration, public notificationUserId: string, public botUserId: string, public config: any) {
         super(bot);
         this.category = "complex-bot";
         this.requirements = [];
@@ -10,4 +10,12 @@ export class ComplexBot extends Integration {
         // Notification bots are technically supported in e2e rooms
         this.isEncryptionSupported = true;
     }
+}
+
+export interface RssBotConfiguration {
+    feeds: {
+        [url: string]: {
+            addedByUserId: string;
+        };
+    };
 }

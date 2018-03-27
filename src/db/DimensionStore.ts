@@ -13,6 +13,7 @@ import NebConfiguration from "./models/NebConfiguration";
 import NebIntegration from "./models/NebIntegration";
 import NebBotUser from "./models/NebBotUser";
 import NebNotificationUser from "./models/NebNotificationUser";
+import NebIntegrationConfig from "./models/NebIntegrationConfig";
 
 class _DimensionStore {
     private sequelize: Sequelize;
@@ -37,6 +38,7 @@ class _DimensionStore {
             NebIntegration,
             NebBotUser,
             NebNotificationUser,
+            NebIntegrationConfig,
         ]);
     }
 
