@@ -61,6 +61,7 @@ import { AdminNebImgurConfigComponent } from "./admin/neb/config/imgur/imgur.com
 import { ConfigSimpleBotComponent } from "./configs/simple-bot/simple-bot.component";
 import { ConfigScreenComplexBotComponent } from "./configs/complex-bot/config-screen/config-screen.complex-bot.component";
 import { RssComplexBotConfigComponent } from "./configs/complex-bot/rss/rss.complex-bot.component";
+import { TravisCiComplexBotConfigComponent } from "./configs/complex-bot/travisci/travisci.complex-bot.component";
 
 @NgModule({
     imports: [
@@ -116,6 +117,7 @@ import { RssComplexBotConfigComponent } from "./configs/complex-bot/rss/rss.comp
         ConfigSimpleBotComponent,
         ConfigScreenComplexBotComponent,
         RssComplexBotConfigComponent,
+        TravisCiComplexBotConfigComponent,
 
         // Vendor
     ],

@@ -1,0 +1,62 @@
+<my-complex-bot-config [botComponent]="this">
+    <ng-template #botParamsTemplate>
+        <my-ibox>
+            <h5 class="my-ibox-title">
+                Repositories
+            </h5>
+            <div class="my-ibox-content">
+                <form (submit)="interceptSave()" novalidate name="saveForm">
+                    <table class="table table-striped table-condensed table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Repository</th>
+                            <th>Template</th>
+                            <th>Added by</th>
+                            <th class="actions-col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let repo of getRepos()">
+                            <td>{{ repo.repoKey }}</td>
+                            <td>
+                                <textarea title="Repository Template" class="repo-template form-control" rows="3" (change)="repo.template = $event.target.value">{{ repo.template }}</textarea>
+                            </td>
+                            <td>{{ repo.addedByUserId }}</td>
+                            <td class="actions-col">
+                               <button type="button" class="btn btn-sm btn-outline-danger"
+                                       [disabled]="isUpdating || !repo.isSelf"
+                                       (click)="removeRepo(repo)">
+                                   <i class="far fa-trash-alt"></i> Remove
+                               </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control"
+                                           [(ngModel)]="newRepoKey"
+                                           placeholder="matrix-org/synapse"
+                                           name="newRepoKey"
+                                           title="New repository name" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-outline-success"
+                                                [disabled]="isUpdating"
+                                                (click)="addRepo()">
+                                            <i class="fa fa-plus"></i> Add
+                                        </button>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 25px">
+                        <button type="submit" class="btn btn-sm btn-primary" [disabled]="isUpdating">
+                            <i class="far fa-save"></i> Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </my-ibox>
+    </ng-template>
+</my-complex-bot-config>

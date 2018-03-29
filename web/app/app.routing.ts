@@ -20,6 +20,7 @@ import { AdminNebComponent } from "./admin/neb/neb.component";
 import { AdminEditNebComponent } from "./admin/neb/edit/edit.component";
 import { AdminAddSelfhostedNebComponent } from "./admin/neb/add-selfhosted/add-selfhosted.component";
 import { RssComplexBotConfigComponent } from "./configs/complex-bot/rss/rss.complex-bot.component";
+import { TravisCiComplexBotConfigComponent } from "./configs/complex-bot/travisci/travisci.complex-bot.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -64,7 +65,7 @@ const routes: Routes = [
                                 path: "new/selfhosted",
                                 component: AdminAddSelfhostedNebComponent,
                                 data: {breadcrumb: "Add self-hosted go-neb", name: "Add self-hosted go-neb"},
-                            }
+                            },
                         ]
                     },
                 ],
@@ -75,37 +76,37 @@ const routes: Routes = [
                     {
                         path: "custom",
                         component: CustomWidgetConfigComponent,
-                        data: {breadcrumb: "Custom Widgets", name: "Custom Widgets"}
+                        data: {breadcrumb: "Custom Widgets", name: "Custom Widgets"},
                     },
                     {
                         path: "etherpad",
                         component: EtherpadWidgetConfigComponent,
-                        data: {breadcrumb: "Etherpad Widgets", name: "Etherpad Widgets"}
+                        data: {breadcrumb: "Etherpad Widgets", name: "Etherpad Widgets"},
                     },
                     {
                         path: "googlecalendar",
                         component: GoogleCalendarWidgetConfigComponent,
-                        data: {breadcrumb: "Google Calendar Widgets", name: "Google Calendar Widgets"}
+                        data: {breadcrumb: "Google Calendar Widgets", name: "Google Calendar Widgets"},
                     },
                     {
                         path: "googledocs",
                         component: GoogleDocsWidgetConfigComponent,
-                        data: {breadcrumb: "Google Doc Widgets", name: "Google Doc Widgets"}
+                        data: {breadcrumb: "Google Doc Widgets", name: "Google Doc Widgets"},
                     },
                     {
                         path: "jitsi",
                         component: JitsiWidgetConfigComponent,
-                        data: {breadcrumb: "Jitsi Widgets", name: "Jitsi Widgets"}
+                        data: {breadcrumb: "Jitsi Widgets", name: "Jitsi Widgets"},
                     },
                     {
                         path: "twitch",
                         component: TwitchWidgetConfigComponent,
-                        data: {breadcrumb: "Twitch Livestream Widgets", name: "Twitch Livestream Widgets"}
+                        data: {breadcrumb: "Twitch Livestream Widgets", name: "Twitch Livestream Widgets"},
                     },
                     {
                         path: "youtube",
                         component: YoutubeWidgetConfigComponent,
-                        data: {breadcrumb: "Youtube Video Widgets", name: "Youtube Video Widgets"}
+                        data: {breadcrumb: "Youtube Video Widgets", name: "Youtube Video Widgets"},
                     },
                 ],
             },
@@ -115,7 +116,12 @@ const routes: Routes = [
                     {
                         path: "rss",
                         component: RssComplexBotConfigComponent,
-                        data: {breadcrumb: "RSS Bot Configuration", name: "RSS Bot Configuration"}
+                        data: {breadcrumb: "RSS Bot Configuration", name: "RSS Bot Configuration"},
+                    },
+                    {
+                        path: "travisci",
+                        component: TravisCiComplexBotConfigComponent,
+                        data: {breadcrumb: "Travis CI Configuration", name: "Travis CI Configuration"},
                     },
                 ],
             },
