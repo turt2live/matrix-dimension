@@ -20,6 +20,7 @@ interface InternalTravisCiConfig {
         [roomId: string]: {
             [repoKey: string]: {
                 template: string;
+                addedByUserId: string;
             };
         };
     };
@@ -90,9 +91,14 @@ export class NebProxy {
 
         if (!result) result = {};
         if (integration.type === "travisci") {
-            // Replace the webhook ID with the requesting user's webhook ID (generating it if needed)
-            result["webhookId"] = await this.getWebhookId(integration.type);
-            delete result["webhook_url"];
+            let repos = result.rooms ? result.rooms[inRoomId] : {};
+            if (!repos) repos = {};
+
+            // Replace the entire result to better represent how this should be sent
+            result = <TravisCiConfiguration>{
+                webhookId: await this.getWebhookId("travisci"),
+                repos: repos,
+            };
         }
 
         return result;
@@ -160,6 +166,7 @@ export class NebProxy {
                 for (const repoKey of repoKeys) {
                     result.rooms[roomId][repoKey] = {
                         template: integration.config.rooms[roomId].repos[repoKey].template,
+                        addedByUserId: userId,
                     };
                 }
             }
