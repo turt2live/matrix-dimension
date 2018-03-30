@@ -219,15 +219,14 @@ export class NebProxy {
         let newConfig = {rooms: {}};
 
         if (!this.neb.upstreamId) {
+            const notifUser = await NebStore.getOrCreateNotificationUser(this.neb.id, "travisci", this.requestingUserId);
+            const client = new NebClient(this.neb);
+            newConfig = await client.getServiceConfig(notifUser.serviceId); // So we don't accidentally clear other rooms
+
             if (repoKeys.length === 0) {
-                const notifUser = await NebStore.getOrCreateNotificationUser(this.neb.id, "travisci", this.requestingUserId);
                 const appserviceClient = new MatrixAppserviceClient(await AppserviceStore.getAppservice(this.neb.appserviceId));
                 await appserviceClient.leaveRoom(notifUser.appserviceUserId, roomId);
             }
-
-            const client = new NebClient(this.neb);
-            const notifUser = await NebStore.getOrCreateNotificationUser(this.neb.id, "travisci", this.requestingUserId);
-            newConfig = await client.getServiceConfig(notifUser.serviceId); // So we don't accidentally clear other rooms
         }
 
         // Reset the current room's configuration so we don't keep artifacts.
