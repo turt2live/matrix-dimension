@@ -15,9 +15,17 @@ export interface IntegrationsResponse {
     complexBots: ComplexBot[],
 }
 
+/**
+ * API for managing integrations, primarily for a given room
+ */
 @Path("/api/v1/dimension/integrations")
 export class DimensionIntegrationsService {
 
+    /**
+     * Gets a list of widgets
+     * @param {boolean} enabledOnly True to only return the enabled widgets
+     * @returns {Promise<Widget[]>} Resolves to the widget list
+     */
     public static async getWidgets(enabledOnly: boolean): Promise<Widget[]> {
         const cached = Cache.for(CACHE_INTEGRATIONS).get("widgets");
         if (cached) return cached;
@@ -27,6 +35,11 @@ export class DimensionIntegrationsService {
         return widgets;
     }
 
+    /**
+     * Gets a list of simple bots
+     * @param {string} userId The requesting user ID
+     * @returns {Promise<SimpleBot[]>} Resolves to the simple bot list
+     */
     public static async getSimpleBots(userId: string): Promise<SimpleBot[]> {
         const cached = Cache.for(CACHE_INTEGRATIONS).get("simple_bots");
         if (cached) return cached;
@@ -36,6 +49,12 @@ export class DimensionIntegrationsService {
         return bots;
     }
 
+    /**
+     * Gets a list of complex bots
+     * @param {string} userId The requesting user ID
+     * @param {string} roomId The room ID to get the complex bots for
+     * @returns {Promise<ComplexBot[]>} Resolves to the complex bot list
+     */
     public static async getComplexBots(userId: string, roomId: string): Promise<ComplexBot[]> {
         const cached = Cache.for(CACHE_INTEGRATIONS).get("complex_bots_" + roomId);
         if (cached) return cached;

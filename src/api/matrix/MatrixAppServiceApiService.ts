@@ -8,6 +8,9 @@ interface AppServiceTransaction {
     events: SimplifiedMatrixEvent[];
 }
 
+/**
+ * API for handling appservice traffic from a homeserver
+ */
 // Note: There's no actual defined prefix for this API. The following was chosen to be
 // somewhat consistent with the other matrix APIs. In reality, the homeserver will just
 // hit the URL given in the registration - be sure to define it to match this prefix.

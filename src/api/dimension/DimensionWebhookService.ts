@@ -4,6 +4,9 @@ import { ApiError } from "../ApiError";
 import * as request from "request";
 import { LogService } from "matrix-js-snippets";
 
+/**
+ * API for proxying webhooks to other services.
+ */
 @Path("/api/v1/dimension/webhooks")
 export class DimensionWebhookService {
 

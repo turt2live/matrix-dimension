@@ -21,13 +21,28 @@ interface DimensionConfigResponse {
     };
 }
 
+/**
+ * Administrative API for general information about Dimension
+ */
 @Path("/api/v1/dimension/admin")
 export class AdminService {
 
+    /**
+     * Determines if a given user is an administrator
+     * @param {string} userId The user ID to validate
+     * @returns {boolean} True if the user is an administrator
+     */
     public static isAdmin(userId: string) {
         return config.admins.indexOf(userId) >= 0;
     }
 
+    /**
+     * Validates the given scalar token to ensure the owner is an administrator. If the
+     * given scalar token does not belong to an administrator, an ApiError is raised.
+     * @param {string} scalarToken The scalar token to validate
+     * @returns {Promise<string>} Resolves to the owner's user ID if they are an administrator
+     * @throws {ApiError} Thrown with a status code of 401 if the owner is not an administrator
+     */
     public static async validateAndGetAdminTokenOwner(scalarToken: string): Promise<string> {
         const userId = await ScalarService.getTokenOwner(scalarToken, true);
         if (!AdminService.isAdmin(userId))

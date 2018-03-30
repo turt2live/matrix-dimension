@@ -17,6 +17,9 @@ interface AppserviceCreateRequest {
     userPrefix: string;
 }
 
+/**
+ * Administrative API for managing the appservices that Dimension operates.
+ */
 @Path("/api/v1/dimension/admin/appservices")
 export class AdminAppserviceService {
 

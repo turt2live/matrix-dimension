@@ -18,6 +18,10 @@ interface NewUpstreamRequest {
     apiUrl: string;
 }
 
+/**
+ * Administrative API for managing the instances upstream of this instance. Particularly
+ * useful for configuring the Modular upstream.
+ */
 @Path("/api/v1/dimension/admin/upstreams")
 export class AdminUpstreamService {
 

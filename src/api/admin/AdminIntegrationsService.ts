@@ -14,6 +14,10 @@ interface SetOptionsRequest {
     options: any;
 }
 
+/**
+ * Administrative API for managing the integrations for Dimension. This is to enable/disable integrations
+ * and set basic options. See the NEB APIs for configuring go-neb instances.
+ */
 @Path("/api/v1/dimension/admin/integrations")
 export class AdminIntegrationsService {
 

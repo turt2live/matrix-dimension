@@ -19,9 +19,20 @@ interface RegisterRequest {
     expires_in: number;
 }
 
+/**
+ * API for the minimum Scalar API we need to implement to be compatible with clients. Used for registration
+ * and general account management.
+ */
 @Path("/api/v1/scalar")
 export class ScalarService {
 
+    /**
+     * Gets the owner of a given scalar token, throwing an ApiError if the token is invalid.
+     * @param {string} scalarToken The scalar token to validate
+     * @param {boolean} ignoreUpstreams True to consider the token valid if it is missing links to other upstreams
+     * @returns {Promise<string>} Resolves to the owner's user ID if the token is valid.
+     * @throws {ApiError} Thrown with a status code of 401 if the token is invalid.
+     */
     public static async getTokenOwner(scalarToken: string, ignoreUpstreams?: boolean): Promise<string> {
         const cachedUserId = Cache.for(CACHE_SCALAR_ACCOUNTS).get(scalarToken);
         if (cachedUserId) return cachedUserId;

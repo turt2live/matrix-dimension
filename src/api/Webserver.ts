@@ -8,6 +8,9 @@ import * as _ from "lodash";
 import config from "../config";
 import { ApiError } from "./ApiError";
 
+/**
+ * Web server for Dimension. Handles the API routes for the admin, scalar, dimension, and matrix APIs.
+ */
 export default class Webserver {
 
     private app: express.Application;
@@ -69,7 +72,10 @@ export default class Webserver {
         });
     }
 
-    start() {
+    /**
+     * Starts the webserver, bootstrapping the various API handlers
+     */
+    public start() {
         this.app.listen(config.web.port, config.web.address);
         LogService.info("Webserver", "API and UI listening on " + config.web.address + ":" + config.web.port);
     }
