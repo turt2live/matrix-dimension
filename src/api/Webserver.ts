@@ -62,7 +62,7 @@ export default class Webserver {
                 parsedUrl.query["scalar_token"] = "redacted";
                 parsedUrl.search = undefined; // to force URL.format to use `query`
             }
-            LogService.verbose("Webserver", "Incoming request: " + req.method + " " + URL.format(parsedUrl));
+            LogService.info("Webserver", "Incoming request: " + req.method + " " + URL.format(parsedUrl));
             next();
         });
         this.app.use((_req, res, next) => {

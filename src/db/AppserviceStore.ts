@@ -2,6 +2,7 @@ import AppService from "./models/AppService";
 import AppServiceUser from "./models/AppServiceUser";
 import * as randomString from "random-string";
 import { MatrixAppserviceClient } from "../matrix/MatrixAppserviceClient";
+import { LogService } from "matrix-js-snippets";
 
 export class AppserviceStore {
 
@@ -37,22 +38,25 @@ export class AppserviceStore {
     public static getSafeUserId(userIdOrPrefix: string): string {
         // Force user IDs to be lowercase and strip out characters that aren't permitted
         // https://matrix.org/docs/spec/appendices.html#user-identifiers
+        if (userIdOrPrefix.startsWith('@')) {
+            // we only change out the parts we care about. The rest will be crushed down.
+            userIdOrPrefix = userIdOrPrefix.replace(/@/g, '=40');
+            userIdOrPrefix = userIdOrPrefix.replace(/:/g, '=3A');
+        }
         return userIdOrPrefix.toLowerCase().replace(/[^a-z0-9._\-=]/g, '.');
-    }
-
-    public static async getUsers(appserviceId: string): Promise<AppServiceUser[]> {
-        return AppServiceUser.findAll({where: {appserviceId: appserviceId}});
     }
 
     public static async registerUser(appserviceId: string, userId: string): Promise<AppServiceUser> {
         const appservice = await AppService.findOne({where: {id: appserviceId}});
         if (!appservice) throw new Error("Appservice not found");
 
+        LogService.info("AppserviceStore", "Registering to own " + userId + " in appservice " + appserviceId);
         const client = new MatrixAppserviceClient(appservice);
         const localpart = AppserviceStore.getSafeUserId(userId.substring(1).split(":")[0]);
         const response = await client.registerUser(localpart);
+        LogService.info("AppserviceStore", "Successfully registered " + userId);
 
-        return AppServiceUser.create({
+        return await AppServiceUser.create({
             id: userId,
             appserviceId: appserviceId,
             accessToken: response.access_token,

@@ -27,7 +27,6 @@ interface InternalTravisCiConfig {
 
 export class NebProxy {
     constructor(private neb: NebConfig, private requestingUserId: string) {
-
     }
 
     public async getBotUserId(integration: NebIntegration): Promise<string> {
@@ -324,6 +323,7 @@ export class NebProxy {
 
         const apiUrl = upstream.apiUrl.endsWith("/") ? upstream.apiUrl.substring(0, upstream.apiUrl.length - 1) : upstream.apiUrl;
         const url = apiUrl + (endpoint.startsWith("/") ? endpoint : "/" + endpoint);
+        LogService.info("NebProxy", "Doing upstream NEB request: " + url);
 
         return new Promise<T>((resolve, reject) => {
             request({

@@ -47,7 +47,7 @@ export class AdminAppserviceService {
     @POST
     @Path("new")
     public async createAppservice(@QueryParam("scalar_token") scalarToken: string, request: AppserviceCreateRequest): Promise<AppserviceResponse> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         // Trim off the @ sign if it's on the prefix
         if (request.userPrefix[0] === "@") {
@@ -60,6 +60,7 @@ export class AdminAppserviceService {
         }
 
         const appservice = await AppserviceStore.create(AppserviceStore.getSafeUserId(request.userPrefix));
+        LogService.info("AdminAppserviceService", userId + " created an application service");
         return this.mapAppservice(appservice);
     }
 

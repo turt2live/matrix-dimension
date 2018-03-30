@@ -9,6 +9,7 @@ export class ScalarClient {
     }
 
     public register(openId: OpenId): Promise<ScalarRegisterResponse> {
+        LogService.info("ScalarClient", "Doing upstream scalar request: " + this.upstream.scalarUrl + "/register");
         return new Promise((resolve, reject) => {
             request({
                 method: "POST",

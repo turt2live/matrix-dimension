@@ -48,6 +48,7 @@ export async function getFederationUrl(serverName: string): Promise<string> {
 
 export async function doFederatedApiCall(method: string, serverName: string, endpoint: string, query?: object, body?: object): Promise<any> {
     const federationUrl = await  getFederationUrl(serverName);
+    LogService.info("matrix", "Doing federated API call: " + federationUrl + endpoint);
     return new Promise((resolve, reject) => {
         request({
             method: method,
@@ -74,6 +75,7 @@ export async function doFederatedApiCall(method: string, serverName: string, end
 export async function doClientApiCall(method: string, endpoint: string, query?: object, body?: object): Promise<any> {
     let url = config.homeserver.clientServerUrl;
     if (url.endsWith("/")) url = url.substring(0, url.length - 1);
+    LogService.info("matrix", "Doing client API call: " + url + endpoint);
 
     return new Promise((resolve, reject) => {
         request({

@@ -2,6 +2,7 @@ import { GET, Path, POST, QueryParam } from "typescript-rest";
 import { AdminService } from "./AdminService";
 import { Cache, CACHE_UPSTREAM } from "../../MemoryCache";
 import Upstream from "../../db/models/Upstream";
+import { LogService } from "matrix-js-snippets";
 
 interface UpstreamRepsonse {
     id: number;
@@ -42,7 +43,7 @@ export class AdminUpstreamService {
     @POST
     @Path("new")
     public async createUpstream(@QueryParam("scalar_token") scalarToken: string, request: NewUpstreamRequest): Promise<UpstreamRepsonse> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         const upstream = await Upstream.create({
             name: request.name,
@@ -51,6 +52,7 @@ export class AdminUpstreamService {
             apiUrl: request.apiUrl,
         });
 
+        LogService.info("AdminUpstreamService", userId + " created a new upstream");
         Cache.for(CACHE_UPSTREAM).clear();
         return this.mapUpstream(upstream);
     }

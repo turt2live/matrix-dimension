@@ -84,6 +84,7 @@ export class ScalarService {
             isDimensionToken: true,
         });
 
+        LogService.info("ScalarService", mxUserId + " has registered for a scalar token successfully");
         return {scalar_token: dimensionScalarToken.scalarToken};
     }
 

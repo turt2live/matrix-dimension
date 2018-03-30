@@ -1,4 +1,5 @@
 import * as memoryCache from "memory-cache";
+import { LogService } from "matrix-js-snippets";
 
 export class MemoryCache {
 
@@ -30,6 +31,7 @@ class _CacheManager {
     public for(namespace: string): MemoryCache {
         let cache = this.caches[namespace];
         if (!cache) {
+            LogService.info("MemoryCache", "Creating a new cache for namespace: " + namespace);
             cache = this.caches[namespace] = new MemoryCache();
         }
 

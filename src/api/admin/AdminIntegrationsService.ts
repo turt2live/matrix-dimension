@@ -5,6 +5,7 @@ import { DimensionIntegrationsService } from "../dimension/DimensionIntegrations
 import { WidgetStore } from "../../db/WidgetStore";
 import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
 import { Integration } from "../../integrations/Integration";
+import { LogService } from "matrix-js-snippets";
 
 interface SetEnabledRequest {
     enabled: boolean;
@@ -24,11 +25,12 @@ export class AdminIntegrationsService {
     @POST
     @Path(":category/:type/options")
     public async setOptions(@QueryParam("scalar_token") scalarToken: string, @PathParam("category") category: string, @PathParam("type") type: string, body: SetOptionsRequest): Promise<any> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         if (category === "widget") await WidgetStore.setOptions(type, body.options);
         else throw new ApiError(400, "Unrecognized category");
 
+        LogService.info("AdminIntegrationsService", userId + " updated the integration options for " + category + "/" + type);
         Cache.for(CACHE_INTEGRATIONS).clear();
         return {}; // 200 OK
     }
@@ -37,11 +39,12 @@ export class AdminIntegrationsService {
     @POST
     @Path(":category/:type/enabled")
     public async setEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("category") category: string, @PathParam("type") type: string, body: SetEnabledRequest): Promise<any> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         if (category === "widget") await WidgetStore.setEnabled(type, body.enabled);
         else throw new ApiError(400, "Unrecognized category");
 
+        LogService.info("AdminIntegrationsService", userId + " set " + category + "/" + type + " to " + (body.enabled ? "enabled" : "disabled"));
         Cache.for(CACHE_INTEGRATIONS).clear();
         return {}; // 200 OK
     }

@@ -51,8 +51,11 @@ export class AdminNebService {
     @POST
     @Path(":id/integration/:type/enabled")
     public async setIntegrationEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("id") nebId: number, @PathParam("type") integrationType: string, request: SetEnabledRequest): Promise<any> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+
         await NebStore.setIntegrationEnabled(nebId, integrationType, request.enabled);
+        LogService.info("AdminNebService", userId + " set the " + integrationType + " on NEB " + nebId + " to " + (request.enabled ? "enabled" : "disabled"));
+
         Cache.for(CACHE_NEB).clear();
         Cache.for(CACHE_INTEGRATIONS).clear();
         return {}; // 200 OK
@@ -61,8 +64,11 @@ export class AdminNebService {
     @POST
     @Path(":id/integration/:type/config")
     public async setIntegrationConfig(@QueryParam("scalar_token") scalarToken: string, @PathParam("id") nebId: number, @PathParam("type") integrationType: string, newConfig: any): Promise<any> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+
         await NebStore.setIntegrationConfig(nebId, integrationType, newConfig);
+        LogService.info("AdminNebService", userId + " updated the configuration for " + integrationType + " on NEB " + nebId);
+
         Cache.for(CACHE_NEB).clear();
         Cache.for(CACHE_INTEGRATIONS).clear();
         return {}; // 200 OK
@@ -78,10 +84,12 @@ export class AdminNebService {
     @POST
     @Path("new/upstream")
     public async newConfigForUpstream(@QueryParam("scalar_token") scalarToken: string, request: CreateWithUpstream): Promise<NebConfig> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         try {
             const neb = await NebStore.createForUpstream(request.upstreamId);
+            LogService.info("AdminNebService", userId + " created a new NEB instance from upstream " + request.upstreamId);
+
             Cache.for(CACHE_NEB).clear();
             Cache.for(CACHE_INTEGRATIONS).clear();
             return neb;
@@ -94,10 +102,12 @@ export class AdminNebService {
     @POST
     @Path("new/appservice")
     public async newConfigForAppservice(@QueryParam("scalar_token") scalarToken: string, request: CreateWithAppservice): Promise<NebConfig> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         try {
             const neb = await NebStore.createForAppservice(request.appserviceId, request.adminUrl);
+            LogService.info("AdminNebService", userId + " created a new NEB instance from appservice " + request.appserviceId);
+
             Cache.for(CACHE_NEB).clear();
             Cache.for(CACHE_INTEGRATIONS).clear();
             return neb;
