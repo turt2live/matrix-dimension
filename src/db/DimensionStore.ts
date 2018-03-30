@@ -14,6 +14,7 @@ import NebIntegration from "./models/NebIntegration";
 import NebBotUser from "./models/NebBotUser";
 import NebNotificationUser from "./models/NebNotificationUser";
 import NebIntegrationConfig from "./models/NebIntegrationConfig";
+import Webhook from "./models/Webhook";
 
 class _DimensionStore {
     private sequelize: Sequelize;
@@ -39,6 +40,7 @@ class _DimensionStore {
             NebBotUser,
             NebNotificationUser,
             NebIntegrationConfig,
+            Webhook,
         ]);
     }
 

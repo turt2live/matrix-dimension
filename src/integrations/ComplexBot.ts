@@ -21,7 +21,7 @@ export interface RssBotConfiguration {
 }
 
 export interface TravisCiConfiguration {
-    webhookUrl: string;
+    webhookId: string;
     repos: {
         [repoKey: string]: {
             addedByUserId: string;

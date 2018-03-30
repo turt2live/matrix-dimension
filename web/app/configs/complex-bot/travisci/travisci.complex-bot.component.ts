@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import { SessionStorage } from "../../../shared/SessionStorage";
 
 interface TravisCiConfig {
-    webhookUrl: string; // TODO: Display webhook URL somewhere
+    webhookId: string;
     repos: {
         [repoKey: string]: { // "turt2live/matrix-dimension"
             addedByUserId: string;
@@ -31,13 +31,36 @@ export class TravisCiComplexBotConfigComponent extends ComplexBotComponent<Travi
         super("travisci");
     }
 
+    public get webhookUrl(): string {
+        if (!this.newConfig) return "not specified";
+
+        return window.location.origin + "/api/v1/dimension/webhooks/travisci/" + this.newConfig.webhookId;
+    }
+
+    public get travisYaml(): string {
+        return "" +
+            "notifications:\n" +
+            "  webhooks:\n" +
+            "    urls:\n" +
+            "      - " + this.webhookUrl + "\n" +
+            "    on_success: change  # always | never | change\n" +
+            "    on_failure: always\n" +
+            "    on_start: never\n";
+    }
+
     public addRepo(): void {
         if (!this.newRepoKey.trim()) {
             this.toaster.pop('warning', 'Please enter a repository');
             return;
         }
 
-        this.newConfig.repos[this.newRepoKey] = {addedByUserId: SessionStorage.userId, template: "TODO: Default template"};
+        this.newConfig.repos[this.newRepoKey] = {
+            addedByUserId: SessionStorage.userId,
+            template: "" +
+            "%{repository_slug}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}\n" +
+            "    Change view : %{compare_url}\n" +
+            "    Build details : %{build_url}\n"
+        };
         this.newRepoKey = "";
     }
 

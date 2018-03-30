@@ -11,6 +11,8 @@ import { AppserviceStore } from "../db/AppserviceStore";
 import { MatrixAppserviceClient } from "../matrix/MatrixAppserviceClient";
 import NebIntegrationConfig from "../db/models/NebIntegrationConfig";
 import { RssBotConfiguration, TravisCiConfiguration } from "../integrations/ComplexBot";
+import Webhook from "../db/models/Webhook";
+import * as randomString from "random-string";
 
 interface InternalTravisCiConfig {
     webhookUrl: string;
@@ -65,18 +67,17 @@ export class NebProxy {
     public async getServiceConfiguration(integration: NebIntegration, inRoomId: string): Promise<any> {
         if (integration.nebId !== this.neb.id) throw new Error("Integration is not for this NEB proxy");
 
+        let result = null;
         if (this.neb.upstreamId) {
             try {
                 const response = await this.doUpstreamRequest<ModularIntegrationInfoResponse>("/integrations/" + NebClient.getNebType(integration.type), {
                     room_id: inRoomId,
                 });
 
-                if (integration.type === "rss") return this.parseUpstreamRssConfiguration(response.integrations);
-                else if (integration.type === "travisci") return this.parseUpstreamTravisCiConfiguration(response.integrations);
-                else return {};
+                if (integration.type === "rss") result = await this.parseUpstreamRssConfiguration(response.integrations);
+                else if (integration.type === "travisci") result = await this.parseUpstreamTravisCiConfiguration(response.integrations);
             } catch (err) {
                 LogService.error("NebProxy", err);
-                return {};
             }
         } else {
             const serviceConfig = await NebIntegrationConfig.findOne({
@@ -85,8 +86,17 @@ export class NebProxy {
                     roomId: inRoomId,
                 },
             });
-            return serviceConfig ? JSON.parse(serviceConfig.jsonContent) : {};
+            result = serviceConfig ? JSON.parse(serviceConfig.jsonContent) : {};
         }
+
+        if (!result) result = {};
+        if (integration.type === "travisci") {
+            // Replace the webhook ID with the requesting user's webhook ID (generating it if needed)
+            result["webhookId"] = await this.getWebhookId(integration.type);
+            delete result["webhook_url"];
+        }
+
+        return result;
     }
 
     public async setServiceConfiguration(integration: NebIntegration, inRoomId: string, newConfig: any): Promise<any> {
@@ -135,7 +145,7 @@ export class NebProxy {
     private parseUpstreamTravisCiConfiguration(integrations: any[]): InternalTravisCiConfig {
         if (!integrations) return {rooms: {}, webhookUrl: null};
 
-        const result: InternalTravisCiConfig = {rooms: {}, webhookUrl: "https://example.org/nowhere"};
+        const result: InternalTravisCiConfig = {rooms: {}, webhookUrl: null};
         for (const integration of integrations) {
             if (!integration.user_id || !integration.config || !integration.config.rooms) continue;
 
@@ -240,14 +250,24 @@ export class NebProxy {
         }
 
         if (this.neb.upstreamId) {
-            await this.doUpstreamRequest<ModularIntegrationInfoResponse>("/integrations/travis-ci/configureService", {
+            await this.doUpstreamRequest("/integrations/travis-ci/configureService", {
                 room_id: roomId,
                 rooms: newConfig.rooms,
             });
+
+            // Annoyingly, we don't get any kind of feedback for the webhook - we have to re-request it
+            const response = await this.doUpstreamRequest<ModularIntegrationInfoResponse>("/integrations/travis-ci", {
+                room_id: roomId,
+            });
+            const parsed = this.parseUpstreamTravisCiConfiguration(response.integrations);
+            if (parsed && parsed.webhookUrl)
+                await this.setWebhookTarget("travisci", parsed.webhookUrl);
         } else {
             const client = new NebClient(this.neb);
             const notifUser = await NebStore.getOrCreateNotificationUser(this.neb.id, "travisci", this.requestingUserId);
-            await client.setServiceConfig(notifUser.serviceId, notifUser.appserviceUserId, "travis-ci", newConfig);
+            const result = await client.setServiceConfig(notifUser.serviceId, notifUser.appserviceUserId, "travis-ci", newConfig);
+            if (result['NewConfig'] && result['NewConfig']['webhook_url'])
+                await this.setWebhookTarget("travisci", result['NewConfig']['webhook_url']);
         }
     }
 
@@ -261,6 +281,35 @@ export class NebProxy {
             const client = new MatrixAppserviceClient(appservice);
             await client.leaveRoom(await this.getBotUserId(integration), roomId);
         }
+    }
+
+    private async getWebhookId(serviceId: string): Promise<string> {
+        // We add a bit of uniqueness to the service ID to avoid conflicts
+        serviceId = serviceId + "_" + this.neb.id;
+
+        let webhook = await Webhook.findOne({
+            where: {
+                purposeId: serviceId,
+                ownerUserId: this.requestingUserId
+            }
+        }).catch(() => null);
+        if (!webhook) {
+            webhook = await Webhook.create({
+                hookId: randomString({length: 160}),
+                ownerUserId: this.requestingUserId,
+                purposeId: serviceId,
+                targetUrl: null, // Will be populated later
+            });
+        }
+
+        return webhook.hookId;
+    }
+
+    private async setWebhookTarget(serviceId: string, targetUrl: string): Promise<any> {
+        const webhookId = await this.getWebhookId(serviceId);
+        const webhook = await Webhook.findByPrimary(webhookId);
+        webhook.targetUrl = targetUrl;
+        return webhook.save();
     }
 
     private async doUpstreamRequest<T>(endpoint: string, body?: any): Promise<T> {

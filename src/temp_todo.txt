@@ -1,6 +1,4 @@
 Release checklist:
-* RSS bot
-* Travis CI
 * IRC Bridge
 * Update documentation
 * Configuration migration (if possible)
