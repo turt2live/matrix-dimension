@@ -19,3 +19,13 @@ export interface RssBotConfiguration {
         };
     };
 }
+
+export interface TravisCiConfiguration {
+    webhookUrl: string;
+    repos: {
+        [repoKey: string]: {
+            addedByUserId: string;
+            template: string;
+        }
+    }
+}

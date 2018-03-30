@@ -10,7 +10,18 @@ import { ModularIntegrationInfoResponse } from "../models/ModularResponses";
 import { AppserviceStore } from "../db/AppserviceStore";
 import { MatrixAppserviceClient } from "../matrix/MatrixAppserviceClient";
 import NebIntegrationConfig from "../db/models/NebIntegrationConfig";
-import { RssBotConfiguration } from "../integrations/ComplexBot";
+import { RssBotConfiguration, TravisCiConfiguration } from "../integrations/ComplexBot";
+
+interface InternalTravisCiConfig {
+    webhookUrl: string;
+    rooms: {
+        [roomId: string]: {
+            [repoKey: string]: {
+                template: string;
+            };
+        };
+    };
+}
 
 export class NebProxy {
     constructor(private neb: NebConfig, private requestingUserId: string) {
@@ -55,13 +66,13 @@ export class NebProxy {
         if (integration.nebId !== this.neb.id) throw new Error("Integration is not for this NEB proxy");
 
         if (this.neb.upstreamId) {
-            // TODO: Verify
             try {
                 const response = await this.doUpstreamRequest<ModularIntegrationInfoResponse>("/integrations/" + NebClient.getNebType(integration.type), {
                     room_id: inRoomId,
                 });
 
                 if (integration.type === "rss") return this.parseUpstreamRssConfiguration(response.integrations);
+                else if (integration.type === "travisci") return this.parseUpstreamTravisCiConfiguration(response.integrations);
                 else return {};
             } catch (err) {
                 LogService.error("NebProxy", err);
@@ -101,11 +112,12 @@ export class NebProxy {
         }
 
         if (integration.type === "rss") await this.updateRssConfiguration(inRoomId, newConfig);
+        else if (integration.type === "travisci") await this.updateTravisCiConfiguration(inRoomId, newConfig);
         else throw new Error("Cannot update go-neb: unrecognized type");
     }
 
-    private parseUpstreamRssConfiguration(integrations: any[]): any {
-        if (!integrations) return {};
+    private parseUpstreamRssConfiguration(integrations: any[]): RssBotConfiguration {
+        if (!integrations) return {feeds: {}};
 
         const result: RssBotConfiguration = {feeds: {}};
         for (const integration of integrations) {
@@ -115,6 +127,33 @@ export class NebProxy {
 
             const urls = Object.keys(feeds);
             urls.forEach(u => result.feeds[u] = {addedByUserId: userId});
+        }
+
+        return result;
+    }
+
+    private parseUpstreamTravisCiConfiguration(integrations: any[]): InternalTravisCiConfig {
+        if (!integrations) return {rooms: {}, webhookUrl: null};
+
+        const result: InternalTravisCiConfig = {rooms: {}, webhookUrl: "https://example.org/nowhere"};
+        for (const integration of integrations) {
+            if (!integration.user_id || !integration.config || !integration.config.rooms) continue;
+
+            const userId = integration.user_id;
+            if (userId === this.requestingUserId && integration.config.webhook_url && !result.webhookUrl)
+                result.webhookUrl = integration.config.webhook_url;
+
+            const roomIds = Object.keys(integration.config.rooms);
+            for (const roomId of roomIds) {
+                if (!result.rooms[roomId]) result.rooms[roomId] = {};
+
+                const repoKeys = Object.keys(integration.config.rooms[roomId].repos || {});
+                for (const repoKey of repoKeys) {
+                    result.rooms[roomId][repoKey] = {
+                        template: integration.config.rooms[roomId].repos[repoKey].template,
+                    };
+                }
+            }
         }
 
         return result;
@@ -175,6 +214,44 @@ export class NebProxy {
         }
     }
 
+    private async updateTravisCiConfiguration(roomId: string, newOpts: TravisCiConfiguration): Promise<any> {
+        const repoKeys = Object.keys(newOpts.repos).filter(f => newOpts.repos[f].addedByUserId === this.requestingUserId);
+        let newConfig = {rooms: {}};
+
+        if (!this.neb.upstreamId) {
+            if (repoKeys.length === 0) {
+                const notifUser = await NebStore.getOrCreateNotificationUser(this.neb.id, "travisci", this.requestingUserId);
+                const appserviceClient = new MatrixAppserviceClient(await AppserviceStore.getAppservice(this.neb.appserviceId));
+                await appserviceClient.leaveRoom(notifUser.appserviceUserId, roomId);
+            }
+
+            const client = new NebClient(this.neb);
+            const notifUser = await NebStore.getOrCreateNotificationUser(this.neb.id, "travisci", this.requestingUserId);
+            newConfig = await client.getServiceConfig(notifUser.serviceId); // So we don't accidentally clear other rooms
+        }
+
+        // Reset the current room's configuration so we don't keep artifacts.
+        newConfig.rooms[roomId] = {repos: {}};
+        const roomReposConf = newConfig.rooms[roomId].repos;
+
+        for (const repoKey of repoKeys) {
+            roomReposConf[repoKey] = {
+                template: newOpts.repos[repoKey].template,
+            };
+        }
+
+        if (this.neb.upstreamId) {
+            await this.doUpstreamRequest<ModularIntegrationInfoResponse>("/integrations/travis-ci/configureService", {
+                room_id: roomId,
+                rooms: newConfig.rooms,
+            });
+        } else {
+            const client = new NebClient(this.neb);
+            const notifUser = await NebStore.getOrCreateNotificationUser(this.neb.id, "travisci", this.requestingUserId);
+            await client.setServiceConfig(notifUser.serviceId, notifUser.appserviceUserId, "travis-ci", newConfig);
+        }
+    }
+
     public async removeBotFromRoom(integration: NebIntegration, roomId: string): Promise<any> {
         if (integration.nebId !== this.neb.id) throw new Error("Integration is not for this NEB proxy");
 
@@ -213,6 +290,7 @@ export class NebProxy {
                     reject(err);
                 } else if (res.statusCode !== 200) {
                     LogService.error("NebProxy", "Got status code " + res.statusCode + " when calling " + url);
+                    LogService.error("NebProxy", res.body);
                     reject(new Error("Request failed"));
                 } else {
                     if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
