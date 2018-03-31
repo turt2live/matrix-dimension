@@ -67,6 +67,7 @@ import { AdminBridgesComponent } from "./admin/bridges/bridges.component";
 import { AdminIrcBridgeComponent } from "./admin/bridges/irc/irc.component";
 import { AdminIrcApiService } from "./shared/services/admin/admin-irc-api.service";
 import { AdminIrcBridgeNetworksComponent } from "./admin/bridges/irc/networks/networks.component";
+import { AdminIrcBridgeAddSelfhostedComponent } from "./admin/bridges/irc/add-selfhosted/add-selfhosted.component";
 
 @NgModule({
     imports: [
@@ -127,6 +128,7 @@ import { AdminIrcBridgeNetworksComponent } from "./admin/bridges/irc/networks/ne
         AdminBridgesComponent,
         AdminIrcBridgeComponent,
         AdminIrcBridgeNetworksComponent,
+        AdminIrcBridgeAddSelfhostedComponent,
 
         // Vendor
     ],
@@ -157,6 +159,7 @@ import { AdminIrcBridgeNetworksComponent } from "./admin/bridges/irc/networks/ne
         AdminNebImgurConfigComponent,
         ConfigSimpleBotComponent,
         AdminIrcBridgeNetworksComponent,
+        AdminIrcBridgeAddSelfhostedComponent,
     ]
 })
 export class AppModule {

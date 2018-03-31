@@ -25,7 +25,7 @@
                 <tr *ngFor="let bridge of configurations trackById">
                     <td>
                         {{ bridge.upstreamId ? "matrix.org's bridge" : "Self-hosted bridge" }}
-                        <span class="text-muted" style="display: inline-block;" *ngIf="!bridge.upstreamId">({{ bridge.adminUrl }})</span>
+                        <span class="text-muted" style="display: inline-block;" *ngIf="!bridge.upstreamId">({{ bridge.provisionUrl }})</span>
                     </td>
                     <td>
                         {{ getEnabledNetworksString(bridge) }}

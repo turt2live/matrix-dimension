@@ -6,6 +6,10 @@ import { AdminUpstreamApiService } from "../../../shared/services/admin/admin-up
 import { FE_IrcBridge } from "../../../shared/models/irc";
 import { Modal, overlayConfigFactory } from "ngx-modialog";
 import { AdminIrcBridgeNetworksComponent, IrcNetworksDialogContext } from "./networks/networks.component";
+import {
+    AddSelfhostedIrcBridgeDialogContext,
+    AdminIrcBridgeAddSelfhostedComponent
+} from "./add-selfhosted/add-selfhosted.component";
 
 @Component({
     templateUrl: "./irc.component.html",
@@ -87,7 +91,15 @@ export class AdminIrcBridgeComponent implements OnInit {
     }
 
     public addSelfHostedBridge() {
-        console.log("TODO: Dialog");
+        this.modal.open(AdminIrcBridgeAddSelfhostedComponent, overlayConfigFactory({
+            isBlocking: true,
+            size: 'lg',
+        }, AddSelfhostedIrcBridgeDialogContext)).result.then(() => {
+            this.reload().catch(err => {
+                console.error(err);
+                this.toaster.pop("error", "Failed to get an update IRC bridge list");
+            });
+        });
     }
 
     public editNetworks(bridge: FE_IrcBridge) {
