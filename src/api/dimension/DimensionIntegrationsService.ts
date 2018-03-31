@@ -8,11 +8,14 @@ import { WidgetStore } from "../../db/WidgetStore";
 import { SimpleBot } from "../../integrations/SimpleBot";
 import { NebStore } from "../../db/NebStore";
 import { ComplexBot } from "../../integrations/ComplexBot";
+import { Bridge } from "../../integrations/Bridge";
+import { BridgeStore } from "../../db/BridgeStore";
 
 export interface IntegrationsResponse {
     widgets: Widget[],
     bots: SimpleBot[],
     complexBots: ComplexBot[],
+    bridges: Bridge[],
 }
 
 /**
@@ -33,6 +36,24 @@ export class DimensionIntegrationsService {
         const widgets = await WidgetStore.listAll(enabledOnly ? true : null);
         Cache.for(CACHE_INTEGRATIONS).put("widgets", widgets);
         return widgets;
+    }
+
+    /**
+     * Gets a list of bridges
+     * @param {boolean} enabledOnly True to only return the enabled bridges
+     * @param {string} forUserId The requesting user ID
+     * @param {string} inRoomId If specified, the room ID to list the bridges in
+     * @returns {Promise<Bridge[]>} Resolves to the bridge list
+     */
+    public static async getBridges(enabledOnly: boolean, forUserId: string, inRoomId?: string): Promise<Bridge[]> {
+        const cacheKey = inRoomId ? "bridges_" + inRoomId : "bridges";
+
+        const cached = Cache.for(CACHE_INTEGRATIONS).get(cacheKey);
+        if (cached) return cached;
+
+        const bridges = await BridgeStore.listAll(forUserId, enabledOnly ? true : null, inRoomId);
+        Cache.for(CACHE_INTEGRATIONS).put(cacheKey, bridges);
+        return bridges;
     }
 
     /**
@@ -72,6 +93,7 @@ export class DimensionIntegrationsService {
             widgets: await DimensionIntegrationsService.getWidgets(true),
             bots: await DimensionIntegrationsService.getSimpleBots(userId),
             complexBots: await DimensionIntegrationsService.getComplexBots(userId, roomId),
+            bridges: await DimensionIntegrationsService.getBridges(true, userId, roomId),
         };
     }
 
@@ -83,6 +105,7 @@ export class DimensionIntegrationsService {
         if (category === "widget") return roomConfig.widgets.find(i => i.type === integrationType);
         else if (category === "bot") return roomConfig.bots.find(i => i.type === integrationType);
         else if (category === "complex-bot") return roomConfig.complexBots.find(i => i.type === integrationType);
+        else if (category === "bridge") return roomConfig.bridges.find(i => i.type === integrationType);
         else throw new ApiError(400, "Unrecognized category");
     }
 
@@ -92,6 +115,7 @@ export class DimensionIntegrationsService {
         const userId = await ScalarService.getTokenOwner(scalarToken);
 
         if (category === "complex-bot") await NebStore.setComplexBotConfig(userId, integrationType, roomId, newConfig);
+        else if (category === "bridge") await BridgeStore.setBridgeRoomConfig(userId, integrationType, roomId, newConfig);
         else throw new ApiError(400, "Unrecognized category");
 
         Cache.for(CACHE_INTEGRATIONS).clear(); // TODO: Improve which cache we invalidate
@@ -106,6 +130,7 @@ export class DimensionIntegrationsService {
         if (category === "widget") throw new ApiError(400, "Widgets should be removed client-side");
         else if (category === "bot") await NebStore.removeSimpleBot(integrationType, roomId, userId);
         else if (category === "complex-bot") throw new ApiError(400, "Complex bots should be removed automatically");
+        else if (category === "bridge") throw new ApiError(400, "Bridges should be removed automatically");
         else throw new ApiError(400, "Unrecognized category");
 
         Cache.for(CACHE_INTEGRATIONS).clear(); // TODO: Improve which cache we invalidate

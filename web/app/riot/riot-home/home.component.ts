@@ -259,6 +259,8 @@ export class RiotHomeComponent {
                     console.error(err);
                     if (requirement.expectedValue) return Promise.reject("Expected to be able to send specific event types");
                 });
+            case "userInRoom":
+                // TODO: Implement
             default:
                 return Promise.reject("Requirement '" + requirement.condition + "' not found");
         }

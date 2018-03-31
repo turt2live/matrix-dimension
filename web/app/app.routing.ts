@@ -21,6 +21,8 @@ import { AdminEditNebComponent } from "./admin/neb/edit/edit.component";
 import { AdminAddSelfhostedNebComponent } from "./admin/neb/add-selfhosted/add-selfhosted.component";
 import { RssComplexBotConfigComponent } from "./configs/complex-bot/rss/rss.complex-bot.component";
 import { TravisCiComplexBotConfigComponent } from "./configs/complex-bot/travisci/travisci.complex-bot.component";
+import { AdminBridgesComponent } from "./admin/bridges/bridges.component";
+import { AdminIrcBridgeComponent } from "./admin/bridges/irc/irc.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -67,6 +69,21 @@ const routes: Routes = [
                                 data: {breadcrumb: "Add self-hosted go-neb", name: "Add self-hosted go-neb"},
                             },
                         ]
+                    },
+                    {
+                        path: "bridges",
+                        data: {breadcrumb: "Bridges", name: "Bridges"},
+                        children: [
+                            {
+                                path: "",
+                                component: AdminBridgesComponent,
+                            },
+                            {
+                                path: "irc",
+                                component: AdminIrcBridgeComponent,
+                                data: {breadcrumb: "IRC Bridge", name: "IRC Bridge"},
+                            },
+                        ],
                     },
                 ],
             },
@@ -125,6 +142,15 @@ const routes: Routes = [
                     },
                 ],
             },
+            // {
+            //     path: "bridge",
+            //     children: [
+            //         {
+            //             path: "irc",
+            //
+            //         }
+            //     ]
+            // }
         ],
     },
     {

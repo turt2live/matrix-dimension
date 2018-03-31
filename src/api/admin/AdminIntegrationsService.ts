@@ -6,6 +6,7 @@ import { WidgetStore } from "../../db/WidgetStore";
 import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
 import { Integration } from "../../integrations/Integration";
 import { LogService } from "matrix-js-snippets";
+import { BridgeStore } from "../../db/BridgeStore";
 
 interface SetEnabledRequest {
     enabled: boolean;
@@ -42,6 +43,7 @@ export class AdminIntegrationsService {
         const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         if (category === "widget") await WidgetStore.setEnabled(type, body.enabled);
+        else if (category === "bridge") await BridgeStore.setEnabled(type, body.enabled);
         else throw new ApiError(400, "Unrecognized category");
 
         LogService.info("AdminIntegrationsService", userId + " set " + category + "/" + type + " to " + (body.enabled ? "enabled" : "disabled"));
@@ -51,10 +53,11 @@ export class AdminIntegrationsService {
 
     @GET
     @Path(":category/all")
-    public async getAllIntegrations(@QueryParam("scalar_token") scalarToken: string, @QueryParam("category") category: string): Promise<Integration[]> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    public async getAllIntegrations(@QueryParam("scalar_token") scalarToken: string, @PathParam("category") category: string): Promise<Integration[]> {
+        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         if (category === "widget") return await DimensionIntegrationsService.getWidgets(false);
+        else if (category === "bridge") return await DimensionIntegrationsService.getBridges(false, userId);
         else throw new ApiError(400, "Unrecongized category");
     }
 }

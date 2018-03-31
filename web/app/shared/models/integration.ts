@@ -26,6 +26,11 @@ export interface FE_ComplexBot<T> extends FE_Integration {
     config: T;
 }
 
+export interface FE_Bridge<T> extends FE_Integration {
+    bridgeUserId: string;
+    config: T;
+}
+
 export interface FE_Widget extends FE_Integration {
     options: any;
 }
@@ -44,7 +49,7 @@ export interface FE_JitsiWidget extends FE_Widget {
 }
 
 export interface FE_IntegrationRequirement {
-    condition: "publicRoom" | "canSendEventTypes";
+    condition: "publicRoom" | "canSendEventTypes" | "userInRoom";
     argument: any;
     expectedValue: any;
 }

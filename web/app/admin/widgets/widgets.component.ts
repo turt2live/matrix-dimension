@@ -22,9 +22,12 @@ export class AdminWidgetsComponent {
     public widgets: FE_Widget[];
 
     constructor(private adminIntegrationsApi: AdminIntegrationsApiService, private toaster: ToasterService, private modal: Modal) {
-        this.adminIntegrationsApi.getAllWidgets().then(integrations => {
+        this.adminIntegrationsApi.getAllWidgets().then(widgets => {
             this.isLoading = false;
-            this.widgets = integrations.widgets;
+            this.widgets = widgets;
+        }).catch(err => {
+            console.error(err);
+            this.toaster.pop("error", "Failed to load widgets");
         });
     }
 

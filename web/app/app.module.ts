@@ -62,6 +62,9 @@ import { ConfigSimpleBotComponent } from "./configs/simple-bot/simple-bot.compon
 import { ConfigScreenComplexBotComponent } from "./configs/complex-bot/config-screen/config-screen.complex-bot.component";
 import { RssComplexBotConfigComponent } from "./configs/complex-bot/rss/rss.complex-bot.component";
 import { TravisCiComplexBotConfigComponent } from "./configs/complex-bot/travisci/travisci.complex-bot.component";
+import { ConfigScreenBridgeComponent } from "./configs/bridge/config-screen/config-screen.bridge.component";
+import { AdminBridgesComponent } from "./admin/bridges/bridges.component";
+import { AdminIrcBridgeComponent } from "./admin/bridges/irc/irc.component";
 
 @NgModule({
     imports: [
@@ -118,6 +121,9 @@ import { TravisCiComplexBotConfigComponent } from "./configs/complex-bot/travisc
         ConfigScreenComplexBotComponent,
         RssComplexBotConfigComponent,
         TravisCiComplexBotConfigComponent,
+        ConfigScreenBridgeComponent,
+        AdminBridgesComponent,
+        AdminIrcBridgeComponent,
 
         // Vendor
     ],

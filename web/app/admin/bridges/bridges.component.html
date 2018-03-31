@@ -1,0 +1,37 @@
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!isLoading">
+    <my-ibox title="Bridges">
+        <div class="my-ibox-content">
+            <p>
+                Bridges provide a way for rooms to interact with and/or bring in events from a third party network. For
+                example, an IRC bridge can allow IRC and matrix users to communicate with each other.
+            </p>
+
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th class="text-center" style="width: 120px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngIf="!bridges || bridges.length === 0">
+                    <td colspan="2"><i>No bridges.</i></td>
+                </tr>
+                <tr *ngFor="let bridge of bridges trackById">
+                    <td>{{ bridge.displayName }}</td>
+                    <td>{{ bridge.description }}</td>
+                    <td class="text-center">
+                        <span class="editButton" [routerLink]="[bridge.type]" title="edit">
+                            <i class="fa fa-pencil-alt"></i>
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </my-ibox>
+</div>
