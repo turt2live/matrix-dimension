@@ -16,6 +16,8 @@ import NebNotificationUser from "./models/NebNotificationUser";
 import NebIntegrationConfig from "./models/NebIntegrationConfig";
 import Webhook from "./models/Webhook";
 import BridgeRecord from "./models/BridgeRecord";
+import IrcBridgeRecord from "./models/IrcBridgeRecord";
+import IrcBridgeNetwork from "./models/IrcBridgeNetwork";
 
 class _DimensionStore {
     private sequelize: Sequelize;
@@ -43,6 +45,8 @@ class _DimensionStore {
             NebIntegrationConfig,
             Webhook,
             BridgeRecord,
+            IrcBridgeRecord,
+            IrcBridgeNetwork,
         ]);
     }
 

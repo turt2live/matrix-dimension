@@ -65,6 +65,7 @@ import { TravisCiComplexBotConfigComponent } from "./configs/complex-bot/travisc
 import { ConfigScreenBridgeComponent } from "./configs/bridge/config-screen/config-screen.bridge.component";
 import { AdminBridgesComponent } from "./admin/bridges/bridges.component";
 import { AdminIrcBridgeComponent } from "./admin/bridges/irc/irc.component";
+import { AdminIrcApiService } from "./shared/services/admin/admin-irc-api.service";
 
 @NgModule({
     imports: [
@@ -138,6 +139,7 @@ import { AdminIrcBridgeComponent } from "./admin/bridges/irc/irc.component";
         AdminAppserviceApiService,
         AdminNebApiService,
         AdminUpstreamApiService,
+        AdminIrcApiService,
         {provide: Window, useValue: window},
 
         // Vendor

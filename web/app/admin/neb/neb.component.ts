@@ -95,7 +95,7 @@ export class AdminNebComponent {
     public addModularHostedNeb() {
         this.isAddingModularNeb = true;
         const createNeb = (upstream: FE_Upstream) => {
-            this.nebApi.newUpstreamConfiguration(upstream).then(neb => {
+            return this.nebApi.newUpstreamConfiguration(upstream).then(neb => {
                 this.configurations.push(neb);
                 this.toaster.pop("success", "matrix.org's go-neb added", "Click the pencil icon to enable the bots.");
                 this.isAddingModularNeb = false;

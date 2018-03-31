@@ -13,7 +13,7 @@ export class BridgeStore {
 
         for (const bridgeRecord of allRecords) {
             if (isEnabled === true || isEnabled === false) {
-                const isLogicallyEnabled = await BridgeStore.isLogicallyEnabled(bridgeRecord);
+                const isLogicallyEnabled = await BridgeStore.isLogicallyEnabled(bridgeRecord, requestingUserId);
                 if (isLogicallyEnabled !== isEnabled) continue;
             }
 
@@ -33,21 +33,18 @@ export class BridgeStore {
     }
 
     public static async setBridgeRoomConfig(requestingUserId: string, integrationType: string, inRoomId: string, newConfig: any): Promise<any> {
-        console.log(requestingUserId);
-        console.log(inRoomId);
-        console.log(newConfig);
         const record = await BridgeRecord.findOne({where: {type: integrationType}});
         if (!record) throw new Error("Bridge not found");
 
         if (integrationType === "irc") {
-            const irc = new IrcBridge(record);
+            const irc = new IrcBridge(requestingUserId);
             return irc.setRoomConfiguration(requestingUserId, inRoomId, newConfig);
         } else throw new Error("Unsupported bridge");
     }
 
-    private static async isLogicallyEnabled(record: BridgeRecord): Promise<boolean> {
+    private static async isLogicallyEnabled(record: BridgeRecord, requestingUserId: string): Promise<boolean> {
         if (record.type === "irc") {
-            const irc = new IrcBridge(record);
+            const irc = new IrcBridge(requestingUserId);
             return irc.hasNetworks();
         } else return true;
     }
@@ -55,7 +52,7 @@ export class BridgeStore {
     private static async getConfiguration(record: BridgeRecord, requestingUserId: string, inRoomId?: string): Promise<any> {
         if (record.type === "irc") {
             if (!inRoomId) return {}; // The bridge's admin config is handled by other APIs
-            const irc = new IrcBridge(record);
+            const irc = new IrcBridge(requestingUserId);
             return irc.getRoomConfiguration(requestingUserId, inRoomId);
         } else return {};
     }
