@@ -4,6 +4,8 @@ import { AdminIrcApiService } from "../../../shared/services/admin/admin-irc-api
 import { FE_Upstream } from "../../../shared/models/admin-responses";
 import { AdminUpstreamApiService } from "../../../shared/services/admin/admin-upstream-api.service";
 import { FE_IrcBridge } from "../../../shared/models/irc";
+import { Modal, overlayConfigFactory } from "ngx-modialog";
+import { AdminIrcBridgeNetworksComponent, IrcNetworksDialogContext } from "./networks/networks.component";
 
 @Component({
     templateUrl: "./irc.component.html",
@@ -20,7 +22,8 @@ export class AdminIrcBridgeComponent implements OnInit {
 
     constructor(private upstreamApi: AdminUpstreamApiService,
                 private ircApi: AdminIrcApiService,
-                private toaster: ToasterService) {
+                private toaster: ToasterService,
+                private modal: Modal) {
     }
 
     public ngOnInit() {
@@ -88,6 +91,11 @@ export class AdminIrcBridgeComponent implements OnInit {
     }
 
     public editNetworks(bridge: FE_IrcBridge) {
-        console.log(bridge);
+        this.modal.open(AdminIrcBridgeNetworksComponent, overlayConfigFactory({
+            bridge: bridge,
+
+            isBlocking: true,
+            size: 'lg',
+        }, IrcNetworksDialogContext));
     }
 }

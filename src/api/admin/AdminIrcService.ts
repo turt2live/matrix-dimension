@@ -6,6 +6,7 @@ import { ApiError } from "../ApiError";
 import IrcBridgeRecord from "../../db/models/IrcBridgeRecord";
 import { AvailableNetworks, IrcBridge } from "../../bridges/IrcBridge";
 import Upstream from "../../db/models/Upstream";
+import IrcBridgeNetwork from "../../db/models/IrcBridgeNetwork";
 
 interface CreateWithUpstream {
     upstreamId: number;
@@ -21,6 +22,10 @@ interface BridgeResponse {
     provisionUrl?: string;
     isEnabled: boolean;
     availableNetworks: AvailableNetworks;
+}
+
+interface SetEnabledRequest {
+    isEnabled: boolean;
 }
 
 /**
@@ -63,6 +68,31 @@ export class AdminIrcService {
             isEnabled: ircBridge.isEnabled,
             availableNetworks: await client.getNetworks(ircBridge),
         };
+    }
+
+    @POST
+    @Path(":bridgeId/network/:networkId/enabled")
+    public async setNetworkEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number, @PathParam("networkId") networkId: string, request: SetEnabledRequest): Promise<any> {
+        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+
+        const ircBridge = await IrcBridgeRecord.findByPrimary(bridgeId);
+        if (!ircBridge) throw new ApiError(404, "IRC Bridge not found");
+
+        const localNetworkId = IrcBridge.parseNetworkId(networkId).bridgeNetworkId;
+        const network = await IrcBridgeNetwork.findOne({
+            where: {
+                bridgeId: ircBridge.id,
+                bridgeNetworkId: localNetworkId,
+            },
+        });
+        if (!network) throw new ApiError(404, "Network not found");
+
+        network.isEnabled = request.isEnabled;
+        await network.save();
+
+        LogService.info("AdminIrcService", userId + " toggled the network '" + localNetworkId + "' on bridge " + ircBridge.id);
+        Cache.for(CACHE_IRC_BRIDGE).clear();
+        return {}; // 200 OK
     }
 
     @POST

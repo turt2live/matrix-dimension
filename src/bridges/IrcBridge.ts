@@ -34,7 +34,7 @@ export class IrcBridge {
 
     public static parseNetworkId(networkId: string): { bridgeId: string, bridgeNetworkId: string } {
         const parts = networkId.split("-");
-        const bridgeId = parts.splice(1, 1)[0];
+        const bridgeId = parts.splice(0, 1)[0];
         const bridgeNetworkId = parts.join("-");
         return {bridgeId, bridgeNetworkId};
     }

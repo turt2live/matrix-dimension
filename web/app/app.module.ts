@@ -66,6 +66,7 @@ import { ConfigScreenBridgeComponent } from "./configs/bridge/config-screen/conf
 import { AdminBridgesComponent } from "./admin/bridges/bridges.component";
 import { AdminIrcBridgeComponent } from "./admin/bridges/irc/irc.component";
 import { AdminIrcApiService } from "./shared/services/admin/admin-irc-api.service";
+import { AdminIrcBridgeNetworksComponent } from "./admin/bridges/irc/networks/networks.component";
 
 @NgModule({
     imports: [
@@ -125,6 +126,7 @@ import { AdminIrcApiService } from "./shared/services/admin/admin-irc-api.servic
         ConfigScreenBridgeComponent,
         AdminBridgesComponent,
         AdminIrcBridgeComponent,
+        AdminIrcBridgeNetworksComponent,
 
         // Vendor
     ],
@@ -154,6 +156,7 @@ import { AdminIrcApiService } from "./shared/services/admin/admin-irc-api.servic
         AdminNebGoogleConfigComponent,
         AdminNebImgurConfigComponent,
         ConfigSimpleBotComponent,
+        AdminIrcBridgeNetworksComponent,
     ]
 })
 export class AppModule {

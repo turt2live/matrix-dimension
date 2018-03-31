@@ -25,4 +25,10 @@ export class AdminIrcApiService extends AuthedApi {
     public newSelfhosted(provisionUrl: string): Promise<FE_IrcBridge> {
         return this.authedPost("/api/v1/dimension/admin/irc/new/selfhosted", {provisionUrl: provisionUrl}).map(r => r.json()).toPromise();
     }
+
+    public setNetworkEnabled(bridgeId: number, networkId: string, isEnabled: boolean): Promise<any> {
+        return this.authedPost("/api/v1/dimension/admin/irc/" + bridgeId + "/network/" + networkId + "/enabled", {
+            isEnabled: isEnabled,
+        }).map(r => r.json()).toPromise();
+    }
 }
