@@ -15,4 +15,8 @@ export class IrcApiService extends AuthedApi {
     public requestLink(roomId: string, networkId: string, channelNoHash: string, op: string): Promise<any> {
         return this.authedPost("/api/v1/dimension/irc/" + networkId + "/channel/" + channelNoHash + "/link/" + roomId, {op: op}).map(r => r.json()).toPromise();
     }
+
+    public removeLink(roomId: string, networkId: string, channelNoHash: string): Promise<any> {
+        return this.authedPost("/api/v1/dimension/irc/" + networkId + "/channel/" + channelNoHash + "/unlink/" + roomId).map(r => r.json()).toPromise();
+    }
 }

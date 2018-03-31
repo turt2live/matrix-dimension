@@ -1,5 +1,4 @@
 Release checklist:
-* IRC Bridge
 * Update documentation
 * Configuration migration (if possible)
 * Final testing (widgets, bots, etc)

@@ -127,6 +127,25 @@ export class IrcBridge {
         }
     }
 
+    public async removeLink(bridge: IrcBridgeRecord, networkId: string, channel: string, inRoomId: string): Promise<any> {
+        const network = (await this.getAllNetworks()).find(n => n.isEnabled && n.ircBridgeId === bridge.id && n.bridgeNetworkId === networkId);
+        if (!network) throw new Error("Network not found");
+
+        const requestBody = {
+            remote_room_server: network.domain,
+            remote_room_channel: channel,
+            matrix_room_id: inRoomId,
+            user_id: this.requestingUserId,
+        };
+
+        if (bridge.upstreamId) {
+            delete requestBody["user_id"];
+            await this.doUpstreamRequest(bridge, "POST", "/bridges/irc/_matrix/provision/unlink", null, requestBody);
+        } else {
+            await this.doProvisionRequest(bridge, "POST", "/_matrix/provision/unlink", null, requestBody);
+        }
+    }
+
     private async getAllNetworks(): Promise<CachedNetwork[]> {
         const cached = Cache.for(CACHE_IRC_BRIDGE).get("networks");
         if (cached) return cached;

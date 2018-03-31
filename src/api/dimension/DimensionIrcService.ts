@@ -46,4 +46,20 @@ export class DimensionIrcService {
         LogService.info("DimensionIrcService", userId + " requested #" + channelNoHash + " on " + networkId + " to be linked to " + roomId);
         return {}; // 200 OK
     }
+
+    @POST
+    @Path(":networkId/channel/:channel/unlink/:roomId")
+    public async unlink(@QueryParam("scalar_token") scalarToken: string, @PathParam("networkId") networkId: string, @PathParam("channel") channelNoHash: string, @PathParam("roomId") roomId: string): Promise<any> {
+        const userId = await ScalarService.getTokenOwner(scalarToken);
+
+        const parsed = IrcBridge.parseNetworkId(networkId);
+        const bridge = await IrcBridgeRecord.findByPrimary(parsed.bridgeId);
+        if (!bridge) throw new ApiError(404, "Bridge not found");
+
+        const client = new IrcBridge(userId);
+        await client.removeLink(bridge, parsed.bridgeNetworkId, "#" + channelNoHash, roomId);
+
+        LogService.info("DimensionIrcService", userId + " unlinked #" + channelNoHash + " on " + networkId + " from " + roomId);
+        return {}; // 200 OK
+    }
 }

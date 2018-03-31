@@ -127,7 +127,16 @@ export class IrcBridgeConfigComponent extends BridgeComponent<IrcConfig> {
         return channels;
     }
 
-    public removeChannel(channel: any) {
-        console.log(channel);
+    public removeChannel(channel: LocalChannel) {
+        this.isUpdating = true;
+        this.irc.removeLink(this.roomId, channel.networkId, channel.name.substring(1)).then(() => {
+            this.isUpdating = false;
+            const idx = this.bridge.config.links[channel.networkId].findIndex(c => c.channelName === channel.name);
+            if (idx !== -1) this.bridge.config.links[channel.networkId].splice(idx, 1);
+            this.toaster.pop("success", "Link removed");
+        }).catch(err => {
+            console.error(err);
+            this.toaster.pop("error", "Failed to remove link");
+        });
     }
 }
