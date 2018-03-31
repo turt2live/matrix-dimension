@@ -1,8 +1,0 @@
-type: "complex-bot"
-integrationType: "rss"
-enabled: true
-name: "RSS Bot"
-about: "Tracks any Atom/RSS feed and sends new items into this room"
-avatar: "img/avatars/rssbot.png"
-upstream:
-  type: "vector"

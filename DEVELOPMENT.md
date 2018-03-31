@@ -22,30 +22,32 @@ npm run start:web
 npm run build:app && node build/app/index.js
 ```
 
-## General architecture
+## Backend Architecture
 
-Integrations are defined in the database for administrators to enable, disable, and configure as they please. They are added using migrations (or in some cases, manually by the administrators) and should always be added as "disabled" by default.
+Integrations are defined into one of four categories:
+* Simple bots - Bots that can be invited to the room and left alone (Imgur, Giphy, etc)
+* Complex bots - Bots that require some sort of per-room configuration (RSS, Github, etc)
+* Bridges - Application services that bridge the room in some way to an external network (IRC, Webhooks, etc)
+* Widgets - Added functionality through iframes for rooms/users
 
-The frontend has two sections: the admin and non-admin sections. The admin section is used by authorized users to configure the various integrations, or parts of integrations. The non-admin section is used by everyone else to add the integrations to their rooms.
+The backend further breaks these categories out to redirect traffic to the correct place. For instance, the admin backend 
+breaks out go-neb specifically as it's configuration is fairly involved.
 
-The frontend automatically routes edit pages in both the admin and non-admin sections to the appropriate routes. It does this by using a combination of the `category` and `type` of the integrations. For example, a `widget` with the type `jitsi` will be redirected to the `/riot-app/widget/jitsi` route for editing. Both the admin and non-admin routes need to be declared in the `app.routing.ts` class. After that, it is best to copy/paste a similar widget component and edit it to your needs.
+The backend has 3 major layers:
+* The webserver (where all the requests come from)
+* The data stores (where requests normally get routed to)
+* The proxy (where we flip between using upstream configurations and self-hosted)
 
-The backend is slightly more complicated, where particular integrations may have their own API defined depending on the complexity involved. For example, all bridges have their own admin and non-admin API to configure the various parts. The required changes to the backend are described in the later sections of this document.
+Many of the API routes are generic, however many of the integrations require additional structure that the routes cannot 
+provide. For example, the IRC bridge is complicated in that it needs a dedicated API in order to be configured, however
+the bots can work well within their constraints.
 
-## Adding new widgets
+## Frontend Architecture
 
-TODO
+The frontend app is split into two major parts: The Riot frontend and the admin section. The components are nested under
+their respective categories and route. For example, the edit page for the Jitsi widget is under the Widgets directory.
 
-## Adding new go-neb services
-
-TODO
-
-## Adding new bridges
-
-TODO
-
-## Adding new bots
-
-TODO
-
-*note to self: are simple bots even a thing anymore?*
+The frontend is otherwise a fairly basic Angular 5 application: there's components, services, etc. The services should be
+kept small and generic where possible (almost always matching the Service classes in the backend). Components are more of
+a judgement call and should be split out where it makes sense. For example, it doesn't make sense to create a component
+for every instance where an `ngFor` is used because the number of components would be astronomical.

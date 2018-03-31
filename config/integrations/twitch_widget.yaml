@@ -1,7 +1,0 @@
-# All this configuration does is make "Twitch Widget" available in the UI
-type: "widget"
-integrationType: "twitch"
-enabled: true
-name: "Twitch Livestream"
-about: "Embed a Twitch Livestream"
-avatar: "img/avatars/twitch.png"

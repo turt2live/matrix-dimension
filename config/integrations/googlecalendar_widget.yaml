@@ -1,7 +1,0 @@
-# All this configuration does is make "Google Calendar Widget" available in the UI
-type: "widget"
-integrationType: "googlecalendar"
-enabled: true
-name: "Google Calendar"
-about: "Share upcoming events in your room with a Google Calendar"
-avatar: "img/avatars/googlecalendar.png"
