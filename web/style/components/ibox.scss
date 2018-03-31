@@ -1,0 +1,33 @@
+.ibox {
+  background-color: #fff;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.ibox .ibox-title {
+  padding: 5px;
+  border-bottom: 1px solid #e7eaec;
+  border-top: 2px solid #e7eaec;
+}
+
+.ibox .ibox-title h5 {
+  display: inline;
+  font-size: 1.1em;
+  padding: 5px;
+  margin: 0;
+}
+
+.ibox .ibox-content {
+  padding: 15px;
+}
+
+.ibox .ibox-title .ibox-icon {
+  float: right;
+  margin-top: 4px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.ibox .ibox-title.ibox-title-collapsible {
+  cursor: pointer;
+}

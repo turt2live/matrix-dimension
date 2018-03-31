@@ -1,76 +1,12 @@
 <div id="wrapper">
-    <my-scalar-close></my-scalar-close>
-    <div *ngIf="error">
-        <p class="text-danger">{{ error }}</p>
-    </div>
-    <div *ngIf="loading && !error">
-        <p><i class="fa fa-circle-o-notch fa-spin"></i> Loading...</p>
-    </div>
-    <div *ngIf="!error && !loading">
-        <!-- ------------------------ -->
-        <!-- EMPTY/ENCRYPTED STATES   -->
-        <!-- ------------------------ -->
-        <div class="alert alert-warning" *ngIf="integrations.length > 0 && isEncryptedRoom">
-            <h4>This room is encrypted</h4>
-            <strong>Integrations are not encrypted!</strong> This means that some information about yourself and the room may be leaked to the bot, bridge, or widget. This information includes the room ID, your display name, your username, your avatar, information about Riot, and other similar details. Add integrations with caution.
-        </div>
-        <div class="alert alert-warning" *ngIf="integrations.length === 0 && isEncryptedRoom">
-            <h4>This room is encrypted</h4>
-            There are currently no integrations which support encrypted rooms. Sorry about that!
-        </div>
-        <div class="alert alert-warning" *ngIf="integrations.length === 0 && !isEncryptedRoom">
-            <h4>No integrations available</h4>
-            This room does not have any compatible integrations. Please contact the server owner if you're seeing this message.
-        </div>
+    <my-page-header>
+        <span class="adminButton headerButton" *ngIf="isAdmin()" routerLink="/riot-app/admin/">
+            <i class="fa fa-cog"></i>
+        </span>
+        <my-scalar-close class="closeButton headerButton"></my-scalar-close>
+    </my-page-header>
 
-        <!-- ------------------------ -->
-        <!-- WIDGETS                  -->
-        <!-- ------------------------ -->
-        <h4 *ngIf="hasAnyOf('widget')">
-            Widgets <i class="fa fa-question-circle text-info" style="font-size: 15px;" placement="bottom"
-                       ngbTooltip="Widgets add small apps to Riot, like Google Docs, Jitsi conferences, and YouTube videos"></i>
-        </h4>
-        <div class="integration-container">
-            <my-integration *ngFor="let integration of integrations | myFilter:'type':'widget'"
-                            [integration]="integration"
-                            [roomId]="roomId"
-                            [scalarToken]="scalarToken"
-                            (updated)="updateIntegration(integration)"></my-integration>
-        </div>
-
-        <!-- ------------------------ -->
-        <!-- BOTS                     -->
-        <!-- ------------------------ -->
-        <h4 *ngIf="hasAnyOf('bot', 'complex-bot')">
-            Bots <i class="fa fa-question-circle text-info" style="font-size: 15px;" placement="bottom"
-                    ngbTooltip="Bots can provide entertainment or some utility to your room"></i>
-        </h4>
-        <div class="integration-container">
-            <my-integration *ngFor="let integration of integrations | myFilter:'type':'bot'"
-                            [integration]="integration"
-                            [roomId]="roomId"
-                            [scalarToken]="scalarToken"
-                            (updated)="updateIntegration(integration)"></my-integration>
-            <my-integration *ngFor="let integration of integrations | myFilter:'type':'complex-bot'"
-                            [integration]="integration"
-                            [roomId]="roomId"
-                            [scalarToken]="scalarToken"
-                            (updated)="updateIntegration(integration)"></my-integration>
-        </div>
-
-        <!-- ------------------------ -->
-        <!-- BRIDGES                  -->
-        <!-- ------------------------ -->
-        <h4 *ngIf="hasAnyOf('bridge')">
-            Bridges <i class="fa fa-question-circle text-info" style="font-size: 15px;" placement="bottom"
-                       ngbTooltip="Bridges allow people on other platforms to talk in the room"></i>
-        </h4>
-        <div class="integration-container">
-            <my-integration *ngFor="let integration of integrations | myFilter:'type':'bridge'"
-                            [integration]="integration"
-                            [roomId]="roomId"
-                            [scalarToken]="scalarToken"
-                            (updated)="updateIntegration(integration)"></my-integration>
-        </div>
+    <div class="page-content">
+        <router-outlet></router-outlet>
     </div>
 </div>

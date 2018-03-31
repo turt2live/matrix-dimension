@@ -1,0 +1,29 @@
+<div class="dialog">
+    <div class="dialog-header">
+        <h4>Jitsi Widget Configuration</h4>
+    </div>
+    <div class="dialog-content">
+        <label class="label-block">
+            Jitsi Domain
+            <span class="text-muted ">This is the domain that is used to host the conference.</span>
+            <input type="text" class="form-control"
+                   placeholder="jitsi.riot.im"
+                   [(ngModel)]="widget.options.jitsiDomain" [disabled]="isUpdating"/>
+        </label>
+        <label class="label-block">
+            Jitsi Script URL
+            <span class="text-muted ">This is used to create the Jitsi widget. It is normally at /libs/external_api.min.js from your domain.</span>
+            <input type="text" class="form-control"
+                   placeholder="https://jitsi.riot.im/libs/external_api.min.js"
+                   [(ngModel)]="widget.options.scriptUrl" [disabled]="isUpdating"/>
+        </label>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm">
+            <i class="far fa-save"></i> Save
+        </button>
+        <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
+            <i class="far fa-times-circle"></i> Cancel
+        </button>
+    </div>
+</div>

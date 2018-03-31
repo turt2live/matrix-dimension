@@ -1,47 +1,54 @@
-export interface Integration {
+export interface FE_Integration {
+    category: "bot" | "complex-bot" | "bridge" | "widget";
     type: string;
-    integrationType: string;
-    userId: string;
-    name: string;
-    avatar: string;
-    about: string; // nullable
-    supportsEncryptedRooms: boolean;
-
-    // Set by us
+    requirements: FE_IntegrationRequirement[];
+    isEncryptionSupported: boolean;
+    displayName: string;
+    avatarUrl: string;
+    description: string;
     isEnabled: boolean;
-    isBroken: boolean;
-    hasConfig: boolean;
-    requirements?: any; // nullable
-    bridgeError: string; // nullable
+    isPublic: boolean;
+
+    // Used by us
+    _inRoom: boolean;
+    _isUpdating: boolean;
+    _isSupported: boolean;
+    _notSupportedReason: string;
 }
 
-export interface RSSIntegration extends Integration {
-    feeds: string[];
-    immutableFeeds: { url: string, ownerId: string }[];
+export interface FE_SimpleBot extends FE_Integration {
+    userId: string;
 }
 
-export interface TravisCiIntegration extends Integration {
-    repoTemplates: { repoKey: string, template: string, newTemplate: string }[]; // newTemplate is local
-    immutableRepoTemplates: { repoKey: string, template: string, ownerId: string }[];
-    webhookUrl: string; // immutable
+export interface FE_ComplexBot<T> extends FE_Integration {
+    notificationUserId: string;
+    botUserId?: string;
+    config: T;
 }
 
-export interface CircleCiIntegration extends Integration {
-    repoTemplates: { repoKey: string, template: string, newTemplate: string }[]; // newTemplate is local
-    immutableRepoTemplates: { repoKey: string, template: string, ownerId: string }[];
-    webhookUrl: string; // immutable
+export interface FE_Bridge<T> extends FE_Integration {
+    config: T;
 }
 
-export interface IRCIntegration extends Integration {
-    availableNetworks: { name: string, id: string }[];
-    channels: { [networkId: string]: string[] };
+export interface FE_Widget extends FE_Integration {
+    options: any;
 }
 
-export interface EtherpadWidgetIntegration extends Integration {
-    defaultUrl: string;
+export interface FE_EtherpadWidget extends FE_Widget {
+    options: {
+        defaultUrl: string;
+    };
 }
 
-export interface JitsiWidgetIntegration extends Integration {
-    jitsiDomain: string;
-    scriptUrl: string
+export interface FE_JitsiWidget extends FE_Widget {
+    options: {
+        jitsiDomain: string;
+        scriptUrl: string;
+    };
+}
+
+export interface FE_IntegrationRequirement {
+    condition: "publicRoom" | "canSendEventTypes" | "userInRoom";
+    argument: any;
+    expectedValue: any;
 }

@@ -1,0 +1,14 @@
+<div class="dialog">
+    <div class="dialog-header">
+        <h4>{{ bot.displayName }}</h4>
+    </div>
+    <div class="dialog-content" style="text-align: center;">
+        <p>{{ bot.description }}</p>
+        <ui-switch [checked]="bot._inRoom" [disabled]="bot._isUpdating" (change)="toggle()"></ui-switch>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
+            <i class="far fa-times-circle"></i> Close
+        </button>
+    </div>
+</div>

@@ -1,8 +1,0 @@
-type: "complex-bot"
-integrationType: "github"
-enabled: true
-name: "Github"
-about: "Track changes to your projects and create new issues using `!github create`"
-avatar: "img/avatars/github.png"
-upstream:
-  type: "vector"

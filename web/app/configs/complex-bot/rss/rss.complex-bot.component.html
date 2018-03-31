@@ -1,0 +1,58 @@
+<my-complex-bot-config [botComponent]="this">
+    <ng-template #botParamsTemplate>
+        <my-ibox>
+            <h5 class="my-ibox-title">
+                Feeds
+            </h5>
+            <div class="my-ibox-content">
+                <form (submit)="interceptSave()" novalidate name="saveForm">
+                    <table class="table table-striped table-condensed table-bordered">
+                        <thead>
+                        <tr>
+                            <th>URL</th>
+                            <th>Added by</th>
+                            <th class="actions-col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let feed of getFeeds()">
+                            <td>{{ feed.url }}</td>
+                            <td>{{ feed.addedByUserId }}</td>
+                            <td class="actions-col">
+                               <button type="button" class="btn btn-sm btn-outline-danger"
+                                       [disabled]="isUpdating || !feed.isSelf"
+                                       (click)="removeFeed(feed)">
+                                   <i class="far fa-trash-alt"></i> Remove
+                               </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control"
+                                           [(ngModel)]="newFeedUrl"
+                                           placeholder="https://example.org/feed.atom"
+                                           name="newFeedUrl"
+                                           title="New feed URL" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-outline-success"
+                                                [disabled]="isUpdating"
+                                                (click)="addFeed()">
+                                            <i class="fa fa-plus"></i> Add
+                                        </button>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 25px">
+                        <button type="submit" class="btn btn-sm btn-primary" [disabled]="isUpdating">
+                            <i class="far fa-save"></i> Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </my-ibox>
+    </ng-template>
+</my-complex-bot-config>

@@ -1,0 +1,13 @@
+<div class="wrapper">
+    <div class="control-page" *ngIf="isLoading || !canEmbed">
+        <div class="loading-badge" *ngIf="isLoading">
+            <my-spinner></my-spinner>
+        </div>
+        <div class="embed-failed" *ngIf="!isLoading && !canEmbed">
+            <p class="ban"><i class="fa fa-ban"></i></p>
+            <h4>Sorry, this content cannot be embedded</h4>
+        </div>
+    </div>
+    <iframe [src]="embedUrl" *ngIf="!isLoading && canEmbed" frameborder="0" allowfullscreen></iframe>
+    <my-fullscreen-button *ngIf="!isLoading && canEmbed" class="toggleFullscreen"></my-fullscreen-button>
+</div>

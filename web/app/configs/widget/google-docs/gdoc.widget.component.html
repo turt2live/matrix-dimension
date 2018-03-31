@@ -1,0 +1,11 @@
+<my-widget-config [widgetComponent]="this">
+    <ng-template #widgetParamsTemplate let-widget="widget">
+        <label class="label-block">
+            Document URL
+            <input type="text" class="form-control"
+                   placeholder="https://docs.google.com/document/d/1V0olL42WJ84LNYn0kFBJaPmlRxQ4Trx97a5wfVMuJC8/edit"
+                   [(ngModel)]="widget.dimension.newUrl" name="widget-url-{{widget.id}}"
+                   [disabled]="isUpdating"/>
+        </label>
+    </ng-template>
+</my-widget-config>

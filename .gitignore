@@ -8,6 +8,12 @@ db/*.db
 start.sh
 config/integrations/*_development.yaml
 config/integrations/*_production.yaml
+build/
+dimension.db
+src/**/*.js
+src/**/*.js.map
+web/**/*.js
+web/**/*.js.map
 
 # Logs
 logs

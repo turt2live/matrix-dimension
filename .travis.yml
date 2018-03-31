@@ -1,11 +1,13 @@
 language: node_js
 node_js:
-  - "6"
+  - "8"
 env:
 - NODE_ENV=development
 before_install:
 - npm i -g npm
+- npm i -g typescript
 install:
   - npm install
 script:
   - npm run build
+  - npm run lint

@@ -1,0 +1,29 @@
+<div class="dialog">
+    <div class="dialog-header">
+        <h4>{{ bridge.upstreamId ? "matrix.org's" : "Self-hosted" }} IRC Bridge Networks</h4>
+    </div>
+    <div class="dialog-content">
+        <table class="table table-striped table-condensed table-bordered">
+            <thead>
+            <tr>
+                <th>Network</th>
+                <th>Enabled</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let network of networks trackById">
+                <td>{{ network.name }}</td>
+                <td>
+                    <ui-switch [checked]="network.isEnabled" size="small" [disabled]="isUpdating"
+                               (change)="toggleNetwork(network)"></ui-switch>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" (click)="dialog.close()" title="close" class="btn btn-primary btn-sm">
+            <i class="far fa-times-circle"></i> Close
+        </button>
+    </div>
+</div>

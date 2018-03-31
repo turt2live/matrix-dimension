@@ -1,0 +1,6 @@
+<div *ngIf="bridgeComponent.isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!bridgeComponent.isLoading">
+    <ng-container *ngTemplateOutlet="bridgeParamsTemplate"></ng-container>
+</div>

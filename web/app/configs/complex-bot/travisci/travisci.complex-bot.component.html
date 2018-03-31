@@ -1,0 +1,93 @@
+<my-complex-bot-config [botComponent]="this">
+    <ng-template #botParamsTemplate>
+        <my-ibox [isCollapsible]="true">
+            <h5 class="my-ibox-title">
+                .travis.yml configuration and template information
+            </h5>
+            <div class="my-ibox-content">
+                <p>The following section needs to be added to your <code>.travis.yml</code> file in your repositories:</p>
+                <pre>{{ travisYaml }}</pre>
+
+                <p>
+                    The following variables can be used in your template. This template is used to post a message to the
+                    room when your webhook is activated.
+                </p>
+                <ul>
+                    <li><code>{{ '%{repository_slug}' }}</code> - The repository identifier (eg: "matrix-org/synapse")</li>
+                    <li><code>{{ '%{repository_name}' }}</code> - The repository name (eg: "synapse")</li>
+                    <li><code>{{ '%{build_number}' }}</code> - The build number</li>
+                    <li><code>{{ '%{build_id}' }}</code> - The build ID</li>
+                    <li><code>{{ '%{branch}' }}</code> - The branch name</li>
+                    <li><code>{{ '%{commit}' }}</code> - A short version of the commit SHA</li>
+                    <li><code>{{ '%{commit_subject}' }}</code> - The first line of the commit message</li>
+                    <li><code>{{ '%{commit_message}' }}</code> - The full commit message</li>
+                    <li><code>{{ '%{author}' }}</code> - The author of the commit</li>
+                    <li><code>{{ '%{result}' }}</code> - The result of the build</li>
+                    <li><code>{{ '%{message}' }}</code> - The message from Travis CI about the build</li>
+                    <li><code>{{ '%{duration}' }}</code> - The total duration of all builds in the matrix</li>
+                    <li><code>{{ '%{elapsed_timed}' }}</code> - The time it took to run the build</li>
+                    <li><code>{{ '%{compare_url}' }}</code> - A URL to see the changes which triggered the build</li>
+                    <li><code>{{ '%{build_url}' }}</code> - A URL to see the build information</li>
+                </ul>
+            </div>
+        </my-ibox>
+        <my-ibox>
+            <h5 class="my-ibox-title">
+                Repositories
+            </h5>
+            <div class="my-ibox-content">
+                <form (submit)="interceptSave()" novalidate name="saveForm">
+                    <table class="table table-striped table-condensed table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Repository</th>
+                            <th>Template</th>
+                            <th>Added by</th>
+                            <th class="actions-col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let repo of getRepos()">
+                            <td>{{ repo.repoKey }}</td>
+                            <td>
+                                <textarea title="Repository Template" class="repo-template form-control" rows="3" (change)="repo.template = $event.target.value" [disabled]="isUpdating || !repo.isSelf">{{ repo.template }}</textarea>
+                            </td>
+                            <td>{{ repo.addedByUserId }}</td>
+                            <td class="actions-col">
+                               <button type="button" class="btn btn-sm btn-outline-danger"
+                                       [disabled]="isUpdating || !repo.isSelf"
+                                       (click)="removeRepo(repo)">
+                                   <i class="far fa-trash-alt"></i> Remove
+                               </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control"
+                                           [(ngModel)]="newRepoKey"
+                                           placeholder="matrix-org/synapse"
+                                           name="newRepoKey"
+                                           title="New repository name" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-outline-success"
+                                                [disabled]="isUpdating"
+                                                (click)="addRepo()">
+                                            <i class="fa fa-plus"></i> Add
+                                        </button>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 25px">
+                        <button type="submit" class="btn btn-sm btn-primary" [disabled]="isUpdating">
+                            <i class="far fa-save"></i> Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </my-ibox>
+    </ng-template>
+</my-complex-bot-config>

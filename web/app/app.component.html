@@ -2,6 +2,8 @@
 </header>
 <main>
     <toaster-container></toaster-container>
+    <!-- The breadcrumb needs to be defined here otherwise it doesn't work -->
+    <breadcrumb [allowBootstrap]="false" [hidden]="true"></breadcrumb>
     <router-outlet></router-outlet>
 </main>
 <footer>

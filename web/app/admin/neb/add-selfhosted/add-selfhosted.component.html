@@ -1,0 +1,24 @@
+<my-ibox title="New self-hosted go-neb">
+    <div class="my-ibox-content">
+        <p>Self-hosted go-neb instances are powered by application services installed on your homeserver. The application service is responsible for creating the bots dynamically.</p>
+
+        <label class="label-block">
+            User Prefix
+            <span class="text-muted ">This is the prefix used for all bot users.</span>
+            <input type="text" class="form-control"
+                   placeholder="@_neb"
+                   [(ngModel)]="userPrefix" [disabled]="isSaving"/>
+        </label>
+        <label class="label-block">
+            API URL
+            <span class="text-muted ">The admin/api url for go-neb. Be sure to not expose the admin API to the outside world because this endpoint is not authenticated.</span>
+            <input type="text" class="form-control"
+                   placeholder="http://localhost:4050"
+                   [(ngModel)]="adminUrl" [disabled]="isSaving"/>
+        </label>
+
+        <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm" [disabled]="isSaving">
+            <i class="far fa-save"></i> Save
+        </button>
+    </div>
+</my-ibox>

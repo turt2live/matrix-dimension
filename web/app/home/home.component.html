@@ -1,22 +1,84 @@
 <div class="header">
-    <img src="/img/logo.png">
+    <img src="/img/logo/banner-sm.png">
 </div>
-<div class="wrapper">
-    <div class="center">
-        <h3>An alternative integrations manager for Riot</h3>
-        <p>Dimension is a way for people hosting Riot to expand their integrations offering to their users.</p>
-        <img src="/img/screenshot_bordered.png">
-        <br/>
-        <br/>
-        <p>Point your Riot <code>config.json</code> to Dimension to start using it:</p>
-        <pre>
-        "integrations_ui_url": "https://dimension.t2bot.io/riot",
-        "integrations_rest_url": "https://dimension.t2bot.io/api/v1/scalar",
-        "integrations_widgets_urls": ["https://dimension.t2bot.io/widgets"],
-        </pre>
-        <br/>
-        <br/>
-        <p>Learn more on <a href="https://github.com/turt2live/matrix-dimension">Github</a>. Talk about it in <a
-                href="https://matrix.to/#/#dimension:t2l.io">#dimension:t2l.io</a></p>
-    </div>
+<div class="wrapper" *ngIf="showPromoPage">
+    <h3>An open source integration manager for matrix clients, like Riot</h3>
+    <p>
+        View the source on <a href="https://github.com/turt2live/matrix-dimension">Github</a>. Visit the community in
+        <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a> on matrix.
+    </p>
+
+    <h4>Try it out</h4>
+    <p>
+        The easiest way to see it in action is to log in to your matrix account at <a href="https://t2bot.io/riot">t2bot.io/riot</a>
+        (be sure to change the server URL to match your homeserver). The other option is to point your Riot <code>config.json</code>
+        at our servers:</p>
+    <pre>{{ integrationsConfig }}</pre>
+
+    <h4>Running your own</h4>
+    <p class="info">
+        You'll need NodeJS 8 or higher, npm 5 or higher, and Riot (or another supported client). For help getting Dimension set up,
+        please see the <a href="https://github.com/turt2live/matrix-dimension/blob/master/README.md">README</a> or visit us in
+        <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a> on matrix.
+    </p>
+    <pre>{{ downloadInstructions }}</pre>
+    <p>
+        If you didn't change the default settings for the webserver, Dimension should now be running on port 8184 of your
+        server. It is best at this point to set up your reverse proxy to access Dimension. Use a hostname that is not the
+        same as your Riot address (eg: dimension.t2bot.io). Visit the public address for Dimension (eg: dimension.t2bot.io)
+        and follow the instructions.
+    </p>
+
+    <h4>Do I need an integration manager?</h4>
+    <p>
+        Riot, and other clients, come with an integration manager already configured to get you started. This integration manager
+        is not compatible with private homeservers and isn't open source, however. Dimension fills this gap by providing a self-hosted,
+        open source, integration manager that uses your infrastructure instead of someone else's.
+    </p>
+    <p>
+        If you're looking to use an open source or self-hosted integration manager on Riot or another client, Dimension is for you.
+    </p>
+
+    <h4>What is an integration manager?</h4>
+    <p>
+        Integration managers are the part of your client that help you configure the various bots, bridges, and widgets for your
+        room and account. Many bots, brides, and widgets ('integrations') have manual, text-based, ways to configure them however for
+        most users that can be too complicated or confusing. Dimension, and other integration managers, aim to provide an easy-to-use
+        interface for setting up integrations.
+    </p>
+    <p>
+        The infrastructure ends up looking something like this:<br />
+        <img src="img/infrastructure.png" />
+    </p>
+</div>
+<div class="wrapper" *ngIf="!showPromoPage">
+    <h3>Welcome to your new Dimension instance!</h3>
+    <p>
+        If you haven't already, join <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a> on
+        matrix and star the repository on <a href="https://github.com/turt2live/matrix-dimension">Github</a>.
+    </p>
+
+    <h4>Configuring Riot</h4>
+    <p>Update your Riot <code>config.json</code> file to have the following options:</p>
+    <pre>{{ integrationsConfig }}</pre>
+
+    <h4>Configuring bots, bridges, and widgets</h4>
+    <p>All of the bots, bridges, and widgets Dimension offers can be turned on and off and configured from within Riot.</p>
+    <ol>
+        <li>Open the integrations manager (the 3x3 grid in the top right of any room).</li>
+        <li>If you're an admin, you'll see a gear (<i class="fa fa-cog"></i>) icon in the top right. To add yourself as an admin, put your user ID in the Dimension configuration and restart Dimension.</li>
+        <li>Click the gear icon and go through the different areas on the left to configure your integrations.</li>
+    </ol>
+
+    <h4>"Could not contact integrations server" error</h4>
+    <p>
+        When Riot cannot reach Dimension or Dimension is unable to reach your homeserver an error saying "Could not contact integrations
+        server" shows up in every room. Before visiting us in <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a>
+        on matrix, here's a few things to check:
+    </p>
+    <ul>
+        <li><strong>Verify the homeserver configuration in Dimension.</strong> The name, client/server URL, and access token all need to be valid and directed at your homeserver.</li>
+        <li><strong>Verify federation is enabled on your homeserver.</strong> Even in a private, or non-federated, environment federation needs to be enabled so Dimension can work correctly. Dimension should still work okay if federation on your homeserver is bound to a private interface instead of being public - just be sure to set the federation URL in your configuration.</li>
+        <li><strong>Verify that federation is working on your homeserver.</strong> Using tools like the <a href="https://matrix.org/federationtester/api/report?server_name=YOUR_SERVER_HERE.com">federation tester</a>, make sure that federation is working on your homeserver.</li>
+    </ul>
 </div>

@@ -1,0 +1,42 @@
+<div *ngIf="isError">
+    <div class="alert alert-danger">{{ errorMessage }}</div>
+</div>
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+
+<div *ngIf="!isLoading && !isError">
+    <!-- ------------------------ -->
+    <!-- EMPTY/ENCRYPTED STATES   -->
+    <!-- ------------------------ -->
+    <div class="alert alert-warning" *ngIf="hasIntegrations() && isRoomEncrypted">
+        <h4>This room is encrypted</h4>
+        <strong>Integrations are not encrypted!</strong>
+        This means that some information about yourself and the
+        room may be leaked to the bot, bridge, or widget. This information includes the room ID, your display
+        name,
+        your username, your avatar, information about Riot, and other similar details. Add integrations with
+        caution.
+    </div>
+    <div class="alert alert-warning" *ngIf="!hasIntegrations() && isRoomEncrypted">
+        <h4>This room is encrypted</h4>
+        There are currently no integrations which support encrypted rooms. Sorry about that!
+    </div>
+    <div class="alert alert-warning" *ngIf="!hasIntegrations() && !isRoomEncrypted">
+        <h4>No integrations available</h4>
+        This room does not have any compatible integrations. Please contact the server owner if you're seeing
+        this
+        message.
+    </div>
+
+    <!-- ------------------------ -->
+    <!-- CATEGORIES               -->
+    <!-- ------------------------ -->
+    <div *ngFor="let category of getCategories()">
+        <my-ibox *ngIf="getIntegrationsIn(category).length > 0" title="{{category}}" [isCollapsible]="true">
+            <div class="my-ibox-content">
+                <my-integration-bag [integrations]="getIntegrationsIn(category)" (integrationClicked)="modifyIntegration($event)"></my-integration-bag>
+            </div>
+        </my-ibox>
+    </div>
+</div>

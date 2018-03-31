@@ -1,0 +1,49 @@
+// The CSS for the Riot breadcrumb is specified here to ensure that it's style can be overridden.
+// In it's current position (as a component), the component-level stylesheet cannot access the
+// elements, so we specify it in a more generic location.
+
+.dimension-breadcrumb {
+  .fluid-bread {
+    padding: 0;
+  }
+
+  .fluid-bread .container {
+    padding: 0;
+    margin: 0;
+  }
+
+  .fluid-bread .container .breadcrumb {
+    padding: 0;
+    margin: 0;
+  }
+
+  .fluid-bread .breadcrumb-item a:hover {
+    text-decoration: none;
+  }
+
+  font-size: 13px;
+  display: block;
+  padding-top: 4px;
+}
+
+.header .quickAction .closeButton .scalarClose {
+  position: absolute;
+  top: 19px;
+  right: 15px;
+}
+
+.header .quickAction .adminButton {
+  position: absolute;
+  top: 19px;
+  right: 55px;
+}
+
+.header .quickAction .headerButton {
+  font-size: 35px;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.header .quickAction .headerButton:hover {
+  color: #888;
+}

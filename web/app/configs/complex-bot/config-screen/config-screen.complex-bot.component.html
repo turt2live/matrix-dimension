@@ -1,0 +1,6 @@
+<div *ngIf="botComponent.isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!botComponent.isLoading">
+    <ng-container *ngTemplateOutlet="botParamsTemplate"></ng-container>
+</div>

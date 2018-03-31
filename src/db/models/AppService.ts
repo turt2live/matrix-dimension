@@ -1,0 +1,21 @@
+import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
+
+@Table({
+    tableName: "dimension_appservice",
+    underscoredAll: false,
+    timestamps: false,
+})
+export default class AppService extends Model<AppService> {
+    @PrimaryKey
+    @Column
+    id: string;
+
+    @Column
+    hsToken: string;
+
+    @Column
+    asToken: string;
+
+    @Column
+    userPrefix: string;
+}
