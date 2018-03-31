@@ -10,6 +10,7 @@ import { AdminApiService } from "../../shared/services/admin/admin-api.service";
 import { IntegrationsApiService } from "../../shared/services/integrations/integrations-api.service";
 import { Modal, overlayConfigFactory } from "ngx-modialog";
 import { ConfigSimpleBotComponent, SimpleBotConfigDialogContext } from "../../configs/simple-bot/simple-bot.component";
+import { ToasterService } from "angular2-toaster";
 
 const CATEGORY_MAP = {
     "Widgets": ["widget"],
@@ -41,7 +42,8 @@ export class RiotHomeComponent {
                 private integrationsApi: IntegrationsApiService,
                 private adminApi: AdminApiService,
                 private router: Router,
-                private modal: Modal) {
+                private modal: Modal,
+                private toaster: ToasterService) {
         let params: any = this.activatedRoute.snapshot.queryParams;
 
         this.requestedScreen = params.screen;
@@ -124,6 +126,13 @@ export class RiotHomeComponent {
     }
 
     public modifyIntegration(integration: FE_Integration) {
+        if (!integration._isSupported) {
+            console.log(this.userId + " tried to modify " + integration.displayName + " with error: " + integration._notSupportedReason);
+            const reason = integration.category === "widget" ? "You do not appear to have permission to modify widgets in this room" : integration._notSupportedReason;
+            this.toaster.pop("error", reason);
+            return;
+        }
+
         SessionStorage.editIntegration = integration;
         SessionStorage.editsRequested++;
         console.log(this.userId + " is trying to modify " + integration.displayName);
@@ -260,7 +269,7 @@ export class RiotHomeComponent {
                     if (requirement.expectedValue) return Promise.reject("Expected to be able to send specific event types");
                 });
             case "userInRoom":
-                // TODO: Implement
+            // TODO: Implement
             default:
                 return Promise.reject("Requirement '" + requirement.condition + "' not found");
         }
