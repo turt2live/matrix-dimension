@@ -46,14 +46,7 @@ export class DimensionIntegrationsService {
      * @returns {Promise<Bridge[]>} Resolves to the bridge list
      */
     public static async getBridges(enabledOnly: boolean, forUserId: string, inRoomId?: string): Promise<Bridge[]> {
-        const cacheKey = inRoomId ? "bridges_" + inRoomId : "bridges";
-
-        const cached = Cache.for(CACHE_INTEGRATIONS).get(cacheKey);
-        if (cached) return cached;
-
-        const bridges = await BridgeStore.listAll(forUserId, enabledOnly ? true : null, inRoomId);
-        Cache.for(CACHE_INTEGRATIONS).put(cacheKey, bridges);
-        return bridges;
+        return BridgeStore.listAll(forUserId, enabledOnly ? true : null, inRoomId);
     }
 
     /**

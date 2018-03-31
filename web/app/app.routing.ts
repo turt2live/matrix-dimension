@@ -23,6 +23,7 @@ import { RssComplexBotConfigComponent } from "./configs/complex-bot/rss/rss.comp
 import { TravisCiComplexBotConfigComponent } from "./configs/complex-bot/travisci/travisci.complex-bot.component";
 import { AdminBridgesComponent } from "./admin/bridges/bridges.component";
 import { AdminIrcBridgeComponent } from "./admin/bridges/irc/irc.component";
+import { IrcBridgeConfigComponent } from "./configs/bridge/irc/irc.bridge.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -142,15 +143,16 @@ const routes: Routes = [
                     },
                 ],
             },
-            // {
-            //     path: "bridge",
-            //     children: [
-            //         {
-            //             path: "irc",
-            //
-            //         }
-            //     ]
-            // }
+            {
+                path: "bridge",
+                children: [
+                    {
+                        path: "irc",
+                        component: IrcBridgeConfigComponent,
+                        data: {breadcrumb: "IRC Bridge Configuration", name: "IRC Bridge Configuration"},
+                    },
+                ],
+            },
         ],
     },
     {

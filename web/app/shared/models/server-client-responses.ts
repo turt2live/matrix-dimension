@@ -56,3 +56,9 @@ export interface CanSendEventResponse extends ScalarRoomResponse {
 export interface RoomEncryptionStatusResponse extends ScalarRoomResponse {
     response: boolean;
 }
+
+export interface SetPowerLevelResponse extends ScalarRoomResponse {
+    response: {
+        success: boolean;
+    };
+}

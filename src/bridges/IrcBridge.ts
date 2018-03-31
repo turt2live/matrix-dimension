@@ -5,9 +5,9 @@ import Upstream from "../db/models/Upstream";
 import UserScalarToken from "../db/models/UserScalarToken";
 import { LogService } from "matrix-js-snippets";
 import * as request from "request";
-import { QueryNetworksResponse } from "./models/provision_responses";
-import { ModularIrcQueryNetworksResponse } from "../models/ModularResponses";
+import { ListLinksResponseItem, ListOpsResponse, QueryNetworksResponse } from "./models/irc";
 import IrcBridgeNetwork from "../db/models/IrcBridgeNetwork";
+import { ModularIrcResponse } from "../models/ModularResponses";
 
 interface CachedNetwork {
     ircBridgeId: number;
@@ -25,6 +25,12 @@ export interface AvailableNetworks {
         bridgeUserId: string;
         isEnabled: boolean;
     };
+}
+
+export interface LinkedChannels {
+    [networkId: string]: {
+        channelName: string;
+    }[];
 }
 
 export class IrcBridge {
@@ -47,9 +53,10 @@ export class IrcBridge {
         return allNetworks.length > 0;
     }
 
-    public async getNetworks(bridge?: IrcBridgeRecord): Promise<AvailableNetworks> {
+    public async getNetworks(bridge?: IrcBridgeRecord, enabledOnly?: boolean): Promise<AvailableNetworks> {
         let networks = await this.getAllNetworks();
         if (bridge) networks = networks.filter(n => n.ircBridgeId === bridge.id);
+        if (enabledOnly) networks = networks.filter(n => n.isEnabled);
 
         const available: AvailableNetworks = {};
         networks.forEach(n => available[IrcBridge.getNetworkId(n)] = {
@@ -61,12 +68,63 @@ export class IrcBridge {
         return available;
     }
 
-    public async getRoomConfiguration(requestingUserId: string, inRoomId: string): Promise<IrcBridgeConfiguration> {
-        return <any>{requestingUserId, inRoomId};
+    public async getRoomConfiguration(inRoomId: string): Promise<IrcBridgeConfiguration> {
+        const availableNetworks = await this.getNetworks(null, true);
+        const bridges = await IrcBridgeRecord.findAll({where: {isEnabled: true}});
+        const linkedChannels: LinkedChannels = {};
+
+        for (const bridge of bridges) {
+            const links = await this.fetchLinks(bridge, inRoomId);
+            for (const key of Object.keys(links)) {
+                linkedChannels[key] = links[key];
+            }
+        }
+
+        return {availableNetworks: availableNetworks, links: linkedChannels};
     }
 
-    public async setRoomConfiguration(requestingUserId: string, inRoomId: string, newConfig: IrcBridgeConfiguration): Promise<any> {
-        return <any>{requestingUserId, inRoomId, newConfig};
+    public async getOperators(bridge: IrcBridgeRecord, networkId: string, channel: string): Promise<string[]> {
+        const network = (await this.getAllNetworks()).find(n => n.isEnabled && n.ircBridgeId === bridge.id && n.bridgeNetworkId === networkId);
+        if (!network) throw new Error("Network not found");
+
+        const requestBody = {remote_room_server: network.domain, remote_room_channel: channel};
+
+        let responses: ListOpsResponse[] = [];
+        if (bridge.upstreamId) {
+            const result = await this.doUpstreamRequest<ModularIrcResponse<ListOpsResponse>>(bridge, "POST", "/bridges/irc/_matrix/provision/querylink", null, requestBody);
+            if (result && result.replies) responses = result.replies.map(r => r.response);
+        } else {
+            const result = await this.doProvisionRequest<ListOpsResponse>(bridge, "POST", "/_matrix/provision/querylink", null, requestBody);
+            if (result) responses = [result];
+        }
+
+        const ops: string[] = [];
+        for (const response of responses) {
+            if (!response || !response.operators) continue;
+            response.operators.forEach(i => ops.push(i));
+        }
+
+        return ops;
+    }
+
+    public async requestLink(bridge: IrcBridgeRecord, networkId: string, channel: string, op: string, inRoomId: string): Promise<any> {
+        const network = (await this.getAllNetworks()).find(n => n.isEnabled && n.ircBridgeId === bridge.id && n.bridgeNetworkId === networkId);
+        if (!network) throw new Error("Network not found");
+
+        const requestBody = {
+            remote_room_server: network.domain,
+            remote_room_channel: channel,
+            matrix_room_id: inRoomId,
+            op_nick: op,
+            user_id: this.requestingUserId,
+        };
+
+        if (bridge.upstreamId) {
+            delete requestBody["user_id"];
+            await this.doUpstreamRequest(bridge, "POST", "/bridges/irc/_matrix/provision/link", null, requestBody);
+        } else {
+            await this.doProvisionRequest(bridge, "POST", "/_matrix/provision/link", null, requestBody);
+        }
     }
 
     private async getAllNetworks(): Promise<CachedNetwork[]> {
@@ -86,10 +144,50 @@ export class IrcBridge {
         return networks;
     }
 
+    private async fetchLinks(bridge: IrcBridgeRecord, inRoomId: string): Promise<LinkedChannels> {
+        const availableNetworks = await this.getNetworks(bridge, true);
+        const networksByDomain: { [domain: string]: { id: string, name: string, bridgeUserId: string } } = {};
+        for (const key of Object.keys(availableNetworks)) {
+            const network = availableNetworks[key];
+            networksByDomain[network.domain] = {
+                id: key,
+                name: network.name,
+                bridgeUserId: network.bridgeUserId,
+            };
+        }
+
+        let responses: ListLinksResponseItem[] = [];
+        if (bridge.upstreamId) {
+            const result = await this.doUpstreamRequest<ModularIrcResponse<ListLinksResponseItem[]>>(bridge, "GET", "/bridges/irc/_matrix/provision/listlinks/" + inRoomId);
+            if (result && result.replies) {
+                const replies = result.replies.map(r => r.response);
+                for (const reply of replies) reply.forEach(r => responses.push(r));
+            }
+        } else {
+            const result = await this.doProvisionRequest<ListLinksResponseItem[]>(bridge, "GET", "/_matrix/provision/listlinks/" + inRoomId);
+            if (result) responses = result;
+        }
+
+        const linked: LinkedChannels = {};
+        for (const response of responses) {
+            if (!response || !response.remote_room_server) continue;
+
+            const network = networksByDomain[response.remote_room_server];
+            if (!network) continue;
+
+            if (!linked[network.id]) linked[network.id] = [];
+            linked[network.id].push({
+                channelName: response.remote_room_channel,
+            });
+        }
+
+        return linked;
+    }
+
     private async fetchNetworks(bridge: IrcBridgeRecord): Promise<CachedNetwork[]> {
         let responses: QueryNetworksResponse[] = [];
         if (bridge.upstreamId) {
-            const result = await this.doUpstreamRequest<ModularIrcQueryNetworksResponse>(bridge, "GET", "/bridges/irc/_matrix/provision/querynetworks");
+            const result = await this.doUpstreamRequest<ModularIrcResponse<QueryNetworksResponse>>(bridge, "GET", "/bridges/irc/_matrix/provision/querynetworks");
             if (result && result.replies) responses = result.replies.map(r => r.response);
         } else {
             const result = await this.doProvisionRequest<QueryNetworksResponse>(bridge, "GET", "/_matrix/provision/querynetworks");

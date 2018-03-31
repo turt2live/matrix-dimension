@@ -3,8 +3,10 @@ import * as randomString from "random-string";
 import {
     CanSendEventResponse,
     JoinRuleStateResponse,
-    MembershipStateResponse, RoomEncryptionStatusResponse,
+    MembershipStateResponse,
+    RoomEncryptionStatusResponse,
     ScalarSuccessResponse,
+    SetPowerLevelResponse,
     WidgetsResponse
 } from "../../models/server-client-responses";
 import { EditableWidget } from "../../models/widget";
@@ -84,6 +86,14 @@ export class ScalarClientApiService {
     public isRoomEncrypted(roomId: string): Promise<RoomEncryptionStatusResponse> {
         return this.callAction("get_room_enc_state", {
             room_id: roomId,
+        });
+    }
+
+    public setUserPowerLevel(roomId: string, userId: string, powerLevel: number): Promise<SetPowerLevelResponse> {
+        return this.callAction("set_bot_power", {
+            room_id: roomId,
+            user_id: userId,
+            level: powerLevel,
         });
     }
 

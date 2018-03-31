@@ -68,6 +68,8 @@ import { AdminIrcBridgeComponent } from "./admin/bridges/irc/irc.component";
 import { AdminIrcApiService } from "./shared/services/admin/admin-irc-api.service";
 import { AdminIrcBridgeNetworksComponent } from "./admin/bridges/irc/networks/networks.component";
 import { AdminIrcBridgeAddSelfhostedComponent } from "./admin/bridges/irc/add-selfhosted/add-selfhosted.component";
+import { IrcBridgeConfigComponent } from "./configs/bridge/irc/irc.bridge.component";
+import { IrcApiService } from "./shared/services/integrations/irc-api.service";
 
 @NgModule({
     imports: [
@@ -129,6 +131,7 @@ import { AdminIrcBridgeAddSelfhostedComponent } from "./admin/bridges/irc/add-se
         AdminIrcBridgeComponent,
         AdminIrcBridgeNetworksComponent,
         AdminIrcBridgeAddSelfhostedComponent,
+        IrcBridgeConfigComponent,
 
         // Vendor
     ],
@@ -144,6 +147,7 @@ import { AdminIrcBridgeAddSelfhostedComponent } from "./admin/bridges/irc/add-se
         AdminNebApiService,
         AdminUpstreamApiService,
         AdminIrcApiService,
+        IrcApiService,
         {provide: Window, useValue: window},
 
         // Vendor

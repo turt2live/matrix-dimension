@@ -27,7 +27,6 @@ export interface FE_ComplexBot<T> extends FE_Integration {
 }
 
 export interface FE_Bridge<T> extends FE_Integration {
-    bridgeUserId: string;
     config: T;
 }
 

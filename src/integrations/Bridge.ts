@@ -1,6 +1,6 @@
 import { Integration } from "./Integration";
 import BridgeRecord from "../db/models/BridgeRecord";
-import { AvailableNetworks } from "../bridges/IrcBridge";
+import { AvailableNetworks, LinkedChannels } from "../bridges/IrcBridge";
 
 export class Bridge extends Integration {
     constructor(bridge: BridgeRecord, public config: any) {
@@ -12,17 +12,12 @@ export class Bridge extends Integration {
             argument: null, // not used
         }];
 
-        // We'll just say we aren't
+        // We'll just say we don't support encryption
         this.isEncryptionSupported = false;
     }
 }
 
 export interface IrcBridgeConfiguration {
     availableNetworks: AvailableNetworks;
-    links: {
-        [networkId: string]: {
-            channelName: string;
-            addedByUserId: string;
-        }[];
-    };
+    links: LinkedChannels;
 }

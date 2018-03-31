@@ -32,13 +32,12 @@ export class BridgeStore {
         return bridge.save();
     }
 
-    public static async setBridgeRoomConfig(requestingUserId: string, integrationType: string, inRoomId: string, newConfig: any): Promise<any> {
+    public static async setBridgeRoomConfig(_requestingUserId: string, integrationType: string, _inRoomId: string, _newConfig: any): Promise<any> {
         const record = await BridgeRecord.findOne({where: {type: integrationType}});
         if (!record) throw new Error("Bridge not found");
 
         if (integrationType === "irc") {
-            const irc = new IrcBridge(requestingUserId);
-            return irc.setRoomConfiguration(requestingUserId, inRoomId, newConfig);
+            throw new Error("IRC Bridges should be modified with the dedicated API");
         } else throw new Error("Unsupported bridge");
     }
 
@@ -53,7 +52,7 @@ export class BridgeStore {
         if (record.type === "irc") {
             if (!inRoomId) return {}; // The bridge's admin config is handled by other APIs
             const irc = new IrcBridge(requestingUserId);
-            return irc.getRoomConfiguration(requestingUserId, inRoomId);
+            return irc.getRoomConfiguration(inRoomId);
         } else return {};
     }
 
