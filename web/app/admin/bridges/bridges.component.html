@@ -19,7 +19,7 @@
                 </thead>
                 <tbody>
                 <tr *ngIf="!bridges || bridges.length === 0">
-                    <td colspan="2"><i>No bridges.</i></td>
+                    <td colspan="3"><i>No bridges.</i></td>
                 </tr>
                 <tr *ngFor="let bridge of bridges trackById">
                     <td>{{ bridge.displayName }}</td>
