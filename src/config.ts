@@ -17,6 +17,11 @@ export interface DimensionConfig {
         file: string;
     };
     admins: string[];
+    goneb: {
+        avatars: {
+            [botType: string]: string; // mxc
+        };
+    };
     logging: LogConfig;
 }
 

@@ -294,6 +294,13 @@ export class NebStore {
             const client = new NebClient(neb);
             await client.updateUser(userId, integration.isEnabled, true); // creates the user in go-neb
 
+            client.updateUserProfile(userId, integration.name, config.goneb.avatars[integration.type]).then(() => {
+                LogService.info("NebStore", "Updated profile for " + userId);
+            }).catch(err => {
+                LogService.error("NebStore", "Error updating profile for " + userId);
+                LogService.error("NebStore", err);
+            });
+
             const serviceId = appservice.id + "_integration_" + integrationType;
             return NebBotUser.create({
                 serviceId: serviceId,
@@ -319,6 +326,13 @@ export class NebStore {
 
             const client = new NebClient(neb);
             await client.updateUser(userId, integration.isEnabled, false); // creates the user in go-neb
+
+            client.updateUserProfile(userId, integration.name + " Notifications [" + forUserId + "]", config.goneb.avatars[integration.type]).then(() => {
+                LogService.info("NebStore", "Updated profile for " + userId);
+            }).catch(err => {
+                LogService.error("NebStore", "Error updating profile for " + userId);
+                LogService.error("NebStore", err);
+            });
 
             const serviceId = appservice.id + "_integration_" + integrationType + "_notifications_" + safeUserId;
             return NebNotificationUser.create({

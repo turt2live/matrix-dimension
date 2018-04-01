@@ -94,6 +94,7 @@ export async function doClientApiCall(method: string, endpoint: string, query?: 
                 reject(err);
             } else if (res.statusCode !== 200) {
                 LogService.error("matrix", "Got status code " + res.statusCode + " while calling client endpoint " + endpoint);
+                LogService.error("matrix", res.body);
                 reject(new Error("Error in request: invalid status code"));
             } else {
                 if (typeof(res.body) === "string") res.body = JSON.parse(res.body);

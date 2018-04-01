@@ -5,6 +5,7 @@ import config from "../config";
 import { LogService } from "matrix-js-snippets";
 import { Service } from "./models/service";
 import * as request from "request";
+import { MatrixLiteClient } from "../matrix/MatrixLiteClient";
 
 export class NebClient {
     constructor(private neb: NebConfig) {
@@ -55,6 +56,17 @@ export class NebClient {
             LogService.error("NebClient", err);
             return {};
         }
+    }
+
+    public async updateUserProfile(userId: string, displayName: string, avatarUrl: string): Promise<any> {
+        const accessToken = await this.getAccessToken(userId);
+        const client = new MatrixLiteClient(accessToken);
+
+        const currentDisplayName = await client.getDisplayName();
+        const currentAvatarUrl = await client.getAvatarUrl();
+
+        if (currentDisplayName !== displayName) await client.setDisplayName(displayName);
+        if (currentAvatarUrl !== avatarUrl) await client.setAvatarUrl(avatarUrl);
     }
 
     private doRequest<T>(endpoint: string, body: any): Promise<T> {
