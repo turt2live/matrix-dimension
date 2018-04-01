@@ -1,6 +1,6 @@
 import { GET, Path, POST, QueryParam } from "typescript-rest";
 import { AdminService } from "./AdminService";
-import { Cache, CACHE_UPSTREAM } from "../../MemoryCache";
+import { Cache, CACHE_SCALAR_ACCOUNTS, CACHE_UPSTREAM } from "../../MemoryCache";
 import Upstream from "../../db/models/Upstream";
 import { LogService } from "matrix-js-snippets";
 
@@ -54,6 +54,7 @@ export class AdminUpstreamService {
 
         LogService.info("AdminUpstreamService", userId + " created a new upstream");
         Cache.for(CACHE_UPSTREAM).clear();
+        Cache.for(CACHE_SCALAR_ACCOUNTS).clear();
         return this.mapUpstream(upstream);
     }
 
