@@ -50,11 +50,11 @@ export class DimensionWidgetService {
         }
 
         // Now we need to verify we can actually make the request
-        await new Promise((resolve, _reject) => {
+        await new Promise((resolve, reject) => {
             request(checkUrl, (err, response) => {
                 if (err) {
                     LogService.error("DimensionWidgetService", err);
-                    throw new ApiError(400, "Failed to contact host");
+                    return reject(new ApiError(400, "Failed to contact host"));
                 }
 
                 if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -62,11 +62,14 @@ export class DimensionWidgetService {
                     const xFrameOptions = (response.headers["x-frame-options"] || '').toLowerCase();
 
                     if (xFrameOptions === "sameorigin" || xFrameOptions === "deny") {
-                        throw new ApiError(400, "X-Frame-Options prevents embedding");
+                        return reject(new ApiError(400, "X-Frame-Options prevents embedding"));
                     }
 
                     resolve();
-                } else throw new ApiError(400, "Non-success status code returned");
+                } else {
+                    LogService.verbose("DimensionWidgetService", response.body);
+                    return reject(new ApiError(400, "Non-success status code returned"));
+                }
             });
         });
 
