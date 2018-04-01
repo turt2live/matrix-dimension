@@ -35,9 +35,12 @@ export default class Webserver {
 
         // We register the default route last to make sure we don't override anything by accident.
         // We'll pass off all other requests to the web app
-        this.app.get("*", (_req, res) => {
+        this.app.get(/(widgets\/|riot\/|\/)*/, (_req, res) => {
             res.sendFile(path.join(__dirname, "..", "..", "web", "index.html"));
         });
+
+        // Register the static content last
+        this.app.use(express.static(path.join(__dirname, "..", "..", "web")));
 
         // Set up the error handler
         this.app.use((err: any, _req, res, next) => {
