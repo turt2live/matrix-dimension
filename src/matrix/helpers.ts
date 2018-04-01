@@ -40,6 +40,10 @@ export async function getFederationUrl(serverName: string): Promise<string> {
         LogService.warn("matrix", "Could not find _matrix._tcp." + serverName + " DNS record. This is normal for most servers.");
     }
 
+    if (!(expirationMs > 0)) { // This is weird so we can catch NaN easier
+        expirationMs = 4 * 60 * 60 * 1000;
+    }
+
     if (!serverUrl) serverUrl = "https://" + serverName + ":8448";
     LogService.verbose("matrix", "Federation URL for " + serverName + " is " + serverUrl + " - caching for " + expirationMs + " ms");
     Cache.for(CACHE_FEDERATION).put(serverName, serverUrl, expirationMs);
@@ -47,7 +51,7 @@ export async function getFederationUrl(serverName: string): Promise<string> {
 }
 
 export async function doFederatedApiCall(method: string, serverName: string, endpoint: string, query?: object, body?: object): Promise<any> {
-    const federationUrl = await  getFederationUrl(serverName);
+    const federationUrl = await getFederationUrl(serverName);
     LogService.info("matrix", "Doing federated API call: " + federationUrl + endpoint);
     return new Promise((resolve, reject) => {
         request({
