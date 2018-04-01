@@ -200,6 +200,7 @@ export class NebProxy {
         for (const feedUrl of allUrls) {
             let feed = currentConfig.feeds[feedUrl];
             if (!feed) feed = {poll_interval_mins: 60, rooms: []};
+            if (!feed.rooms) feed.rooms = [];
 
             const hasRoom = feed.rooms.indexOf(roomId) !== -1;
             const isEnabled = feedUrls.indexOf(feedUrl) !== -1;
