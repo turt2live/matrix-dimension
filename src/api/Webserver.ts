@@ -39,9 +39,6 @@ export default class Webserver {
             res.sendFile(path.join(__dirname, "..", "..", "web", "index.html"));
         });
 
-        // Register the static content last
-        this.app.use(express.static(path.join(__dirname, "..", "..", "web")));
-
         // Set up the error handler
         this.app.use((err: any, _req, res, next) => {
             if (err instanceof ApiError) {
