@@ -60,6 +60,9 @@ export async function doFederatedApiCall(method: string, serverName: string, end
             qs: query,
             json: body,
             rejectUnauthorized: false, // allow self signed certs (for federation)
+            headers: {
+                "Host": serverName,
+            },
         }, (err, res, _body) => {
             if (err) {
                 LogService.error("matrix", "Error calling " + endpoint);
