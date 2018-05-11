@@ -282,9 +282,12 @@ export class IrcBridge {
                 json: body,
             }, (err, res, _body) => {
                 if (err) {
-                    LogService.error("IrcBridge", "Error calling" + url);
+                    LogService.error("IrcBridge", "Error calling " + url);
                     LogService.error("IrcBridge", err);
                     reject(err);
+                } else if (!res) {
+                    LogService.error("IrcBridge", "There is no response for " + url);
+                    reject(new Error("No response provided - is the service online?"));
                 } else if (res.statusCode !== 200) {
                     LogService.error("IrcBridge", "Got status code " + res.statusCode + " when calling " + url);
                     LogService.error("IrcBridge", res.body);
@@ -314,6 +317,10 @@ export class IrcBridge {
                     LogService.error("IrcBridge", "Error calling" + url);
                     LogService.error("IrcBridge", err);
                     reject(err);
+                } else if (!res) {
+                    LogService.error("IrcBridge", "There is no response for " + url);
+                    reject(new Error("No response provided - is the service online?"));
+                } else if (res.statusCode !== 200) {
                     LogService.error("IrcBridge", "Got status code " + res.statusCode + " when calling " + url);
                     LogService.error("IrcBridge", res.body);
                     reject(new Error("Request failed"));

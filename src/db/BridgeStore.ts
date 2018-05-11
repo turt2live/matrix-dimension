@@ -1,6 +1,7 @@
 import { Bridge } from "../integrations/Bridge";
 import BridgeRecord from "./models/BridgeRecord";
 import { IrcBridge } from "../bridges/IrcBridge";
+import { LogService } from "matrix-js-snippets";
 
 export class BridgeStore {
 
@@ -12,13 +13,18 @@ export class BridgeStore {
         const enabledBridges: Bridge[] = [];
 
         for (const bridgeRecord of allRecords) {
-            if (isEnabled === true || isEnabled === false) {
-                const isLogicallyEnabled = await BridgeStore.isLogicallyEnabled(bridgeRecord, requestingUserId);
-                if (isLogicallyEnabled !== isEnabled) continue;
-            }
+            try {
+                if (isEnabled === true || isEnabled === false) {
+                    const isLogicallyEnabled = await BridgeStore.isLogicallyEnabled(bridgeRecord, requestingUserId);
+                    if (isLogicallyEnabled !== isEnabled) continue;
+                }
 
-            const bridgeConfig = await BridgeStore.getConfiguration(bridgeRecord, requestingUserId, inRoomId);
-            enabledBridges.push(new Bridge(bridgeRecord, bridgeConfig));
+                const bridgeConfig = await BridgeStore.getConfiguration(bridgeRecord, requestingUserId, inRoomId);
+                enabledBridges.push(new Bridge(bridgeRecord, bridgeConfig));
+            } catch (e) {
+                LogService.error("BridgeStore", "Failed to load configuration for bridge: " + bridgeRecord.name);
+                LogService.error("BridgeStore", e);
+            }
         }
 
         return enabledBridges;
