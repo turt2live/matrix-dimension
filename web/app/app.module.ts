@@ -70,6 +70,7 @@ import { AdminIrcBridgeNetworksComponent } from "./admin/bridges/irc/networks/ne
 import { AdminIrcBridgeAddSelfhostedComponent } from "./admin/bridges/irc/add-selfhosted/add-selfhosted.component";
 import { IrcBridgeConfigComponent } from "./configs/bridge/irc/irc.bridge.component";
 import { IrcApiService } from "./shared/services/integrations/irc-api.service";
+import { ScreenshotCapableDirective } from "./shared/directives/screenshot-capable.directive";
 
 @NgModule({
     imports: [
@@ -132,6 +133,7 @@ import { IrcApiService } from "./shared/services/integrations/irc-api.service";
         AdminIrcBridgeNetworksComponent,
         AdminIrcBridgeAddSelfhostedComponent,
         IrcBridgeConfigComponent,
+        ScreenshotCapableDirective,
 
         // Vendor
     ],

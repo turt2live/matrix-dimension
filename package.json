@@ -73,6 +73,7 @@
     "core-js": "^2.5.3",
     "css-loader": "^0.28.11",
     "cssnano": "^3.10.0",
+    "dom-to-image": "^2.6.0",
     "embed-video": "^2.0.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.11",
