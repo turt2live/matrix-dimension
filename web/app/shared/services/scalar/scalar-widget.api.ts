@@ -35,7 +35,7 @@ export class ScalarWidgetApi {
     }
 
     public static replyError(request: ScalarToWidgetRequest, error: Error, message: string = null): void {
-        ScalarWidgetApi.replyEvent(request, {error: {message: message || error.message, error: error}});
+        ScalarWidgetApi.replyEvent(request, {error: {message: message || error.message, _error: error}});
     }
 
     private static callAction(action, payload) {

@@ -18,7 +18,7 @@ export class ScreenshotCapableDirective implements OnInit, OnDestroy {
     public ngOnInit() {
         this.widgetApiSubscription = ScalarWidgetApi.requestReceived.subscribe(request => {
             if (request.action === "screenshot") this.takeScreenshot(request);
-        })
+        });
     }
 
     public ngOnDestroy() {
@@ -26,11 +26,20 @@ export class ScreenshotCapableDirective implements OnInit, OnDestroy {
     }
 
     private takeScreenshot(request: ScalarToWidgetRequest) {
-        domtoimage.toBlob(this.el.nativeElement).then(b => {
-            ScalarWidgetApi.replyScreenshot(request, b);
-        }).catch(error => {
-            console.error(error);
-            ScalarWidgetApi.replyError(request, error, "Failed to take screenshot");
-        });
+        if (this.el.nativeElement.tagName === "IFRAME") {
+            console.error("Attempted to take a screenshot of an iframe");
+            ScalarWidgetApi.replyError(request, new Error("Cannot take screenshot of iframe"), "Failed to take screenshot: iframe not supported");
+        } else {
+            domtoimage.toBlob(this.el.nativeElement).then(b => {
+                if (!b) {
+                    console.warn("No screenshot produced - skipping reply");
+                    return;
+                }
+                ScalarWidgetApi.replyScreenshot(request, b);
+            }).catch(error => {
+                console.error(error);
+                ScalarWidgetApi.replyError(request, error, "Failed to take screenshot");
+            });
+        }
     }
 }
