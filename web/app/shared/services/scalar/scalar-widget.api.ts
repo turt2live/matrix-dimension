@@ -56,9 +56,8 @@ export class ScalarWidgetApi {
             return;
         }
 
-        let response = JSON.parse(JSON.stringify(payload));
         let requestClone = JSON.parse(JSON.stringify(request));
-        requestClone["response"] = response;
+        requestClone["response"] = payload;
         window.opener.postMessage(requestClone, "*");
     }
 }
