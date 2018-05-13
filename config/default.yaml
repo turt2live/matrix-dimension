@@ -19,6 +19,10 @@ homeserver:
   # through the normal federation process.
   #federationUrl: "https://t2bot.io:8448"
 
+  # The URL that Dimension will redirect media requests to for downloading media such as
+  # stickers. If not supplied or left empty Dimension will use the clientServerUrl.
+  #mediaUrl: "https://t2bot.io"
+
   # The access token Dimension should use for miscellaneous access to the homeserver. This
   # should be for a valid user.
   accessToken: "something"

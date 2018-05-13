@@ -30,6 +30,35 @@ export interface FE_Bridge<T> extends FE_Integration {
     config: T;
 }
 
+export interface FE_StickerPack extends FE_Integration {
+    id: number;
+    author: {
+        type: "none" | "twitter" | "mx-user";
+        name: string;
+        reference: string;
+    };
+    license: {
+        name: string;
+        urlPath: string;
+    };
+    stickers: FE_Sticker[];
+}
+
+export interface FE_Sticker {
+    id: number;
+    name: string;
+    description: string;
+    image: {
+        mxc: string;
+        mimetype: string;
+    };
+    thumbnail: {
+        mxc: string;
+        width: number;
+        height: number;
+    };
+}
+
 export interface FE_Widget extends FE_Integration {
     options: any;
 }

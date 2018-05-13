@@ -71,6 +71,10 @@ import { AdminIrcBridgeAddSelfhostedComponent } from "./admin/bridges/irc/add-se
 import { IrcBridgeConfigComponent } from "./configs/bridge/irc/irc.bridge.component";
 import { IrcApiService } from "./shared/services/integrations/irc-api.service";
 import { ScreenshotCapableDirective } from "./shared/directives/screenshot-capable.directive";
+import { AdminStickersApiService } from "./shared/services/admin/admin-stickers-api-service";
+import { AdminStickerPacksComponent } from "./admin/sticker-packs/sticker-packs.component";
+import { AdminStickerPackPreviewComponent } from "./admin/sticker-packs/preview/preview.component";
+import { MediaService } from "./shared/services/media.service";
 
 @NgModule({
     imports: [
@@ -134,6 +138,8 @@ import { ScreenshotCapableDirective } from "./shared/directives/screenshot-capab
         AdminIrcBridgeAddSelfhostedComponent,
         IrcBridgeConfigComponent,
         ScreenshotCapableDirective,
+        AdminStickerPacksComponent,
+        AdminStickerPackPreviewComponent,
 
         // Vendor
     ],
@@ -150,6 +156,8 @@ import { ScreenshotCapableDirective } from "./shared/directives/screenshot-capab
         AdminUpstreamApiService,
         AdminIrcApiService,
         IrcApiService,
+        AdminStickersApiService,
+        MediaService,
         {provide: Window, useValue: window},
 
         // Vendor
@@ -166,6 +174,7 @@ import { ScreenshotCapableDirective } from "./shared/directives/screenshot-capab
         ConfigSimpleBotComponent,
         AdminIrcBridgeNetworksComponent,
         AdminIrcBridgeAddSelfhostedComponent,
+        AdminStickerPackPreviewComponent,
     ]
 })
 export class AppModule {

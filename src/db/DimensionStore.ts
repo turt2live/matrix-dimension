@@ -18,6 +18,8 @@ import Webhook from "./models/Webhook";
 import BridgeRecord from "./models/BridgeRecord";
 import IrcBridgeRecord from "./models/IrcBridgeRecord";
 import IrcBridgeNetwork from "./models/IrcBridgeNetwork";
+import StickerPack from "./models/StickerPack";
+import Sticker from "./models/Sticker";
 
 class _DimensionStore {
     private sequelize: Sequelize;
@@ -47,6 +49,8 @@ class _DimensionStore {
             BridgeRecord,
             IrcBridgeRecord,
             IrcBridgeNetwork,
+            StickerPack,
+            Sticker,
         ]);
     }
 

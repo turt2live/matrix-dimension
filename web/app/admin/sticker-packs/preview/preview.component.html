@@ -1,0 +1,19 @@
+<div class="dialog">
+    <div class="dialog-header">
+        <h4>Sticker Pack: {{ pack.displayName }}</h4>
+    </div>
+    <div class="dialog-content">
+        <div class="sticker" *ngFor="let sticker of pack.stickers trackById">
+            <img [src]="getThumbnailUrl(sticker.thumbnail.mxc, 120, 120)" width="120" height="120"/>
+            <div class="caption">
+                <span class="name">{{ sticker.name }}</span>
+                <span class="description">{{ sticker.description }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
+            <i class="far fa-times-circle"></i> Close
+        </button>
+    </div>
+</div>

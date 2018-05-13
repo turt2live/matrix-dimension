@@ -1,4 +1,5 @@
 import { doClientApiCall } from "./helpers";
+import config from "../config";
 
 export interface MatrixUrlPreview {
     // This is really the only parameter we care about
@@ -16,6 +17,15 @@ export class MatrixLiteClient {
             "/_matrix/media/r0/preview_url",
             {access_token: this.accessToken, url: url}
         );
+    }
+
+    public async getThumbnailUrl(serverName: string, contentId: string, width: number, height: number, method: "crop" | "scale", isAnimated: boolean): Promise<string> {
+        let baseUrl = config.homeserver.mediaUrl;
+        if (!baseUrl) baseUrl = config.homeserver.clientServerUrl;
+        if (baseUrl.endsWith("/")) baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+
+        // DO NOT RETURN THE ACCESS TOKEN.
+        return baseUrl + `/_matrix/media/r0/thumbnail/${serverName}/${contentId}?width=${width}&height=${height}&method=${method}&animated=${isAnimated}`;
     }
 
     public async whoAmI(): Promise<string> {

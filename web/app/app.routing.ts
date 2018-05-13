@@ -24,6 +24,7 @@ import { TravisCiComplexBotConfigComponent } from "./configs/complex-bot/travisc
 import { AdminBridgesComponent } from "./admin/bridges/bridges.component";
 import { AdminIrcBridgeComponent } from "./admin/bridges/irc/irc.component";
 import { IrcBridgeConfigComponent } from "./configs/bridge/irc/irc.bridge.component";
+import { AdminStickerPacksComponent } from "./admin/sticker-packs/sticker-packs.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -86,6 +87,16 @@ const routes: Routes = [
                             },
                         ],
                     },
+                    {
+                        path: "stickerpacks",
+                        data: {breadcrumb: "Sticker Packs", name: "Sticker Packs"},
+                        children: [
+                            {
+                                path: "",
+                                component: AdminStickerPacksComponent,
+                            },
+                        ],
+                    }
                 ],
             },
             {

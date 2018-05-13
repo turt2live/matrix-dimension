@@ -11,6 +11,7 @@ export interface DimensionConfig {
         accessToken: string;
         clientServerUrl: string;
         federationUrl: string;
+        mediaUrl: string;
     };
     widgetBlacklist: string[];
     database: {
