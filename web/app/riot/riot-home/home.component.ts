@@ -11,6 +11,7 @@ import { IntegrationsApiService } from "../../shared/services/integrations/integ
 import { Modal, overlayConfigFactory } from "ngx-modialog";
 import { ConfigSimpleBotComponent, SimpleBotConfigDialogContext } from "../../configs/simple-bot/simple-bot.component";
 import { ToasterService } from "angular2-toaster";
+import { StickerApiService } from "../../shared/services/integrations/sticker-api.service";
 
 const CATEGORY_MAP = {
     "Widgets": ["widget"],
@@ -28,6 +29,7 @@ export class RiotHomeComponent {
     public isError = false;
     public errorMessage: string;
     public isRoomEncrypted: boolean;
+    public hasStickerPacks = false;
 
     private roomId: string;
     private userId: string;
@@ -40,6 +42,7 @@ export class RiotHomeComponent {
                 private scalarApi: ScalarServerApiService,
                 private scalar: ScalarClientApiService,
                 private integrationsApi: IntegrationsApiService,
+                private stickerApi: StickerApiService,
                 private adminApi: AdminApiService,
                 private router: Router,
                 private modal: Modal,
@@ -187,6 +190,12 @@ export class RiotHomeComponent {
             this.isError = true;
             this.isLoading = false;
             this.errorMessage = "Unable to set up Dimension. This version of Riot may not supported or there may be a problem with the server.";
+        });
+
+        this.stickerApi.getPacks().then(packs => {
+            this.hasStickerPacks = packs.length > 0;
+        }).catch(err => {
+            console.error(err);
         });
     }
 

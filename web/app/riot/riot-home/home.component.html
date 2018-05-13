@@ -6,6 +6,10 @@
 </div>
 
 <div *ngIf="!isLoading && !isError">
+    <div class="stickerpacks" *ngIf="hasStickerPacks">
+        Looking for your sticker packs? <a routerLink="stickerpicker">Click here</a>.
+    </div>
+
     <!-- ------------------------ -->
     <!-- EMPTY/ENCRYPTED STATES   -->
     <!-- ------------------------ -->
@@ -14,9 +18,8 @@
         <strong>Integrations are not encrypted!</strong>
         This means that some information about yourself and the
         room may be leaked to the bot, bridge, or widget. This information includes the room ID, your display
-        name,
-        your username, your avatar, information about Riot, and other similar details. Add integrations with
-        caution.
+        name, your username, your avatar, information about Riot, and other similar details. Add integrations
+        with caution.
     </div>
     <div class="alert alert-warning" *ngIf="!hasIntegrations() && isRoomEncrypted">
         <h4>This room is encrypted</h4>
@@ -25,8 +28,7 @@
     <div class="alert alert-warning" *ngIf="!hasIntegrations() && !isRoomEncrypted">
         <h4>No integrations available</h4>
         This room does not have any compatible integrations. Please contact the server owner if you're seeing
-        this
-        message.
+        this message.
     </div>
 
     <!-- ------------------------ -->
