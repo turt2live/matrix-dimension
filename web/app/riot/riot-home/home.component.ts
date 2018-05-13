@@ -195,6 +195,12 @@ export class RiotHomeComponent {
         let type = null;
         if (!this.requestedScreen) return;
 
+        if (this.requestedScreen === "type_m.stickerpicker") {
+            console.log("Intercepting config screen handling to open sticker picker config");
+            this.router.navigate(['riot-app', 'stickerpicker']);
+            return;
+        }
+
         const targetIntegration = IntegrationsRegistry.getIntegrationForScreen(this.requestedScreen);
         if (targetIntegration) {
             category = targetIntegration.category;

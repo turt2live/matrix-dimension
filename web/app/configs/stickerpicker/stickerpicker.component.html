@@ -1,0 +1,25 @@
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!isLoading">
+    <my-ibox title="Sticker Packs">
+        <div class="my-ibox-content" *ngIf="packs.length <= 0">
+            <h5 style="text-align: center;">Sticker packs are not enabled on this Dimension instance.</h5>
+        </div>
+        <div class="my-ibox-content" *ngIf="packs.length > 0">
+            <div class="pack" *ngFor="let pack of packs trackById">
+                <img [src]="getThumbnailUrl(pack.avatarUrl, 120, 120)" width="120" height="120"/>
+                <div class="caption">
+                    <ui-switch [checked]="pack.isSelected" size="medium" [disabled]="isUpdating"
+                               (change)="toggleSelected(pack)" class="toggle-switch"></ui-switch>
+
+                    <span class="name">{{ pack.displayName }}</span>
+                    <span class="description">{{ pack.description }}</span>
+
+                    <span class="author" *ngIf="pack.author.type !== 'none'">Created by <a [href]="pack.author.reference">{{ pack.author.name }}</a> under </span>
+                    <span class="license"><a [href]="pack.license.urlPath">{{ pack.license.name }}</a></span>
+                </div>
+            </div>
+        </div>
+    </my-ibox>
+</div>

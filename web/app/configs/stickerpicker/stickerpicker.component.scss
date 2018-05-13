@@ -1,0 +1,38 @@
+.pack {
+  display: flex;
+  margin: 20px;
+  padding: 5px;
+  background-color: #f6fbff;
+
+  .caption {
+    flex: 1;
+    margin-left: 20px;
+    padding-top: 20px;
+
+    .name {
+      font-size: 1.1em;
+      font-weight: bold;
+      display: block;
+    }
+
+    .description {
+      color: #7d7d7d;
+      display: block;
+    }
+
+    .toggle-switch {
+      margin-top: 20px;
+      margin-right: 10px;
+      float: right;
+    }
+
+    .author, .license {
+      font-size: 0.8em;
+      color: #7d7d7d;
+
+      a {
+        color: #7d7d7d;
+      }
+    }
+  }
+}

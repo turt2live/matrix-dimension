@@ -75,6 +75,8 @@ import { AdminStickersApiService } from "./shared/services/admin/admin-stickers-
 import { AdminStickerPacksComponent } from "./admin/sticker-packs/sticker-packs.component";
 import { AdminStickerPackPreviewComponent } from "./admin/sticker-packs/preview/preview.component";
 import { MediaService } from "./shared/services/media.service";
+import { StickerApiService } from "./shared/services/integrations/sticker-api.service";
+import { StickerpickerComponent } from "./configs/stickerpicker/stickerpicker.component";
 
 @NgModule({
     imports: [
@@ -140,6 +142,7 @@ import { MediaService } from "./shared/services/media.service";
         ScreenshotCapableDirective,
         AdminStickerPacksComponent,
         AdminStickerPackPreviewComponent,
+        StickerpickerComponent,
 
         // Vendor
     ],
@@ -158,6 +161,7 @@ import { MediaService } from "./shared/services/media.service";
         IrcApiService,
         AdminStickersApiService,
         MediaService,
+        StickerApiService,
         {provide: Window, useValue: window},
 
         // Vendor

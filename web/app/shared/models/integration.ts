@@ -44,6 +44,10 @@ export interface FE_StickerPack extends FE_Integration {
     stickers: FE_Sticker[];
 }
 
+export interface FE_UserStickerPack extends FE_StickerPack {
+    isSelected: boolean;
+}
+
 export interface FE_Sticker {
     id: number;
     name: string;

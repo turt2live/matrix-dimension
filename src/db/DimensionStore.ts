@@ -20,6 +20,7 @@ import IrcBridgeRecord from "./models/IrcBridgeRecord";
 import IrcBridgeNetwork from "./models/IrcBridgeNetwork";
 import StickerPack from "./models/StickerPack";
 import Sticker from "./models/Sticker";
+import UserStickerPack from "./models/UserStickerPack";
 
 class _DimensionStore {
     private sequelize: Sequelize;
@@ -51,6 +52,7 @@ class _DimensionStore {
             IrcBridgeNetwork,
             StickerPack,
             Sticker,
+            UserStickerPack,
         ]);
     }
 
