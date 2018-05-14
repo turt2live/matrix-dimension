@@ -51,7 +51,7 @@ interface SetSelectedRequest {
 @Path("/api/v1/dimension/stickers")
 export class DimensionStickerService {
 
-    public static async getStickerPacks(enabledOnly: boolean = false): Promise<MemoryStickerPack[]> {
+    public static async getStickerPacks(enabledOnly = false): Promise<MemoryStickerPack[]> {
         const cachedPacks = Cache.for(CACHE_STICKERS).get("packs");
         if (cachedPacks) {
             if (enabledOnly) return cachedPacks.filter(p => p.isEnabled);
