@@ -8,6 +8,7 @@ export abstract class CapableWidget implements OnInit, OnDestroy {
 
     // The capabilities we support
     protected supportsScreenshots = false;
+    protected supportsStickers = false;
 
     public ngOnInit() {
         this.widgetApiSubscription = ScalarWidgetApi.requestReceived.subscribe(request => {
@@ -15,6 +16,7 @@ export abstract class CapableWidget implements OnInit, OnDestroy {
                 const capabilities = [];
 
                 if (this.supportsScreenshots) capabilities.push("m.capability.screenshot");
+                if (this.supportsStickers) capabilities.push("m.sticker");
 
                 ScalarWidgetApi.replyCapabilities(request, capabilities);
             }

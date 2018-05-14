@@ -5,7 +5,7 @@ import {
     JoinRuleStateResponse,
     MembershipStateResponse,
     RoomEncryptionStatusResponse,
-    ScalarSuccessResponse,
+    ScalarSuccessResponse, ScalarWidget,
     SetPowerLevelResponse,
     WidgetsResponse
 } from "../../models/server-client-responses";
@@ -45,7 +45,7 @@ export class ScalarClientApiService {
         });
     }
 
-    public getWidgets(roomId: string): Promise<WidgetsResponse> {
+    public getWidgets(roomId?: string): Promise<WidgetsResponse> {
         return this.callAction("get_widgets", {
             room_id: roomId
         });
@@ -62,10 +62,32 @@ export class ScalarClientApiService {
         });
     }
 
-    public deleteWidget(roomId: string, widget: EditableWidget): Promise<ScalarSuccessResponse> {
+    public setUserWidget(widget: EditableWidget): Promise<ScalarSuccessResponse> {
+        return this.callAction("set_widget", {
+            userWidget: true,
+            widget_id: widget.id,
+            type: widget.type,
+            url: widget.url,
+            name: widget.name,
+            data: widget.data
+        });
+    }
+
+    public deleteWidget(roomId: string, widget: EditableWidget|ScalarWidget): Promise<ScalarSuccessResponse> {
+        const anyWidget: any = widget;
         return this.callAction("set_widget", {
             room_id: roomId,
-            widget_id: widget.id,
+            widget_id: anyWidget.id || anyWidget.state_key,
+            type: widget.type, // required for some reason
+            url: ""
+        });
+    }
+
+    public deleteUserWidget(widget: EditableWidget|ScalarWidget): Promise<ScalarSuccessResponse> {
+        const anyWidget: any = widget;
+        return this.callAction("set_widget", {
+            userWidget: true,
+            widget_id: anyWidget.id || anyWidget.state_key,
             type: widget.type, // required for some reason
             url: ""
         });

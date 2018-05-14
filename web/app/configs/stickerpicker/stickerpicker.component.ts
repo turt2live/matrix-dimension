@@ -3,6 +3,8 @@ import { FE_UserStickerPack } from "../../shared/models/integration";
 import { StickerApiService } from "../../shared/services/integrations/sticker-api.service";
 import { ToasterService } from "angular2-toaster";
 import { MediaService } from "../../shared/services/media.service";
+import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
+import { WIDGET_STICKER_PICKER } from "../../shared/models/widget";
 
 @Component({
     templateUrl: "stickerpicker.component.html",
@@ -16,7 +18,9 @@ export class StickerpickerComponent implements OnInit {
 
     constructor(private stickerApi: StickerApiService,
                 private media: MediaService,
-                private toaster: ToasterService) {
+                private scalarClient: ScalarClientApiService,
+                private toaster: ToasterService,
+                private window: Window) {
         this.isLoading = true;
         this.isUpdating = false;
     }
@@ -41,12 +45,41 @@ export class StickerpickerComponent implements OnInit {
         this.stickerApi.togglePackSelection(pack.id, pack.isSelected).then(() => {
             this.isUpdating = false;
             this.toaster.pop("success", "Stickers updated");
-            // TODO: Add the user widget when we have >1 sticker pack selected
+
+            if (this.packs.filter(p => p.isSelected).length > 0) this.addWidget();
         }).catch(err => {
             console.error(err);
             pack.isSelected = !pack.isSelected; // revert change
             this.isUpdating = false;
             this.toaster.pop("error", "Error updating stickers");
         });
+    }
+
+    private async addWidget() {
+        try {
+            const widgets = await this.scalarClient.getWidgets();
+            const stickerPicker = widgets.response.find(w => w.content && w.content.type === "m.stickerpicker");
+            if (stickerPicker && !stickerPicker.content.data.dimension) {
+                console.log("Deleting non-Dimension sticker picker");
+                await this.scalarClient.deleteUserWidget(stickerPicker);
+            }
+
+            if (stickerPicker) return; // already have a widget
+
+            console.log("Adding Dimension sticker picker");
+            await this.scalarClient.setUserWidget({
+                id: "dimension-stickerpicker-" + (new Date().getTime()),
+                type: WIDGET_STICKER_PICKER[0],
+                url: this.window.location.origin + "/widgets/stickerpicker",
+                data: {
+                    dimension: {
+                        wrapperId: "stickerpicker",
+                    },
+                },
+            });
+        } catch (e) {
+            console.error("Failed to check for Dimension sticker picker");
+            console.error(e);
+        }
     }
 }

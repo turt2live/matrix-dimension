@@ -1,0 +1,26 @@
+<div class="wrapper">
+    <div class="control-page" *ngIf="isLoading || authError">
+        <div class="loading-badge" *ngIf="isLoading">
+            <my-spinner></my-spinner>
+        </div>
+        <div class="auth-error" *ngIf="!isLoading && authError">
+            There was a problem authenticating your use of this sticker picker. Please make sure you're using a client
+            that has Dimension enabled and correctly set up.
+        </div>
+    </div>
+    <div class="sticker-picker" *ngIf="!isLoading && !authError">
+        <div class="sticker-pack" *ngFor="let pack of packs trackById">
+            <div class="header">
+                <span class="title">{{ pack.displayName }}</span>
+                <span class="license"><a [href]="pack.license.urlPath">{{ pack.license.name }}</a></span>
+                <span class="author" *ngIf="pack.author.type !== 'none'"><a [href]="pack.author.reference">{{ pack.author.name }}</a> |&nbsp;</span>
+            </div>
+
+            <div class="stickers">
+                <div class="sticker" *ngFor="let sticker of pack.stickers trackById" (click)="sendSticker(sticker, pack)">
+                    <img [src]="getThumbnailUrl(sticker.thumbnail.mxc, 48, 48)" width="48" height="48" class="image" ngbTooltip="{{ sticker.name }}" placement="bottom" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

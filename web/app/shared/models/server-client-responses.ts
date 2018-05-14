@@ -33,18 +33,20 @@ export interface JoinRuleStateResponse extends ScalarRoomResponse {
 }
 
 export interface WidgetsResponse extends ScalarRoomResponse {
-    response: {
-        type: "im.vector.modular.widgets";
-        state_key: string;
-        sender: string;
-        room_id: string;
-        content: {
-            type: string;
-            url: string;
-            name?: string;
-            data?: any;
-        }
-    }[];
+    response: ScalarWidget[];
+}
+
+export interface ScalarWidget {
+    type: "im.vector.modular.widgets";
+    state_key: string;
+    sender: string;
+    room_id: string;
+    content: {
+        type: string;
+        url: string;
+        name?: string;
+        data?: any;
+    }
 }
 
 export interface CanSendEventResponse extends ScalarRoomResponse {

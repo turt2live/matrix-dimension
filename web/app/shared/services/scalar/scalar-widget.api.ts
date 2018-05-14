@@ -1,21 +1,14 @@
 import { ScalarToWidgetRequest } from "../../models/scalar-widget-actions";
 import { ReplaySubject } from "rxjs/ReplaySubject";
 import { Subject } from "rxjs/Subject";
+import { FE_Sticker, FE_StickerPack } from "../../models/integration";
 
 export class ScalarWidgetApi {
 
     public static requestReceived: Subject<ScalarToWidgetRequest> = new ReplaySubject();
-    private static widgetId: string;
+    public static widgetId: string;
 
     private constructor() {
-    }
-
-    public static setWidgetId(id: string) {
-        ScalarWidgetApi.widgetId = id;
-    }
-
-    public static test() {
-        ScalarWidgetApi.callAction(null, null);
     }
 
     public static replyScreenshot(request: ScalarToWidgetRequest, data: Blob): void {
@@ -36,6 +29,38 @@ export class ScalarWidgetApi {
 
     public static replyError(request: ScalarToWidgetRequest, error: Error, message: string = null): void {
         ScalarWidgetApi.replyEvent(request, {error: {message: message || error.message, _error: error}});
+    }
+
+    public static replyAcknowledge(request: ScalarToWidgetRequest): void {
+        ScalarWidgetApi.replyEvent(request, {success: true});
+    }
+
+    public static sendSticker(sticker: FE_Sticker, pack: FE_StickerPack): void {
+        ScalarWidgetApi.callAction("m.sticker", {
+            data: {
+                description: sticker.description,
+                content: {
+                    url: sticker.thumbnail.mxc,
+                    info: {
+                        mimetype: sticker.image.mimetype,
+                        w: sticker.thumbnail.width / 2,
+                        h: sticker.thumbnail.height / 2,
+                        thumbnail_url: sticker.thumbnail.mxc,
+                        thumbnail_info: {
+                            mimetype: sticker.image.mimetype,
+                            w: sticker.thumbnail.width / 2,
+                            h: sticker.thumbnail.height / 2,
+                        },
+
+                        // This has to be included in the info object so it makes it to the event
+                        dimension: {
+                            license: pack.license,
+                            author: pack.author,
+                        },
+                    },
+                },
+            },
+        });
     }
 
     private static callAction(action, payload) {
@@ -67,6 +92,7 @@ window.addEventListener("message", event => {
     if (!event.data) return;
 
     if (event.data.api === "toWidget" && event.data.action) {
+        if (event.data.widgetId && !ScalarWidgetApi.widgetId) ScalarWidgetApi.widgetId = event.data.widgetId;
         ScalarWidgetApi.requestReceived.next(event.data);
         return;
     }

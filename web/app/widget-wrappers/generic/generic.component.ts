@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { WidgetApiService } from "../../shared/services/integrations/widget-api.service";
-import { ScalarWidgetApi } from "../../shared/services/scalar/scalar-widget.api";
 
 @Component({
     selector: "my-generic-widget-wrapper",
@@ -17,8 +16,6 @@ export class GenericWidgetWrapperComponent {
 
     constructor(widgetApi: WidgetApiService, activatedRoute: ActivatedRoute, sanitizer: DomSanitizer) {
         let params: any = activatedRoute.snapshot.queryParams;
-
-        ScalarWidgetApi.setWidgetId("test");
 
         widgetApi.isEmbeddable(params.url).then(result => {
             this.canEmbed = result.canEmbed;

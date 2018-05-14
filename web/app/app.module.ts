@@ -77,6 +77,7 @@ import { AdminStickerPackPreviewComponent } from "./admin/sticker-packs/preview/
 import { MediaService } from "./shared/services/media.service";
 import { StickerApiService } from "./shared/services/integrations/sticker-api.service";
 import { StickerpickerComponent } from "./configs/stickerpicker/stickerpicker.component";
+import { StickerPickerWidgetWrapperComponent } from "./widget-wrappers/sticker-picker/sticker-picker.component";
 
 @NgModule({
     imports: [
@@ -143,6 +144,7 @@ import { StickerpickerComponent } from "./configs/stickerpicker/stickerpicker.co
         AdminStickerPacksComponent,
         AdminStickerPackPreviewComponent,
         StickerpickerComponent,
+        StickerPickerWidgetWrapperComponent,
 
         // Vendor
     ],
