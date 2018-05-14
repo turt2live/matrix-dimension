@@ -114,6 +114,8 @@ export class DimensionStickerService {
 
         userPack.isSelected = request.isSelected;
         await userPack.save();
+        Cache.for(CACHE_STICKERS).del("packs_" + userId);
+
         return {}; // 200 OK
     }
 
