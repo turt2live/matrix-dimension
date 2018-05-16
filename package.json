@@ -40,7 +40,7 @@
     "require-dir-all": "^0.4.15",
     "sequelize": "^4.37.3",
     "sequelize-typescript": "^0.6.3",
-    "sqlite3": "^3.1.13",
+    "sqlite3": "^4.0.0",
     "typescript": "^2.7.2",
     "typescript-rest": "^1.3.0",
     "umzug": "^2.1.0",
