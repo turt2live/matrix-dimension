@@ -16,8 +16,10 @@
         <div class="sticker-pack" *ngFor="let pack of packs trackById">
             <div class="header">
                 <span class="title">{{ pack.displayName }}</span>
-                <span class="license"><a [href]="pack.license.urlPath">{{ pack.license.name }}</a></span>
-                <span class="author" *ngIf="pack.author.type !== 'none'"><a [href]="pack.author.reference">{{ pack.author.name }}</a> |&nbsp;</span>
+                <span class="license"><a [href]="pack.license.urlPath" target="_blank">{{ pack.license.name }}</a></span>
+                <span class="author" *ngIf="pack.author.type !== 'none'">
+                    <a [href]="pack.author.reference" target="_blank">{{ pack.author.name }}</a> |&nbsp;
+                </span>
             </div>
 
             <div class="stickers">
