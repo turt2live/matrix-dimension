@@ -9,6 +9,10 @@
         </div>
     </div>
     <div class="sticker-picker" *ngIf="!isLoading && !authError">
+        <div class="no-stickers" *ngIf="!packs || packs.length === 0">
+            You have no sticker packs.
+            <!-- TODO: Open integrations manager -->
+        </div>
         <div class="sticker-pack" *ngFor="let pack of packs trackById">
             <div class="header">
                 <span class="title">{{ pack.displayName }}</span>
