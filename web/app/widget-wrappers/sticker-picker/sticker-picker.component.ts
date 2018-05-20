@@ -22,7 +22,7 @@ export class StickerPickerWidgetWrapperComponent extends CapableWidget implement
 
     private stickerWidgetApiSubscription: Subscription;
 
-    constructor(private activatedRoute: ActivatedRoute,
+    constructor(activatedRoute: ActivatedRoute,
                 private media: MediaService,
                 private scalarApi: ScalarServerApiService,
                 private stickerApi: StickerApiService) {
@@ -30,15 +30,23 @@ export class StickerPickerWidgetWrapperComponent extends CapableWidget implement
         this.supportsStickers = true;
 
         let params: any = activatedRoute.snapshot.queryParams;
+
+        let token = params.scalar_token;
+        if (!token) token = localStorage.getItem("dim-scalar-token");
+        else localStorage.setItem("dim-scalar-token", token);
+
         if (!params.widgetId) {
             console.error("No widgetId query parameter");
             this.authError = true;
         } else {
             ScalarWidgetApi.widgetId = params.widgetId;
         }
+
+        SessionStorage.scalarToken = token;
+        this.authError = !token;
     }
 
-    public async ngOnInit() {
+    public ngOnInit() {
         super.ngOnInit();
         this.stickerWidgetApiSubscription = ScalarWidgetApi.requestReceived.subscribe(request => {
             if (request.action === "visibility") {
@@ -46,21 +54,6 @@ export class StickerPickerWidgetWrapperComponent extends CapableWidget implement
                 ScalarWidgetApi.replyAcknowledge(request);
             }
         });
-
-        let params: any = this.activatedRoute.snapshot.queryParams;
-        try {
-            await this.loadAccount(params.scalar_token);
-            localStorage.setItem("dim-scalar-token", params.scalar_token);
-        } catch (e) {
-            console.error(e);
-            try {
-                await this.loadAccount(localStorage.getItem("dim-scalar-token"))
-            } catch (e2) {
-                console.error(e2);
-                this.authError = true;
-                this.isLoading = false;
-            }
-        }
         this.loadStickers();
     }
 
@@ -73,15 +66,20 @@ export class StickerPickerWidgetWrapperComponent extends CapableWidget implement
         return this.media.getThumbnailUrl(mxc, width, height, method, true);
     }
 
-    private async loadAccount(scalarToken: string) {
-        SessionStorage.scalarToken = scalarToken;
-        const info = await this.scalarApi.getAccount();
-        SessionStorage.userId = info.user_id;
-        console.log("Dimension scalar_token belongs to " + SessionStorage.userId);
-    }
-
     private async loadStickers() {
         if (this.authError) return; // Don't bother
+
+        if (!SessionStorage.userId) {
+            try {
+                const info = await this.scalarApi.getAccount();
+                SessionStorage.userId = info.user_id;
+                console.log("Dimension scalar_token belongs to " + SessionStorage.userId);
+            } catch (e) {
+                console.error(e);
+                this.authError = true;
+                return;
+            }
+        }
 
         console.log("Attempting to load available stickers...");
         try {
