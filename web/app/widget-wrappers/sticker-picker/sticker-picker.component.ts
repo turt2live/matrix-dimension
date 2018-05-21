@@ -38,12 +38,16 @@ export class StickerPickerWidgetWrapperComponent extends CapableWidget implement
         if (!params.widgetId) {
             console.error("No widgetId query parameter");
             this.authError = true;
+            this.isLoading = false;
         } else {
             ScalarWidgetApi.widgetId = params.widgetId;
         }
 
-        SessionStorage.scalarToken = token;
-        this.authError = !token;
+        if (!this.authError) {
+            SessionStorage.scalarToken = token;
+            this.authError = !token;
+            this.isLoading = !this.authError;
+        }
     }
 
     public ngOnInit() {
@@ -77,6 +81,7 @@ export class StickerPickerWidgetWrapperComponent extends CapableWidget implement
             } catch (e) {
                 console.error(e);
                 this.authError = true;
+                this.isLoading = false;
                 return;
             }
         }
