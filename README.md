@@ -21,7 +21,7 @@ The remaining settings should be tailored for your Riot deployment. If you're se
 # Running your own
 
 Prerequisites:
-* [NodeJS](https://nodejs.org/en/download/) 8 or higher
+* [NodeJS](https://nodejs.org/en/download/) 8
 * npm 5 or higher (`npm install -g npm@latest`)
 * A webserver running Riot or another supported client
 
