@@ -39,7 +39,7 @@
         color: #222222;
       }
 
-      .author, .license {
+      .license {
         font-size: 0.6em;
         font-weight: 300;
         color: #b5b5b5;
@@ -48,6 +48,17 @@
 
         a {
           color: #b5b5b5;
+        }
+      }
+
+      .author {
+        font-size: 0.6em;
+        font-weight: 300;
+        color: #222222;
+        display: block;
+
+        a {
+          color: #222222;
         }
       }
     }
