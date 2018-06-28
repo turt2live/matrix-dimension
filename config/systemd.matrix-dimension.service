@@ -1,0 +1,24 @@
+[Unit]
+Description=Integrations server for Matrix.org
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/npm run start:app
+WorkingDirectory=/home/matrix-dimension/git/matrix-dimension
+Environment=NODE_ENV=production
+
+# Restart timing
+Restart=always
+RestartSec=60
+
+# Output to syslog
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=matrix-dimension
+
+# User & group to run service as
+User=matrix-dimension
+Group=matrix-dimension
+
+[Install]
+WantedBy=default.target
