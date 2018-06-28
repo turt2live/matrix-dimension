@@ -2,8 +2,7 @@
 
 Run dimension as a systemd service and configure to start at boot.
 
-* Create service unit file
-Save [systemd.matrix-dimension.service](https://github.com/turt2live/matrix-dimension/tree/master/config/systemd.matrix-dimension.service) to a systemd system path (e.g., `/etc/systemd/system/matrix-dimension.service`)
+* Create service unit file. Save [systemd.matrix-dimension.service](https://github.com/turt2live/matrix-dimension/tree/master/config/systemd.matrix-dimension.service) to a systemd system path (e.g., `/etc/systemd/system/matrix-dimension.service`)
 
 * Enable and start the newly created service
 
