@@ -1,7 +1,7 @@
 FROM node:9.11.2-alpine
 
 RUN apk update && \
-    apk add bash gcc git python make g++ sqlite && \
+    apk add bash gcc python make g++ sqlite && \
     mkdir /home/node/.npm-global && \
     mkdir -p /home/node/app 
 
@@ -24,7 +24,7 @@ RUN cd /home/node/matrix-dimension && \
 
 USER root
 
-RUN apk del gcc git make g++ && \
+RUN apk del gcc make g++ && \
     rm /home/node/matrix-dimension/Dockerfile && \
     rm /home/node/matrix-dimension/docker-entrypoint.sh
 
