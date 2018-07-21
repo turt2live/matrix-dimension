@@ -20,6 +20,17 @@ The remaining settings should be tailored for your Riot deployment. If you're se
 
 # Running your own
 
+### Docker
+
+To get started quickly, run the following command or build the Docker image:
+```bash
+docker run -p 8184:8184 -v /path/to/dimension/store:/data turt2live/matrix-dimension
+```
+
+In the `/path/to/dimension/store` make sure there is a file named `config.yaml`. This will be the configuration that Dimension uses.
+
+### Compiling it yourself
+
 Prerequisites:
 * [NodeJS](https://nodejs.org/en/download/) 8
 * npm 5 or higher (`npm install -g npm@latest`)
@@ -38,6 +49,8 @@ nano config/production.yaml
 # Run
 NODE_ENV=production npm run start:app
 ```
+
+### Setting up Dimension
 
 If you didn't change the port, Dimension should now be running on port 8184. It's best to set up your environment so that Dimension runs on a dedicated subdomain that *is not* the same as your Riot domain. This is to help keep Riot and Dimension safe and secure. 
 
