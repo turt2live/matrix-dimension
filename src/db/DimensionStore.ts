@@ -29,7 +29,7 @@ class _DimensionStore {
         this.sequelize = new Sequelize({
             dialect: 'sqlite',
             database: "dimension",
-            storage: config.database.file,
+            storage: process.env['DIMENSION_DB_PATH'] || config.database.file,
             username: "",
             password: "",
             logging: i => LogService.verbose("DimensionStore [SQL]", i)

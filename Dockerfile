@@ -35,6 +35,9 @@ USER node
 
 VOLUME ["/data"]
 
+# Ensure the database doesn't get lost to the container
+ENV DIMENSION_DB_PATH=/data/dimension.db
+
 EXPOSE 8184
 #CMD ["/bin/sh"]
 ENTRYPOINT ["/docker-entrypoint.sh"]
