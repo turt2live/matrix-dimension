@@ -3,6 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import * as $ from "jquery";
 import { FE_JitsiWidget } from "../../shared/models/integration";
 import { WidgetApiService } from "../../shared/services/integrations/widget-api.service";
+import { CapableWidget } from "../capable-widget";
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -11,7 +12,7 @@ declare var JitsiMeetExternalAPI: any;
     templateUrl: "jitsi.component.html",
     styleUrls: ["jitsi.component.scss"],
 })
-export class JitsiWidgetWrapperComponent implements OnInit {
+export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit {
 
     public isJoined = false;
 
@@ -23,16 +24,20 @@ export class JitsiWidgetWrapperComponent implements OnInit {
     private jitsiApiObj: any;
 
     constructor(activatedRoute: ActivatedRoute, private widgetApi: WidgetApiService) {
+        super();
+        this.supportsAlwaysOnScreen = true;
+
         let params: any = activatedRoute.snapshot.queryParams;
 
-        this.domain = params.domain;
+        this.domain = params.domain || "jitsi.riot.im"; // Riot doesn't supply a domain, so we default
         this.conferenceId = params.confId || params.conferenceId;
         this.displayName = params.displayName;
         this.avatarUrl = params.avatarUrl;
-        this.userId = params.userId;
+        this.userId = params.userId || params.email; // Riot uses `email` when placing a conference call
     }
 
     public ngOnInit() {
+        super.ngOnInit();
         this.widgetApi.getWidget("jitsi").then(integration => {
             const widget = <FE_JitsiWidget>integration;
             $.getScript(widget.options.scriptUrl);

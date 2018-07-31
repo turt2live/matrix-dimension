@@ -63,6 +63,14 @@ export class ScalarWidgetApi {
         });
     }
 
+    public static sendSetAlwaysOnScreen(alwaysVisible: boolean): void {
+        ScalarWidgetApi.callAction("set_always_on_screen", {
+            data: {
+                value: alwaysVisible,
+            },
+        });
+    }
+
     private static callAction(action, payload) {
         if (!window.opener) {
             return;
