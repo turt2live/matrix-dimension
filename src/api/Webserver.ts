@@ -55,7 +55,7 @@ export default class Webserver {
 
     private configure() {
         this.app.use(express.static(path.join(__dirname, "..", "..", "web")));
-        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.json({limit: '512mb'}));
         this.app.use((req, _res, next) => {
             const parsedUrl = URL.parse(req.url, true);
             if (parsedUrl.query && parsedUrl.query["scalar_token"]) {
