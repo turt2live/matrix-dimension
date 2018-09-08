@@ -53,6 +53,11 @@ export class ScalarService {
         const mxClient = new MatrixOpenIdClient(<OpenId>request);
         const mxUserId = await mxClient.getUserId();
 
+        if (!mxUserId.endsWith(":" + request.matrix_server_name)) {
+            LogService.warn("ScalarService", `OpenID subject '${mxUserId}' does not belong to the homeserver '${request.matrix_server_name}'`);
+            throw new ApiError(401, "Invalid token");
+        }
+
         const user = await User.findByPrimary(mxUserId);
         if (!user) {
             // There's a small chance we'll get a validation error because of:
