@@ -49,3 +49,4 @@ export const CACHE_WIDGET_TITLES = "widget-titles";
 export const CACHE_FEDERATION = "federation";
 export const CACHE_IRC_BRIDGE = "irc-bridge";
 export const CACHE_STICKERS = "stickers";
+export const CACHE_TELEGRAM_BRIDGE = "telegram-bridge";

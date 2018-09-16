@@ -21,3 +21,7 @@ export interface IrcBridgeConfiguration {
     availableNetworks: AvailableNetworks;
     links: LinkedChannels;
 }
+
+export interface TelegramBridgeConfiguration {
+    linkedChatIds: number[];
+}
