@@ -18,6 +18,9 @@ nano config/development.yaml
 # Run the webserver (it watches for changes)
 npm run start:web
 
+# Install dependencies
+npm install
+
 # Run the backend (does not watch for changes)
 npm run build:app && node build/app/index.js
 ```
