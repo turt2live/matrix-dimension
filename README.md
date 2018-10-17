@@ -47,6 +47,9 @@ cd matrix-dimension
 cp config/default.yaml config/production.yaml
 nano config/production.yaml
 
+# Install dependencies
+npm install
+
 # Run
 NODE_ENV=production npm run start:app
 ```
