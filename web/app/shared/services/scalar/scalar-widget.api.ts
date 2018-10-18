@@ -101,6 +101,7 @@ window.addEventListener("message", event => {
 
     if (event.data.api === "toWidget" && event.data.action) {
         if (event.data.widgetId && !ScalarWidgetApi.widgetId) ScalarWidgetApi.widgetId = event.data.widgetId;
+        console.log(`[Dimension] Received toWidget request at widget ID ${ScalarWidgetApi.widgetId}: ${JSON.stringify(event.data)}`);
         ScalarWidgetApi.requestReceived.next(event.data);
         return;
     }
