@@ -2,6 +2,12 @@ import { Component } from "@angular/core";
 import { BridgeComponent } from "../bridge.component";
 import { TelegramApiService } from "../../../shared/services/integrations/telegram-api.service";
 import { FE_PortalInfo } from "../../../shared/models/telegram";
+import { Modal, overlayConfigFactory } from "ngx-modialog";
+import { AskUnbridgeDialogContext, TelegramAskUnbridgeComponent } from "./ask-unbridge/ask-unbridge.component";
+import {
+    CannotUnbridgeDialogContext,
+    TelegramCannotUnbridgeComponent
+} from "./cannot-unbridge/cannot-unbridge.component";
 
 interface TelegramConfig {
     puppet: {
@@ -33,7 +39,7 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
 
     public isUpdating: boolean;
 
-    constructor(private telegram: TelegramApiService) {
+    constructor(private telegram: TelegramApiService, private modal: Modal) {
         super("telegram");
     }
 
@@ -69,16 +75,31 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
     }
 
     public bridgeRoom(): void {
-        this.telegram.getPortalInfo(this.bridge.config.portalInfo.chatId, this.roomId).then(chatInfo => {
+        this.telegram.getPortalInfo(this.bridge.config.portalInfo.chatId, this.roomId).then(async (chatInfo) => {
+            let forceUnbridge = false;
             if (chatInfo.bridged && chatInfo.canUnbridge) {
-                // TODO: Ask if the user would like to unbridge
-                console.log("Ask for unbridge");
+                const response = await this.modal.open(TelegramAskUnbridgeComponent, overlayConfigFactory({
+                    isBlocking: true,
+                    size: 'lg',
+                }, AskUnbridgeDialogContext)).result;
+
+                if (response.unbridge) {
+                    forceUnbridge = true;
+                } else {
+                    return {aborted: true};
+                }
             } else if (chatInfo.bridged) {
-                // TODO: Dialog saying 'sorry'
-                console.log("Cannot bridge");
+                this.modal.open(TelegramCannotUnbridgeComponent, overlayConfigFactory({
+                    isBlocking: true,
+                    size: 'lg',
+                }, CannotUnbridgeDialogContext));
+                return {aborted: true};
             }
-            return this.telegram.bridgeRoom(this.roomId, this.bridge.config.portalInfo.chatId);
-        }).then(portalInfo => {
+
+            return this.telegram.bridgeRoom(this.roomId, this.bridge.config.portalInfo.chatId, forceUnbridge);
+        }).then((portalInfo: FE_PortalInfo) => {
+            if ((<any>portalInfo).aborted) return;
+
             this.bridge.config.portalInfo = portalInfo;
             this.bridge.config.linked = [portalInfo.chatId];
             this.isUpdating = false;

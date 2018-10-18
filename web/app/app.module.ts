@@ -83,6 +83,8 @@ import { AdminTelegramBridgeComponent } from "./admin/bridges/telegram/telegram.
 import { AdminTelegramBridgeManageSelfhostedComponent } from "./admin/bridges/telegram/manage-selfhosted/manage-selfhosted.component";
 import { TelegramApiService } from "./shared/services/integrations/telegram-api.service";
 import { TelegramBridgeConfigComponent } from "./configs/bridge/telegram/telegram.bridge.component";
+import { TelegramAskUnbridgeComponent } from "./configs/bridge/telegram/ask-unbridge/ask-unbridge.component";
+import { TelegramCannotUnbridgeComponent } from "./configs/bridge/telegram/cannot-unbridge/cannot-unbridge.component";
 
 @NgModule({
     imports: [
@@ -153,6 +155,8 @@ import { TelegramBridgeConfigComponent } from "./configs/bridge/telegram/telegra
         AdminTelegramBridgeComponent,
         AdminTelegramBridgeManageSelfhostedComponent,
         TelegramBridgeConfigComponent,
+        TelegramAskUnbridgeComponent,
+        TelegramCannotUnbridgeComponent,
 
         // Vendor
     ],
@@ -192,6 +196,8 @@ import { TelegramBridgeConfigComponent } from "./configs/bridge/telegram/telegra
         AdminIrcBridgeAddSelfhostedComponent,
         AdminStickerPackPreviewComponent,
         AdminTelegramBridgeManageSelfhostedComponent,
+        TelegramAskUnbridgeComponent,
+        TelegramCannotUnbridgeComponent,
     ]
 })
 export class AppModule {

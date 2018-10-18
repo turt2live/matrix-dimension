@@ -11,6 +11,10 @@ interface PortalInfoResponse {
     chatName: string;
 }
 
+interface BridgeRoomRequest {
+    unbridgeOtherPortals: boolean;
+}
+
 /**
  * API for interacting with the Telegram bridge
  */
@@ -49,12 +53,12 @@ export class DimensionTelegramService {
 
     @POST
     @Path("chat/:chatId/room/:roomId")
-    public async bridgeRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("chatId") chatId: number, @PathParam("roomId") roomId: string): Promise<PortalInfoResponse> {
+    public async bridgeRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("chatId") chatId: number, @PathParam("roomId") roomId: string, request: BridgeRoomRequest): Promise<PortalInfoResponse> {
         const userId = await ScalarService.getTokenOwner(scalarToken);
 
         try {
             const telegram = new TelegramBridge(userId);
-            const portal = await telegram.bridgeRoom(chatId, roomId);
+            const portal = await telegram.bridgeRoom(chatId, roomId, request.unbridgeOtherPortals);
             return {
                 bridged: true,
                 canUnbridge: portal.canUnbridge,

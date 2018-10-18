@@ -97,9 +97,9 @@ export class TelegramBridge {
         try {
             const info = await this.doProvisionRequest<PortalInformationResponse>(bridge, "GET", `/portal/${inRoomId}`);
             return {
-                bridged: !!info,
+                bridged: !!info && info.mxid === inRoomId,
                 chatId: info ? info.chat_id : 0,
-                roomId: inRoomId,
+                roomId: info.mxid,
                 chatName: info ? info.title || info.username : null,
                 canUnbridge: info ? info.can_unbridge : false,
             };
@@ -150,11 +150,13 @@ export class TelegramBridge {
         }
     }
 
-    public async bridgeRoom(chatId: number, roomId: string): Promise<PortalInfo> {
+    public async bridgeRoom(chatId: number, roomId: string, unbridgeOtherPortals = false): Promise<PortalInfo> {
         const bridge = await this.getDefaultBridge();
 
         try {
-            await this.doProvisionRequest(bridge, "POST", `/portal/${roomId}/connect/${chatId}`);
+            const qs = {};
+            if (unbridgeOtherPortals) qs["force"] = "unbridge";
+            await this.doProvisionRequest(bridge, "POST", `/portal/${roomId}/connect/${chatId}`, qs);
             return this.getChatConfiguration(chatId, roomId);
         } catch (e) {
             if (!e.errBody) throw e.error || e;
