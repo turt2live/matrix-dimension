@@ -12,14 +12,16 @@ interface CreateWithUpstream {
 interface CreateSelfhosted {
     provisionUrl: string;
     sharedSecret: string;
-    allowPuppets: boolean;
+    allowTgPuppets: boolean;
+    allowMxPuppets: boolean;
 }
 
 interface BridgeResponse {
     id: number;
     upstreamId?: number;
     provisionUrl?: string;
-    allowPuppets?: boolean;
+    allowTgPuppets?: boolean;
+    allowMxPuppets?: boolean;
     sharedSecret?: string;
     isEnabled: boolean;
 }
@@ -41,7 +43,8 @@ export class AdminTelegramService {
                 id: b.id,
                 upstreamId: b.upstreamId,
                 provisionUrl: b.provisionUrl,
-                allowPuppets: b.allowPuppets,
+                allowTgPuppets: b.allowTgPuppets,
+                allowMxPuppets: b.allowMxPuppets,
                 sharedSecret: b.sharedSecret,
                 isEnabled: b.isEnabled,
             };
@@ -60,7 +63,8 @@ export class AdminTelegramService {
             id: telegramBridge.id,
             upstreamId: telegramBridge.upstreamId,
             provisionUrl: telegramBridge.provisionUrl,
-            allowPuppets: telegramBridge.allowPuppets,
+            allowTgPuppets: telegramBridge.allowTgPuppets,
+            allowMxPuppets: telegramBridge.allowMxPuppets,
             sharedSecret: telegramBridge.sharedSecret,
             isEnabled: telegramBridge.isEnabled,
         };
@@ -76,7 +80,8 @@ export class AdminTelegramService {
 
         bridge.provisionUrl = request.provisionUrl;
         bridge.sharedSecret = request.sharedSecret;
-        bridge.allowPuppets = request.allowPuppets;
+        bridge.allowTgPuppets = request.allowTgPuppets;
+        bridge.allowMxPuppets = request.allowMxPuppets;
         await bridge.save();
 
         LogService.info("AdminTelegramService", userId + " updated Telegram Bridge " + bridge.id);
@@ -100,7 +105,8 @@ export class AdminTelegramService {
         const bridge = await TelegramBridgeRecord.create({
             provisionUrl: request.provisionUrl,
             sharedSecret: request.sharedSecret,
-            allowPuppets: request.allowPuppets,
+            allowTgPuppets: request.allowTgPuppets,
+            allowMxPuppets: request.allowMxPuppets,
             isEnabled: true,
         });
         LogService.info("AdminTelegramService", userId + " created a new Telegram Bridge with provisioning URL " + request.provisionUrl);

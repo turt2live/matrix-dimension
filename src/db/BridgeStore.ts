@@ -1,4 +1,4 @@
-import { Bridge } from "../integrations/Bridge";
+import { Bridge, TelegramBridgeConfiguration } from "../integrations/Bridge";
 import BridgeRecord from "./models/BridgeRecord";
 import { IrcBridge } from "../bridges/IrcBridge";
 import { LogService } from "matrix-js-snippets";
@@ -68,7 +68,14 @@ export class BridgeStore {
         } else if (record.type === "telegram") {
             if (!inRoomId) return {}; // The bridge's admin config is handled by other APIs
             const telegram = new TelegramBridge(requestingUserId);
-            return telegram.getRoomConfiguration(inRoomId);
+            const roomConf = await telegram.getRoomConfiguration(inRoomId);
+            const bridgeInfo = await telegram.getBridgeInfo();
+            return <TelegramBridgeConfiguration>{
+                botUsername: bridgeInfo.botUsername,
+                linked: roomConf.bridged ? [roomConf.chatId] : [],
+                portalInfo: roomConf,
+                puppet: await telegram.getPuppetInfo(),
+            };
         } else return {};
     }
 

@@ -22,10 +22,17 @@
         </label>
 
         <label class="label-block">
-            Promote Puppeting
+            Promote Telegram Puppeting
             <span class="text-muted ">If enabled, Dimension will recommend that users log in to their Telegram accounts.</span>
-            <ui-switch [checked]="allowPuppets" size="small" [disabled]="isSaving"
-                       (change)="allowPuppets = !allowPuppets"></ui-switch>
+            <ui-switch [checked]="allowTgPuppets" size="small" [disabled]="isSaving"
+                       (change)="allowTgPuppets = !allowTgPuppets"></ui-switch>
+        </label>
+
+        <label class="label-block">
+            Promote Matrix Puppeting
+            <span class="text-muted ">If enabled, Dimension will recommend that users log in to their Matrix accounts.</span>
+            <ui-switch [checked]="allowMxPuppets" size="small" [disabled]="isSaving"
+                       (change)="allowMxPuppets = !allowMxPuppets"></ui-switch>
         </label>
     </div>
     <div class="dialog-footer">

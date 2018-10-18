@@ -53,7 +53,9 @@ export class AdminTelegramBridgeComponent implements OnInit {
     }
 
     public getEnabledFeaturesString(bridge: FE_TelegramBridge): string {
-        if (bridge.allowPuppets) return "Puppeting";
+        if (!bridge.options) return "";
+        if (bridge.options.allowTgPuppets) return "Telegram Puppetting";
+        if (bridge.options.allowMxPuppets) return "Matrix Puppetting";
         return "";
     }
 
@@ -64,7 +66,8 @@ export class AdminTelegramBridgeComponent implements OnInit {
 
             provisionUrl: bridge.provisionUrl,
             sharedSecret: bridge.sharedSecret,
-            allowPuppets: bridge.allowPuppets,
+            allowTgPuppets: bridge.options ? bridge.options.allowTgPuppets : false,
+            allowMxPuppets: bridge.options ? bridge.options.allowMxPuppets : false,
             bridgeId: bridge.id,
         }, ManageSelfhostedTelegramBridgeDialogContext)).result.then(() => {
             this.reload().catch(err => {

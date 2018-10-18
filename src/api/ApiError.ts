@@ -35,5 +35,7 @@ export class ApiError {
         this.jsonResponse = json;
         this.statusCode = statusCode;
         this.errorCode = errCode;
+
+        this.jsonResponse["dim_errcode"] = this.errorCode;
     }
 }

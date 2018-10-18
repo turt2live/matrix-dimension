@@ -28,6 +28,7 @@ import { AdminStickerPacksComponent } from "./admin/sticker-packs/sticker-packs.
 import { StickerpickerComponent } from "./configs/stickerpicker/stickerpicker.component";
 import { StickerPickerWidgetWrapperComponent } from "./widget-wrappers/sticker-picker/sticker-picker.component";
 import { AdminTelegramBridgeComponent } from "./admin/bridges/telegram/telegram.component";
+import { TelegramBridgeConfigComponent } from "./configs/bridge/telegram/telegram.bridge.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -169,6 +170,11 @@ const routes: Routes = [
                         path: "irc",
                         component: IrcBridgeConfigComponent,
                         data: {breadcrumb: "IRC Bridge Configuration", name: "IRC Bridge Configuration"},
+                    },
+                    {
+                        path: "telegram",
+                        component: TelegramBridgeConfigComponent,
+                        data: {breadcrumb: "Telegram Bridge Configuration", name: "Telegram Bridge Configuration"},
                     },
                 ],
             },

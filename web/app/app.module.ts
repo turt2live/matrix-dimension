@@ -81,6 +81,8 @@ import { StickerPickerWidgetWrapperComponent } from "./widget-wrappers/sticker-p
 import { AdminTelegramApiService } from "./shared/services/admin/admin-telegram-api.service";
 import { AdminTelegramBridgeComponent } from "./admin/bridges/telegram/telegram.component";
 import { AdminTelegramBridgeManageSelfhostedComponent } from "./admin/bridges/telegram/manage-selfhosted/manage-selfhosted.component";
+import { TelegramApiService } from "./shared/services/integrations/telegram-api.service";
+import { TelegramBridgeConfigComponent } from "./configs/bridge/telegram/telegram.bridge.component";
 
 @NgModule({
     imports: [
@@ -150,6 +152,7 @@ import { AdminTelegramBridgeManageSelfhostedComponent } from "./admin/bridges/te
         StickerPickerWidgetWrapperComponent,
         AdminTelegramBridgeComponent,
         AdminTelegramBridgeManageSelfhostedComponent,
+        TelegramBridgeConfigComponent,
 
         // Vendor
     ],
@@ -170,6 +173,7 @@ import { AdminTelegramBridgeManageSelfhostedComponent } from "./admin/bridges/te
         MediaService,
         StickerApiService,
         AdminTelegramApiService,
+        TelegramApiService,
         {provide: Window, useValue: window},
 
         // Vendor

@@ -27,7 +27,11 @@ export default class TelegramBridgeRecord extends Model<TelegramBridgeRecord> {
 
     @AllowNull
     @Column
-    allowPuppets?: boolean;
+    allowTgPuppets?: boolean;
+
+    @AllowNull
+    @Column
+    allowMxPuppets?: boolean;
 
     @Column
     isEnabled: boolean;
