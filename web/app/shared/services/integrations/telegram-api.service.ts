@@ -13,7 +13,7 @@ export class TelegramApiService extends AuthedApi {
         return this.authedGet("/api/v1/dimension/telegram/chat/" + chatId, {roomId: roomId}).map(r => r.json()).toPromise();
     }
 
-    public bridgeRoom(roomId: string, chatId: number, unbridgeOtherPortals: boolean = false): Promise<FE_PortalInfo> {
+    public bridgeRoom(roomId: string, chatId: number, unbridgeOtherPortals = false): Promise<FE_PortalInfo> {
         return this.authedPost("/api/v1/dimension/telegram/chat/" + chatId + "/room/" + roomId, {unbridgeOtherPortals})
             .map(r => r.json()).toPromise();
     }
