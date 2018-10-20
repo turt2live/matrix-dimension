@@ -1,0 +1,17 @@
+<div class="dialog">
+    <div class="dialog-header">
+        <h4>Telegram chat is already bridged</h4>
+    </div>
+    <div class="dialog-content">
+        You have the appropriate permissions to be able to unbridge the chat, however. Would you like to unbridge
+        the other room and instead bridge it here?
+    </div>
+    <div class="dialog-footer">
+        <button type="button" (click)="unbridgeAndContinue()" title="unbridge and continue" class="btn btn-danger btn-sm">
+            Unbridge and continue
+        </button>
+        <button type="button" (click)="cancel()" title="cancel" class="btn btn-primary btn-sm">
+            <i class="far fa-times-circle"></i> No, don't bridge
+        </button>
+    </div>
+</div>

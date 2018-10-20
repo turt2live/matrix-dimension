@@ -1,6 +1,7 @@
 import { Integration } from "./Integration";
 import BridgeRecord from "../db/models/BridgeRecord";
 import { AvailableNetworks, LinkedChannels } from "../bridges/IrcBridge";
+import { PortalInfo, PuppetInfo } from "../bridges/TelegramBridge";
 
 export class Bridge extends Integration {
     constructor(bridge: BridgeRecord, public config: any) {
@@ -20,4 +21,11 @@ export class Bridge extends Integration {
 export interface IrcBridgeConfiguration {
     availableNetworks: AvailableNetworks;
     links: LinkedChannels;
+}
+
+export interface TelegramBridgeConfiguration {
+    botUsername: string;
+    linked: number[];
+    portalInfo: PortalInfo;
+    puppet: PuppetInfo;
 }

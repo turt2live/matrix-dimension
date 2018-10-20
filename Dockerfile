@@ -3,8 +3,10 @@ FROM node:9.11.2-alpine
 LABEL maintainer="Andreas Peters <support@aventer.biz>"
 #Upstream URL: https://git.aventer.biz/AVENTER/docker-matrix-dimension
 
+RUN apk add dos2unix --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ --allow-untrusted
+
 RUN apk update && \
-    apk add bash gcc python make g++ sqlite && \
+    apk add --no-cache bash gcc python make g++ sqlite && \
     mkdir /home/node/.npm-global && \
     mkdir -p /home/node/app 
 
@@ -29,7 +31,8 @@ USER root
 
 RUN apk del gcc make g++ && \
     rm /home/node/matrix-dimension/Dockerfile && \
-    rm /home/node/matrix-dimension/docker-entrypoint.sh
+    rm /home/node/matrix-dimension/docker-entrypoint.sh && \
+    dos2unix /docker-entrypoint.sh
 
 USER node
 

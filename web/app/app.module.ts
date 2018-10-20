@@ -78,6 +78,13 @@ import { MediaService } from "./shared/services/media.service";
 import { StickerApiService } from "./shared/services/integrations/sticker-api.service";
 import { StickerpickerComponent } from "./configs/stickerpicker/stickerpicker.component";
 import { StickerPickerWidgetWrapperComponent } from "./widget-wrappers/sticker-picker/sticker-picker.component";
+import { AdminTelegramApiService } from "./shared/services/admin/admin-telegram-api.service";
+import { AdminTelegramBridgeComponent } from "./admin/bridges/telegram/telegram.component";
+import { AdminTelegramBridgeManageSelfhostedComponent } from "./admin/bridges/telegram/manage-selfhosted/manage-selfhosted.component";
+import { TelegramApiService } from "./shared/services/integrations/telegram-api.service";
+import { TelegramBridgeConfigComponent } from "./configs/bridge/telegram/telegram.bridge.component";
+import { TelegramAskUnbridgeComponent } from "./configs/bridge/telegram/ask-unbridge/ask-unbridge.component";
+import { TelegramCannotUnbridgeComponent } from "./configs/bridge/telegram/cannot-unbridge/cannot-unbridge.component";
 
 @NgModule({
     imports: [
@@ -145,6 +152,11 @@ import { StickerPickerWidgetWrapperComponent } from "./widget-wrappers/sticker-p
         AdminStickerPackPreviewComponent,
         StickerpickerComponent,
         StickerPickerWidgetWrapperComponent,
+        AdminTelegramBridgeComponent,
+        AdminTelegramBridgeManageSelfhostedComponent,
+        TelegramBridgeConfigComponent,
+        TelegramAskUnbridgeComponent,
+        TelegramCannotUnbridgeComponent,
 
         // Vendor
     ],
@@ -164,6 +176,8 @@ import { StickerPickerWidgetWrapperComponent } from "./widget-wrappers/sticker-p
         AdminStickersApiService,
         MediaService,
         StickerApiService,
+        AdminTelegramApiService,
+        TelegramApiService,
         {provide: Window, useValue: window},
 
         // Vendor
@@ -181,6 +195,9 @@ import { StickerPickerWidgetWrapperComponent } from "./widget-wrappers/sticker-p
         AdminIrcBridgeNetworksComponent,
         AdminIrcBridgeAddSelfhostedComponent,
         AdminStickerPackPreviewComponent,
+        AdminTelegramBridgeManageSelfhostedComponent,
+        TelegramAskUnbridgeComponent,
+        TelegramCannotUnbridgeComponent,
     ]
 })
 export class AppModule {
