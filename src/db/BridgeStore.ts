@@ -1,5 +1,4 @@
-import { Bridge, TelegramBridgeConfiguration } from "../integrations/Bridge";
-import { Bridge, WebhookBridgeConfiguration } from "../integrations/Bridge";
+import { Bridge, TelegramBridgeConfiguration, WebhookBridgeConfiguration } from "../integrations/Bridge";
 import BridgeRecord from "./models/BridgeRecord";
 import { IrcBridge } from "../bridges/IrcBridge";
 import { LogService } from "matrix-js-snippets";
