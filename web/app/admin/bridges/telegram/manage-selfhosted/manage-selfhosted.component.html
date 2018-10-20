@@ -1,0 +1,46 @@
+<div class="dialog">
+    <div class="dialog-header">
+        <h4>{{ isAdding ? "Add a new" : "Edit" }} self-hosted Telegram bridge</h4>
+    </div>
+    <div class="dialog-content">
+        <p>Self-hosted Telegram bridges must have <code>provisioning</code> enabled in the configuration.</p>
+
+        <label class="label-block">
+            Provisioning URL
+            <span class="text-muted ">The provisioning URL for the bridge. This is the public address for the bridge followed by the provisioning prefix given in the configuration.</span>
+            <input type="text" class="form-control"
+                   placeholder="http://localhost:9999/_matrix/provision/v1"
+                   [(ngModel)]="provisionUrl" [disabled]="isSaving"/>
+        </label>
+
+        <label class="label-block">
+            Shared Secret
+            <span class="text-muted ">The shared secret defined in the configuration for provisioning.</span>
+            <input type="text" class="form-control"
+                   placeholder="some_secret_value"
+                   [(ngModel)]="sharedSecret" [disabled]="isSaving"/>
+        </label>
+
+        <label class="label-block">
+            Promote Telegram Puppeting
+            <span class="text-muted ">If enabled, Dimension will recommend that users log in to their Telegram accounts.</span>
+            <ui-switch [checked]="allowTgPuppets" size="small" [disabled]="isSaving"
+                       (change)="allowTgPuppets = !allowTgPuppets"></ui-switch>
+        </label>
+
+        <label class="label-block">
+            Promote Matrix Puppeting
+            <span class="text-muted ">If enabled, Dimension will recommend that users log in to their Matrix accounts.</span>
+            <ui-switch [checked]="allowMxPuppets" size="small" [disabled]="isSaving"
+                       (change)="allowMxPuppets = !allowMxPuppets"></ui-switch>
+        </label>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" (click)="add()" title="close" class="btn btn-primary btn-sm">
+            <i class="far fa-save"></i> Save
+        </button>
+        <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
+            <i class="far fa-times-circle"></i> Cancel
+        </button>
+    </div>
+</div>

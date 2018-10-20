@@ -1,0 +1,32 @@
+<my-bridge-config [bridgeComponent]="this">
+    <ng-template #bridgeParamsTemplate>
+        <my-ibox [isCollapsible]="false">
+            <h5 class="my-ibox-title">
+                Bridge to Telegram
+            </h5>
+            <div class="my-ibox-content">
+                <div *ngIf="isBridged">
+                    This room is bridged to "{{ chatName }}" (<code>{{ chatId }}</code>) on Telegram.
+                    <div *ngIf="canUnbridge">
+                        <button type="button" class="btn btn-sm btn-danger" [disabled]="isUpdating" (click)="unbridgeRoom()">
+                            Unbridge
+                        </button>
+                    </div>
+                    <span *ngIf="!canUnbridge">
+                        You do not have the necessary permissions in this room to unbridge the channel.
+                    </span>
+                </div>
+                <div *ngIf="!isBridged">
+                    <label class="label-block">
+                        Chat ID
+                        <span class="text-muted">After inviting <a href="https://t.me/{{ botUsername }}" target="_blank">@{{ botUsername }}</a> to your Telegram chat, run the command <code>/id</code> in the Telegram room to get the chat ID.</span>
+                        <input title="chat ID" type="text" class="form-control form-control-sm col-md-3" [(ngModel)]="chatId" [disabled]="isUpdating" />
+                    </label>
+                    <button type="button" class="btn btn-sm btn-primary" [disabled]="isUpdating" (click)="bridgeRoom()">
+                        Bridge
+                    </button>
+                </div>
+            </div>
+        </my-ibox>
+    </ng-template>
+</my-bridge-config>
