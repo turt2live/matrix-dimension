@@ -1,7 +1,8 @@
-import { Bridge } from "../integrations/Bridge";
+import { Bridge, WebhookBridgeConfiguration } from "../integrations/Bridge";
 import BridgeRecord from "./models/BridgeRecord";
 import { IrcBridge } from "../bridges/IrcBridge";
 import { LogService } from "matrix-js-snippets";
+import { WebhooksBridge } from "../bridges/WebhooksBridge";
 
 export class BridgeStore {
 
@@ -44,6 +45,8 @@ export class BridgeStore {
 
         if (integrationType === "irc") {
             throw new Error("IRC Bridges should be modified with the dedicated API");
+        } else if (integrationType === "webhooks") {
+            throw new Error("Webhooks should be modified with the dedicated API");
         } else throw new Error("Unsupported bridge");
     }
 
@@ -51,6 +54,9 @@ export class BridgeStore {
         if (record.type === "irc") {
             const irc = new IrcBridge(requestingUserId);
             return irc.hasNetworks();
+        } else if (record.type === "webhooks") {
+            const webhooks = new WebhooksBridge(requestingUserId);
+            return webhooks.isBridgingEnabled();
         } else return true;
     }
 
@@ -59,6 +65,13 @@ export class BridgeStore {
             if (!inRoomId) return {}; // The bridge's admin config is handled by other APIs
             const irc = new IrcBridge(requestingUserId);
             return irc.getRoomConfiguration(inRoomId);
+        } else if (record.type === "webhooks") {
+            if (!inRoomId) return {}; // The bridge's admin config is handled by other APIs
+            const webhooks = new WebhooksBridge(requestingUserId);
+            const hooks = await webhooks.getHooks(inRoomId);
+            return <WebhookBridgeConfiguration>{
+                webhooks: hooks,
+            };
         } else return {};
     }
 

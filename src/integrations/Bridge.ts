@@ -1,6 +1,7 @@
 import { Integration } from "./Integration";
 import BridgeRecord from "../db/models/BridgeRecord";
 import { AvailableNetworks, LinkedChannels } from "../bridges/IrcBridge";
+import { WebhookConfiguration } from "../bridges/models/webhooks";
 
 export class Bridge extends Integration {
     constructor(bridge: BridgeRecord, public config: any) {
@@ -20,4 +21,8 @@ export class Bridge extends Integration {
 export interface IrcBridgeConfiguration {
     availableNetworks: AvailableNetworks;
     links: LinkedChannels;
+}
+
+export interface WebhookBridgeConfiguration {
+    webhooks: WebhookConfiguration[];
 }
