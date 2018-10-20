@@ -29,20 +29,13 @@ export class DimensionTelegramService {
         try {
             const telegram = new TelegramBridge(userId);
             const conf = await telegram.getChatConfiguration(chatId, roomId);
-            if (!conf) return {
-                bridged: false,
-                canUnbridge: true,
-                chatId: chatId,
-                roomId: null,
-                chatName: null,
-            };
 
             return {
-                bridged: true,
-                canUnbridge: conf.canUnbridge,
-                chatId: chatId,
-                roomId: conf.roomId,
-                chatName: conf.chatName,
+                bridged: conf ? conf.bridged : false,
+                canUnbridge: conf ? conf.canUnbridge : false,
+                chatId: conf ? conf.chatId : null,
+                roomId: conf ? conf.roomId : null,
+                chatName: conf ? conf.chatName : null,
             };
         } catch (e) {
             if (e.errcode) {

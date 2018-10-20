@@ -124,7 +124,7 @@ export class TelegramBridge {
         try {
             const info = await this.doProvisionRequest<PortalInformationResponse>(bridge, "GET", `/portal/${chatId}`, {room_id: roomId});
             return {
-                bridged: !!info,
+                bridged: info && !!info.mxid,
                 chatId: chatId,
                 roomId: info ? info.mxid : null,
                 chatName: info ? info.title || info.username : null,
