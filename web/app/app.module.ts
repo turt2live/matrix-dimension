@@ -93,6 +93,8 @@ import { WebhooksBridgeConfigComponent } from "./configs/bridge/webhooks/webhook
 import { AdminGitterBridgeComponent } from "./admin/bridges/gitter/gitter.component";
 import { AdminGitterBridgeManageSelfhostedComponent } from "./admin/bridges/gitter/manage-selfhosted/manage-selfhosted.component";
 import { AdminGitterApiService } from "./shared/services/admin/admin-gitter-api.service";
+import { GitterBridgeConfigComponent } from "./configs/bridge/gitter/gitter.bridge.component";
+import { GitterApiService } from "./shared/services/integrations/gitter-api.service";
 
 @NgModule({
     imports: [
@@ -170,6 +172,7 @@ import { AdminGitterApiService } from "./shared/services/admin/admin-gitter-api.
         WebhooksBridgeConfigComponent,
         AdminGitterBridgeComponent,
         AdminGitterBridgeManageSelfhostedComponent,
+        GitterBridgeConfigComponent,
 
         // Vendor
     ],
@@ -194,6 +197,7 @@ import { AdminGitterApiService } from "./shared/services/admin/admin-gitter-api.
         AdminWebhooksApiService,
         WebhooksApiService,
         AdminGitterApiService,
+        GitterApiService,
         {provide: Window, useValue: window},
 
         // Vendor

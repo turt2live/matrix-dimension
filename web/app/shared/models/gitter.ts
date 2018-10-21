@@ -4,3 +4,8 @@ export interface FE_GitterBridge {
     provisionUrl?: string;
     isEnabled: boolean;
 }
+
+export interface FE_GitterLink {
+    roomId: string;
+    gitterRoomName: string;
+}

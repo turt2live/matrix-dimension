@@ -5,12 +5,14 @@ import { PortalInfo, PuppetInfo } from "../bridges/TelegramBridge";
 import { WebhookConfiguration } from "../bridges/models/webhooks";
 import { BridgedRoom } from "../bridges/GitterBridge";
 
+const PRIVATE_ACCESS_SUPPORTED_BRIDGES = ["webhooks", "gitter"];
+
 export class Bridge extends Integration {
     constructor(bridge: BridgeRecord, public config: any) {
         super(bridge);
         this.category = "bridge";
 
-        if (bridge.type === "webhooks") this.requirements = [];
+        if (PRIVATE_ACCESS_SUPPORTED_BRIDGES.indexOf(bridge.type) !== -1) this.requirements = [];
         else this.requirements = [{
             condition: "publicRoom",
             expectedValue: true,

@@ -32,6 +32,7 @@ import { TelegramBridgeConfigComponent } from "./configs/bridge/telegram/telegra
 import { AdminWebhooksBridgeComponent } from "./admin/bridges/webhooks/webhooks.component";
 import { WebhooksBridgeConfigComponent } from "./configs/bridge/webhooks/webhooks.bridge.component";
 import { AdminGitterBridgeComponent } from "./admin/bridges/gitter/gitter.component";
+import { GitterBridgeConfigComponent } from "./configs/bridge/gitter/gitter.bridge.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -193,6 +194,11 @@ const routes: Routes = [
                         path: "webhooks",
                         component: WebhooksBridgeConfigComponent,
                         data: {breadcrumb: "Webhook Bridge Configuration", name: "Webhook Bridge Configuration"},
+                    },
+                    {
+                        path: "gitter",
+                        component: GitterBridgeConfigComponent,
+                        data: {breadcrumb: "Gitter Bridge Configuration", name: "Gitter Bridge Configuration"},
                     },
                 ],
             },

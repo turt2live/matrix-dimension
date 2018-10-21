@@ -38,7 +38,7 @@ export class GitterBridge {
         const bridge = await this.getDefaultBridge();
 
         if (bridge.upstreamId) {
-            const info = await this.doUpstreamRequest<ModularGitterResponse<GetBotUserIdResponse>>(bridge, "POST", "/bridges/gitter/_matrix/provision/getbotid");
+            const info = await this.doUpstreamRequest<ModularGitterResponse<GetBotUserIdResponse>>(bridge, "POST", "/bridges/gitter/_matrix/provision/getbotid/", null, {});
             if (!info || !info.replies || !info.replies[0] || !info.replies[0].response) {
                 throw new Error("Invalid response from Modular for Gitter bot user ID");
             }
@@ -59,7 +59,7 @@ export class GitterBridge {
         try {
             if (bridge.upstreamId) {
                 delete requestBody["user_id"];
-                const link = await this.doUpstreamRequest<ModularGitterResponse<BridgedRoomResponse>>(bridge, "POST", "/bridge/gitter/_matrix/provision/getlink", null, requestBody);
+                const link = await this.doUpstreamRequest<ModularGitterResponse<BridgedRoomResponse>>(bridge, "POST", "/bridges/gitter/_matrix/provision/getlink", null, requestBody);
                 if (!link || !link.replies || !link.replies[0] || !link.replies[0].response) {
                     // noinspection ExceptionCaughtLocallyJS
                     throw new Error("Invalid response from Modular for Gitter list links in " + roomId);
@@ -76,6 +76,7 @@ export class GitterBridge {
                 };
             }
         } catch (e) {
+            if (e.status === 404) return null;
             LogService.error("GitterBridge", e);
             throw e;
         }
@@ -147,9 +148,10 @@ export class GitterBridge {
                     LogService.error("GitterBridge", "There is no response for " + url);
                     reject(new Error("No response provided - is the service online?"));
                 } else if (res.statusCode !== 200) {
+                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
                     LogService.error("GitterBridge", "Got status code " + res.statusCode + " when calling " + url);
                     LogService.error("GitterBridge", res.body);
-                    reject(new Error("Request failed"));
+                    reject({body: res.body, status: res.statusCode});
                 } else {
                     if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
                     resolve(res.body);
@@ -179,9 +181,10 @@ export class GitterBridge {
                     LogService.error("GitterBridge", "There is no response for " + url);
                     reject(new Error("No response provided - is the service online?"));
                 } else if (res.statusCode !== 200) {
+                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
                     LogService.error("GitterBridge", "Got status code " + res.statusCode + " when calling " + url);
                     LogService.error("GitterBridge", res.body);
-                    reject(new Error("Request failed"));
+                    reject({body: res.body, status: res.statusCode});
                 } else {
                     if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
                     resolve(res.body);
