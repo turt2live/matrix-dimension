@@ -1,36 +1,176 @@
 // component styles are encapsulated and only applied to their components
-.header {
-  text-align: center;
-  background-color: #ea6424;
-  margin-top: 30px;
-  border-top: 1px solid #ea4000;
-  border-bottom: 1px solid #ea4000;
+
+.spacer {
+  width: 85%;
+  display: block;
+  border-color: rgba(206, 222, 235, 0.85);
+  margin-top: 60px;
+  margin-bottom: 60px;
 }
 
-.header img {
-  padding: 20px;
+.shadowed {
+  box-shadow: 0 20px 40px 20px rgba(206, 222, 235, 0.34);
+}
+
+.info-box {
+  display: inline-block;
+  margin: auto;
+  background-color: #fff;
+  padding: 50px;
+  border: 1px solid rgba(143, 45, 86, 0.2);
+
+  h3 {
+    margin-bottom: 20px;
+  }
+}
+
+pre {
+  border: 1px solid rgba(143, 45, 86, 0.7);
+  padding: 5px;
+  width: 590px;
+}
+
+.footer {
+  color: white;
+  text-align: center;
+  padding: 50px;
+  background: linear-gradient(to right, #c95036, #8F2D56);
+
+  a {
+    color: white;
+    font-size: 0.9em;
+    margin-left: 20px;
+  }
+}
+
+.links {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+.links a {
+  font-size: 0.9em;
+  color: #dadada;
+  margin-left: 20px;
+}
+
+.hero {
+  color: white;
+  text-align: center;
+  background: linear-gradient(to right, #c95036, #8F2D56);
 }
 
 .wrapper {
   min-width: 700px;
-  max-width: 1000px;
-  margin: auto;
+  max-width: 1500px;
   padding: 20px;
-  background-color: white;
-  border-left: 1px solid #ea6424aa;
-  border-right: 1px solid #ea6424aa;
-  border-bottom: 1px solid #ea6424aa;
+  margin: 70px auto auto;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-pre {
-  border: 1px solid #ea6424;
-  border-radius: 3px;
-  padding: 5px;
-  width: 600px;
-  background-color: #fff;
+.promo {
+  .hero {
+    padding-top: 50px;
+    padding-bottom: 100px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 3vw));
+  }
+
+  .logo {
+    padding: 20px 20px 40px;
+  }
+
+  .made-for-matrix {
+    height: 45px;
+  }
+
+  .made-for-matrix-anchor {
+    margin-left: 20px;
+  }
+
+  .banner {
+    font-size: 1.2em;
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+
+  .try-dimension {
+    width: 695px;
+  }
+
+  .screenshot {
+    display: inline-block;
+    margin: 0 70px;
+
+    img {
+      width: 595px;
+    }
+  }
+
+  .integrations {
+    display: block;
+    width: 100%;
+
+    .title {
+      display: block;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .intro {
+      font-size: 1.3em;
+      color: #868686;
+      text-align: center;
+    }
+
+    .integration-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      .integration {
+        width: 350px;
+        background-color: #ffffff;
+        padding: 20px;
+        margin: 15px;
+        border: 1px solid rgba(143, 45, 86, 0.2);
+
+        img {
+          margin-right: 25px;
+          width: 48px;
+          vertical-align: middle;
+        }
+
+        span {
+          font-size: 1.2em;
+        }
+      }
+    }
+  }
 }
 
-h4 {
-  padding-top: 15px;
-  font-size: 1.45em;
+.non-promo {
+  .hero {
+    padding-top: 20px;
+  }
+
+  .logo {
+    padding: 20px 20px 40px;
+    height: 150px;
+  }
+
+  .welcome {
+    min-width: 700px;
+    max-width: 800px;
+  }
+
+  h4 {
+    margin-top: 45px;
+    margin-bottom: 20px;
+  }
+
+  .footer {
+    margin-top: 100px;
+  }
 }

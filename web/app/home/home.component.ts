@@ -16,19 +16,6 @@ export class HomeComponent {
         `"integrations_widgets_urls": ["${this.hostname}/widgets"],\n` +
         `"integrations_jitsi_widget_url": "${this.hostname}/widgets/jitsi",\n`;
 
-    public downloadInstructions = "" +
-        "# Download Dimension\n" +
-        "git clone https://github.com/turt2live/matrix-dimension.git\n" +
-        "cd matrix-dimension\n" +
-        "\n" +
-        "# Edit the configuration to your needs\n" +
-        "# Be sure to add yourself as an admin!\n" +
-        "cp config/default.yaml config/production.yaml\n" +
-        "nano config/production.yaml\n" +
-        "\n" +
-        "# Run\n" +
-        "NODE_ENV=production npm run start:app";
-
     constructor() {
         // Do stuff
     }

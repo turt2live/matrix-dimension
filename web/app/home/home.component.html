@@ -1,84 +1,213 @@
-<div class="header">
-    <img src="/img/logo/banner-sm.png">
+<div *ngIf="showPromoPage" class="promo">
+    <div class="hero">
+        <img src="/img/logo/banner-sm.png" class="logo">
+        <h1>An open source integration manager for Matrix</h1>
+        <div class="banner">
+            Self-host your favourite bots, bridges, and widgets.
+            <a href="https://matrix.org" target="_blank" class="made-for-matrix-anchor">
+                <img src="/img/logo/made-for-matrix.svg" class="made-for-matrix">
+            </a>
+        </div>
+        <div class="links">
+            <a href="https://github.com/turt2live/matrix-dimension" target="_blank">source</a>
+            <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="info-box try-dimension shadowed">
+            <h3>Try it out or <a href="https://github.com/turt2live/matrix-dimension#running-your-own" target="_blank">run your own</a></h3>
+            <p>
+                Visit <a href="https://t2bot.io/riot" target="_blank">t2bot.io/riot</a> and log in with your Matrix account
+                or point your Riot <code>config.json</code> at our servers:
+            </p>
+            <pre>{{ integrationsConfig }}</pre>
+        </div>
+        <div class="screenshot shadowed">
+            <img src="/img/screenshot.png">
+        </div>
+
+        <hr class="spacer">
+
+        <div class="integrations">
+            <h3 class="title">Widgets</h3>
+            <p class="intro">Embed full-blown applications into your rooms, adding utility for everyone.</p>
+
+            <div class="integration-list">
+                <div class="integration">
+                    <img src="/img/avatars/jitsi.png">
+                    <span>Jitsi</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/etherpad.png">
+                    <span>Etherpad</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/youtube.png">
+                    <span>YouTube</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/twitch.png">
+                    <span>Twitch Livestream</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/googledocs.png">
+                    <span>Google Docs</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/googlecalendar.png">
+                    <span>Google Calendar</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/customwidget.png">
+                    <span>Custom Widget</span>
+                </div>
+            </div>
+        </div>
+
+        <hr class="spacer">
+
+        <div class="integrations">
+            <h3 class="title">Bots</h3>
+            <p class="intro">Add some fun or enhance productivity in your room with bots. They're here to help at your command.</p>
+
+            <div class="integration-list">
+                <!--<div class="integration">-->
+                <!--<img src="/img/avatars/github.png">-->
+                <!--<span>GitHub</span>-->
+                <!--</div>-->
+                <!--<div class="integration">-->
+                <!--<img src="/img/avatars/jira.png">-->
+                <!--<span>Jira</span>-->
+                <!--</div>-->
+                <div class="integration">
+                    <img src="/img/avatars/guggy.png">
+                    <span>Guggy</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/giphy.png">
+                    <span>Giphy</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/guggy.png">
+                    <span>Guggy</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/imgur.png">
+                    <span>Imgur</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/google.png">
+                    <span>Google Image Search</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/wikipedia.png">
+                    <span>Wikipedia</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/travisci.png">
+                    <span>Travis CI</span>
+                </div>
+                <!--<div class="integration">-->
+                <!--<img src="/img/avatars/circleci.png">-->
+                <!--<span>Circle CI</span>-->
+                <!--</div>-->
+                <div class="integration">
+                    <img src="/img/avatars/rssbot.png">
+                    <span>RSS Notifications</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/echo.png">
+                    <span>Echo</span>
+                </div>
+            </div>
+        </div>
+
+        <hr class="spacer">
+
+        <div class="integrations">
+            <h3 class="title">Bridges</h3>
+            <p class="intro">Bring the outside world into your room with bridges.</p>
+
+            <div class="integration-list">
+                <div class="integration">
+                    <img src="/img/avatars/irc.png">
+                    <span>IRC</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/telegram.png">
+                    <span>Telegram</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/webhooks.png">
+                    <span>Webhooks</span>
+                </div>
+            </div>
+        </div>
+
+        <hr class="spacer">
+    </div>
+
+    <div class="footer">
+        <a href="https://github.com/turt2live/matrix-dimension" target="_blank">source on GitHub</a>
+        <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a>
+    </div>
 </div>
-<div class="wrapper" *ngIf="showPromoPage">
-    <h3>An open source integration manager for matrix clients, like Riot</h3>
-    <p>
-        View the source on <a href="https://github.com/turt2live/matrix-dimension">Github</a>. Visit the community in
-        <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a> on matrix.
-    </p>
 
-    <h4>Try it out</h4>
-    <p>
-        The easiest way to see it in action is to log in to your matrix account at <a href="https://t2bot.io/riot">t2bot.io/riot</a>
-        (be sure to change the server URL to match your homeserver). The other option is to point your Riot <code>config.json</code>
-        at our servers:</p>
-    <pre>{{ integrationsConfig }}</pre>
+<div *ngIf="!showPromoPage" class="non-promo">
+    <div class="hero">
+        <img src="/img/logo/banner-sm.png" class="logo">
+        <div class="links">
+            <a href="https://github.com/turt2live/matrix-dimension" target="_blank">source</a>
+            <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a>
+        </div>
+    </div>
 
-    <h4>Running your own</h4>
-    <p class="info">
-        You'll need NodeJS 8 or higher, npm 5 or higher, and Riot (or another supported client). For help getting Dimension set up,
-        please see the <a href="https://github.com/turt2live/matrix-dimension/blob/master/README.md">README</a> or visit us in
-        <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a> on matrix.
-    </p>
-    <pre>{{ downloadInstructions }}</pre>
-    <p>
-        If you didn't change the default settings for the webserver, Dimension should now be running on port 8184 of your
-        server. It is best at this point to set up your reverse proxy to access Dimension. Use a hostname that is not the
-        same as your Riot address (eg: dimension.t2bot.io). Visit the public address for Dimension (eg: dimension.t2bot.io)
-        and follow the instructions.
-    </p>
 
-    <h4>Do I need an integration manager?</h4>
-    <p>
-        Riot, and other clients, come with an integration manager already configured to get you started. This integration manager
-        is not compatible with private (non-federated) homeservers and isn't open source, however. Dimension fills this gap by providing
-        a self-hosted and open source integration manager that uses your infrastructure instead of someone else's.
-    </p>
-    <p>
-        If you're looking to use an open source or self-hosted integration manager on Riot or another client, Dimension is for you.
-    </p>
+    <div class="wrapper">
+        <div class="info-box welcome shadowed">
+            <h3>Welcome to Dimension!</h3>
+            <p>
+                Join <a href="https://matrix.to/#/#dimension:t2bot.io" target="_blank">#dimension:t2bot.io</a>
+                for news and updates. Don't forget to star the repository on
+                <a href="https://github.com/turt2live/matrix-dimension" target="_blank">GitHub</a>.
+            </p>
+            <p>Here's the configuration options you'll need to update in your Riot <code>config.json</code>:</p>
+            <pre>{{ integrationsConfig }}</pre>
 
-    <h4>What is an integration manager?</h4>
-    <p>
-        Integration managers are the part of your client that help you configure the various bots, bridges, and widgets for your
-        room and account. Many bots, brides, and widgets ('integrations') have manual, text-based, ways to configure them however for
-        most users that can be too complicated or confusing. Dimension, and other integration managers, aim to provide an easy-to-use
-        interface for setting up integrations.
-    </p>
-    <p>
-        The infrastructure ends up looking something like this:<br />
-        <img src="img/infrastructure.png" />
-    </p>
-</div>
-<div class="wrapper" *ngIf="!showPromoPage">
-    <h3>Welcome to your new Dimension instance!</h3>
-    <p>
-        If you haven't already, join <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a> on
-        matrix and star the repository on <a href="https://github.com/turt2live/matrix-dimension">Github</a>.
-    </p>
+            <h4>Configuring integrations</h4>
+            <p>
+                If everything is set up correctly, you'll be able to access the admin area of Dimension by clicking
+                the 3x3 grid in the top right of any room in Riot. The gear icon (<i class="fa fa-cog"></i>) in the
+                top right is where you can configure your bots, bridges, and widgets.
+            </p>
 
-    <h4>Configuring Riot</h4>
-    <p>Update your Riot <code>config.json</code> file to have the following options:</p>
-    <pre>{{ integrationsConfig }}</pre>
+            <h4>"Could not connect to integrations server" error</h4>
+            <p>
+                When Riot cannot reach Dimension or Dimension is unable to reach your homeserver an error saying "Could not
+                contact integrations
+                server" shows up in every room. Before visiting us in <a href="https://matrix.to/#/#dimension:t2bot.io" target="_blank">#dimension:t2bot.io</a>
+                on Matrix, here's a few things to check:
+            </p>
+            <ul>
+                <li><strong>Verify the homeserver configuration in Dimension.</strong> The name, client/server URL, and
+                    access token all need to be valid and directed at your homeserver.
+                </li>
+                <li><strong>Verify federation is enabled on your homeserver.</strong> Even in a private, or non-federated,
+                    environment federation needs to be enabled so Dimension can work correctly. Dimension should still work
+                    okay if federation on your homeserver is bound to a private interface instead of being public - just be
+                    sure to set the federation URL in your configuration.
+                </li>
+                <li><strong>Verify that federation is working on your homeserver.</strong> Using tools like the <a
+                        href="https://matrix.org/federationtester/api/report?server_name=YOUR_SERVER_HERE.com">federation
+                    tester</a>, make sure that federation is working on your homeserver.
+                </li>
+            </ul>
+        </div>
+    </div>
 
-    <h4>Configuring bots, bridges, and widgets</h4>
-    <p>All of the bots, bridges, and widgets Dimension offers can be turned on and off and configured from within Riot.</p>
-    <ol>
-        <li>Open the integrations manager (the 3x3 grid in the top right of any room).</li>
-        <li>If you're an admin, you'll see a gear (<i class="fa fa-cog"></i>) icon in the top right. To add yourself as an admin, put your user ID in the Dimension configuration and restart Dimension.</li>
-        <li>Click the gear icon and go through the different areas on the left to configure your integrations.</li>
-    </ol>
-
-    <h4>"Could not contact integrations server" error</h4>
-    <p>
-        When Riot cannot reach Dimension or Dimension is unable to reach your homeserver an error saying "Could not contact integrations
-        server" shows up in every room. Before visiting us in <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a>
-        on matrix, here's a few things to check:
-    </p>
-    <ul>
-        <li><strong>Verify the homeserver configuration in Dimension.</strong> The name, client/server URL, and access token all need to be valid and directed at your homeserver.</li>
-        <li><strong>Verify federation is enabled on your homeserver.</strong> Even in a private, or non-federated, environment federation needs to be enabled so Dimension can work correctly. Dimension should still work okay if federation on your homeserver is bound to a private interface instead of being public - just be sure to set the federation URL in your configuration.</li>
-        <li><strong>Verify that federation is working on your homeserver.</strong> Using tools like the <a href="https://matrix.org/federationtester/api/report?server_name=YOUR_SERVER_HERE.com">federation tester</a>, make sure that federation is working on your homeserver.</li>
-    </ul>
+    <div class="footer">
+        <a href="https://github.com/turt2live/matrix-dimension" target="_blank">source on GitHub</a>
+        <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a>
+    </div>
 </div>
