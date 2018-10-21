@@ -1,8 +1,9 @@
-import { Bridge, TelegramBridgeConfiguration } from "../integrations/Bridge";
+import { Bridge, TelegramBridgeConfiguration, WebhookBridgeConfiguration } from "../integrations/Bridge";
 import BridgeRecord from "./models/BridgeRecord";
 import { IrcBridge } from "../bridges/IrcBridge";
 import { LogService } from "matrix-js-snippets";
 import { TelegramBridge } from "../bridges/TelegramBridge";
+import { WebhooksBridge } from "../bridges/WebhooksBridge";
 
 export class BridgeStore {
 
@@ -47,6 +48,8 @@ export class BridgeStore {
             throw new Error("IRC Bridges should be modified with the dedicated API");
         } else if (integrationType === "telegram") {
             throw new Error("Telegram bridges should be modified with the dedicated API");
+        } else if (integrationType === "webhooks") {
+            throw new Error("Webhooks should be modified with the dedicated API");
         } else throw new Error("Unsupported bridge");
     }
 
@@ -57,6 +60,9 @@ export class BridgeStore {
         } else if (record.type === "telegram") {
             const telegram = new TelegramBridge(requestingUserId);
             return telegram.isBridgingEnabled();
+        } else if (record.type === "webhooks") {
+            const webhooks = new WebhooksBridge(requestingUserId);
+            return webhooks.isBridgingEnabled();
         } else return true;
     }
 
@@ -75,6 +81,15 @@ export class BridgeStore {
                 linked: roomConf.bridged ? [roomConf.chatId] : [],
                 portalInfo: roomConf,
                 puppet: await telegram.getPuppetInfo(),
+            };
+        } else if (record.type === "webhooks") {
+            if (!inRoomId) return {}; // The bridge's admin config is handled by other APIs
+            const webhooks = new WebhooksBridge(requestingUserId);
+            const hooks = await webhooks.getHooks(inRoomId);
+            const info = await webhooks.getBridgeInfo();
+            return <WebhookBridgeConfiguration>{
+                webhooks: hooks,
+                botUserId: info.botUserId,
             };
         } else return {};
     }

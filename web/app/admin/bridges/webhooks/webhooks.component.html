@@ -1,0 +1,41 @@
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!isLoading">
+    <my-ibox title="Webhooks Bridge Configuration">
+        <div class="my-ibox-content">
+            <p>
+                <a href="https://github.com/turt2live/matrix-appservice-webhooks" target="_blank">matrix-appservice-webhooks</a>
+                provides Slack-compatible webhooks for Matrix, making it easy to send updates into a room.
+            </p>
+
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="text-center" style="width: 120px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngIf="!configurations || configurations.length === 0">
+                    <td colspan="2"><i>No bridge configurations.</i></td>
+                </tr>
+                <tr *ngFor="let bridge of configurations trackById">
+                    <td>
+                        {{ bridge.upstreamId ? "matrix.org's bridge" : "Self-hosted bridge" }}
+                        <span class="text-muted" style="display: inline-block;" *ngIf="!bridge.upstreamId">({{ bridge.provisionUrl }})</span>
+                    </td>
+                    <td class="text-center">
+                        <span class="editButton" (click)="editBridge(bridge)">
+                            <i class="fa fa-pencil-alt"></i>
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-success btn-sm" (click)="addSelfHostedBridge()" [disabled]="configurations && configurations.length > 0">
+                <i class="fa fa-plus"></i> Add self-hosted bridge
+            </button>
+        </div>
+    </my-ibox>
+</div>

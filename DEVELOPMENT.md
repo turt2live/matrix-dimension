@@ -54,3 +54,7 @@ The frontend is otherwise a fairly basic Angular 5 application: there's componen
 kept small and generic where possible (almost always matching the Service classes in the backend). Components are more of
 a judgement call and should be split out where it makes sense. For example, it doesn't make sense to create a component
 for every instance where an `ngFor` is used because the number of components would be astronomical.
+
+## Reference Material
+
+Adding a bridge to Dimension: https://github.com/turt2live/matrix-dimension/pull/217

@@ -29,6 +29,8 @@ import { StickerpickerComponent } from "./configs/stickerpicker/stickerpicker.co
 import { StickerPickerWidgetWrapperComponent } from "./widget-wrappers/sticker-picker/sticker-picker.component";
 import { AdminTelegramBridgeComponent } from "./admin/bridges/telegram/telegram.component";
 import { TelegramBridgeConfigComponent } from "./configs/bridge/telegram/telegram.bridge.component";
+import { AdminWebhooksBridgeComponent } from "./admin/bridges/webhooks/webhooks.component";
+import { WebhooksBridgeConfigComponent } from "./configs/bridge/webhooks/webhooks.bridge.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -93,6 +95,11 @@ const routes: Routes = [
                                 path: "telegram",
                                 component: AdminTelegramBridgeComponent,
                                 data: {breadcrumb: "Telegram Bridge", name: "Telegram Bridge"},
+                            },
+                            {
+                                path: "webhooks",
+                                component: AdminWebhooksBridgeComponent,
+                                data: {breadcrumb: "Webhook Bridge", name: "Webhook Bridge"},
                             },
                         ],
                     },
@@ -175,6 +182,11 @@ const routes: Routes = [
                         path: "telegram",
                         component: TelegramBridgeConfigComponent,
                         data: {breadcrumb: "Telegram Bridge Configuration", name: "Telegram Bridge Configuration"},
+                    },
+                    {
+                        path: "webhooks",
+                        component: WebhooksBridgeConfigComponent,
+                        data: {breadcrumb: "Webhook Bridge Configuration", name: "Webhook Bridge Configuration"},
                     },
                 ],
             },

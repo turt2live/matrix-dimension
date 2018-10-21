@@ -2,12 +2,15 @@ import { Integration } from "./Integration";
 import BridgeRecord from "../db/models/BridgeRecord";
 import { AvailableNetworks, LinkedChannels } from "../bridges/IrcBridge";
 import { PortalInfo, PuppetInfo } from "../bridges/TelegramBridge";
+import { WebhookConfiguration } from "../bridges/models/webhooks";
 
 export class Bridge extends Integration {
     constructor(bridge: BridgeRecord, public config: any) {
         super(bridge);
         this.category = "bridge";
-        this.requirements = [{
+
+        if (bridge.type === "webhooks") this.requirements = [];
+        else this.requirements = [{
             condition: "publicRoom",
             expectedValue: true,
             argument: null, // not used
@@ -28,4 +31,9 @@ export interface TelegramBridgeConfiguration {
     linked: number[];
     portalInfo: PortalInfo;
     puppet: PuppetInfo;
+}
+
+export interface WebhookBridgeConfiguration {
+    webhooks: WebhookConfiguration[];
+    botUserId: string;
 }

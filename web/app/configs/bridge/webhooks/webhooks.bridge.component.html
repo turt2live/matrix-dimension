@@ -1,0 +1,55 @@
+<my-bridge-config [bridgeComponent]="this">
+    <ng-template #bridgeParamsTemplate>
+        <my-ibox [isCollapsible]="true">
+            <h5 class="my-ibox-title">
+                Add a new webhook
+            </h5>
+            <div class="my-ibox-content">
+                <label class="label-block">
+                    Webhook Name
+                    <input title="webhook name" type="text" class="form-control form-control-sm" [(ngModel)]="webhookName" [disabled]="isBusy">
+                </label>
+                <div style="margin-top: 25px">
+                    <button type="button" class="btn btn-sm btn-primary" [disabled]="isBusy" (click)="newHook()">
+                        Create
+                    </button>
+                </div>
+            </div>
+        </my-ibox>
+        <my-ibox [isCollapsible]="true">
+            <h5 class="my-ibox-title">
+                Webhooks
+            </h5>
+            <div class="my-ibox-content">
+                <table class="table table-striped table-condensed table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>URL</th>
+                        <th class="actions-col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngIf="newConfig.webhooks.length === 0">
+                        <td colspan="4">No webhooks</td>
+                    </tr>
+                    <tr *ngFor="let hook of newConfig.webhooks">
+                        <td *ngIf="hook.label">{{ hook.label }}</td>
+                        <td *ngIf="!hook.label"><i>No name</i></td>
+                        <td>{{ hook.type }}</td>
+                        <td class="webhook-url"><a [href]="hook.url" target="_blank">{{ hook.url }}</a></td>
+                        <td class="actions-col">
+                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                    [disabled]="isBusy"
+                                    (click)="removeHook(hook)">
+                                <i class="far fa-trash-alt"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </my-ibox>
+    </ng-template>
+</my-bridge-config>
