@@ -1,6 +1,6 @@
 import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
 import { AdminService } from "./AdminService";
-import { Cache, CACHE_INTEGRATIONS, CACHE_TELEGRAM_BRIDGE } from "../../MemoryCache";
+import { Cache, CACHE_INTEGRATIONS, CACHE_WEBHOOKS_BRIDGE } from "../../MemoryCache";
 import { LogService } from "matrix-js-snippets";
 import { ApiError } from "../ApiError";
 import WebhookBridgeRecord from "../../db/models/WebhookBridgeRecord";
@@ -76,7 +76,7 @@ export class AdminWebhooksService {
 
         LogService.info("AdminWebhooksService", userId + " updated Webhook Bridge " + bridge.id);
 
-        Cache.for(CACHE_TELEGRAM_BRIDGE).clear();
+        Cache.for(CACHE_WEBHOOKS_BRIDGE).clear();
         Cache.for(CACHE_INTEGRATIONS).clear();
         return this.getBridge(scalarToken, bridge.id);
     }
@@ -99,7 +99,7 @@ export class AdminWebhooksService {
         });
         LogService.info("AdminWebhooksService", userId + " created a new Webhook Bridge with provisioning URL " + request.provisionUrl);
 
-        Cache.for(CACHE_TELEGRAM_BRIDGE).clear();
+        Cache.for(CACHE_WEBHOOKS_BRIDGE).clear();
         Cache.for(CACHE_INTEGRATIONS).clear();
         return this.getBridge(scalarToken, bridge.id);
     }
