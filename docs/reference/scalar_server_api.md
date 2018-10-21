@@ -322,6 +322,95 @@ None of these are officially documented, and are subject to change.
 }
 ```
 
+## POST `/api/bridges/gitter/_matrix/provision/getlink/?scalar_token=...`
+
+**Body**
+```
+{
+  "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io"
+}
+```
+
+**Response**
+```
+{
+  "replies": [{
+    "rid": "...",
+    "response":{
+      "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
+      "remote_room_name": "t2bot-io/Testing"
+    }
+  }]
+}
+```
+
+*Note*: This API is polled to check for updates, such as bridging success. This will also 404 if there is no link.
+
+## POST `/api/bridges/gitter/_matrix/provision/unlink?scalar_token=...`
+
+**Body**
+```
+{
+  "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
+  "remote_room_name": "t2bot-io/Testing"
+}
+```
+
+**Response**
+```
+{
+  "replies": [
+    {
+      "rid": "..",
+      "response": {}
+    }
+  ]
+}
+```
+
+## POST `/api/bridges/gitter/_matrix/provision/getbotid?scalar_token=...`
+
+**Body**
+```
+{}
+```
+
+**Response**
+```
+{
+  "replies": [
+    {
+      "rid": "..",
+      "response": {
+        "bot_user_id": "@gitterbot:matrix.org"
+      }
+    }
+  ]
+}
+```
+
+## POST `/api/bridges/gitter/_matrix/provision/link?scalar_token=...`
+
+**Body**
+```
+{
+  "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
+  "remote_room_name": "t2bot-io/Testing"
+}
+```
+
+**Response**
+```
+{
+  "replies": [
+    {
+      "rid": "..",
+      "response": {}
+    }
+  ]
+}
+```
+
 ## POST `/api/integrations/github-webhook?scalar_token=...`
 
 **Body**

@@ -1,0 +1,24 @@
+<div class="dialog">
+    <div class="dialog-header">
+        <h4>{{ isAdding ? "Add a new" : "Edit" }} self-hosted Gitter bridge</h4>
+    </div>
+    <div class="dialog-content">
+        <p>Self-hosted Gitter bridges already have provisioning enabled. Be careful not to expose the API to the public internet.</p>
+
+        <label class="label-block">
+            Provisioning URL
+            <span class="text-muted ">The provisioning URL for the bridge. This is usually the same as the URL your homeserver uses to communicate with the bridge.</span>
+            <input type="text" class="form-control"
+                   placeholder="http://localhost:9000"
+                   [(ngModel)]="provisionUrl" [disabled]="isSaving"/>
+        </label>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" (click)="add()" title="close" class="btn btn-primary btn-sm">
+            <i class="far fa-save"></i> Save
+        </button>
+        <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
+            <i class="far fa-times-circle"></i> Cancel
+        </button>
+    </div>
+</div>

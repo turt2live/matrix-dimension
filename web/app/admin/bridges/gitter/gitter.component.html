@@ -1,0 +1,45 @@
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!isLoading">
+    <my-ibox title="Gitter Bridge Configurations">
+        <div class="my-ibox-content">
+            <p>
+                <a href="https://github.com/matrix-org/matrix-appservice-gitter" target="_blank">matrix-appservice-gitter</a>
+                is a Gitter bridge that supports bridging Gitter rooms to Matrix. Users on Matrix are represented as a single
+                bot user in Gitter, however Gitter users are represented as real-looking Matrix users in the room.
+            </p>
+
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="text-center" style="width: 120px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngIf="!configurations || configurations.length === 0">
+                    <td colspan="2"><i>No bridge configurations.</i></td>
+                </tr>
+                <tr *ngFor="let bridge of configurations trackById">
+                    <td>
+                        {{ bridge.upstreamId ? "matrix.org's bridge" : "Self-hosted bridge" }}
+                        <span class="text-muted" style="display: inline-block;" *ngIf="!bridge.upstreamId">({{ bridge.provisionUrl }})</span>
+                    </td>
+                    <td class="text-center">
+                        <span class="editButton" (click)="editBridge(bridge)" *ngIf="!bridge.upstreamId">
+                            <i class="fa fa-pencil-alt"></i>
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-success btn-sm" (click)="addModularHostedBridge()" [disabled]="(configurations && configurations.length > 0) || isUpdating">
+                <i class="fa fa-plus"></i> Add matrix.org's bridge
+            </button>
+            <button type="button" class="btn btn-success btn-sm" (click)="addSelfHostedBridge()" [disabled]="(configurations && configurations.length > 0) || isUpdating">
+                <i class="fa fa-plus"></i> Add self-hosted bridge
+            </button>
+        </div>
+    </my-ibox>
+</div>

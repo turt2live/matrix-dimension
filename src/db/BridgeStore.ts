@@ -1,9 +1,15 @@
-import { Bridge, TelegramBridgeConfiguration, WebhookBridgeConfiguration } from "../integrations/Bridge";
+import {
+    Bridge,
+    GitterBridgeConfiguration,
+    TelegramBridgeConfiguration,
+    WebhookBridgeConfiguration
+} from "../integrations/Bridge";
 import BridgeRecord from "./models/BridgeRecord";
 import { IrcBridge } from "../bridges/IrcBridge";
 import { LogService } from "matrix-js-snippets";
 import { TelegramBridge } from "../bridges/TelegramBridge";
 import { WebhooksBridge } from "../bridges/WebhooksBridge";
+import { GitterBridge } from "../bridges/GitterBridge";
 
 export class BridgeStore {
 
@@ -50,6 +56,8 @@ export class BridgeStore {
             throw new Error("Telegram bridges should be modified with the dedicated API");
         } else if (integrationType === "webhooks") {
             throw new Error("Webhooks should be modified with the dedicated API");
+        } else if (integrationType === "gitter") {
+            throw new Error("Gitter Bridges should be modified with the dedicated API");
         } else throw new Error("Unsupported bridge");
     }
 
@@ -63,6 +71,9 @@ export class BridgeStore {
         } else if (record.type === "webhooks") {
             const webhooks = new WebhooksBridge(requestingUserId);
             return webhooks.isBridgingEnabled();
+        } else if (record.type === "gitter") {
+            const gitter = new GitterBridge(requestingUserId);
+            return gitter.isBridgingEnabled();
         } else return true;
     }
 
@@ -89,6 +100,15 @@ export class BridgeStore {
             const info = await webhooks.getBridgeInfo();
             return <WebhookBridgeConfiguration>{
                 webhooks: hooks,
+                botUserId: info.botUserId,
+            };
+        } else if (record.type === "gitter") {
+            if (!inRoomId) return {}; // The bridge's admin config is handled by other APIs
+            const gitter = new GitterBridge(requestingUserId);
+            const info = await gitter.getBridgeInfo();
+            const link = await gitter.getLink(inRoomId);
+            return <GitterBridgeConfiguration>{
+                link: link,
                 botUserId: info.botUserId,
             };
         } else return {};
