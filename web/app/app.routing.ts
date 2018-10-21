@@ -35,6 +35,8 @@ import { AdminGitterBridgeComponent } from "./admin/bridges/gitter/gitter.compon
 import { GitterBridgeConfigComponent } from "./configs/bridge/gitter/gitter.bridge.component";
 import { GenericFullscreenWidgetWrapperComponent } from "./widget-wrappers/generic-fullscreen/generic-fullscreen.component";
 import { GrafanaWidgetConfigComponent } from "./configs/widget/grafana/grafana.widget.component";
+import { TradingViewWidgetConfigComponent } from "./configs/widget/tradingview/tradingview.widget.component";
+import { TradingViewWidgetWrapperComponent } from "./widget-wrappers/tradingview/tradingview.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -167,6 +169,11 @@ const routes: Routes = [
                         component: GrafanaWidgetConfigComponent,
                         data: {breadcrumb: "Grafana Widgets", name: "Grafana Widgets"},
                     },
+                    {
+                        path: "tradingview",
+                        component: TradingViewWidgetConfigComponent,
+                        data: {breadcrumb: "TradingView Widgets", name: "TradingView Widgets"},
+                    },
                 ],
             },
             {
@@ -225,6 +232,7 @@ const routes: Routes = [
             {path: "gcal", component: GCalWidgetWrapperComponent},
             {path: "stickerpicker", component: StickerPickerWidgetWrapperComponent},
             {path: "generic-fullscreen", component: GenericFullscreenWidgetWrapperComponent},
+            {path: "tradingview", component: TradingViewWidgetWrapperComponent},
         ]
     },
 ];

@@ -5,19 +5,19 @@ export default {
         return Promise.resolve()
             .then(() => queryInterface.bulkInsert("dimension_widgets", [
                 {
-                    type: "grafana",
-                    name: "Grafana",
-                    avatarUrl: "/img/avatars/grafana.png",
+                    type: "tradingview",
+                    name: "TradingView",
+                    avatarUrl: "/img/avatars/tradingview.png",
                     isEnabled: true,
                     isPublic: true,
-                    description: "Embed a graph in the room",
+                    description: "Monitor your favourite cryptocurrencies",
                 }
             ]));
     },
     down: (queryInterface: QueryInterface) => {
         return Promise.resolve()
             .then(() => queryInterface.bulkDelete("dimension_widgets", {
-                type: "grafana",
+                type: "tradingview",
             }));
     }
 }

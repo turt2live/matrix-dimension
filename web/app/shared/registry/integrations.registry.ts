@@ -6,6 +6,7 @@ import {
     WIDGET_GOOGLE_DOCS,
     WIDGET_GRAFANA,
     WIDGET_JITSI,
+    WIDGET_TRADINGVIEW,
     WIDGET_TWITCH,
     WIDGET_YOUTUBE
 } from "../models/widget";
@@ -51,7 +52,10 @@ export class IntegrationsRegistry {
             },
             "grafana": {
                 types: WIDGET_GRAFANA,
-            }
+            },
+            "tradingview": {
+                types: WIDGET_TRADINGVIEW,
+            },
         },
     };
 

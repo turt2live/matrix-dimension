@@ -38,6 +38,6 @@ export class GoogleCalendarWidgetConfigComponent extends WidgetComponent {
         }
 
         const encodedId = encodeURIComponent(widget.dimension.newData.src);
-        widget.dimension.newUrl = window.location.origin + "/widget/gcal?calendarId=" + encodedId;
+        widget.dimension.newUrl = window.location.origin + "/widgets/gcal?calendarId=" + encodedId;
     }
 }

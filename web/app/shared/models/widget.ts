@@ -9,6 +9,7 @@ export const WIDGET_YOUTUBE = ["youtube", "dimension-youtube"];
 export const WIDGET_GRAFANA = ["grafana", "dimension-grafana"];
 export const WIDGET_TWITCH = ["twitch", "dimension-twitch"];
 export const WIDGET_STICKER_PICKER = ["m.stickerpicker"];
+export const WIDGET_TRADINGVIEW = ["tradingview", "dimension-tradingview"];
 
 export interface EditableWidget {
     /**

@@ -97,6 +97,8 @@ import { GitterBridgeConfigComponent } from "./configs/bridge/gitter/gitter.brid
 import { GitterApiService } from "./shared/services/integrations/gitter-api.service";
 import { GenericFullscreenWidgetWrapperComponent } from "./widget-wrappers/generic-fullscreen/generic-fullscreen.component";
 import { GrafanaWidgetConfigComponent } from "./configs/widget/grafana/grafana.widget.component";
+import { TradingViewWidgetConfigComponent } from "./configs/widget/tradingview/tradingview.widget.component";
+import { TradingViewWidgetWrapperComponent } from "./widget-wrappers/tradingview/tradingview.component";
 
 @NgModule({
     imports: [
@@ -177,6 +179,8 @@ import { GrafanaWidgetConfigComponent } from "./configs/widget/grafana/grafana.w
         GitterBridgeConfigComponent,
         GenericFullscreenWidgetWrapperComponent,
         GrafanaWidgetConfigComponent,
+        TradingViewWidgetConfigComponent,
+        TradingViewWidgetWrapperComponent,
 
         // Vendor
     ],
