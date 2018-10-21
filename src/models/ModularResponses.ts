@@ -9,3 +9,10 @@ export interface ModularIrcResponse<T> {
         response: T;
     }[];
 }
+
+export interface ModularGitterResponse<T> {
+    replies: {
+        rid: string;
+        response: T;
+    }[];
+}

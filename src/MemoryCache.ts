@@ -51,3 +51,4 @@ export const CACHE_IRC_BRIDGE = "irc-bridge";
 export const CACHE_STICKERS = "stickers";
 export const CACHE_TELEGRAM_BRIDGE = "telegram-bridge";
 export const CACHE_WEBHOOKS_BRIDGE = "webhooks-bridge";
+export const CACHE_GITTER_BRIDGE = "gitter-bridge";
