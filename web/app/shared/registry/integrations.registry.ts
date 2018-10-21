@@ -18,6 +18,7 @@ export class IntegrationsRegistry {
         "bridge": {
             "irc": {},
             "telegram": {},
+            "webhooks": {},
         },
         "widget": {
             "custom": {

@@ -88,6 +88,8 @@ import { TelegramCannotUnbridgeComponent } from "./configs/bridge/telegram/canno
 import { AdminWebhooksBridgeManageSelfhostedComponent } from "./admin/bridges/webhooks/manage-selfhosted/manage-selfhosted.component";
 import { AdminWebhooksBridgeComponent } from "./admin/bridges/webhooks/webhooks.component";
 import { AdminWebhooksApiService } from "./shared/services/admin/admin-webhooks-api.service";
+import { WebhooksApiService } from "./shared/services/integrations/webhooks-api.service";
+import { WebhooksBridgeConfigComponent } from "./configs/bridge/webhooks/webhooks.bridge.component";
 
 @NgModule({
     imports: [
@@ -162,6 +164,7 @@ import { AdminWebhooksApiService } from "./shared/services/admin/admin-webhooks-
         TelegramCannotUnbridgeComponent,
         AdminWebhooksBridgeManageSelfhostedComponent,
         AdminWebhooksBridgeComponent,
+        WebhooksBridgeConfigComponent,
 
         // Vendor
     ],
@@ -184,6 +187,7 @@ import { AdminWebhooksApiService } from "./shared/services/admin/admin-webhooks-
         AdminTelegramApiService,
         TelegramApiService,
         AdminWebhooksApiService,
+        WebhooksApiService,
         {provide: Window, useValue: window},
 
         // Vendor
