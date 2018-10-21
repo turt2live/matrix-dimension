@@ -86,8 +86,10 @@ export class BridgeStore {
             if (!inRoomId) return {}; // The bridge's admin config is handled by other APIs
             const webhooks = new WebhooksBridge(requestingUserId);
             const hooks = await webhooks.getHooks(inRoomId);
+            const info = await webhooks.getBridgeInfo();
             return <WebhookBridgeConfiguration>{
                 webhooks: hooks,
+                botUserId: info.botUserId,
             };
         } else return {};
     }

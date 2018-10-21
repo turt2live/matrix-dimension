@@ -21,3 +21,7 @@ export interface WebhookOptions {
 export interface SuccessResponse {
     success: boolean;
 }
+
+export interface WebhookBridgeInfo {
+    botUserId: string;
+}

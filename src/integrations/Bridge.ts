@@ -8,7 +8,9 @@ export class Bridge extends Integration {
     constructor(bridge: BridgeRecord, public config: any) {
         super(bridge);
         this.category = "bridge";
-        this.requirements = [{
+
+        if (bridge.type === "webhooks") this.requirements = [];
+        else this.requirements = [{
             condition: "publicRoom",
             expectedValue: true,
             argument: null, // not used
@@ -33,4 +35,5 @@ export interface TelegramBridgeConfiguration {
 
 export interface WebhookBridgeConfiguration {
     webhooks: WebhookConfiguration[];
+    botUserId: string;
 }

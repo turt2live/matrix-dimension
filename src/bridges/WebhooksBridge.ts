@@ -3,6 +3,7 @@ import * as request from "request";
 import {
     ListWebhooksResponse,
     SuccessResponse,
+    WebhookBridgeInfo,
     WebhookConfiguration,
     WebhookOptions,
     WebhookResponse
@@ -27,12 +28,22 @@ export class WebhooksBridge {
         return !!bridges;
     }
 
+    public async getBridgeInfo(): Promise<WebhookBridgeInfo> {
+        const bridge = await this.getDefaultBridge();
+        return this.doProvisionRequest<WebhookBridgeInfo>(bridge, "GET", "/api/v1/provision/info");
+    }
+
     public async getHooks(roomId: string): Promise<WebhookConfiguration[]> {
         const bridge = await this.getDefaultBridge();
 
-        const response = await this.doProvisionRequest<ListWebhooksResponse>(bridge, "GET", `/api/v1/provision/${roomId}/hooks`);
-        if (!response.success) throw new Error("Failed to get webhooks");
-        return response.results;
+        try {
+            const response = await this.doProvisionRequest<ListWebhooksResponse>(bridge, "GET", `/api/v1/provision/${roomId}/hooks`);
+            if (!response.success) throw new Error("Failed to get webhooks");
+            return response.results;
+        } catch (e) {
+            LogService.error("WebhooksBridge", e);
+            return [];
+        }
     }
 
     public async createWebhook(roomId: string, options: WebhookOptions): Promise<WebhookConfiguration> {
