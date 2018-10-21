@@ -5,7 +5,7 @@ import {
     WIDGET_GOOGLE_CALENDAR,
     WIDGET_GOOGLE_DOCS,
     WIDGET_GRAFANA,
-    WIDGET_JITSI,
+    WIDGET_JITSI, WIDGET_SPOTIFY,
     WIDGET_TRADINGVIEW,
     WIDGET_TWITCH,
     WIDGET_YOUTUBE
@@ -55,6 +55,9 @@ export class IntegrationsRegistry {
             },
             "tradingview": {
                 types: WIDGET_TRADINGVIEW,
+            },
+            "spotify": {
+                types: WIDGET_SPOTIFY,
             },
         },
     };

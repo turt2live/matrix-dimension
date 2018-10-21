@@ -99,6 +99,8 @@ import { GenericFullscreenWidgetWrapperComponent } from "./widget-wrappers/gener
 import { GrafanaWidgetConfigComponent } from "./configs/widget/grafana/grafana.widget.component";
 import { TradingViewWidgetConfigComponent } from "./configs/widget/tradingview/tradingview.widget.component";
 import { TradingViewWidgetWrapperComponent } from "./widget-wrappers/tradingview/tradingview.component";
+import { SpotifyWidgetConfigComponent } from "./configs/widget/spotify/spotify.widget.component";
+import { SpotifyWidgetWrapperComponent } from "./widget-wrappers/spotify/spotify.component";
 
 @NgModule({
     imports: [
@@ -181,6 +183,8 @@ import { TradingViewWidgetWrapperComponent } from "./widget-wrappers/tradingview
         GrafanaWidgetConfigComponent,
         TradingViewWidgetConfigComponent,
         TradingViewWidgetWrapperComponent,
+        SpotifyWidgetConfigComponent,
+        SpotifyWidgetWrapperComponent,
 
         // Vendor
     ],

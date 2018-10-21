@@ -40,6 +40,7 @@
     "require-dir-all": "^0.4.15",
     "sequelize": "^4.39.1",
     "sequelize-typescript": "^0.6.6",
+    "spotify-uri": "^1.0.0",
     "sqlite3": "^4.0.2",
     "typescript": "^2.9.2",
     "typescript-rest": "^1.7.0",

@@ -1,0 +1,12 @@
+<my-widget-config [widgetComponent]="this">
+    <ng-template #widgetParamsTemplate let-widget="widget">
+        <label class="label-block">
+            Spotify URI
+            <span class="text-muted">Click "share" from your favourite playlist, artist, track, or album and paste the Spotify URI here.</span>
+            <input type="text" class="form-control"
+                   placeholder="spotify:artist:7CajNmpbOovFoOoasH2HaY"
+                   [(ngModel)]="widget.dimension.newData.uri" name="widget-uri-{{widget.id}}"
+                   [disabled]="isUpdating"/>
+        </label>
+    </ng-template>
+</my-widget-config>

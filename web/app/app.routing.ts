@@ -37,6 +37,8 @@ import { GenericFullscreenWidgetWrapperComponent } from "./widget-wrappers/gener
 import { GrafanaWidgetConfigComponent } from "./configs/widget/grafana/grafana.widget.component";
 import { TradingViewWidgetConfigComponent } from "./configs/widget/tradingview/tradingview.widget.component";
 import { TradingViewWidgetWrapperComponent } from "./widget-wrappers/tradingview/tradingview.component";
+import { SpotifyWidgetConfigComponent } from "./configs/widget/spotify/spotify.widget.component";
+import { SpotifyWidgetWrapperComponent } from "./widget-wrappers/spotify/spotify.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -174,6 +176,11 @@ const routes: Routes = [
                         component: TradingViewWidgetConfigComponent,
                         data: {breadcrumb: "TradingView Widgets", name: "TradingView Widgets"},
                     },
+                    {
+                        path: "spotify",
+                        component: SpotifyWidgetConfigComponent,
+                        data: {breadcrumb: "Spotify Widgets", name: "Spotify Widgets"},
+                    },
                 ],
             },
             {
@@ -233,6 +240,7 @@ const routes: Routes = [
             {path: "stickerpicker", component: StickerPickerWidgetWrapperComponent},
             {path: "generic-fullscreen", component: GenericFullscreenWidgetWrapperComponent},
             {path: "tradingview", component: TradingViewWidgetWrapperComponent},
+            {path: "spotify", component: SpotifyWidgetWrapperComponent},
         ]
     },
 ];
