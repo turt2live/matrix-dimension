@@ -42,20 +42,20 @@ export class DimensionWebhooksService {
 
     @POST
     @Path("room/:roomId/webhooks/new")
-    public async newWebhook(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, request: WebhookOptions): Promise<WebhookConfiguration> {
+    public async newWebhook(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, options: WebhookOptions): Promise<WebhookConfiguration> {
         const userId = await ScalarService.getTokenOwner(scalarToken);
 
         const webhooks = new WebhooksBridge(userId);
-        return webhooks.createWebhook(roomId, request);
+        return webhooks.createWebhook(roomId, options);
     }
 
     @POST
     @Path("room/:roomId/webhooks/:hookId")
-    public async updateWebhook(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, @PathParam("hookId") hookId: string, request: WebhookOptions): Promise<WebhookConfiguration> {
+    public async updateWebhook(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, @PathParam("hookId") hookId: string, options: WebhookOptions): Promise<WebhookConfiguration> {
         const userId = await ScalarService.getTokenOwner(scalarToken);
 
         const webhooks = new WebhooksBridge(userId);
-        return webhooks.updateWebhook(roomId, hookId, request);
+        return webhooks.updateWebhook(roomId, hookId, options);
     }
 
     @DELETE
