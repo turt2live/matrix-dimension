@@ -1,0 +1,19 @@
+<my-widget-config [widgetComponent]="this">
+    <ng-template #widgetParamsTemplate let-widget="widget">
+        <label class="label-block">
+            Grafana URL
+            <span class="text-muted">To get a URL, go to Grafana and click "share" on a graph.</span>
+            <input type="text" class="form-control"
+                   placeholder="https://example.com/grafana/dashboard/db/example?orgId=1&panelId=1&fullscreen"
+                   [(ngModel)]="widget.dimension.newData.curl" name="widget-url-{{widget.id}}"
+                   [disabled]="isUpdating"/>
+        </label>
+        <label class="label-block">
+            Widget Name
+            <input type="text" class="form-control"
+                   placeholder="{{ defaultName }}"
+                   [(ngModel)]="widget.dimension.newName" name="widget-name-{{widget.id}}"
+                   [disabled]="isUpdating"/>
+        </label>
+    </ng-template>
+</my-widget-config>

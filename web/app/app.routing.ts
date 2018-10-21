@@ -33,6 +33,8 @@ import { AdminWebhooksBridgeComponent } from "./admin/bridges/webhooks/webhooks.
 import { WebhooksBridgeConfigComponent } from "./configs/bridge/webhooks/webhooks.bridge.component";
 import { AdminGitterBridgeComponent } from "./admin/bridges/gitter/gitter.component";
 import { GitterBridgeConfigComponent } from "./configs/bridge/gitter/gitter.bridge.component";
+import { GenericFullscreenWidgetWrapperComponent } from "./widget-wrappers/generic-fullscreen/generic-fullscreen.component";
+import { GrafanaWidgetConfigComponent } from "./configs/widget/grafana/grafana.widget.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -160,6 +162,11 @@ const routes: Routes = [
                         component: YoutubeWidgetConfigComponent,
                         data: {breadcrumb: "Youtube Video Widgets", name: "Youtube Video Widgets"},
                     },
+                    {
+                        path: "grafana",
+                        component: GrafanaWidgetConfigComponent,
+                        data: {breadcrumb: "Grafana Widgets", name: "Grafana Widgets"},
+                    },
                 ],
             },
             {
@@ -217,6 +224,7 @@ const routes: Routes = [
             {path: "jitsi", component: JitsiWidgetWrapperComponent},
             {path: "gcal", component: GCalWidgetWrapperComponent},
             {path: "stickerpicker", component: StickerPickerWidgetWrapperComponent},
+            {path: "generic-fullscreen", component: GenericFullscreenWidgetWrapperComponent},
         ]
     },
 ];

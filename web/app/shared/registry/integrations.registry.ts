@@ -1,6 +1,12 @@
 import { Injectable } from "@angular/core";
 import {
-    WIDGET_CUSTOM, WIDGET_ETHERPAD, WIDGET_GOOGLE_CALENDAR, WIDGET_GOOGLE_DOCS, WIDGET_JITSI, WIDGET_TWITCH,
+    WIDGET_CUSTOM,
+    WIDGET_ETHERPAD,
+    WIDGET_GOOGLE_CALENDAR,
+    WIDGET_GOOGLE_DOCS,
+    WIDGET_GRAFANA,
+    WIDGET_JITSI,
+    WIDGET_TWITCH,
     WIDGET_YOUTUBE
 } from "../models/widget";
 import { FE_Integration } from "../models/integration";
@@ -43,6 +49,9 @@ export class IntegrationsRegistry {
             "googlecalendar": {
                 types: WIDGET_GOOGLE_CALENDAR,
             },
+            "grafana": {
+                types: WIDGET_GRAFANA,
+            }
         },
     };
 

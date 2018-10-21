@@ -95,6 +95,8 @@ import { AdminGitterBridgeManageSelfhostedComponent } from "./admin/bridges/gitt
 import { AdminGitterApiService } from "./shared/services/admin/admin-gitter-api.service";
 import { GitterBridgeConfigComponent } from "./configs/bridge/gitter/gitter.bridge.component";
 import { GitterApiService } from "./shared/services/integrations/gitter-api.service";
+import { GenericFullscreenWidgetWrapperComponent } from "./widget-wrappers/generic-fullscreen/generic-fullscreen.component";
+import { GrafanaWidgetConfigComponent } from "./configs/widget/grafana/grafana.widget.component";
 
 @NgModule({
     imports: [
@@ -173,6 +175,8 @@ import { GitterApiService } from "./shared/services/integrations/gitter-api.serv
         AdminGitterBridgeComponent,
         AdminGitterBridgeManageSelfhostedComponent,
         GitterBridgeConfigComponent,
+        GenericFullscreenWidgetWrapperComponent,
+        GrafanaWidgetConfigComponent,
 
         // Vendor
     ],
