@@ -90,6 +90,9 @@ import { AdminWebhooksBridgeComponent } from "./admin/bridges/webhooks/webhooks.
 import { AdminWebhooksApiService } from "./shared/services/admin/admin-webhooks-api.service";
 import { WebhooksApiService } from "./shared/services/integrations/webhooks-api.service";
 import { WebhooksBridgeConfigComponent } from "./configs/bridge/webhooks/webhooks.bridge.component";
+import { AdminGitterBridgeComponent } from "./admin/bridges/gitter/gitter.component";
+import { AdminGitterBridgeManageSelfhostedComponent } from "./admin/bridges/gitter/manage-selfhosted/manage-selfhosted.component";
+import { AdminGitterApiService } from "./shared/services/admin/admin-gitter-api.service";
 
 @NgModule({
     imports: [
@@ -165,6 +168,8 @@ import { WebhooksBridgeConfigComponent } from "./configs/bridge/webhooks/webhook
         AdminWebhooksBridgeManageSelfhostedComponent,
         AdminWebhooksBridgeComponent,
         WebhooksBridgeConfigComponent,
+        AdminGitterBridgeComponent,
+        AdminGitterBridgeManageSelfhostedComponent,
 
         // Vendor
     ],
@@ -188,6 +193,7 @@ import { WebhooksBridgeConfigComponent } from "./configs/bridge/webhooks/webhook
         TelegramApiService,
         AdminWebhooksApiService,
         WebhooksApiService,
+        AdminGitterApiService,
         {provide: Window, useValue: window},
 
         // Vendor
@@ -209,6 +215,7 @@ import { WebhooksBridgeConfigComponent } from "./configs/bridge/webhooks/webhook
         TelegramAskUnbridgeComponent,
         TelegramCannotUnbridgeComponent,
         AdminWebhooksBridgeManageSelfhostedComponent,
+        AdminGitterBridgeManageSelfhostedComponent,
     ]
 })
 export class AppModule {
