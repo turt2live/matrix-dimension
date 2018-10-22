@@ -89,13 +89,12 @@
 <body class="app-body">
 <script type="text/javascript">
     const urlParams = new URLSearchParams(window.location.search);
-    const theme = urlParams.get("theme") || "light";
+    let theme = urlParams.get("theme");
     const allowedThemes = ["dark", "light"];
-    if (theme && allowedThemes.indexOf(theme) !== -1) {
-        const body = document.getElementsByTagName("body");
-        for (const element of body) {
-            element.className += " theme-" + theme;
-        }
+    if (allowedThemes.indexOf(theme) === -1) theme = "light";
+    const body = document.getElementsByTagName("body");
+    for (const element of body) {
+        element.className += " theme-" + theme;
     }
 </script>
 <my-app class="main-app">
