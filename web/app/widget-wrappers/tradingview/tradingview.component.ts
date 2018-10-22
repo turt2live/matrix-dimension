@@ -23,7 +23,7 @@ export class TradingViewWidgetWrapperComponent implements OnInit {
 
     public ngOnInit() {
         $.getScript("https://s3.tradingview.com/tv.js", () => {
-            new TradingView.widget({
+            const widget = new TradingView.widget({
                 "autosize": true,
                 "symbol": this.symbol,
                 "interval": this.interval,
@@ -37,6 +37,7 @@ export class TradingViewWidgetWrapperComponent implements OnInit {
                 "hide_legend": true,
                 "container_id": "tradingviewContainer",
             });
+            console.log("Created widget: " + widget);
         });
     }
 }
