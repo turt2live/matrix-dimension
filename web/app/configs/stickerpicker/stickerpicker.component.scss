@@ -1,37 +1,42 @@
-.pack {
-  display: flex;
-  margin: 20px;
-  padding: 5px;
-  background-color: #f6fbff;
+@import "../../../style/themes/themes";
 
-  .caption {
-    flex: 1;
-    margin-left: 20px;
-    padding-top: 20px;
+@include themifyComponent() {
+  .pack {
+    display: flex;
+    margin: 20px;
+    padding: 5px;
+    background-color: themed(stickerpackBgColor);
+    color: themed(stickerpackFgColor);
 
-    .name {
-      font-size: 1.1em;
-      font-weight: bold;
-      display: block;
-    }
+    .caption {
+      flex: 1;
+      margin-left: 20px;
+      padding-top: 20px;
 
-    .description {
-      color: #7d7d7d;
-      display: block;
-    }
+      .name {
+        font-size: 1.1em;
+        font-weight: bold;
+        display: block;
+      }
 
-    .toggle-switch {
-      margin-top: 20px;
-      margin-right: 10px;
-      float: right;
-    }
+      .description {
+        color: themed(stickerpackDescriptionColor);
+        display: block;
+      }
 
-    .author, .license {
-      font-size: 0.8em;
-      color: #7d7d7d;
+      .toggle-switch {
+        margin-top: 20px;
+        margin-right: 10px;
+        float: right;
+      }
 
-      a {
-        color: #7d7d7d;
+      .author, .license {
+        font-size: 0.8em;
+        color: themed(stickerpackAuthorLicenseColor);
+
+        a {
+          color: themed(stickerpackAuthorLicenseColor);
+        }
       }
     }
   }

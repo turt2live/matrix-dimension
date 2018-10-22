@@ -1,6 +1,10 @@
-pre {
-  margin-top: 10px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  background-color: #eee;
+@import "../../../../style/themes/themes";
+
+@include themifyComponent() {
+  pre {
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid themed(appserviceConfigPreBorderColor);
+    background-color: themed(appserviceConfigPreBgColor);
+  }
 }

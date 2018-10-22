@@ -1,31 +1,40 @@
 // component styles are encapsulated and only applied to their components
-.header {
-  width: 100%;
-  margin-top: 30px;
-  border-top: 1px solid #e7eaec;
-  border-bottom: 1px solid #e7eaec;
-  background-color: #fff;
-}
+@import "../../style/themes/themes";
 
-.header .title {
-  margin: 0;
-  width: 83.333333%; // col-sm-10
-  padding: 15px;
-  display: inline-block;
-}
+@include themifyComponent() {
+  .wrapper {
+    width: 100%;
+    padding-top: 10px;
+    background: linear-gradient(to right, themed(headerGradientStartColor), themed(headerGradientEndColor));
+  }
 
-.header .title .pageName {
-  font-weight: 100;
-  padding: 0;
-  margin: 0;
-}
+  .header {
+    width: 100%;
+    border-top: 1px solid themed(headerBorderColor);
+    border-bottom: 1px solid themed(headerBorderColor);
+    background-color: themed(headerBgColor);
+  }
 
-.header .quickAction {
-  padding: 0;
-  margin: 0;
-  float: right;
-  text-align: right;
-  display: inline-block;
-  width: 15.666667%; // col-sm-2
-  position: relative;
+  .header .title {
+    margin: 0;
+    width: 83.333333%; // col-sm-10
+    padding: 15px;
+    display: inline-block;
+  }
+
+  .header .title .pageName {
+    font-weight: 100;
+    padding: 0;
+    margin: 0;
+  }
+
+  .header .quickAction {
+    padding: 0;
+    margin: 0;
+    float: right;
+    text-align: right;
+    display: inline-block;
+    width: 15.666667%; // col-sm-2
+    position: relative;
+  }
 }

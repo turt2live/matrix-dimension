@@ -1,17 +1,26 @@
 // styles in src/style directory are applied to the whole page
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:100|Roboto:300');
 @import '../../node_modules/angular2-toaster/toaster';
+@import "themes/themes";
 @import "components/ibox";
 @import "components/dialog";
+@import "components/bootstrap_override";
 @import "riot";
 
 body {
-  background: #b0bbbf1f;
-  //background: #6268680d;
   margin: 0;
   padding: 0;
-  color: #333;
   font-family: 'Roboto', 'Open Sans', Arial, sans-serif;
+}
+
+@include themifyRoot(){
+  color: themed(defaultFgColor);
+
+  // HACK: We specify the spinner color here because we can't use the mixin
+  // in the spinner's css due to angular scoping
+  .sk-cube:before {
+    background-color: themed(spinnerColor) !important;
+  }
 }
 
 // HACK: Work around dialog not showing up

@@ -1,22 +1,26 @@
-.sticker {
-  margin: 20px;
-  padding: 5px;
-  background-color: #f6fbff;
+@import "../../../../style/themes/themes";
 
-  .caption {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 20px;
+@include themifyComponent() {
+  .sticker {
+    margin: 20px;
+    padding: 5px;
+    background-color: themed(stickerPreviewBgColor);
 
-    .name {
-      font-size: 1.1em;
-      font-weight: bold;
-      display: block;
-    }
+    .caption {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 20px;
 
-    .description {
-      color: #7d7d7d;
-      display: block;
+      .name {
+        font-size: 1.1em;
+        font-weight: bold;
+        display: block;
+      }
+
+      .description {
+        color: themed(stickerPreviewFgColor);
+        display: block;
+      }
     }
   }
 }

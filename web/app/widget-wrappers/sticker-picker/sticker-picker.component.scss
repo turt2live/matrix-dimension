@@ -1,79 +1,83 @@
 // component styles are encapsulated and only applied to their components
-.control-page {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: 0;
-  padding: 0;
-  background-color: #eee;
-  color: #222;
-}
+@import "../../../style/themes/themes";
 
-.loading-badge {
-  text-align: center;
-  font-size: 20px;
-  position: relative;
-  top: calc(50% - 10px);
-}
+@include themifyComponent() {
+  .control-page {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    background-color: themed(stickerPickerControlBgColor);
+    color: themed(stickerPickerControlFgColor);
+  }
 
-.auth-error {
-  text-align: center;
-  position: relative;
-  height: 300px;
-  top: calc(50% - 150px);
-  color: #bd362f;
-}
+  .loading-badge {
+    text-align: center;
+    font-size: 20px;
+    position: relative;
+    top: calc(50% - 10px);
+  }
 
-.sticker-picker {
-  margin: 15px 15px 30px;
+  .auth-error {
+    text-align: center;
+    position: relative;
+    height: 300px;
+    top: calc(50% - 150px);
+    color: themed(stickerPickerErrorColor);
+  }
 
-  .sticker-pack {
-    .header {
-      margin-top: 15px;
-      margin-left: 3px;
+  .sticker-picker {
+    margin: 15px 15px 30px;
 
-      .title {
-        font-weight: 700;
-        color: #222222;
-      }
+    .sticker-pack {
+      .header {
+        margin-top: 15px;
+        margin-left: 3px;
 
-      .license {
-        font-size: 0.6em;
-        font-weight: 300;
-        color: #b5b5b5;
-        margin-top: 3px;
-        float: right;
+        .title {
+          font-weight: 700;
+          color: themed(stickerPickerTitleColor);
+        }
 
-        a {
-          color: #b5b5b5;
+        .license {
+          font-size: 0.6em;
+          font-weight: 300;
+          color: themed(stickerPickerLicenseColor);
+          margin-top: 3px;
+          float: right;
+
+          a {
+            color: themed(stickerPickerLicenseColor);
+          }
+        }
+
+        .author {
+          font-size: 0.6em;
+          font-weight: 300;
+          color: themed(stickerPickerAuthorColor);
+          display: block;
+
+          a {
+            color: themed(stickerPickerAuthorColor);
+          }
         }
       }
 
-      .author {
-        font-size: 0.6em;
-        font-weight: 300;
-        color: #222222;
-        display: block;
+      .stickers {
+        display: flex;
+        flex-wrap: wrap;
 
-        a {
-          color: #222222;
+        .sticker {
+          padding: 5px;
+          margin: 2px;
+          cursor: pointer;
+          border-radius: 3px;
+          background-color: themed(stickerPickerStickerBgColor);
+          box-shadow: 0 2px 6px themed(stickerPickerShadowColor);
         }
-      }
-    }
-
-    .stickers {
-      display: flex;
-      flex-wrap: wrap;
-
-      .sticker {
-        padding: 5px;
-        margin: 2px;
-        cursor: pointer;
-        border-radius: 3px;
-        background-color: #fff;
-        box-shadow: 0 2px 6px hsla(0, 0%, 0%, 0.2);
       }
     }
   }

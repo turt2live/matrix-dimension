@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="description" content="An alternative integrations manager for Riot. Check out #dimension:t2l.io for more information.">
+    <meta name="description" content="An open source integrations manager for Matrix. Check out #dimension:t2bot.io for more information.">
 
     <title>Dimension</title>
 
@@ -16,11 +16,94 @@
     <meta name="msapplication-config" content="img/logo/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        body, html {
+            height: 100%;
+            background-color: transparent;
+        }
+
+        body.theme-dark {
+            background-color: #4a4a4a;
+        }
+
+        body.theme-light {
+            background-color: #e7e7e7;
+        }
+
+        .app-loading {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .app-loading .spinner {
+            height: 100px;
+            width: 100px;
+            animation: rotate 2s linear infinite;
+            transform-origin: center center;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+
+        .app-loading .spinner .path {
+            stroke-dasharray: 1, 200;
+            stroke-dashoffset: 0;
+            animation: dash 1.5s ease-in-out infinite;
+            stroke-linecap: round;
+            stroke: #a0a0a0;
+        }
+
+        @keyframes rotate {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes dash {
+            0% {
+                stroke-dasharray: 1, 200;
+                stroke-dashoffset: 0;
+            }
+            50% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -35px;
+            }
+            100% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -124px;
+            }
+        }
+    </style>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 
     <base href="/">
 </head>
-<body>
-<my-app>Loading...</my-app>
+<body class="app-body">
+<script type="text/javascript">
+    const urlParams = new URLSearchParams(window.location.search);
+    const theme = urlParams.get("theme") || "light";
+    const allowedThemes = ["dark", "light"];
+    if (theme && allowedThemes.indexOf(theme) !== -1) {
+        const body = document.getElementsByTagName("body");
+        for (const element of body) {
+            element.className += " theme-" + theme;
+        }
+    }
+</script>
+<my-app class="main-app">
+    <div class="app-loading">
+        <svg class="spinner" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"></circle>
+        </svg>
+    </div>
+</my-app>
 </body>
 </html>

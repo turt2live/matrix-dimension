@@ -1,34 +1,40 @@
-.ibox {
-  background-color: #fff;
-  padding: 0;
-  margin-bottom: 30px;
-  box-shadow: 0 2px 4px hsla(0, 0%, 0%, 0.2);
-}
+@import "../themes/themes";
 
-.ibox .ibox-title {
-  padding: 5px;
-  border-bottom: 1px solid #e7eaec;
-  border-top: 2px solid #e7eaec;
-}
+.main-app {
+  @include themify() {
+    .ibox {
+      background-color: themed('containerBgColor');
+      padding: 0;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 4px themed('containerShadowColor');
+    }
 
-.ibox .ibox-title h5 {
-  display: inline;
-  font-size: 1.1em;
-  padding: 5px;
-  margin: 0;
-}
+    .ibox .ibox-title {
+      padding: 5px;
+      border-bottom: 1px solid themed('containerBorderColor');
+      border-top: 2px solid themed('containerBorderColor');
+    }
 
-.ibox .ibox-content {
-  padding: 15px;
-}
+    .ibox .ibox-title h5 {
+      display: inline;
+      font-size: 1.1em;
+      padding: 5px;
+      margin: 0;
+    }
 
-.ibox .ibox-title .ibox-icon {
-  float: right;
-  margin-top: 4px;
-  margin-right: 5px;
-  cursor: pointer;
-}
+    .ibox .ibox-content {
+      padding: 15px;
+    }
 
-.ibox .ibox-title.ibox-title-collapsible {
-  cursor: pointer;
+    .ibox .ibox-title .ibox-icon {
+      float: right;
+      margin-top: 4px;
+      margin-right: 5px;
+      cursor: pointer;
+    }
+
+    .ibox .ibox-title.ibox-title-collapsible {
+      cursor: pointer;
+    }
+  }
 }

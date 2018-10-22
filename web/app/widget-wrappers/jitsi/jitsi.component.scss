@@ -1,29 +1,33 @@
 // component styles are encapsulated and only applied to their components
-#jitsiContainer {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: none;
-}
+@import "../../../style/themes/themes";
 
-.join-conference-wrapper {
-  display: table;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background-color: #fff;
-}
+@include themifyComponent() {
+  #jitsiContainer {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+  }
 
-.join-conference-boat {
-  display: table-cell;
-  vertical-align: middle;
-}
+  .join-conference-wrapper {
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: themed(jitsiWelcomeBgColor);
+  }
 
-.join-conference-prompt {
-  margin-left: auto;
-  margin-right: auto;
-  width: 90%;
-  text-align: center;
+  .join-conference-boat {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  .join-conference-prompt {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    text-align: center;
+  }
 }

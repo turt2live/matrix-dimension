@@ -1,55 +1,58 @@
 // component styles are encapsulated and only applied to their components
-.integration-bag {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-}
+@import "../../style/themes/themes";
 
-.integration {
-  border: 1px solid #eee;
-  border-radius: 5px;
-  margin: 7px;
-  padding: 6px;
-  width: calc(325px - 14px);
-  position: relative;
-  cursor: pointer;
-}
+@include themifyComponent() {
+  .integration-bag {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
 
-.integration .integration-arrow {
-  display: none;
-  position: absolute;
-  top: calc(50% - 12px); // icon happens to be 24px tall
-  right: 1px;
-  color: #bbb;
-}
+  .integration {
+    border: 1px solid themed(integrationBorderColor);
+    margin: 7px;
+    padding: 6px;
+    width: calc(325px - 14px);
+    position: relative;
+    cursor: pointer;
+  }
 
-.integration:hover {
-  box-shadow: 0 0 9px #888;
-}
+  .integration .integration-arrow {
+    display: none;
+    position: absolute;
+    top: calc(50% - 12px); // icon happens to be 24px tall
+    right: 1px;
+    color: #bbb;
+  }
 
-.integration:hover .integration-arrow {
-  display: block;
-}
+  .integration:hover {
+    box-shadow: 0 0 5px 5px themed(integrationShadowColor);
+  }
 
-.integration .integration-avatar {
-  width: 50px;
-  height: 50px;
-  float: left;
-}
+  .integration:hover .integration-arrow {
+    display: block;
+  }
 
-.integration .integration-name {
-  display: inline-block;
-  font-size: 1.1em;
-  font-weight: 100;
-  padding-left: 10px;
-}
+  .integration .integration-avatar {
+    width: 50px;
+    height: 50px;
+    float: left;
+  }
 
-.integration .integration-description {
-  display: block;
-  font-size: 0.8em;
-  margin-left: 60px;
-  margin-right: 5px;
-  color: #999;
+  .integration .integration-name {
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: 100;
+    padding-left: 10px;
+  }
+
+  .integration .integration-description {
+    display: block;
+    font-size: 0.8em;
+    margin-left: 60px;
+    margin-right: 5px;
+    color: themed(integrationDescriptionColor);
+  }
 }

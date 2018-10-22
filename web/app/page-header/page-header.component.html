@@ -1,9 +1,11 @@
-<div class="header">
-    <div class="title">
-        <h2 class="pageName">{{ pageName }}</h2>
-        <breadcrumb [allowBootstrap]="true" class="dimension-breadcrumb"></breadcrumb>
-    </div>
-    <div class="quickAction">
-        <ng-content></ng-content>
+<div class="wrapper">
+    <div class="header">
+        <div class="title">
+            <h2 class="pageName">{{ pageName }}</h2>
+            <breadcrumb [allowBootstrap]="true" class="dimension-breadcrumb"></breadcrumb>
+        </div>
+        <div class="quickAction">
+            <ng-content></ng-content>
+        </div>
     </div>
 </div>

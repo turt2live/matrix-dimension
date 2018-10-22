@@ -1,60 +1,56 @@
-//$bgColor: #625F72;
-//$hoverColor: #6E8ABC;
-//$accentColor: #8ABBFF;
+@import "../../style/themes/themes";
 
-$bgColor: #233046;
-$hoverColor: #374752;
-$accentColor: #DE6657;
+@include themifyComponent() {
+  .adminNav {
+    width: 200px;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 100px;
+    left: 0;
+    bottom: 0;
+    background-color: themed(adminBgColor);
+  }
 
-.adminNav {
-  width: 200px;
-  margin: 0;
-  padding: 0;
-  position: fixed;
-  top: 120px;
-  left: 0;
-  bottom: 0;
-  background-color: $bgColor;
-}
+  .adminNav li {
+    list-style: none;
+    background-color: themed(adminBgColor);
+    border-left: 5px solid themed(adminBgColor);
+    padding: 5px 5px 5px 11px;
+    color: themed(adminFgColor);
+    opacity: 0.5;
+    cursor: pointer;
+  }
 
-.adminNav li {
-  list-style: none;
-  background-color: $bgColor;
-  border-left: 5px solid $bgColor;
-  padding: 5px 5px 5px 11px;
-  color: #fff;
-  opacity: 0.5;
-  cursor: pointer;
-}
+  .adminNav li:hover,
+  .adminNav li.active {
+    opacity: 1;
+    background-color: themed(adminHoverColor);
+    border-left: 5px solid themed(adminHoverColor);
+  }
 
-.adminNav li:hover,
-.adminNav li.active {
-  opacity: 1;
-  background-color: $hoverColor;
-  border-left: 5px solid $hoverColor;
-}
+  .adminNav li.active {
+    border-left: 5px solid themed(adminAccentColor);
+  }
 
-.adminNav li.active {
-  border-left: 5px solid $accentColor;
-}
+  .adminContent {
+    position: fixed;
+    top: 120px;
+    left: 200px;
+    bottom: 0;
+    right: 0;
+    padding: 15px;
+    overflow: auto;
+  }
 
-.adminContent {
-  position: fixed;
-  top: 120px;
-  left: 200px;
-  bottom: 0;
-  right: 0;
-  padding: 15px;
-  overflow: auto;
-}
-
-.version {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 200px;
-  text-align: center;
-  color: #7d7d7d;
-  font-size: 11px;
-  font-family: monospace;
+  .version {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+    text-align: center;
+    color: themed(adminVersionColor);
+    font-size: 11px;
+    font-family: monospace;
+  }
 }

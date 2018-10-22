@@ -1,21 +1,27 @@
-.dialog {
-  .dialog-header {
-    border-bottom: 1px solid #ddd;
-    padding: 20px;
+@import "../themes/themes";
 
-    h4 {
-      margin: 0;
+@include themifyRoot() {
+  .dialog {
+    background-color: themed(dialogBgColor);
+    color: themed(dialogFgColor);
+
+    .dialog-header {
+      padding: 20px;
+      border-bottom: 1px solid themed(dialogBorderColor);
+
+      h4 {
+        margin: 0;
+      }
     }
-  }
 
-  .dialog-content {
-    padding: 20px;
+    .dialog-content {
+      padding: 20px;
+    }
 
-  }
-
-  .dialog-footer {
-    padding: 20px;
-    border-top: 1px solid #bbb;
-    background-color: #ddd;
+    .dialog-footer {
+      padding: 20px;
+      border-top: 1px solid themed(dialogFooterBorderColor);
+      background-color: themed(dialogFooterBackgroundColor);
+    }
   }
 }
