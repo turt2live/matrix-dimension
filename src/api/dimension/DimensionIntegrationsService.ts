@@ -130,8 +130,7 @@ export class DimensionIntegrationsService {
             if (integrationType.startsWith(BotStore.TYPE_PREFIX)) {
                 await BotStore.removeCustomByTypeFromRoom(integrationType, roomId);
             } else await NebStore.removeSimpleBot(integrationType, roomId, userId);
-        }
-        else if (category === "complex-bot") throw new ApiError(400, "Complex bots should be removed automatically");
+        } else if (category === "complex-bot") throw new ApiError(400, "Complex bots should be removed automatically");
         else if (category === "bridge") throw new ApiError(400, "Bridges should be removed automatically");
         else throw new ApiError(400, "Unrecognized category");
 
