@@ -37,3 +37,23 @@ export interface FE_NebConfiguration {
     upstreamId?: string;
     integrations: FE_Integration[];
 }
+
+export interface FE_CustomSimpleBot extends FE_CustomSimpleBotTemplate {
+    id: number;
+    type: string;
+}
+
+export interface FE_CustomSimpleBotTemplate {
+    name: string;
+    avatarUrl: string;
+    description: string;
+    isEnabled: boolean;
+    isPublic: boolean;
+    userId: string;
+    accessToken: string;
+}
+
+export interface FE_UserProfile {
+    name: string;
+    avatarUrl: string;
+}

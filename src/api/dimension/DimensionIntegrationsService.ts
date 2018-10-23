@@ -10,6 +10,7 @@ import { NebStore } from "../../db/NebStore";
 import { ComplexBot } from "../../integrations/ComplexBot";
 import { Bridge } from "../../integrations/Bridge";
 import { BridgeStore } from "../../db/BridgeStore";
+import { BotStore } from "../../db/BotStore";
 
 export interface IntegrationsResponse {
     widgets: Widget[],
@@ -58,7 +59,11 @@ export class DimensionIntegrationsService {
         const cached = Cache.for(CACHE_INTEGRATIONS).get("simple_bots");
         if (cached) return cached;
 
-        const bots = await NebStore.listSimpleBots(userId);
+        const nebs = await NebStore.listSimpleBots(userId);
+        const custom = (await BotStore.getCustomBots())
+            .filter(b => b.isEnabled)
+            .map(b => SimpleBot.fromCached(b));
+        const bots = [...nebs, ...custom];
         Cache.for(CACHE_INTEGRATIONS).put("simple_bots", bots);
         return bots;
     }
@@ -121,7 +126,11 @@ export class DimensionIntegrationsService {
         const userId = await ScalarService.getTokenOwner(scalarToken);
 
         if (category === "widget") throw new ApiError(400, "Widgets should be removed client-side");
-        else if (category === "bot") await NebStore.removeSimpleBot(integrationType, roomId, userId);
+        else if (category === "bot") {
+            if (integrationType.startsWith(BotStore.TYPE_PREFIX)) {
+                await BotStore.removeCustomByTypeFromRoom(integrationType, roomId);
+            } else await NebStore.removeSimpleBot(integrationType, roomId, userId);
+        }
         else if (category === "complex-bot") throw new ApiError(400, "Complex bots should be removed automatically");
         else if (category === "bridge") throw new ApiError(400, "Bridges should be removed automatically");
         else throw new ApiError(400, "Unrecognized category");

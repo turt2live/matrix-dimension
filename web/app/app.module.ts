@@ -101,6 +101,9 @@ import { TradingViewWidgetConfigComponent } from "./configs/widget/tradingview/t
 import { TradingViewWidgetWrapperComponent } from "./widget-wrappers/tradingview/tradingview.component";
 import { SpotifyWidgetConfigComponent } from "./configs/widget/spotify/spotify.widget.component";
 import { SpotifyWidgetWrapperComponent } from "./widget-wrappers/spotify/spotify.component";
+import { AdminCustomSimpleBotsApiService } from "./shared/services/admin/admin-custom-simple-bots-api.service";
+import { AdminCustomBotsComponent } from "./admin/custom-bots/custom-bots.component";
+import { AdminAddCustomBotComponent } from "./admin/custom-bots/add/add.component";
 
 @NgModule({
     imports: [
@@ -185,6 +188,8 @@ import { SpotifyWidgetWrapperComponent } from "./widget-wrappers/spotify/spotify
         TradingViewWidgetWrapperComponent,
         SpotifyWidgetConfigComponent,
         SpotifyWidgetWrapperComponent,
+        AdminCustomBotsComponent,
+        AdminAddCustomBotComponent,
 
         // Vendor
     ],
@@ -210,6 +215,7 @@ import { SpotifyWidgetWrapperComponent } from "./widget-wrappers/spotify/spotify
         WebhooksApiService,
         AdminGitterApiService,
         GitterApiService,
+        AdminCustomSimpleBotsApiService,
         {provide: Window, useValue: window},
 
         // Vendor
@@ -232,6 +238,7 @@ import { SpotifyWidgetWrapperComponent } from "./widget-wrappers/spotify/spotify
         TelegramCannotUnbridgeComponent,
         AdminWebhooksBridgeManageSelfhostedComponent,
         AdminGitterBridgeManageSelfhostedComponent,
+        AdminAddCustomBotComponent,
     ]
 })
 export class AppModule {

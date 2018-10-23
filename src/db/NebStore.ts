@@ -129,7 +129,7 @@ export class NebStore {
         const rawIntegrations = await NebStore.listEnabledNebSimpleBots();
         return Promise.all(rawIntegrations.map(async i => {
             const proxy = new NebProxy(i.neb, requestingUserId);
-            return new SimpleBot(i.integration, await proxy.getBotUserId(i.integration));
+            return SimpleBot.fromNeb(i.integration, await proxy.getBotUserId(i.integration));
         }));
     }
 

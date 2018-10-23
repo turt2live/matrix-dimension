@@ -1,0 +1,45 @@
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!isLoading">
+    <my-ibox title="Custom bots">
+        <div class="my-ibox-content">
+            <p>
+                Custom bots give you the ability to add your own bots to Dimension for users to add
+                to their rooms. These bots can't have any configuration to them and must be able to
+                accept room invites on their own. All Dimension will do when a user wants to add the
+                bot is invite it to the room.
+            </p>
+
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="text-center" style="width: 120px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngIf="!bots || bots.length === 0">
+                    <td colspan="2"><i>No custom bots.</i></td>
+                </tr>
+                <tr *ngFor="let bot of bots trackById">
+                    <td>
+                        {{ bot.name }}
+                        <span class="text-muted" style="display: inline-block;">({{ bot.userId }})</span>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-link btn-sm editButton" (click)="editBot(bot)">
+                            <i class="fa fa-pencil-alt"></i>
+                        </button>
+                        <ui-switch [checked]="bot.isEnabled" size="small" [disabled]="isUpdating"
+                                   (change)="toggleBot(bot)"></ui-switch>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-success btn-sm" (click)="addBot()">
+                <i class="fa fa-plus"></i> Add custom bot
+            </button>
+        </div>
+    </my-ibox>
+</div>

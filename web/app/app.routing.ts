@@ -39,6 +39,7 @@ import { TradingViewWidgetConfigComponent } from "./configs/widget/tradingview/t
 import { TradingViewWidgetWrapperComponent } from "./widget-wrappers/tradingview/tradingview.component";
 import { SpotifyWidgetConfigComponent } from "./configs/widget/spotify/spotify.widget.component";
 import { SpotifyWidgetWrapperComponent } from "./widget-wrappers/spotify/spotify.component";
+import { AdminCustomBotsComponent } from "./admin/custom-bots/custom-bots.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -84,6 +85,16 @@ const routes: Routes = [
                                 component: AdminAddSelfhostedNebComponent,
                                 data: {breadcrumb: "Add self-hosted go-neb", name: "Add self-hosted go-neb"},
                             },
+                        ]
+                    },
+                    {
+                        path: "custom-bots",
+                        data: {breadcrumb: "Custom bots", name: "Custom bots"},
+                        children: [
+                            {
+                                path: "",
+                                component: AdminCustomBotsComponent,
+                            }
                         ]
                     },
                     {

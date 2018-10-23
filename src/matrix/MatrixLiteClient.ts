@@ -6,6 +6,11 @@ export interface MatrixUrlPreview {
     "og:title"?: string;
 }
 
+export interface MatrixUserProfile {
+    displayname?: string;
+    avatar_url?: string;
+}
+
 export class MatrixLiteClient {
 
     constructor(private accessToken: string) {
@@ -35,6 +40,22 @@ export class MatrixLiteClient {
             {access_token: this.accessToken}
         );
         return response['user_id'];
+    }
+
+    public async leaveRoom(roomId: string): Promise<string> {
+        return doClientApiCall(
+            "POST",
+            "/_matrix/client/r0/rooms/" + roomId + "/leave",
+            {access_token: this.accessToken}
+        );
+    }
+
+    public async getProfile(userId: string): Promise<MatrixUserProfile> {
+        return doClientApiCall(
+            "GET",
+            "/_matrix/client/r0/profile/" + userId,
+            {access_token: this.accessToken},
+        );
     }
 
     public async getDisplayName(): Promise<string> {

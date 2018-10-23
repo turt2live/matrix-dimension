@@ -1,30 +1,28 @@
 @import "../themes/themes";
 
-.main-app {
-  @include themify(){
-    a {
-      color: themed(anchorColor);
-    }
+@include themifyRoot() {
+  a {
+    color: themed(anchorColor);
+  }
 
-    table, td, th {
-      border-color: themed(tableBorderColor);
-    }
+  table, td, th {
+    border-color: themed(tableBorderColor);
+  }
 
-    code {
-      background-color: themed(codeBgColor);
-    }
+  code {
+    background-color: themed(codeBgColor);
+  }
 
-    .text-muted {
-      color: themed(altMutedColor) !important;
-    }
+  *.text-muted {
+    color: themed(altMutedColor) !important;
+  }
 
-    .form-control {
-      color: themed(formControlFgColor);
-      background-color: themed(formControlBgColor);
-    }
+  .form-control {
+    color: themed(formControlFgColor);
+    background-color: themed(formControlBgColor);
+  }
 
-    .form-control::placeholder {
-      color: themed(formControlPlaceholderColor);
-    }
+  .form-control::placeholder {
+    color: themed(formControlPlaceholderColor);
   }
 }

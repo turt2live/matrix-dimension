@@ -24,6 +24,7 @@ import UserStickerPack from "./models/UserStickerPack";
 import TelegramBridgeRecord from "./models/TelegramBridgeRecord";
 import WebhookBridgeRecord from "./models/WebhookBridgeRecord";
 import GitterBridgeRecord from "./models/GitterBridgeRecord";
+import CustomSimpleBotRecord from "./models/CustomSimpleBotRecord";
 
 class _DimensionStore {
     private sequelize: Sequelize;
@@ -59,6 +60,7 @@ class _DimensionStore {
             TelegramBridgeRecord,
             WebhookBridgeRecord,
             GitterBridgeRecord,
+            CustomSimpleBotRecord,
         ]);
     }
 
