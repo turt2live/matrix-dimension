@@ -103,11 +103,20 @@
 
     .screenshot {
       display: inline-block;
-      margin: 0 70px;
+      width: 597px;
+      margin: 20px 70px 0;
+      border: 1px solid themed(promoInfoBorderColor);
 
       img {
         width: 595px;
       }
+    }
+
+    .subhero-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
     }
 
     .integrations {
