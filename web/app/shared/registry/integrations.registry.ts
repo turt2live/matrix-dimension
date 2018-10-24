@@ -5,7 +5,7 @@ import {
     WIDGET_GOOGLE_CALENDAR,
     WIDGET_GOOGLE_DOCS,
     WIDGET_GRAFANA,
-    WIDGET_JITSI, WIDGET_SPOTIFY,
+    WIDGET_JITSI, WIDGET_SPOTIFY, WIDGET_STICKER_PICKER,
     WIDGET_TRADINGVIEW,
     WIDGET_TWITCH,
     WIDGET_YOUTUBE
@@ -58,6 +58,9 @@ export class IntegrationsRegistry {
             },
             "spotify": {
                 types: WIDGET_SPOTIFY,
+            },
+            "stickerpicker": {
+                types: WIDGET_STICKER_PICKER,
             },
         },
     };

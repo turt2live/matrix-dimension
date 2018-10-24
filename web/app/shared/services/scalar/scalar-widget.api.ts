@@ -71,6 +71,15 @@ export class ScalarWidgetApi {
         });
     }
 
+    public static openIntegrationManager(integrationType: string, integrationId: string): void {
+        ScalarWidgetApi.callAction("integration_manager_open", {
+            data: {
+                integType: integrationType,
+                integId: integrationId,
+            },
+        });
+    }
+
     private static callAction(action, payload) {
         if (!window.opener) {
             return;

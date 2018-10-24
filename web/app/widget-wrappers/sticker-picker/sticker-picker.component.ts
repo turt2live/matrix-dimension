@@ -8,6 +8,7 @@ import { SessionStorage } from "../../shared/SessionStorage";
 import { ScalarServerApiService } from "../../shared/services/scalar/scalar-server-api.service";
 import { FE_Sticker, FE_UserStickerPack } from "../../shared/models/integration";
 import { MediaService } from "../../shared/services/media.service";
+import { WIDGET_STICKER_PICKER } from "../../shared/models/widget";
 
 @Component({
     selector: "my-generic-widget-wrapper",
@@ -99,5 +100,9 @@ export class StickerPickerWidgetWrapperComponent extends CapableWidget implement
 
     public sendSticker(sticker: FE_Sticker, pack: FE_UserStickerPack) {
         ScalarWidgetApi.sendSticker(sticker, pack);
+    }
+
+    public openIntegrationManager() {
+        ScalarWidgetApi.openIntegrationManager(WIDGET_STICKER_PICKER[0], ScalarWidgetApi.widgetId);
     }
 }

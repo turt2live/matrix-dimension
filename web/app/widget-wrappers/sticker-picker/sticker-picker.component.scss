@@ -29,6 +29,21 @@
     color: themed(stickerPickerErrorColor);
   }
 
+  .no-stickers {
+    text-align: center;
+
+    img {
+      width: 96px;
+      height: 96px;
+      margin-top: 20px;
+      margin-bottom: 15px;
+    }
+
+    .message {
+      display: block;
+    }
+  }
+
   .sticker-picker {
     margin: 15px 15px 30px;
 
