@@ -59,16 +59,11 @@ export class StickerpickerComponent implements OnInit {
         try {
             const widgets = await this.scalarClient.getWidgets();
             const stickerPicker = widgets.response.find(w => w.content && w.content.type === "m.stickerpicker");
-            if (stickerPicker && !stickerPicker.content.data.dimension) {
-                console.log("Deleting non-Dimension sticker picker");
-                await this.scalarClient.deleteUserWidget(stickerPicker);
-            }
+            const widgetId = stickerPicker ? ((<any>stickerPicker).id || stickerPicker.state_key) : "dimension-stickerpicker-" + (new Date().getTime());
 
-            if (stickerPicker) return; // already have a widget
-
-            console.log("Adding Dimension sticker picker");
+            console.log("Force-setting new widget of ID " + widgetId);
             await this.scalarClient.setUserWidget({
-                id: "dimension-stickerpicker-" + (new Date().getTime()),
+                id: widgetId,
                 type: WIDGET_STICKER_PICKER[0],
                 url: this.window.location.origin + "/widgets/stickerpicker",
                 data: {
