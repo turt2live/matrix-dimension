@@ -21,8 +21,8 @@ export interface SlackBridgeInfo {
 export interface BridgedChannel {
     roomId: string;
     isWebhook: boolean;
-    slackChannelName: string;
-    slackChannelId: string;
+    channelName: string;
+    channelId: string;
     teamId: string;
 }
 
@@ -77,8 +77,8 @@ export class SlackBridge {
                 return {
                     roomId: link.replies[0].response.matrix_room_id,
                     isWebhook: link.replies[0].response.isWebhook,
-                    slackChannelName: link.replies[0].response.slack_channel_name,
-                    slackChannelId: link.replies[0].response.slack_channel_id,
+                    channelName: link.replies[0].response.slack_channel_name,
+                    channelId: link.replies[0].response.slack_channel_id,
                     teamId: link.replies[0].response.team_id,
                 };
             } else {
@@ -86,8 +86,8 @@ export class SlackBridge {
                 return {
                     roomId: link.matrix_room_id,
                     isWebhook: link.isWebhook,
-                    slackChannelName: link.slack_channel_name,
-                    slackChannelId: link.slack_channel_id,
+                    channelName: link.slack_channel_name,
+                    channelId: link.slack_channel_id,
                     teamId: link.team_id,
                 };
             }
