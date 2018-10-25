@@ -359,7 +359,8 @@ None of these are officially documented, and are subject to change.
       "matrix_room_id":" !JmvocvDuPTYUfuvKgs:t2l.io",
       "slack_channel_name": "general",
       "team_id": "ABC...",
-      "status": "ready"
+      "status": "ready",
+      "slack_channel_id": "ABC..."
     }
   }]
 }
@@ -413,11 +414,20 @@ None of these are officially documented, and are subject to change.
 
 ## POST `/api/bridges/slack/_matrix/provision/link?scalar_token=...`
 
-**Body**
+**Body (webhooks)**
 ```
 {
   "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
   "slack_webhook_url": "https://hooks.slack.com/..."
+}
+```
+
+**Body (events)**
+```
+{
+  "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
+  "channel_id": "ABC...",
+  "team_id": "ABC..."
 }
 ```
 

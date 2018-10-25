@@ -16,3 +16,10 @@ export interface ModularGitterResponse<T> {
         response: T;
     }[];
 }
+
+export interface ModularSlackResponse<T> {
+    replies: {
+        rid: string;
+        response: T;
+    }[];
+}
