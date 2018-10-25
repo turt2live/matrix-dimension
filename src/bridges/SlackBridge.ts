@@ -6,6 +6,7 @@ import * as request from "request";
 import { ModularSlackResponse } from "../models/ModularResponses";
 import SlackBridgeRecord from "../db/models/SlackBridgeRecord";
 import {
+    AuthUrlResponse,
     BridgedChannelResponse,
     ChannelsResponse,
     GetBotUserIdResponse,
@@ -98,7 +99,7 @@ export class SlackBridge {
         }
     }
 
-    public async requestEventsLink(roomId: string, channelId: string, teamId: string): Promise<any> {
+    public async requestEventsLink(roomId: string, teamId: string, channelId: string): Promise<any> {
         const bridge = await this.getDefaultBridge();
 
         const requestBody = {
@@ -116,7 +117,7 @@ export class SlackBridge {
         }
     }
 
-    public async removeEventsLink(roomId: string, channelId: string, teamId: string): Promise<any> {
+    public async removeEventsLink(roomId: string, teamId: string, channelId: string): Promise<any> {
         const bridge = await this.getDefaultBridge();
 
         const requestBody = {
@@ -197,6 +198,33 @@ export class SlackBridge {
             } else {
                 const response = await this.doProvisionRequest<TeamsResponse>(bridge, "POST", "/_matrix/provision/teams", null, requestBody);
                 return response.teams;
+            }
+        } catch (e) {
+            if (e.status === 404) return null;
+            LogService.error("SlackBridge", e);
+            throw e;
+        }
+    }
+
+    public async getAuthUrl(): Promise<string> {
+        const bridge = await this.getDefaultBridge();
+
+        const requestBody = {
+            user_id: this.requestingUserId,
+        };
+
+        try {
+            if (bridge.upstreamId) {
+                delete requestBody["user_id"];
+                const response = await this.doUpstreamRequest<ModularSlackResponse<AuthUrlResponse>>(bridge, "POST", "/bridges/slack/_matrix/provision/authurl", null, requestBody);
+                if (!response || !response.replies || !response.replies[0] || !response.replies[0].response) {
+                    // noinspection ExceptionCaughtLocallyJS
+                    throw new Error("Invalid response from Modular for Slack get auth url for " + this.requestingUserId);
+                }
+                return response.replies[0].response.auth_uri;
+            } else {
+                const response = await this.doProvisionRequest<AuthUrlResponse>(bridge, "POST", "/_matrix/provision/authurl", null, requestBody);
+                return response.auth_uri;
             }
         } catch (e) {
             if (e.status === 404) return null;

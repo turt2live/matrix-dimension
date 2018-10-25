@@ -104,6 +104,8 @@ import { SpotifyWidgetWrapperComponent } from "./widget-wrappers/spotify/spotify
 import { AdminCustomSimpleBotsApiService } from "./shared/services/admin/admin-custom-simple-bots-api.service";
 import { AdminCustomBotsComponent } from "./admin/custom-bots/custom-bots.component";
 import { AdminAddCustomBotComponent } from "./admin/custom-bots/add/add.component";
+import { SlackApiService } from "./shared/services/integrations/slack-api.service";
+import { SlackBridgeConfigComponent } from "./configs/bridge/slack/slack.bridge.component";
 import { AdminSlackBridgeManageSelfhostedComponent } from "./admin/bridges/slack/manage-selfhosted/manage-selfhosted.component";
 import { AdminSlackBridgeComponent } from "./admin/bridges/slack/slack.component";
 import { AdminSlackApiService } from "./shared/services/admin/admin-slack-api.service";
@@ -193,6 +195,7 @@ import { AdminSlackApiService } from "./shared/services/admin/admin-slack-api.se
         SpotifyWidgetWrapperComponent,
         AdminCustomBotsComponent,
         AdminAddCustomBotComponent,
+        SlackBridgeConfigComponent,
         AdminSlackBridgeManageSelfhostedComponent,
         AdminSlackBridgeComponent,
 
@@ -221,6 +224,7 @@ import { AdminSlackApiService } from "./shared/services/admin/admin-slack-api.se
         AdminGitterApiService,
         GitterApiService,
         AdminCustomSimpleBotsApiService,
+        SlackApiService,
         AdminSlackApiService,
         {provide: Window, useValue: window},
 

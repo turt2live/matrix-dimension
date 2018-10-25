@@ -12,3 +12,13 @@ export interface FE_SlackLink {
     channelId: string;
     teamId: string;
 }
+
+export interface FE_SlackTeam {
+    id: string;
+    name: string;
+}
+
+export interface FE_SlackChannel {
+    id: string;
+    name: string;
+}

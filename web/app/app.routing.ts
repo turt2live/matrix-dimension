@@ -41,6 +41,7 @@ import { SpotifyWidgetConfigComponent } from "./configs/widget/spotify/spotify.w
 import { SpotifyWidgetWrapperComponent } from "./widget-wrappers/spotify/spotify.component";
 import { AdminCustomBotsComponent } from "./admin/custom-bots/custom-bots.component";
 import { AdminSlackBridgeComponent } from "./admin/bridges/slack/slack.component";
+import { SlackBridgeConfigComponent } from "./configs/bridge/slack/slack.bridge.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -237,6 +238,11 @@ const routes: Routes = [
                         path: "gitter",
                         component: GitterBridgeConfigComponent,
                         data: {breadcrumb: "Gitter Bridge Configuration", name: "Gitter Bridge Configuration"},
+                    },
+                    {
+                        path: "slack",
+                        component: SlackBridgeConfigComponent,
+                        data: {breadcrumb: "Slack Bridge Configuration", name: "Slack Bridge Configuration"},
                     },
                 ],
             },

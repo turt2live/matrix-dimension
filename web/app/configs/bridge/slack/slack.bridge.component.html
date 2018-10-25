@@ -1,0 +1,59 @@
+<my-bridge-config [bridgeComponent]="this">
+    <ng-template #bridgeParamsTemplate>
+        <my-ibox [isCollapsible]="false">
+            <h5 class="my-ibox-title">
+                Bridge to Slack
+            </h5>
+            <div class="my-ibox-content" *ngIf="loadingTeams">
+                <my-spinner></my-spinner>
+            </div>
+            <div class="my-ibox-content" *ngIf="!loadingTeams">
+                <div *ngIf="isBridged && bridge.config.link.isWebhook">
+                    This room is bridged to Slack using webhooks. Webhook bridging is legacy and doesn't support as
+                    rich bridging as the new approach. It is recommended to re-create the bridge with the new process.
+                    <br />
+                    <button type="button" class="btn btn-sm btn-danger" [disabled]="isBusy" (click)="unbridgeRoom()">
+                        Unbridge
+                    </button>
+                </div>
+                <div *ngIf="isBridged && !bridge.config.link.isWebhook">
+                    This room is bridged to "{{ bridge.config.link.channelName }}" on Slack.
+                    <button type="button" class="btn btn-sm btn-danger" [disabled]="isBusy" (click)="unbridgeRoom()">
+                        Unbridge
+                    </button>
+                </div>
+                <div *ngIf="!isBridged && needsAuth">
+                    <p>
+                        In order to bridge Slack channels, you'll need to authorize the bridge to access your teams
+                        and channels. Please click the button below to do so.
+                    </p>
+                    <a [href]="authUrl" rel="noopener" target="_blank">
+                        <img src="/img/slack_auth_button.png" class="slack-auth-button" alt="sign in with slack" />
+                    </a>
+                </div>
+                <div *ngIf="!isBridged && !needsAuth">
+                    <label class="label-block">
+                        Team
+                        <select class="form-control form-control-sm" [(ngModel)]="teamId"
+                                (change)="loadChannels()" [disabled]="isBusy">
+                            <option *ngFor="let team of teams" [ngValue]="team.id">
+                                {{ team.name }}
+                            </option>
+                        </select>
+                    </label>
+                    <label class="label-block">
+                        Channel
+                        <select class="form-control form-control-sm" [(ngModel)]="channelId" [disabled]="isBusy">
+                            <option *ngFor="let channel of channels" [ngValue]="channel.id">
+                                {{ channel.name }}
+                            </option>
+                        </select>
+                    </label>
+                    <button type="button" class="btn btn-sm btn-primary" [disabled]="isBusy" (click)="bridgeRoom()">
+                        Bridge
+                    </button>
+                </div>
+            </div>
+        </my-ibox>
+    </ng-template>
+</my-bridge-config>
