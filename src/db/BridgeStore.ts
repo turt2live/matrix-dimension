@@ -1,6 +1,7 @@
 import {
     Bridge,
     GitterBridgeConfiguration,
+    SlackBridgeConfiguration,
     TelegramBridgeConfiguration,
     WebhookBridgeConfiguration
 } from "../integrations/Bridge";
@@ -10,6 +11,7 @@ import { LogService } from "matrix-js-snippets";
 import { TelegramBridge } from "../bridges/TelegramBridge";
 import { WebhooksBridge } from "../bridges/WebhooksBridge";
 import { GitterBridge } from "../bridges/GitterBridge";
+import { SlackBridge } from "../bridges/SlackBridge";
 
 export class BridgeStore {
 
@@ -50,14 +52,9 @@ export class BridgeStore {
         const record = await BridgeRecord.findOne({where: {type: integrationType}});
         if (!record) throw new Error("Bridge not found");
 
-        if (integrationType === "irc") {
-            throw new Error("IRC Bridges should be modified with the dedicated API");
-        } else if (integrationType === "telegram") {
-            throw new Error("Telegram bridges should be modified with the dedicated API");
-        } else if (integrationType === "webhooks") {
-            throw new Error("Webhooks should be modified with the dedicated API");
-        } else if (integrationType === "gitter") {
-            throw new Error("Gitter Bridges should be modified with the dedicated API");
+        const hasDedicatedApi = ["irc", "telegram", "webhooks", "gitter", "slack"];
+        if (hasDedicatedApi.indexOf(integrationType) !== -1) {
+            throw new Error("This bridge should be modified with the dedicated API");
         } else throw new Error("Unsupported bridge");
     }
 
@@ -74,6 +71,9 @@ export class BridgeStore {
         } else if (record.type === "gitter") {
             const gitter = new GitterBridge(requestingUserId);
             return gitter.isBridgingEnabled();
+        } else if (record.type === "slack") {
+            const slack = new SlackBridge(requestingUserId);
+            return slack.isBridgingEnabled();
         } else return true;
     }
 
@@ -108,6 +108,15 @@ export class BridgeStore {
             const info = await gitter.getBridgeInfo();
             const link = await gitter.getLink(inRoomId);
             return <GitterBridgeConfiguration>{
+                link: link,
+                botUserId: info.botUserId,
+            };
+        } else if (record.type === "slack") {
+            if (!inRoomId) return {}; // The bridge's admin config is handled by other APIs
+            const slack = new SlackBridge(requestingUserId);
+            const info = await slack.getBridgeInfo();
+            const link = await slack.getLink(inRoomId);
+            return <SlackBridgeConfiguration>{
                 link: link,
                 botUserId: info.botUserId,
             };

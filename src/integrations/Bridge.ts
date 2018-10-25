@@ -4,6 +4,7 @@ import { AvailableNetworks, LinkedChannels } from "../bridges/IrcBridge";
 import { PortalInfo, PuppetInfo } from "../bridges/TelegramBridge";
 import { WebhookConfiguration } from "../bridges/models/webhooks";
 import { BridgedRoom } from "../bridges/GitterBridge";
+import { BridgedChannel } from "../bridges/SlackBridge";
 
 const PRIVATE_ACCESS_SUPPORTED_BRIDGES = ["webhooks", "gitter"];
 
@@ -42,6 +43,11 @@ export interface WebhookBridgeConfiguration {
 }
 
 export interface GitterBridgeConfiguration {
-    link: BridgedRoom,
+    link: BridgedRoom;
+    botUserId: string;
+}
+
+export interface SlackBridgeConfiguration {
+    link: BridgedChannel;
     botUserId: string;
 }

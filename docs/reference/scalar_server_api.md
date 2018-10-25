@@ -322,6 +322,278 @@ None of these are officially documented, and are subject to change.
 }
 ```
 
+## POST `/api/bridges/slack/_matrix/provision/getlink/?scalar_token=...`
+
+**Body**
+```
+{
+  "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io"
+}
+```
+
+**Response (webhooks)**
+```
+{
+  "replies": [{
+    "rid": "...",
+    "response": {
+      "auth_uri": "https://slack.com/oauth/authorize?client_id=...",
+      "inbound_uri":" https://matrix.org/slackhook/...",
+      "isWebhook": true,
+      "matrix_room_id":" !JmvocvDuPTYUfuvKgs:t2l.io",
+      "slack_webhook_uri": "https://hooks.slack.com/...",
+      "status": "pending"
+    }
+  }]
+}
+```
+
+**Response (events)**
+```
+{
+  "replies": [{
+    "rid": "...",
+    "response": {
+      "inbound_uri":" https://matrix.org/slackhook/...",
+      "isWebhook": false,
+      "matrix_room_id":" !JmvocvDuPTYUfuvKgs:t2l.io",
+      "slack_channel_name": "general",
+      "team_id": "ABC...",
+      "status": "ready",
+      "slack_channel_id": "ABC..."
+    }
+  }]
+}
+```
+
+*Note*: The `auth_uri` disappears after the user has authorized the bridge. This endpoint is also polled. This will also 404 if there is no link.
+
+## POST `/api/bridges/slack/_matrix/provision/getbotid?scalar_token=...`
+
+**Body**
+```
+{}
+```
+
+**Response**
+```
+{
+  "replies": [
+    {
+      "rid": "..",
+      "response": {
+        "bot_user_id": "@slackbot:matrix.org"
+      }
+    }
+  ]
+}
+```
+
+## POST `/api/bridges/slack/_matrix/provision/logout?scalar_token=...`
+
+**Body**
+```
+{
+  "slack_id": "ABC..."
+}
+```
+
+**Response**
+```
+{
+  "replies": [
+    {
+      "rid": "..",
+      "response": {
+        "UNKNOWN": "RESPONSE"
+      }
+    }
+  ]
+}
+```
+
+## POST `/api/bridges/slack/_matrix/provision/link?scalar_token=...`
+
+**Body (webhooks)**
+```
+{
+  "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
+  "slack_webhook_url": "https://hooks.slack.com/..."
+}
+```
+
+**Body (events)**
+```
+{
+  "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
+  "channel_id": "ABC...",
+  "team_id": "ABC..."
+}
+```
+
+**Response (webhooks)**
+```
+{
+  "replies": [
+    {
+      "rid": "..",
+      "response": {
+        "inbound_uri": "https://matrix.org/slackhook/...",
+        "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
+        "slack_webhook_uri": "https://hooks.slack.com/...",
+        "status": "pending"
+      }
+    }
+  ]
+}
+```
+
+**Response (events)**
+```
+{
+  "replies": [
+    {
+      "rid": "..",
+      "response": {
+        "inbound_uri": "https://matrix.org/slackhook/...",
+        "matrix_room_id": "!JmvocvDuPTYUfuvKgs:t2l.io",
+        "slack_channel_name": "general",
+        "slack_channel_id": "ABC...",
+        "status": "ready"
+      }
+    }
+  ]
+}
+```
+
+## POST `/api/bridges/slack/_matrix/provision/teams?scalar_token=...`
+
+**Body**
+```
+{}
+```
+
+**Response**
+```
+{
+  "replies": [
+    {
+      "rid": "..",
+      "response": {
+        "teams": [
+           {
+             "id": "ABC...",
+             "name": "turt2live",
+             "slack_id": "ABC..."
+           }
+        ]
+      }
+    }
+  ]
+}
+```
+
+*Note*: This 404s if there's no teams set up.
+
+## POST `/api/bridges/slack/_matrix/provision/channels?scalar_token=...`
+
+**Body**
+```
+{
+  "team_id": "ABC..."
+}
+```
+
+**Response**
+```
+{
+  "replies": [
+    {
+      "rid": "..",
+      "response": {
+        "channels": [
+           {
+             "id": "ABC...",
+             "name":"general",
+             "purpose":{
+               "creator":"",
+               "last_set":0,
+               "value":"This channel is for team-wide communication and announcements. All team members are in this channel."
+             },
+             "topic":{
+               "creator":"",
+               "last_set":0,
+               "value":"Company-wide announcements and work-based matters"
+             }
+           }
+        ]
+      }
+    }
+  ]
+}
+```
+
+## POST `/api/bridges/slack/_matrix/provision/authurl?scalar_token=...`
+
+**Body**
+```
+{}
+```
+
+**Response**
+```
+{
+  "replies": [
+    {
+      "rid": "..",
+      "response": {
+        "auth_uri": "https://slack.com/oauth/..."
+      }
+    }
+  ]
+}
+```
+
+*Note*: This 404s if there's no teams set up.
+
+## POST `/api/bridges/gitter/_matrix/provision/unlink?scalar_token=...`
+
+**Body (webhooks)**
+```
+{
+  "inbound_uri":" https://matrix.org/slackhook/...",
+  "isWebhook": true,
+  "matrix_room_id":" !JmvocvDuPTYUfuvKgs:t2l.io",
+  "slack_webhook_uri": "https://hooks.slack.com/...",
+  "status": "pending"
+}
+```
+
+**Body (events)**
+```
+{
+  "inbound_uri":" https://matrix.org/slackhook/...",
+  "isWebhook": false,
+  "matrix_room_id":" !JmvocvDuPTYUfuvKgs:t2l.io",
+  "slack_channel_id": "ABC...",
+  "slack_channel_name": "general",
+  "team_id": "ABC...",
+  "status": "ready"
+}
+```
+
+**Response**
+```
+{
+  "replies": [
+    {
+      "rid": "..",
+      "response": {}
+    }
+  ]
+}
+```
+
 ## POST `/api/bridges/gitter/_matrix/provision/getlink/?scalar_token=...`
 
 **Body**

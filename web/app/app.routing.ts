@@ -40,6 +40,8 @@ import { TradingViewWidgetWrapperComponent } from "./widget-wrappers/tradingview
 import { SpotifyWidgetConfigComponent } from "./configs/widget/spotify/spotify.widget.component";
 import { SpotifyWidgetWrapperComponent } from "./widget-wrappers/spotify/spotify.component";
 import { AdminCustomBotsComponent } from "./admin/custom-bots/custom-bots.component";
+import { AdminSlackBridgeComponent } from "./admin/bridges/slack/slack.component";
+import { SlackBridgeConfigComponent } from "./configs/bridge/slack/slack.bridge.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -124,6 +126,11 @@ const routes: Routes = [
                                 path: "gitter",
                                 component: AdminGitterBridgeComponent,
                                 data: {breadcrumb: "Gitter Bridge", name: "Gitter Bridge"},
+                            },
+                            {
+                                path: "slack",
+                                component: AdminSlackBridgeComponent,
+                                data: {breadcrumb: "Slack Bridge", name: "Slack Bridge"},
                             },
                         ],
                     },
@@ -231,6 +238,11 @@ const routes: Routes = [
                         path: "gitter",
                         component: GitterBridgeConfigComponent,
                         data: {breadcrumb: "Gitter Bridge Configuration", name: "Gitter Bridge Configuration"},
+                    },
+                    {
+                        path: "slack",
+                        component: SlackBridgeConfigComponent,
+                        data: {breadcrumb: "Slack Bridge Configuration", name: "Slack Bridge Configuration"},
                     },
                 ],
             },
