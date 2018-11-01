@@ -46,10 +46,38 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
             $.getScript(widget.options.scriptUrl);
         });
         this.jitsiApiSubscription = ScalarWidgetApi.requestReceived.subscribe(request => {
-            if (request.action === "audioMuteToggle" && this.isJoined) {
-                this.jitsiApiObj.executeCommand('toggleAudio');
-                ScalarWidgetApi.replyAcknowledge(request);
+            if (!this.isJoined) {
+                return;
             }
+
+            switch (request.action) {
+            case "audioToggle":
+                this.jitsiApiObj.executeCommand('toggleAudio');
+                break;
+            case "audioMute":
+                this.jitsiApiObj.isAudioMuted().then((muted) => {
+                    // Toggle audio if Jitsi is not currently muted
+                    if (!muted) {
+                        this.jitsiApiObj.executeCommand('toggleAudio');
+                    }
+                });
+                break;
+            case "audioUnmute":
+                this.jitsiApiObj.isAudioMuted().then((muted) => {
+                    // Toggle audio if Jitsi is currently muted
+                    if (muted) {
+                        this.jitsiApiObj.executeCommand('toggleAudio');
+                    }
+                });
+                break;
+            default:
+                // Unknown command sent
+                return;
+            }
+
+            // TODO: Travis, should this fire even if we didn't get a command we're
+            // handling?
+            ScalarWidgetApi.replyAcknowledge(request);
         });
     }
 
