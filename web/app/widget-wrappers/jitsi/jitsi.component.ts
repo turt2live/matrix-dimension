@@ -1,8 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import * as $ from "jquery";
 import { FE_JitsiWidget } from "../../shared/models/integration";
 import { WidgetApiService } from "../../shared/services/integrations/widget-api.service";
+import { Subscription } from "rxjs/Subscription";
+import { ScalarWidgetApi } from "../../shared/services/scalar/scalar-widget.api";
 import { CapableWidget } from "../capable-widget";
 
 declare var JitsiMeetExternalAPI: any;
@@ -12,7 +14,7 @@ declare var JitsiMeetExternalAPI: any;
     templateUrl: "jitsi.component.html",
     styleUrls: ["jitsi.component.scss"],
 })
-export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit {
+export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit, OnDestroy {
 
     public isJoined = false;
 
@@ -22,6 +24,7 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
     private avatarUrl: string;
     private userId: string;
     private jitsiApiObj: any;
+    private jitsiApiSubscription: Subscription;
 
     constructor(activatedRoute: ActivatedRoute, private widgetApi: WidgetApiService) {
         super();
@@ -41,6 +44,38 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
         this.widgetApi.getWidget("jitsi").then(integration => {
             const widget = <FE_JitsiWidget>integration;
             $.getScript(widget.options.scriptUrl);
+        });
+        this.jitsiApiSubscription = ScalarWidgetApi.requestReceived.subscribe(request => {
+            if (!this.isJoined) {
+                return;
+            }
+
+            switch (request.action) {
+            case "audioToggle":
+                this.jitsiApiObj.executeCommand('toggleAudio');
+                break;
+            case "audioMute":
+                this.jitsiApiObj.isAudioMuted().then((muted) => {
+                    // Toggle audio if Jitsi is not currently muted
+                    if (!muted) {
+                        this.jitsiApiObj.executeCommand('toggleAudio');
+                    }
+                });
+                break;
+            case "audioUnmute":
+                this.jitsiApiObj.isAudioMuted().then((muted) => {
+                    // Toggle audio if Jitsi is currently muted
+                    if (muted) {
+                        this.jitsiApiObj.executeCommand('toggleAudio');
+                    }
+                });
+                break;
+            default:
+                // Unknown command sent
+                return;
+            }
+
+            ScalarWidgetApi.replyAcknowledge(request);
         });
     }
 
@@ -71,6 +106,10 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
         });
 
         this.isJoined = true;
+    }
+
+    public ngOnDestroy() {
+        if (this.jitsiApiSubscription) this.jitsiApiSubscription.unsubscribe();
     }
 
 }
