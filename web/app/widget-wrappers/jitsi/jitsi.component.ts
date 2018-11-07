@@ -75,8 +75,6 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
                 return;
             }
 
-            // TODO: Travis, should this fire even if we didn't get a command we're
-            // handling?
             ScalarWidgetApi.replyAcknowledge(request);
         });
     }
