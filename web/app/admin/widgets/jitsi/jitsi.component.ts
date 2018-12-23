@@ -18,6 +18,9 @@ export class AdminWidgetJitsiConfigComponent implements ModalComponent<WidgetCon
     constructor(public dialog: DialogRef<WidgetConfigDialogContext>, private adminIntegrationsApi: AdminIntegrationsApiService, private toaster: ToasterService) {
         this.originalWidget = dialog.context.widget;
         this.widget = JSON.parse(JSON.stringify(this.originalWidget));
+
+        // Fix the ui-switch not picking up a boolean value
+        this.widget.options.useDomainAsDefault = !!this.widget.options.useDomainAsDefault;
     }
 
     public save() {
@@ -31,5 +34,9 @@ export class AdminWidgetJitsiConfigComponent implements ModalComponent<WidgetCon
             console.error(err);
             this.toaster.pop("error", "Error updating widget");
         });
+    }
+
+    public toggleForcedJitsi() {
+        this.widget.options.useDomainAsDefault = !this.widget.options.useDomainAsDefault;
     }
 }

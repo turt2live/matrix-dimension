@@ -11,6 +11,12 @@
                    [(ngModel)]="widget.options.jitsiDomain" [disabled]="isUpdating"/>
         </label>
         <label class="label-block">
+            Use this domain as the default conference domain
+            <span class="text-muted ">Some clients can create widgets that are not compatible with Dimension, making Dimension use jitsi.riot.im by default. By enabling this option, you'll force Dimension to use your Jitsi domain at risk of having clients not respect it.</span>
+            <ui-switch [checked]="widget.options.useDomainAsDefault" size="medium" [disabled]="isUpdating"
+                       (change)="toggleForcedJitsi()"></ui-switch>
+        </label>
+        <label class="label-block">
             Jitsi Script URL
             <span class="text-muted ">This is used to create the Jitsi widget. It is normally at /libs/external_api.min.js from your domain.</span>
             <input type="text" class="form-control"

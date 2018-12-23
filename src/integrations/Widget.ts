@@ -8,6 +8,7 @@ export interface EtherpadWidgetOptions {
 export interface JitsiWidgetOptions {
     jitsiDomain: string;
     scriptUrl: string;
+    useDomainAsDefault: boolean;
 }
 
 export class Widget extends Integration {

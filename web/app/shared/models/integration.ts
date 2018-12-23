@@ -77,6 +77,7 @@ export interface FE_JitsiWidget extends FE_Widget {
     options: {
         jitsiDomain: string;
         scriptUrl: string;
+        useDomainAsDefault: boolean;
     };
 }
 

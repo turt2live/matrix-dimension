@@ -32,7 +32,7 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
 
         let params: any = activatedRoute.snapshot.queryParams;
 
-        this.domain = params.domain || "jitsi.riot.im"; // Riot doesn't supply a domain, so we default
+        this.domain = params.domain;
         this.conferenceId = params.confId || params.conferenceId;
         this.displayName = params.displayName;
         this.avatarUrl = params.avatarUrl;
@@ -44,6 +44,11 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
         this.widgetApi.getWidget("jitsi").then(integration => {
             const widget = <FE_JitsiWidget>integration;
             $.getScript(widget.options.scriptUrl);
+
+            if (!this.domain) {
+                // Always fall back to jitsi.riot.im to maintain compatibility with widgets created by Riot.
+                this.domain = widget.options.useDomainAsDefault ? widget.options.jitsiDomain : "jitsi.riot.im";
+            }
         });
         this.jitsiApiSubscription = ScalarWidgetApi.requestReceived.subscribe(request => {
             if (!this.isJoined) {
