@@ -61,6 +61,8 @@
     "@angular/router": "^5.2.11",
     "@angularclass/hmr": "^2.1.0",
     "@angularclass/hmr-loader": "^3.0.2",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-brands": "^5.0.13",
     "@fortawesome/fontawesome-free-regular": "^5.0.13",

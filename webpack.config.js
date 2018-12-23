@@ -8,7 +8,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const isProd = process.env.npm_lifecycle_event.startsWith('build');
 
 module.exports = function () {
-    var config = {};
+    const config = {};
 
     if (isProd) config.devtool = 'source-map';
     else config.devtool = 'eval-source-map';
@@ -34,7 +34,20 @@ module.exports = function () {
         rules: [
             {
                 test: /\.ts$/,
-                loaders: ['awesome-typescript-loader', 'angular2-template-loader', '@angularclass/hmr-loader'],
+                loaders: [{
+                    loader: 'awesome-typescript-loader',
+                    options: {
+                        useCache: true,
+                        useBabel: true,
+                        babelOptions: {
+                            babelrc: false,
+                            presets: [
+                                ["@babel/preset-env", {"targets": "last 2 versions, ie 11", "modules": false}]
+                            ],
+                        },
+                        babelCore: "@babel/core",
+                    },
+                }, 'angular2-template-loader', '@angularclass/hmr-loader'],
                 exclude: [/node_modules\/(?!(ng2-.+))/]
             },
             {
@@ -110,10 +123,6 @@ module.exports = function () {
         new HtmlWebpackPlugin({
             template: './web/public/index.html',
             chunksSortMode: 'dependency'
-        }),
-        new MiniCssExtractPlugin({
-            filename: 'css/[name].[hash].css',
-            disable: !isProd
         })
     ];
 
@@ -122,6 +131,11 @@ module.exports = function () {
             new CopyWebpackPlugin([{
                 from: root('web/public')
             }])
+        );
+        config.plugins.push(
+            new MiniCssExtractPlugin({
+                filename: 'css/[name].[hash].css',
+            })
         );
     }
 
