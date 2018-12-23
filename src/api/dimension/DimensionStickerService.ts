@@ -119,7 +119,7 @@ export class DimensionStickerService {
         return {}; // 200 OK
     }
 
-    private static async packToMemory(pack: StickerPack): Promise<MemoryStickerPack> {
+    public static async packToMemory(pack: StickerPack): Promise<MemoryStickerPack> {
         const stickers = await Sticker.findAll({where: {packId: pack.id}});
         return {
             id: pack.id,

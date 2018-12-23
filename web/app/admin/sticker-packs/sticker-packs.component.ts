@@ -14,6 +14,8 @@ export class AdminStickerPacksComponent implements OnInit {
     public isLoading = true;
     public isUpdating = false;
     public packs: FE_StickerPack[];
+    public tgUrl: string;
+    public isImporting = false;
 
     constructor(private adminStickers: AdminStickersApiService,
                 private toaster: ToasterService,
@@ -51,5 +53,19 @@ export class AdminStickerPacksComponent implements OnInit {
             isBlocking: false,
             size: 'lg',
         }, StickerPackPreviewDialogContext));
+    }
+
+    public startTelegramImport() {
+        this.isImporting = true;
+        this.adminStickers.importFromTelegram(this.tgUrl).then(pack => {
+            this.isImporting = false;
+            this.tgUrl = "";
+            this.packs.push(pack);
+            this.toaster.pop("success", "Telegram sticker pack imported");
+        }).catch(err => {
+            console.error(err);
+            this.isImporting = false;
+            this.toaster.pop("error", "Error importing sticker pack");
+        });
     }
 }

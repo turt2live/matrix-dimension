@@ -62,6 +62,12 @@ goneb:
     circleci: "mxc://t2bot.io/cf7d875845a82a6b21f5f66de78f6bee"
     jira: "mxc://t2bot.io/f4a38ebcc4280ba5b950163ca3e7c329"
 
+# Settings for interacting with Telegram. Currently only applies for importing
+# sticker packs from Telegram.
+telegram:
+  # Talk to @BotFather on Telegram to get a token
+  botToken: "YourTokenHere"
+
 # Settings for controlling how logging works
 logging:
   file: logs/dimension.log

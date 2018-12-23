@@ -23,6 +23,9 @@ export interface DimensionConfig {
             [botType: string]: string; // mxc
         };
     };
+    telegram: {
+        botToken: string;
+    };
     logging: LogConfig;
 }
 

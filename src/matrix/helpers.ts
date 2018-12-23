@@ -79,18 +79,27 @@ export async function doFederatedApiCall(method: string, serverName: string, end
     });
 }
 
-export async function doClientApiCall(method: string, endpoint: string, query?: object, body?: object): Promise<any> {
+export async function doClientApiCall(method: string, endpoint: string, query?: object, body?: object | Buffer, contentType: string = "application/octet-stream"): Promise<any> {
     let url = config.homeserver.clientServerUrl;
     if (url.endsWith("/")) url = url.substring(0, url.length - 1);
     LogService.info("matrix", "Doing client API call: " + url + endpoint);
 
+    const requestOptions = {
+        method: method,
+        url: url + endpoint,
+        qs: query,
+    };
+    if (Buffer.isBuffer(body)) {
+        requestOptions["body"] = body;
+        requestOptions["headers"] = {
+            "Content-Type": contentType,
+        };
+    } else {
+        requestOptions["json"] = body;
+    }
+
     return new Promise((resolve, reject) => {
-        request({
-            method: method,
-            url: url + endpoint,
-            qs: query,
-            json: body,
-        }, (err, res, _body) => {
+        request(requestOptions, (err, res, _body) => {
             if (err) {
                 LogService.error("matrix", "Error calling " + endpoint);
                 LogService.error("matrix", err);

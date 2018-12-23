@@ -10,6 +10,17 @@
                 then the 'sticker picker' widget will be disabled.
             </p>
 
+            <div class="input-group input-group-sm telegram-import">
+                <input type="text" class="form-control" [(ngModel)]="tgUrl" placeholder="https://t.me/addstickers/YourPackID"
+                       [disabled]="isImporting" />
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" (click)="startTelegramImport()" [disabled]="!tgUrl || isImporting">
+                        <i class="fa fa-download"></i>
+                        Import from Telegram
+                    </button>
+                </span>
+            </div>
+
             <table class="table table-striped table-condensed table-bordered">
                 <thead>
                 <tr>
