@@ -123,28 +123,21 @@ module.exports = function () {
         new HtmlWebpackPlugin({
             template: './web/public/index.html',
             chunksSortMode: 'dependency'
+        }),
+        new CopyWebpackPlugin([{
+            from: root('web/public')
+        }]),
+        new MiniCssExtractPlugin({
+            filename: 'css/[name].[hash].css',
         })
     ];
-
-    if (isProd) {
-        config.plugins.push(
-            new CopyWebpackPlugin([{
-                from: root('web/public')
-            }])
-        );
-        config.plugins.push(
-            new MiniCssExtractPlugin({
-                filename: 'css/[name].[hash].css',
-            })
-        );
-    }
 
     config.devServer = {
         contentBase: './web/public',
         historyApiFallback: true,
         disableHostCheck: true,
-        quiet: true,
-        stats: 'minimal',
+        quiet: false,
+        //stats: 'minimal',
         proxy: {
             '/api': {
                 target: 'http://localhost:8184',

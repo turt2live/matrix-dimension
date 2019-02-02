@@ -5,7 +5,7 @@
   "main": "build/app/index.js",
   "license": "GPL-3.0",
   "scripts": {
-    "start:web": "webpack-dev-server --inline --progress --port 8080 --host 0.0.0.0",
+    "start:web": "webpack-dev-server --inline --mode=development --progress --port 8080 --host 0.0.0.0",
     "start:app": "npm run-script build && node build/app/index.js",
     "build": "npm run-script build:web && npm run-script build:app",
     "build:web": "rimraf build/web && webpack --mode production --progress --profile --bail",
@@ -108,7 +108,7 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10",
+    "webpack-dev-server": "^3.1.14",
     "zone.js": "^0.8.26"
   }
 }
