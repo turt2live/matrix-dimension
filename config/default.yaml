@@ -24,7 +24,9 @@ homeserver:
   #mediaUrl: "https://t2bot.io"
 
   # The access token Dimension should use for miscellaneous access to the homeserver. This
-  # should be for a valid user.
+  # should be for a user on the configured homeserver: any user will do, however it is
+  # recommended to use a dedicated user (such as @dimension:t2bot.io). For information on
+  # how to acquire an access token, visit https://t2bot.io/docs/access_tokens
   accessToken: "something"
 
 # These users can modify the integrations this Dimension supports.
