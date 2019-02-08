@@ -178,7 +178,7 @@ export async function doFederatedApiCall(method: string, serverName: string, end
     });
 }
 
-export async function doClientApiCall(method: string, endpoint: string, query?: object, body?: object | Buffer, contentType: string = "application/octet-stream"): Promise<any> {
+export async function doClientApiCall(method: string, endpoint: string, query?: object, body?: object | Buffer, contentType = "application/octet-stream"): Promise<any> {
     let url = config.homeserver.clientServerUrl;
     if (url.endsWith("/")) url = url.substring(0, url.length - 1);
     LogService.info("matrix", "Doing client API call: " + url + endpoint);
