@@ -4,7 +4,7 @@ import config from "../../config";
 import { ApiError } from "../ApiError";
 import { MatrixLiteClient } from "../../matrix/MatrixLiteClient";
 import { CURRENT_VERSION } from "../../version";
-import { getFederationUrl } from "../../matrix/helpers";
+import { getFederationConnInfo } from "../../matrix/helpers";
 
 interface DimensionVersionResponse {
     version: string;
@@ -17,6 +17,7 @@ interface DimensionConfigResponse {
         name: string;
         userId: string;
         federationUrl: string;
+        federationHostname: string;
         clientServerUrl: string;
     };
 }
@@ -70,15 +71,28 @@ export class AdminService {
         await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
         const client = new MatrixLiteClient(config.homeserver.accessToken);
+        const fedInfo = await getFederationConnInfo(config.homeserver.name);
         return {
             admins: config.admins,
             widgetBlacklist: config.widgetBlacklist,
             homeserver: {
                 name: config.homeserver.name,
                 userId: await client.whoAmI(),
-                federationUrl: await getFederationUrl(config.homeserver.name),
+                federationUrl: fedInfo.url,
+                federationHostname: fedInfo.hostname,
                 clientServerUrl: config.homeserver.clientServerUrl,
             },
+        };
+    }
+
+    @GET
+    @Path("test/federation")
+    public async testFederationRouting(@QueryParam("scalar_token") scalarToken: string, @QueryParam("server_name") serverName: string): Promise<any> {
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+
+        return {
+            inputServerName: serverName,
+            resolvedServer: await getFederationConnInfo(serverName),
         };
     }
 }
