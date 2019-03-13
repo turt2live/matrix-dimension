@@ -42,6 +42,7 @@ import { SpotifyWidgetWrapperComponent } from "./widget-wrappers/spotify/spotify
 import { AdminCustomBotsComponent } from "./admin/custom-bots/custom-bots.component";
 import { AdminSlackBridgeComponent } from "./admin/bridges/slack/slack.component";
 import { SlackBridgeConfigComponent } from "./configs/bridge/slack/slack.bridge.component";
+import { ReauthExampleWidgetWrapperComponent } from "./widget-wrappers/reauth-example/reauth-example.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -264,6 +265,7 @@ const routes: Routes = [
             {path: "generic-fullscreen", component: GenericFullscreenWidgetWrapperComponent},
             {path: "tradingview", component: TradingViewWidgetWrapperComponent},
             {path: "spotify", component: SpotifyWidgetWrapperComponent},
+            {path: "reauth", component: ReauthExampleWidgetWrapperComponent},
         ]
     },
 ];

@@ -1,4 +1,4 @@
-import { ScalarToWidgetRequest } from "../../models/scalar-widget-actions";
+import { ScalarFromWidgetResponse, ScalarToWidgetRequest } from "../../models/scalar-widget-actions";
 import { ReplaySubject } from "rxjs/ReplaySubject";
 import { Subject } from "rxjs/Subject";
 import { FE_Sticker, FE_StickerPack } from "../../models/integration";
@@ -7,7 +7,9 @@ import * as randomString from "random-string";
 export class ScalarWidgetApi {
 
     public static requestReceived: Subject<ScalarToWidgetRequest> = new ReplaySubject();
+    public static replyReceived: Subject<ScalarFromWidgetResponse> = new ReplaySubject();
     public static widgetId: string;
+    public static inFlightRequestIds: string[] = [];
 
     private constructor() {
     }
@@ -82,6 +84,10 @@ export class ScalarWidgetApi {
         });
     }
 
+    public static requestOpenID(): void {
+        ScalarWidgetApi.callAction("get_openid", {});
+    }
+
     private static callAction(action, payload) {
         if (!window.opener) {
             return;
@@ -92,6 +98,8 @@ export class ScalarWidgetApi {
         request["widgetId"] = ScalarWidgetApi.widgetId;
         request["action"] = action;
         request["requestId"] = randomString({length: 160});
+
+        ScalarWidgetApi.inFlightRequestIds.push(request["requestId"]);
 
         console.log("[Dimension] Sending fromWidget: ", request);
         window.opener.postMessage(request, "*");
@@ -118,6 +126,17 @@ window.addEventListener("message", event => {
         if (event.data.widgetId && !ScalarWidgetApi.widgetId) ScalarWidgetApi.widgetId = event.data.widgetId;
         console.log(`[Dimension] Received toWidget request at widget ID ${ScalarWidgetApi.widgetId}: ${JSON.stringify(event.data)}`);
         ScalarWidgetApi.requestReceived.next(event.data);
+        return;
+    }
+
+    if (event.data.api === "fromWidget" && ScalarWidgetApi.inFlightRequestIds.indexOf(event.data.requestId) !== -1) {
+        if (event.data.widgetId && !ScalarWidgetApi.widgetId) ScalarWidgetApi.widgetId = event.data.widgetId;
+        console.log(`[Dimension] Received fromWidget response at widget ID ${ScalarWidgetApi.widgetId}: ${JSON.stringify(event.data)}`);
+
+        const idx = ScalarWidgetApi.inFlightRequestIds.indexOf(event.data.requestId);
+        ScalarWidgetApi.inFlightRequestIds.splice(idx, 1);
+        ScalarWidgetApi.replyReceived.next(event.data);
+
         return;
     }
 });
