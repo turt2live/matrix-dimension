@@ -10,6 +10,9 @@ export interface FE_DimensionConfig {
         federationHostname: string;
         clientServerUrl: string;
     };
+    sessionInfo: {
+        numTokens: number;
+    };
 }
 
 export interface FE_DimensionVersion {

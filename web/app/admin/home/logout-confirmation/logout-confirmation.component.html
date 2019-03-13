@@ -1,0 +1,20 @@
+<div class="dialog">
+    <div class="dialog-header">
+        <h4>Logout confirmation</h4>
+    </div>
+    <div class="dialog-content">
+        <p>
+            Logging everyone out will disable all known login tokens for Dimension and upstream integration managers.
+            Most clients will automatically re-register for a login token behind the scenes, similar to how a login token
+            was first acquired.
+        </p>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" (click)="dialog.dismiss()" title="close" class="btn btn-secondary btn-sm">
+            <i class="far fa-times-circle"></i> Cancel
+        </button>
+        <button type="button" (click)="dialog.close()" title="logout everyone" class="btn btn-danger btn-sm">
+            <i class="far fa-times-circle"></i> Logout Everyone
+        </button>
+    </div>
+</div>
