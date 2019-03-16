@@ -56,28 +56,28 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
             }
 
             switch (request.action) {
-            case "audioToggle":
-                this.jitsiApiObj.executeCommand('toggleAudio');
-                break;
-            case "audioMute":
-                this.jitsiApiObj.isAudioMuted().then((muted) => {
-                    // Toggle audio if Jitsi is not currently muted
-                    if (!muted) {
-                        this.jitsiApiObj.executeCommand('toggleAudio');
-                    }
-                });
-                break;
-            case "audioUnmute":
-                this.jitsiApiObj.isAudioMuted().then((muted) => {
-                    // Toggle audio if Jitsi is currently muted
-                    if (muted) {
-                        this.jitsiApiObj.executeCommand('toggleAudio');
-                    }
-                });
-                break;
-            default:
-                // Unknown command sent
-                return;
+                case "audioToggle":
+                    this.jitsiApiObj.executeCommand('toggleAudio');
+                    break;
+                case "audioMute":
+                    this.jitsiApiObj.isAudioMuted().then((muted) => {
+                        // Toggle audio if Jitsi is not currently muted
+                        if (!muted) {
+                            this.jitsiApiObj.executeCommand('toggleAudio');
+                        }
+                    });
+                    break;
+                case "audioUnmute":
+                    this.jitsiApiObj.isAudioMuted().then((muted) => {
+                        // Toggle audio if Jitsi is currently muted
+                        if (muted) {
+                            this.jitsiApiObj.executeCommand('toggleAudio');
+                        }
+                    });
+                    break;
+                default:
+                    // Unknown command sent
+                    return;
             }
 
             ScalarWidgetApi.replyAcknowledge(request);
