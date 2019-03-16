@@ -2,6 +2,7 @@ import { ScalarToWidgetRequest } from "../../models/scalar-widget-actions";
 import { ReplaySubject } from "rxjs/ReplaySubject";
 import { Subject } from "rxjs/Subject";
 import { FE_Sticker, FE_StickerPack } from "../../models/integration";
+import * as randomString from "random-string";
 
 export class ScalarWidgetApi {
 
@@ -89,6 +90,7 @@ export class ScalarWidgetApi {
         request["api"] = "fromWidget";
         request["widgetId"] = ScalarWidgetApi.widgetId;
         request["action"] = action;
+        request["requestId"] = randomString({length: 160});
 
         window.opener.postMessage(request, "*");
     }
