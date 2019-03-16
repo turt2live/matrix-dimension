@@ -14,12 +14,12 @@ import { FE_ScalarOpenIdRequestBody } from "../../shared/models/scalar-server-re
 })
 export class ReauthExampleWidgetWrapperComponent extends CapableWidget implements OnInit, OnDestroy {
 
-    public busy = false;
+    public busy = true; // busy until we load supported versions
     public hasOpenId = false;
     public userId: string;
     public blocked = false;
     public error = false;
-    public stateMessage = "";
+    public stateMessage = "Checking client version...";
 
     private widgetReplySubscription: Subscription;
     private widgetRequestSubscription: Subscription;
@@ -38,13 +38,29 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
     }
 
     public ngOnInit(): void {
-        // TODO: Check that the client supports this (API version 0.0.2 at least)
-
         super.ngOnInit();
         this.widgetReplySubscription = ScalarWidgetApi.replyReceived.subscribe(async response => {
-            if (response.action !== "get_openid") return;
-
             const data = response.response;
+
+            if (response.action === "supported_api_versions") {
+                if (!data || !data.supported_versions) {
+                    this.stateMessage = "Invalid API version response";
+                    this.changeDetector.detectChanges();
+                    return;
+                }
+
+                if (data.supported_versions.indexOf("0.0.2") === -1) {
+                    this.stateMessage = "Your client is not supported by this widget.";
+                    this.changeDetector.detectChanges();
+                    return;
+                }
+
+                this.busy = false;
+                this.changeDetector.detectChanges();
+                return;
+            }
+
+            if (response.action !== "get_openid") return;
 
             try {
                 if (data.state === "request") {
@@ -94,6 +110,13 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
         super.ngOnDestroy();
         if (this.widgetReplySubscription) this.widgetReplySubscription.unsubscribe();
         if (this.widgetRequestSubscription) this.widgetRequestSubscription.unsubscribe();
+    }
+
+    protected onCapabilitiesSent(): void {
+        super.onCapabilitiesSent();
+
+        // Start a request for supported API versions
+        ScalarWidgetApi.requestSupportedVersions();
     }
 
     public onReauthStart(): void {

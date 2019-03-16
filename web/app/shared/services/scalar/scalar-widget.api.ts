@@ -88,6 +88,10 @@ export class ScalarWidgetApi {
         ScalarWidgetApi.callAction("get_openid", {});
     }
 
+    public static requestSupportedVersions(): void {
+        ScalarWidgetApi.callAction("supported_api_versions", {});
+    }
+
     private static callAction(action, payload) {
         if (!window.opener) {
             return;
