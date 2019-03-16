@@ -66,6 +66,7 @@ export class ScalarWidgetApi {
 
     public static sendSetAlwaysOnScreen(alwaysVisible: boolean): void {
         ScalarWidgetApi.callAction("set_always_on_screen", {
+            // Send the value here and in data due to a Riot bug.
             data: {
                 value: alwaysVisible,
             },
@@ -92,6 +93,7 @@ export class ScalarWidgetApi {
         request["action"] = action;
         request["requestId"] = randomString({length: 160});
 
+        console.log("[Dimension] Sending fromWidget: ", request);
         window.opener.postMessage(request, "*");
     }
 
@@ -102,6 +104,8 @@ export class ScalarWidgetApi {
 
         let requestClone = JSON.parse(JSON.stringify(request));
         requestClone["response"] = payload;
+
+        console.log("[Dimension] Sending postMessage response: ", request);
         window.opener.postMessage(requestClone, "*");
     }
 }

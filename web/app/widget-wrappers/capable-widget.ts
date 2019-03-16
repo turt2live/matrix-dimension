@@ -31,6 +31,6 @@ export abstract class CapableWidget implements OnInit, OnDestroy {
     }
 
     protected onCapabilitiesSent(): void {
-        if (this.supportsAlwaysOnScreen) ScalarWidgetApi.sendSetAlwaysOnScreen(true);
+        // Nothing to do here.
     }
 }

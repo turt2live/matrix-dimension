@@ -37,6 +37,9 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
         this.displayName = params.displayName;
         this.avatarUrl = params.avatarUrl;
         this.userId = params.userId || params.email; // Riot uses `email` when placing a conference call
+
+        // Set the widget ID if we have it
+        ScalarWidgetApi.widgetId = params.widgetId;
     }
 
     public ngOnInit() {
@@ -88,6 +91,8 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
         $(".join-conference-wrapper").hide();
         $("#jitsiContainer").show();
 
+        ScalarWidgetApi.sendSetAlwaysOnScreen(true);
+
         this.jitsiApiObj = new JitsiMeetExternalAPI(this.domain, {
             width: "100%",
             height: "100%",
@@ -106,6 +111,7 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
 
         this.jitsiApiObj.on("readyToClose", () => {
             this.isJoined = false;
+            ScalarWidgetApi.sendSetAlwaysOnScreen(false);
             $(".join-conference-wrapper").show();
             $("#jitsiContainer").hide().html("");
         });
@@ -115,6 +121,11 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
 
     public ngOnDestroy() {
         if (this.jitsiApiSubscription) this.jitsiApiSubscription.unsubscribe();
+    }
+
+    protected onCapabilitiesSent(): void {
+        super.onCapabilitiesSent();
+        ScalarWidgetApi.sendSetAlwaysOnScreen(false);
     }
 
 }
