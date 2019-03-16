@@ -109,6 +109,7 @@ import { SlackBridgeConfigComponent } from "./configs/bridge/slack/slack.bridge.
 import { AdminSlackBridgeManageSelfhostedComponent } from "./admin/bridges/slack/manage-selfhosted/manage-selfhosted.component";
 import { AdminSlackBridgeComponent } from "./admin/bridges/slack/slack.component";
 import { AdminSlackApiService } from "./shared/services/admin/admin-slack-api.service";
+import { ReauthExampleWidgetWrapperComponent } from "./widget-wrappers/reauth-example/reauth-example.component";
 
 @NgModule({
     imports: [
@@ -198,6 +199,7 @@ import { AdminSlackApiService } from "./shared/services/admin/admin-slack-api.se
         SlackBridgeConfigComponent,
         AdminSlackBridgeManageSelfhostedComponent,
         AdminSlackBridgeComponent,
+        ReauthExampleWidgetWrapperComponent,
 
         // Vendor
     ],
