@@ -1,0 +1,1 @@
+export const SCALAR_API_VERSION = "1.1";
