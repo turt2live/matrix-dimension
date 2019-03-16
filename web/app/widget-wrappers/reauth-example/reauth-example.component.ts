@@ -56,6 +56,7 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
                 }
 
                 this.busy = false;
+                this.stateMessage = "";
                 this.changeDetector.detectChanges();
                 return;
             }
