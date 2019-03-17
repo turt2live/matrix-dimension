@@ -86,7 +86,7 @@ export class AdminStickerService {
                 const mxc = await mx.upload(png, "image/png");
                 const serverName = mxc.substring("mxc://".length).split("/")[0];
                 const contentId = mxc.substring("mxc://".length).split("/")[1];
-                const thumbMxc = await mx.uploadFromUrl(await mx.getThumbnailUrl(serverName, contentId, 512, 512, "crop", false), "image/png");
+                const thumbMxc = await mx.uploadFromUrl(await mx.getThumbnailUrl(serverName, contentId, 512, 512, "scale", false), "image/png");
 
                 stickers.push(await Sticker.create({
                     packId: pack.id,
