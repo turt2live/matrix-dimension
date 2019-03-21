@@ -16,6 +16,7 @@ export interface DimensionConfig {
     widgetBlacklist: string[];
     database: {
         file: string;
+        botData: string;
     };
     admins: string[];
     goneb: {

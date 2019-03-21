@@ -42,9 +42,12 @@ widgetBlacklist:
   - 192.168.0.0/16
   - 127.0.0.0/8
 
-# Where the database for Dimension is
 database:
+  # Where the database for Dimension is
   file: "dimension.db"
+
+  # Where to store misc information for the utility bot account.
+  botData: "dimension.bot.json"
 
 # Display settings that apply to self-hosted go-neb instances
 goneb:
