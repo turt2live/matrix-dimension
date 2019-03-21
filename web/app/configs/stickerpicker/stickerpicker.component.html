@@ -2,11 +2,30 @@
     <my-spinner></my-spinner>
 </div>
 <div *ngIf="!isLoading">
-    <my-ibox title="Sticker Packs">
-        <div class="my-ibox-content" *ngIf="packs.length <= 0">
+    <my-ibox title="Sticker Packs" *ngIf="packs.length <= 0">
+        <div class="my-ibox-content">
             <h5 style="text-align: center;">Sticker packs are not enabled on this Dimension instance.</h5>
         </div>
-        <div class="my-ibox-content" *ngIf="packs.length > 0">
+    </my-ibox>
+    <my-ibox title="Add Sticker Packs" *ngIf="packs.length > 0">
+        <div class="my-ibox-content">
+            <form (submit)="importPack()" novalidate name="importForm">
+                <label class="label-block">
+                    Stickerpack URL
+                    <input type="text" class="form-control" name="packUrl"
+                           placeholder="https://packs.t2bot.io/pack/..."
+                           [(ngModel)]="packUrl" [disabled]="isImporting"/>
+                </label>
+                <div style="margin-top: 25px">
+                    <button type="submit" class="btn btn-sm btn-success" [disabled]="isImporting">
+                        <i class="fa fa-plus"></i> Add stickerpack
+                    </button>
+                </div>
+            </form>
+        </div>
+    </my-ibox>
+    <my-ibox title="Sticker Packs" *ngIf="packs.length > 0">
+        <div class="my-ibox-content">
             <div class="pack" *ngFor="let pack of packs trackById">
                 <img [src]="getThumbnailUrl(pack.avatarUrl, 120, 120)" width="120" height="120"/>
                 <div class="caption">

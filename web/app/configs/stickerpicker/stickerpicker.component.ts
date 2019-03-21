@@ -16,6 +16,10 @@ export class StickerpickerComponent implements OnInit {
     public isUpdating = false;
     public packs: FE_UserStickerPack[];
 
+    // Import stuff
+    public packUrl = "";
+    public isImporting = false;
+
     constructor(private stickerApi: StickerApiService,
                 private media: MediaService,
                 private scalarClient: ScalarClientApiService,
@@ -33,6 +37,21 @@ export class StickerpickerComponent implements OnInit {
             console.error(e);
             this.toaster.pop("error", "Failed to load sticker packs");
         }
+    }
+
+    public importPack() {
+        this.isImporting = true;
+        this.stickerApi.importStickerpack(this.packUrl).then(pack => {
+            // Insert at top for visibility
+            this.packs.splice(0, 0, pack);
+            this.packUrl = "";
+            this.isImporting = false;
+            this.toaster.pop("success", "Stickerpack added");
+        }).catch(err => {
+            console.error(err);
+            this.isImporting = false;
+            this.toaster.pop("error", "Error adding stickerpack");
+        });
     }
 
     public getThumbnailUrl(mxc: string, width: number, height: number, method: "crop" | "scale" = "scale"): string {

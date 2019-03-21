@@ -5,6 +5,8 @@ import Sticker from "../../db/models/Sticker";
 import { ScalarService } from "../scalar/ScalarService";
 import UserStickerPack from "../../db/models/UserStickerPack";
 import { ApiError } from "../ApiError";
+import { StickerpackMetadataDownloader } from "../../utils/StickerpackMetadataDownloader";
+import { MatrixStickerBot } from "../../matrix/MatrixStickerBot";
 
 export interface MemoryStickerPack {
     id: number;
@@ -35,6 +37,7 @@ export interface MemoryStickerPack {
             height: number;
         };
     }[];
+    trackingRoomAlias: string;
 }
 
 export interface MemoryUserStickerPack extends MemoryStickerPack {
@@ -43,6 +46,10 @@ export interface MemoryUserStickerPack extends MemoryStickerPack {
 
 interface SetSelectedRequest {
     isSelected: boolean;
+}
+
+interface ImportPackRequest {
+    packUrl: string;
 }
 
 /**
@@ -88,6 +95,7 @@ export class DimensionStickerService {
 
             const selectedPack = JSON.parse(JSON.stringify(pack));
             selectedPack.isSelected = userPack ? userPack.isSelected : false;
+            if (!selectedPack.isSelected && pack.trackingRoomAlias) continue;
             packs.push(selectedPack);
         }
 
@@ -117,6 +125,28 @@ export class DimensionStickerService {
         Cache.for(CACHE_STICKERS).del("packs_" + userId);
 
         return {}; // 200 OK
+    }
+
+    @POST
+    @Path("packs/import")
+    public async importPack(@QueryParam("scalar_token") scalarToken: string, request: ImportPackRequest): Promise<MemoryUserStickerPack> {
+        await ScalarService.getTokenOwner(scalarToken);
+
+        const packUrl = request.packUrl.endsWith(".json") ? request.packUrl : `${request.packUrl}.json`;
+        const metadata = await StickerpackMetadataDownloader.getMetadata(packUrl);
+        await MatrixStickerBot.trackStickerpack(metadata.roomAlias);
+
+        const stickerPacks = await StickerPack.findAll({where: {trackingRoomAlias: metadata.roomAlias}});
+        Cache.for(CACHE_STICKERS).clear();
+
+        if (stickerPacks.length <= 0) throw new ApiError(500, "Stickerpack not imported");
+        const pack = stickerPacks[0];
+
+        // Simulate a call to setPackSelected
+        await this.setPackSelected(scalarToken, pack.id, {isSelected: true});
+
+        const memoryPack = await DimensionStickerService.packToMemory(pack);
+        return Object.assign({isSelected: true}, memoryPack);
     }
 
     public static async packToMemory(pack: StickerPack): Promise<MemoryStickerPack> {
@@ -152,6 +182,7 @@ export class DimensionStickerService {
                     },
                 }
             }),
+            trackingRoomAlias: pack.trackingRoomAlias,
         };
     }
 

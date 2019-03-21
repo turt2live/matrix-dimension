@@ -1,4 +1,4 @@
-import { AutoIncrement, Column, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AllowNull, AutoIncrement, Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 import { IntegrationRecord } from "./IntegrationRecord";
 
 @Table({
@@ -44,4 +44,8 @@ export default class StickerPack extends Model<StickerPack> implements Integrati
 
     @Column
     licensePath: string;
+
+    @AllowNull
+    @Column
+    trackingRoomAlias: string;
 }
