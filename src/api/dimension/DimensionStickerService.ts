@@ -7,6 +7,7 @@ import UserStickerPack from "../../db/models/UserStickerPack";
 import { ApiError } from "../ApiError";
 import { StickerpackMetadataDownloader } from "../../utils/StickerpackMetadataDownloader";
 import { MatrixStickerBot } from "../../matrix/MatrixStickerBot";
+import config from "../../config";
 
 export interface MemoryStickerPack {
     id: number;
@@ -52,6 +53,12 @@ interface ImportPackRequest {
     packUrl: string;
 }
 
+interface StickerConfig {
+    enabled: boolean;
+    stickerBot: string;
+    managerUrl: string;
+}
+
 /**
  * API for stickers
  */
@@ -74,6 +81,18 @@ export class DimensionStickerService {
         Cache.for(CACHE_STICKERS).put("packs", packs);
         if (enabledOnly) return packs.filter(p => p.isEnabled);
         return packs;
+    }
+
+    @GET
+    @Path("config")
+    public async getConfig(@QueryParam("scalar_token") scalarToken: string): Promise<StickerConfig> {
+        await ScalarService.getTokenOwner(scalarToken);
+
+        return {
+            enabled: config.stickers.enabled,
+            stickerBot: config.stickers.stickerBot,
+            managerUrl: config.stickers.managerUrl,
+        };
     }
 
     @GET
@@ -131,6 +150,10 @@ export class DimensionStickerService {
     @Path("packs/import")
     public async importPack(@QueryParam("scalar_token") scalarToken: string, request: ImportPackRequest): Promise<MemoryUserStickerPack> {
         await ScalarService.getTokenOwner(scalarToken);
+
+        if (!config.stickers.enabled) {
+            throw new ApiError(400, "Custom stickerpacks are disabled on this homeserver");
+        }
 
         const packUrl = request.packUrl.endsWith(".json") ? request.packUrl : `${request.packUrl}.json`;
         const metadata = await StickerpackMetadataDownloader.getMetadata(packUrl);

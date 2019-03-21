@@ -63,6 +63,12 @@ export interface FE_Sticker {
     };
 }
 
+export interface FE_StickerConfig {
+    enabled: boolean;
+    stickerBot: string;
+    managerUrl: string;
+}
+
 export interface FE_Widget extends FE_Integration {
     options: any;
 }

@@ -7,13 +7,14 @@
             <h5 style="text-align: center;">Sticker packs are not enabled on this Dimension instance.</h5>
         </div>
     </my-ibox>
-    <my-ibox title="Add Sticker Packs" *ngIf="packs.length > 0">
+    <my-ibox title="Add Sticker Packs" *ngIf="packs.length > 0 && customEnabled">
         <div class="my-ibox-content">
             <form (submit)="importPack()" novalidate name="importForm">
                 <label class="label-block">
                     Stickerpack URL
+                    <span class="text-muted">Start a conversation with {{stickerBot}} to create your own stickerpack.</span>
                     <input type="text" class="form-control" name="packUrl"
-                           placeholder="https://packs.t2bot.io/pack/..."
+                           placeholder="{{managerUrl}}/pack/..."
                            [(ngModel)]="packUrl" [disabled]="isImporting"/>
                 </label>
                 <div style="margin-top: 25px">

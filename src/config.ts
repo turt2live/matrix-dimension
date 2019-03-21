@@ -27,6 +27,11 @@ export interface DimensionConfig {
     telegram: {
         botToken: string;
     };
+    stickers: {
+        enabled: boolean;
+        stickerBot: string;
+        managerUrl: string;
+    };
     logging: LogConfig;
 }
 

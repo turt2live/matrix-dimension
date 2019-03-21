@@ -23,10 +23,10 @@ homeserver:
   # stickers. If not supplied or left empty Dimension will use the clientServerUrl.
   #mediaUrl: "https://t2bot.io"
 
-  # The access token Dimension should use for miscellaneous access to the homeserver. This
-  # should be for a user on the configured homeserver: any user will do, however it is
-  # recommended to use a dedicated user (such as @dimension:t2bot.io). For information on
-  # how to acquire an access token, visit https://t2bot.io/docs/access_tokens
+  # The access token Dimension should use for miscellaneous access to the homeserver, and
+  # for tracking custom sticker pack updates. This should be a user configured on the homeserver
+  # and be dedicated to Dimension (create a user named "dimension" on your homeserver). For
+  # information on how to acquire an access token, visit https://t2bot.io/docs/access_tokens
   accessToken: "something"
 
 # These users can modify the integrations this Dimension supports.
@@ -72,6 +72,19 @@ goneb:
 telegram:
   # Talk to @BotFather on Telegram to get a token
   botToken: "YourTokenHere"
+
+# Custom sticker pack options.
+# Largely based on https://github.com/turt2live/matrix-sticker-manager
+stickers:
+  # Whether or not to allow people to add custom sticker packs
+  enabled: true
+
+  # The sticker manager bot to promote
+  stickerBot: "@stickers:t2bot.io"
+
+  # The sticker manager URL to promote
+  managerUrl: "https://stickers.t2bot.io"
+
 
 # Settings for controlling how logging works
 logging:

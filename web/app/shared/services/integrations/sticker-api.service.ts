@@ -1,12 +1,16 @@
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
 import { AuthedApi } from "../authed-api";
-import { FE_UserStickerPack } from "../../models/integration";
+import { FE_StickerConfig, FE_UserStickerPack } from "../../models/integration";
 
 @Injectable()
 export class StickerApiService extends AuthedApi {
     constructor(http: Http) {
         super(http);
+    }
+
+    public getConfig(): Promise<FE_StickerConfig> {
+        return this.authedGet("/api/v1/dimension/stickers/config").map(r => r.json()).toPromise();
     }
 
     public getPacks(): Promise<FE_UserStickerPack[]> {

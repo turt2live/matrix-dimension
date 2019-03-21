@@ -19,6 +19,9 @@ export class StickerpickerComponent implements OnInit {
     // Import stuff
     public packUrl = "";
     public isImporting = false;
+    public customEnabled = false;
+    public managerUrl: string;
+    public stickerBot: string;
 
     constructor(private stickerApi: StickerApiService,
                 private media: MediaService,
@@ -37,6 +40,12 @@ export class StickerpickerComponent implements OnInit {
             console.error(e);
             this.toaster.pop("error", "Failed to load sticker packs");
         }
+
+        this.stickerApi.getConfig().then(config => {
+            this.customEnabled = config.enabled;
+            this.managerUrl = config.managerUrl;
+            this.stickerBot = config.stickerBot;
+        }).catch(err => console.error(err));
     }
 
     public importPack() {
