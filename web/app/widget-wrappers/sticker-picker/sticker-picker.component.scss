@@ -17,15 +17,12 @@
   .loading-badge {
     text-align: center;
     font-size: 20px;
-    position: relative;
-    top: calc(50% - 10px);
   }
 
   .auth-error {
     text-align: center;
     position: relative;
-    height: 300px;
-    top: calc(50% - 150px);
+    padding: 20px;
     color: themed(stickerPickerErrorColor);
   }
 

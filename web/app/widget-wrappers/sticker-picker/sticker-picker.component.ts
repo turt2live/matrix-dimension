@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { CapableWidget } from "../capable-widget";
+import { CapableWidget, WIDGET_API_VERSION_OPENID } from "../capable-widget";
 import { Subscription } from "rxjs/Subscription";
 import { ScalarWidgetApi } from "../../shared/services/scalar/scalar-widget.api";
 import { StickerApiService } from "../../shared/services/integrations/sticker-api.service";
@@ -26,7 +26,8 @@ export class StickerPickerWidgetWrapperComponent extends CapableWidget implement
     constructor(activatedRoute: ActivatedRoute,
                 private media: MediaService,
                 private scalarApi: ScalarServerApiService,
-                private stickerApi: StickerApiService) {
+                private stickerApi: StickerApiService,
+                private changeDetector: ChangeDetectorRef) {
         super();
         this.supportsStickers = true;
 
@@ -65,6 +66,39 @@ export class StickerPickerWidgetWrapperComponent extends CapableWidget implement
     public ngOnDestroy() {
         super.ngOnDestroy();
         if (this.stickerWidgetApiSubscription) this.stickerWidgetApiSubscription.unsubscribe();
+    }
+
+    protected onSupportedVersionsFound(): void {
+        super.onSupportedVersionsFound();
+
+        if (this.authError && this.doesSupportAtLeastVersion(WIDGET_API_VERSION_OPENID)) {
+            this.isLoading = true;
+            this.changeDetector.detectChanges();
+
+            this.getOpenIdInfo().then(async response => {
+                if (response.blocked) {
+                    this.isLoading = false;
+                    this.authError = true;
+                    this.changeDetector.detectChanges();
+                    return;
+                }
+
+                try {
+                    const registerResponse = await this.scalarApi.register(response.openId);
+                    localStorage.setItem("dim-scalar-token", registerResponse.scalar_token);
+                    SessionStorage.scalarToken = registerResponse.scalar_token;
+                    this.authError = !SessionStorage.scalarToken;
+                    this.isLoading = false;
+                    this.loadStickers();
+                } catch (e) {
+                    console.error(e);
+                    this.isLoading = false;
+                    this.authError = true;
+                }
+
+                this.changeDetector.detectChanges();
+            });
+        }
     }
 
     public getThumbnailUrl(mxc: string, width: number, height: number, method: "crop" | "scale" = "scale"): string {
