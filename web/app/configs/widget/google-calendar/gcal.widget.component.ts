@@ -12,7 +12,7 @@ export class GoogleCalendarWidgetConfigComponent extends WidgetComponent {
     }
 
     protected  OnNewWidgetPrepared(widget: EditableWidget) {
-        widget.dimension.newData.src = "";
+        widget.dimension.newData.shareId = "";
     }
 
     protected OnWidgetsDiscovered(widgets: EditableWidget[]) {
@@ -20,6 +20,10 @@ export class GoogleCalendarWidgetConfigComponent extends WidgetComponent {
             if (widget.data.dimSrc && !widget.data.src) {
                 // Convert legacy Dimension widgets to new source
                 widget.data.src = widget.data.dimSrc;
+            }
+            if (widget.data.src && !widget.data.shareId) {
+                // Convert even more legacy Dimension widgets to new source
+                widget.data.shareId = widget.data.src;
             }
         }
     }
@@ -33,11 +37,10 @@ export class GoogleCalendarWidgetConfigComponent extends WidgetComponent {
     }
 
     private setCalendarUrl(widget: EditableWidget) {
-        if (!widget.dimension.newData.src || widget.dimension.newData.src.trim().length === 0) {
+        if (!widget.dimension.newData.shareId || widget.dimension.newData.shareId.trim().length === 0) {
             throw new Error("Please enter a shared calendar ID");
         }
 
-        const encodedId = encodeURIComponent(widget.dimension.newData.src);
-        widget.dimension.newUrl = window.location.origin + "/widgets/gcal?calendarId=" + encodedId;
+        widget.dimension.newUrl = window.location.origin + "/widgets/gcal?calendarId=$shareId";
     }
 }
