@@ -13,6 +13,10 @@ export class ScalarServerApiService extends AuthedApi {
         super(http)
     }
 
+    public ping(): Promise<any> {
+        return this.http.get("/api/v1/scalar/ping").map(res => res.json()).toPromise();
+    }
+
     public getAccount(): Promise<FE_ScalarAccountResponse> {
         return this.authedGet("/api/v1/scalar/account").map(res => res.json()).toPromise();
     }

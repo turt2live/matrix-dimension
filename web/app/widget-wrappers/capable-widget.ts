@@ -2,16 +2,23 @@ import { OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs/Subscription";
 import { ScalarWidgetApi } from "../shared/services/scalar/scalar-widget.api";
 import * as semver from "semver";
+import { FE_ScalarOpenIdRequestBody } from "../shared/models/scalar-server-responses";
 
 export const WIDGET_API_VERSION_BASIC = "0.0.1";
 export const WIDGET_API_VERSION_OPENID = "0.0.2";
 
 export const WIDGET_API_DIMENSION_VERSIONS = [WIDGET_API_VERSION_BASIC, WIDGET_API_VERSION_OPENID];
 
+export interface OpenIdResponse {
+    openId: FE_ScalarOpenIdRequestBody;
+    blocked: boolean;
+}
+
 export abstract class CapableWidget implements OnInit, OnDestroy {
 
     private requestSubscription: Subscription;
     private responseSubscription: Subscription;
+    private openIdRequest: { resolve: (a: OpenIdResponse) => void, promise: Promise<OpenIdResponse> } = null;
 
     // The capabilities we support
     protected supportsScreenshots = false;
@@ -34,12 +41,29 @@ export abstract class CapableWidget implements OnInit, OnDestroy {
                 this.onCapabilitiesSent();
             } else if (request.action === "supported_api_versions") {
                 ScalarWidgetApi.replySupportedVersions(request, WIDGET_API_DIMENSION_VERSIONS);
+            } else if (request.action === "openid_credentials" && this.openIdRequest) {
+                if (request.data.success) {
+                    this.openIdRequest.resolve({openId: request.data, blocked: false});
+                } else {
+                    this.openIdRequest.resolve({openId: null, blocked: true});
+                }
+                this.openIdRequest = null;
             }
         });
         this.responseSubscription = ScalarWidgetApi.replyReceived.subscribe(request => {
-            if (request.action === "supported_api_versions" && request.response) {
+            if (!request.response) return;
+
+            if (request.action === "supported_api_versions") {
                 this.clientWidgetApiVersions = request.response.supported_versions || [];
                 this.onSupportedVersionsFound();
+            } else if (request.action === "get_openid" && this.openIdRequest) {
+                if (request.response.state === "allowed") {
+                    this.openIdRequest.resolve({openId: request.response, blocked: false});
+                    this.openIdRequest = null;
+                } else if (request.response.state === "blocked") {
+                    this.openIdRequest.resolve({openId: null, blocked: true});
+                    this.openIdRequest = null;
+                }
             }
         });
     }
@@ -64,5 +88,14 @@ export abstract class CapableWidget implements OnInit, OnDestroy {
             }
         }
         return false;
+    }
+
+    protected getOpenIdInfo(): Promise<OpenIdResponse> {
+        if (this.openIdRequest) return this.openIdRequest.promise;
+        const promise = new Promise<OpenIdResponse>(((resolve, _reject) => {
+            this.openIdRequest = {resolve: resolve, promise};
+            ScalarWidgetApi.requestOpenID();
+        }));
+        return promise;
     }
 }

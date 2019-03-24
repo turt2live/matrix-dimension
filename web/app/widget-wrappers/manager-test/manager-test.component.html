@@ -1,0 +1,33 @@
+<div class="wrapper">
+    <div class="boat">
+        <div class="prompt">
+            <div class="diagram">
+                <div class="circle {{selfState}}">
+                    <i class="fa fa-user fa-2x"></i>
+                    <span class="title">You</span>
+                </div>
+                <div class="link {{managerState}}"></div>
+                <div class="circle {{managerState}}">
+                    <i class="fa fa-cubes fa-2x"></i>
+                    <span class="title">Integrations</span>
+                </div>
+                <div class="link {{homeserverState}}"></div>
+                <div class="circle {{homeserverState}}">
+                    <i class="fa fa-server fa-2x"></i>
+                    <span class="title">Homeserver</span>
+                </div>
+            </div>
+            <p *ngIf="!isSupported">
+                Your client is too old to use this widget. Try upgrading your client to the latest available version,
+                or contact the author to try and diagnose the problem. Your client needs to support OpenID information
+                exchange.
+            </p>
+            <div *ngIf="isSupported">
+                <p>{{message}}</p>
+                <button type="button" (click)="start()" class="btn btn-primary btn-large" [disabled]="isBusy">
+                    Check connection
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

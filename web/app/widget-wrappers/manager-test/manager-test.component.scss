@@ -1,0 +1,66 @@
+// component styles are encapsulated and only applied to their components
+@import "../../../style/themes/themes";
+
+@include themifyComponent() {
+  .wrapper {
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: themed(troubleshooterBgColor);
+  }
+
+  .boat {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  .prompt {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    text-align: center;
+  }
+
+  p {
+    font-size: 0.9em;
+  }
+
+  .diagram {
+    margin: 20px;
+
+    div {
+      display: inline-block;
+    }
+
+    .circle {
+      width: 120px;
+      height: 120px;
+      border: 5px solid themed(troubleshooterNeutralColor);
+      border-radius: 120px;
+      vertical-align: middle;
+      padding-top: 22px;
+      transition: border-color 0.2s;
+
+      .title {
+        display: block;
+      }
+    }
+
+    .link {
+      width: 120px;
+      height: 1px;
+      border: 2px solid themed(troubleshooterNeutralColor);
+      margin: 5px;
+      transition: border-color 0.2s;
+    }
+
+    .circle.error, .link.error {
+      border-color: themed(troubleshooterErrorColor);
+    }
+
+    .circle.ok, .link.ok {
+      border-color: themed(troubleshooterOkColor);
+    }
+  }
+}

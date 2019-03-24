@@ -100,4 +100,10 @@ export class ScalarService {
         return {user_id: userId};
     }
 
+    @GET
+    @Path("ping")
+    public async ping(): Promise<any> {
+        return {}; // 200 OK
+    }
+
 }
