@@ -8,12 +8,12 @@
             that has Dimension enabled and correctly set up.
         </div>
     </div>
+    <div class="no-stickers" *ngIf="!isLoading && !authError && (!packs || packs.length === 0)">
+        <img src="/img/no_stickers.png" />
+        <span class="message">You have no sticker packs.</span>
+        <button class="btn btn-link btn-sm" (click)="openIntegrationManager()">Add some stickers</button>
+    </div>
     <div class="sticker-picker" *ngIf="!isLoading && !authError">
-        <div class="no-stickers" *ngIf="!packs || packs.length === 0">
-            <img src="/img/no_stickers.png" />
-            <span class="message">You have no sticker packs.</span>
-            <button class="btn btn-link btn-sm" (click)="openIntegrationManager()">Add some stickers</button>
-        </div>
         <div class="sticker-pack" *ngFor="let pack of packs trackById">
             <div class="header">
                 <span class="title">{{ pack.displayName }}</span>
