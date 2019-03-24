@@ -81,8 +81,12 @@ export class AdminStickerService {
             for (const tgSticker of tgPack.stickers) {
                 LogService.info("AdminStickerService", "Importing sticker from " + tgSticker.url);
                 const buffer = await mx.downloadFromUrl(tgSticker.url);
-                console.log(typeof(buffer));
-                const png = await sharp(buffer).png().toBuffer();
+                const png = await sharp(buffer).resize({
+                    width: 512,
+                    height: 512,
+                    fit: 'contain',
+                    background: 'rgba(0,0,0,0)',
+                }).png().toBuffer();
                 const mxc = await mx.upload(png, "image/png");
                 const serverName = mxc.substring("mxc://".length).split("/")[0];
                 const contentId = mxc.substring("mxc://".length).split("/")[1];
