@@ -5,7 +5,7 @@
             <span class="text-muted">To get a URL, go to Grafana and click "share" on a graph.</span>
             <input type="text" class="form-control"
                    placeholder="https://example.com/grafana/dashboard/db/example?orgId=1&panelId=1&fullscreen"
-                   [(ngModel)]="widget.dimension.newData.curl" name="widget-url-{{widget.id}}"
+                   [(ngModel)]="widget.dimension.newData.url" name="widget-url-{{widget.id}}"
                    [disabled]="isUpdating"/>
         </label>
         <label class="label-block">

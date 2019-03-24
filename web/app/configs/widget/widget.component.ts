@@ -108,6 +108,7 @@ export class WidgetComponent implements OnInit {
         // The widget already has an ID and type, we just need to fill in the bits
         widget.name = widget.dimension.newName || this.defaultName;
         widget.data = widget.dimension.newData || {};
+        widget.data.url = widget.dimension.newUrl;
         widget.url = this.wrapUrl(widget.dimension.newUrl, Object.keys(widget.data).map(k => "$" + k));
         widget.type = this.widgetTypes[0]; // always set the type to be the latest type
 
