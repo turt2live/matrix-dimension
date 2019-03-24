@@ -2,6 +2,8 @@
 
 Widgets and Riot communicate using cross-origin messages in a defined format (described in this document). Widgets have access to the entire Scalar Client API, but generally do not need any of the endpoints there. Riot provides additional APIs available to particular widgets for which the integrations manager can not access. The full source for the widget messaging layer in Riot can be seen [here](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/WidgetMessaging.js). The API is restricted to ensure rogue widgets cannot take over the Riot instance.
 
+**Note**: This is largely out of date and better documented in the Matrix spec nowadays. See https://github.com/matrix-org/matrix-doc/issues/1236 for more information.
+
 ## Setting up communications
 
 Riot will automatically open a channel for receiving messages. The widget needs to do the same so it can speak to Riot. Here's some sample JavaScript that will do this for us:
