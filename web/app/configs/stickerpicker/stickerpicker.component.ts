@@ -56,6 +56,7 @@ export class StickerpickerComponent implements OnInit {
             this.packUrl = "";
             this.isImporting = false;
             this.toaster.pop("success", "Stickerpack added");
+            this.addWidget();
         }).catch(err => {
             console.error(err);
             this.isImporting = false;
