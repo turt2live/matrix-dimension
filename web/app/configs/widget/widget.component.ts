@@ -6,10 +6,10 @@ import { SessionStorage } from "../../shared/SessionStorage";
 import { OnInit } from "@angular/core";
 
 const SCALAR_WIDGET_LINKS = [
-    "https://scalar-staging.riot.im/scalar/api/widgets/__TYPE__.html?url=",
-    "https://scalar-staging.vector.im/scalar/api/widgets/__TYPE__.html?url=",
-    "https://scalar-develop.riot.im/scalar/api/widgets/__TYPE__.html?url=",
-    "https://demo.riot.im/scalar/api/widgets/__TYPE__.html?url=",
+    "https://scalar-staging.riot.im/scalar/api/widgets/__TYPE__.html?__PNAME__=",
+    "https://scalar-staging.vector.im/scalar/api/widgets/__TYPE__.html?__PNAME__=",
+    "https://scalar-develop.riot.im/scalar/api/widgets/__TYPE__.html?__PNAME__=",
+    "https://demo.riot.im/scalar/api/widgets/__TYPE__.html?__PNAME__=",
 ];
 
 export const DISABLE_AUTOMATIC_WRAPPING = "";
@@ -32,7 +32,8 @@ export class WidgetComponent implements OnInit {
     constructor(private widgetTypes: string[],
                 public defaultName: string,
                 private wrapperId = "generic",
-                private scalarWrapperId = null) {
+                private scalarWrapperId = null,
+                private scalarWrapperUrlParamName = "url") {
         this.isLoading = true;
         this.isUpdating = false;
     }
@@ -43,7 +44,10 @@ export class WidgetComponent implements OnInit {
 
             if (!this.scalarWrapperId) this.scalarWrapperId = this.wrapperId;
             for (let widgetLink of SCALAR_WIDGET_LINKS) {
-                this.scalarWrapperUrls.push(widgetLink.replace("__TYPE__", this.scalarWrapperId));
+                const wrapperLink = widgetLink
+                    .replace("__TYPE__", this.scalarWrapperId)
+                    .replace("__PNAME__", this.scalarWrapperUrlParamName);
+                this.scalarWrapperUrls.push(wrapperLink);
             }
         }
 
