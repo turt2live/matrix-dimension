@@ -10,6 +10,7 @@ import StickerPack from "../db/models/StickerPack";
 import Sticker from "../db/models/Sticker";
 import { MatrixLiteClient } from "./MatrixLiteClient";
 import { Cache, CACHE_STICKERS } from "../MemoryCache";
+import { LicenseMap } from "../utils/LicenseMap";
 
 class _MatrixStickerBot {
 
@@ -104,17 +105,30 @@ class _MatrixStickerBot {
             stickerEvents.push(stickerEvent);
         }
 
+        const creatorId = packEvent.creatorId;
+        const authorName = packEvent.authorName || packEvent.creatorId;
+        const authorUrl = packEvent.authorUrl || `https://matrix.to/#/${packEvent.creatorId}`;
+        const authorIsCreator = creatorId === authorName;
+
+        let license = LicenseMap.find(packEvent.license || "");
+        if (!license) license = LicenseMap.find(LicenseMap.LICENSE_IMPORTED);
 
         for (const pack of stickerPacks) {
             pack.isEnabled = true;
-            pack.authorType = "matrix";
-            pack.authorReference = "https://matrix.to/#/" + packEvent.creatorId;
-            pack.authorName = authorDisplayName;
             pack.trackingRoomAlias = canconicalAliasEvent.alias;
             pack.name = nameEvent.name;
+            if (authorIsCreator) {
+                pack.authorType = "matrix";
+                pack.authorReference = "https://matrix.to/#/" + packEvent.creatorId;
+                pack.authorName = authorDisplayName;
+            } else {
+                pack.authorType = "website";
+                pack.authorReference = authorUrl;
+                pack.authorName = authorName;
+            }
             pack.description = "Matrix sticker pack created by " + authorDisplayName;
-            pack.license = "Imported";
-            pack.licensePath = "/licenses/general-imported.txt";
+            pack.license = license.name;
+            pack.licensePath = license.url;
             if (stickerEvents.length > 0) pack.avatarUrl = stickerEvents[0].contentUri;
             await pack.save();
 
