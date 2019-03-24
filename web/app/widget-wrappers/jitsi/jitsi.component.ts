@@ -33,7 +33,7 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
         let params: any = activatedRoute.snapshot.queryParams;
 
         this.domain = params.domain;
-        this.conferenceId = params.confId || params.conferenceId;
+        this.conferenceId = params.conferenceId || params.confId;
         this.displayName = params.displayName;
         this.avatarUrl = params.avatarUrl;
         this.userId = params.userId || params.email; // Riot uses `email` when placing a conference call

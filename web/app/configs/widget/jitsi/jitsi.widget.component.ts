@@ -26,23 +26,34 @@ export class JitsiWidgetConfigComponent extends WidgetComponent {
             const confId = parsedUrl.query["confId"];
             const domain = parsedUrl.query["domain"];
             let isAudioConf: string | boolean = <string>parsedUrl.query["isAudioConf"];
+            let isAudioOnly: string | boolean = <string>parsedUrl.query["isAudioOnly"];
 
             // Convert isAudioConf to boolean
             if (isAudioConf === "true") isAudioConf = true;
             else if (isAudioConf === "false") isAudioConf = false;
-            else if (isAudioConf && isAudioConf[0] === '$') isAudioConf = widget.data[isAudioConf];
-            else isAudioConf = false; // default
+            else if (isAudioConf && isAudioConf[0] === '$') isAudioConf = widget.data["isAudioConf"];
+            else isAudioConf = null; // default
 
-            if (conferenceId) {
+            // Convert isAudioOnly to boolean
+            if (isAudioOnly === "true") isAudioOnly = true;
+            else if (isAudioOnly === "false") isAudioOnly = false;
+            else if (isAudioOnly && isAudioOnly[0] === '$') isAudioOnly = widget.data["isAudioOnly"];
+            else isAudioOnly = null; // default
+
+            if (confId) {
                 // It's a legacy Dimension widget
-                widget.data.confId = conferenceId;
-            } else widget.data.confId = confId;
+                widget.data.conferenceId = confId;
+            } else widget.data.conferenceId = conferenceId;
 
             if (domain) widget.data.domain = domain;
             else widget.data.domain = "jitsi.riot.im";
 
-            widget.data.isAudioConf = isAudioConf;
-            widget.data.conferenceUrl = "https://" + widget.data.domain + "/" + widget.data.confId;
+            if (isAudioConf !== null) {
+                // It's a legacy Dimension widget
+                widget.data.isAudioOnly = isAudioConf;
+            } else widget.data.isAudioOnly = !!isAudioOnly;
+
+            widget.data.conferenceUrl = "https://" + widget.data.domain + "/" + widget.data.conferenceId;
         }
     }
 
@@ -68,15 +79,14 @@ export class JitsiWidgetConfigComponent extends WidgetComponent {
     private setJitsiUrl(widget: EditableWidget) {
         const jitsiUrl = url.parse(widget.dimension.newData.conferenceUrl);
         widget.dimension.newData.domain = jitsiUrl.host;
-        widget.dimension.newData.confId = jitsiUrl.path.substring(1);
-        widget.dimension.newData.isAudioConf = false;
+        widget.dimension.newData.conferenceId = jitsiUrl.path.substring(1);
+        widget.dimension.newData.isAudioOnly = false;
 
         let widgetQueryString = url.format({
             query: {
-                // TODO: Use templating when mobile riot supports it
-                "confId": widget.dimension.newData.confId,
-                "domain": widget.dimension.newData.domain,
-                "isAudioConf": widget.dimension.newData.isAudioConf,
+                "conferenceId": "$conferenceId",
+                "domain": "$domain",
+                "isAudioOnly": "$isAudioOnly",
                 "displayName": "$matrix_display_name",
                 "avatarUrl": "$matrix_avatar_url",
                 "userId": "$matrix_user_id",
