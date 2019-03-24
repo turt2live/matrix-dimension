@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ScalarWidgetApi } from "../../shared/services/scalar/scalar-widget.api";
 import { Subscription } from "rxjs";
-import { CapableWidget } from "../capable-widget";
+import { CapableWidget, WIDGET_API_VERSION_OPENID } from "../capable-widget";
 import { ActivatedRoute } from "@angular/router";
 import { ScalarServerApiService } from "../../shared/services/scalar/scalar-server-api.service";
 import { SessionStorage } from "../../shared/SessionStorage";
@@ -41,26 +41,6 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
         super.ngOnInit();
         this.widgetReplySubscription = ScalarWidgetApi.replyReceived.subscribe(async response => {
             const data = response.response;
-
-            if (response.action === "supported_api_versions") {
-                if (!data || !data.supported_versions) {
-                    this.stateMessage = "Invalid API version response";
-                    this.changeDetector.detectChanges();
-                    return;
-                }
-
-                if (data.supported_versions.indexOf("0.0.2") === -1) {
-                    this.stateMessage = "Your client is not supported by this widget.";
-                    this.changeDetector.detectChanges();
-                    return;
-                }
-
-                this.busy = false;
-                this.stateMessage = "";
-                this.changeDetector.detectChanges();
-                return;
-            }
-
             if (response.action !== "get_openid") return;
 
             try {
@@ -113,11 +93,22 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
         if (this.widgetRequestSubscription) this.widgetRequestSubscription.unsubscribe();
     }
 
-    protected onCapabilitiesSent(): void {
-        super.onCapabilitiesSent();
-
-        // Start a request for supported API versions
-        ScalarWidgetApi.requestSupportedVersions();
+    protected onSupportedVersionsFound(): void {
+        super.onSupportedVersionsFound();
+        if (!this.doesSupportAtLeastVersion(WIDGET_API_VERSION_OPENID)) {
+            this.busy = true;
+            this.error = true;
+            this.hasOpenId = false;
+            this.blocked = false;
+            this.stateMessage = "Your client is too old to use this widget, sorry";
+        } else {
+            this.busy = false;
+            this.error = false;
+            this.hasOpenId = false;
+            this.blocked = false;
+            this.stateMessage = null;
+        }
+        this.changeDetector.detectChanges();
     }
 
     public onReauthStart(): void {
