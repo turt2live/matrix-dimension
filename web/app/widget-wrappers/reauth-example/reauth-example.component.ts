@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ScalarWidgetApi } from "../../shared/services/scalar/scalar-widget.api";
-import { Subscription } from "rxjs";
 import { CapableWidget, WIDGET_API_VERSION_OPENID } from "../capable-widget";
 import { ActivatedRoute } from "@angular/router";
 import { ScalarServerApiService } from "../../shared/services/scalar/scalar-server-api.service";
@@ -21,9 +20,6 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
     public error = false;
     public stateMessage = "Checking client version...";
 
-    private widgetReplySubscription: Subscription;
-    private widgetRequestSubscription: Subscription;
-
     constructor(activatedRoute: ActivatedRoute,
                 private scalarApi: ScalarServerApiService,
                 private changeDetector: ChangeDetectorRef) {
@@ -35,62 +31,6 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
 
     public get widgetId(): string {
         return ScalarWidgetApi.widgetId;
-    }
-
-    public ngOnInit(): void {
-        super.ngOnInit();
-        this.widgetReplySubscription = ScalarWidgetApi.replyReceived.subscribe(async response => {
-            const data = response.response;
-            if (response.action !== "get_openid") return;
-
-            try {
-                if (data.state === "request") {
-                    this.stateMessage = "Waiting for you to accept the prompt...";
-                } else if (data.state === "allowed") {
-                    await this.exchangeOpenIdInfo(data);
-                } else {
-                    this.blocked = true;
-                    this.busy = false;
-                    this.hasOpenId = false;
-                    this.stateMessage = null;
-                }
-            } catch (e) {
-                console.error(e);
-                this.error = true;
-                this.busy = false;
-                this.stateMessage = null;
-            }
-
-            this.changeDetector.detectChanges();
-        });
-
-        this.widgetRequestSubscription = ScalarWidgetApi.requestReceived.subscribe(async request => {
-            if (request.action !== "openid_credentials") return;
-            ScalarWidgetApi.replyAcknowledge(request);
-
-            try {
-                if (request.data.success) {
-                    await this.exchangeOpenIdInfo(request.data);
-                } else {
-                    this.blocked = true;
-                    this.busy = false;
-                    this.stateMessage = null;
-                }
-            } catch (e) {
-                console.error(e);
-                this.error = true;
-                this.busy = false;
-                this.stateMessage = null;
-            }
-
-            this.changeDetector.detectChanges();
-        });
-    }
-
-    public ngOnDestroy() {
-        super.ngOnDestroy();
-        if (this.widgetReplySubscription) this.widgetReplySubscription.unsubscribe();
-        if (this.widgetRequestSubscription) this.widgetRequestSubscription.unsubscribe();
     }
 
     protected onSupportedVersionsFound(): void {
@@ -111,12 +51,31 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
         this.changeDetector.detectChanges();
     }
 
-    public onReauthStart(): void {
+    public async onReauthStart(): Promise<any> {
         this.busy = true;
         this.error = false;
         this.blocked = false;
         this.hasOpenId = false;
-        ScalarWidgetApi.requestOpenID();
+        this.stateMessage = "Please accept the prompt to verify your identity";
+
+        const response = await this.getOpenIdInfo();
+        if (response.blocked) {
+            this.busy = false;
+            this.blocked = true;
+            this.hasOpenId = false;
+            this.stateMessage = "";
+            return;
+        }
+
+        try {
+            await this.exchangeOpenIdInfo(response.openId);
+        } catch (e) {
+            console.error(e);
+            this.busy = false;
+            this.error = true;
+            this.hasOpenId = false;
+            this.stateMessage = "";
+        }
     }
 
     private async exchangeOpenIdInfo(openId: FE_ScalarOpenIdRequestBody) {
