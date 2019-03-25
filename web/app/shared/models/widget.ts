@@ -1,16 +1,16 @@
 import { WidgetsResponse } from "./server-client-responses";
 
-export const WIDGET_CUSTOM = ["customwidget", "dimension-customwidget"];
-export const WIDGET_ETHERPAD = ["etherpad", "dimension-etherpad"];
-export const WIDGET_GOOGLE_DOCS = ["googledocs", "dimension-googledocs"];
-export const WIDGET_GOOGLE_CALENDAR = ["googlecalendar", "dimension-googlecalendar"];
-export const WIDGET_JITSI = ["jitsi", "dimension-jitsi"];
-export const WIDGET_YOUTUBE = ["youtube", "dimension-youtube"];
-export const WIDGET_GRAFANA = ["grafana", "dimension-grafana"];
-export const WIDGET_TWITCH = ["twitch", "dimension-twitch"];
+export const WIDGET_CUSTOM = ["m.custom", "customwidget", "dimension-customwidget"];
+export const WIDGET_ETHERPAD = ["m.etherpad", "etherpad", "dimension-etherpad"];
+export const WIDGET_GOOGLE_DOCS = ["m.googledoc", "googledocs", "dimension-googledocs"];
+export const WIDGET_GOOGLE_CALENDAR = ["m.googlecalendar", "googlecalendar", "dimension-googlecalendar"];
+export const WIDGET_JITSI = ["jitsi", "m.jitsi", "dimension-jitsi"]; // TODO: Move m.jitsi higher (https://github.com/vector-im/riot-meta/issues/282)
+export const WIDGET_YOUTUBE = ["m.video", "youtube", "dimension-youtube"];
+export const WIDGET_GRAFANA = ["m.grafana", "grafana", "dimension-grafana"];
+export const WIDGET_TWITCH = ["twitch", "dimension-twitch"]; // TODO: m.* namespace proposal
 export const WIDGET_STICKER_PICKER = ["m.stickerpicker"];
-export const WIDGET_TRADINGVIEW = ["tradingview", "dimension-tradingview"];
-export const WIDGET_SPOTIFY = ["spotify", "dimension-spotify"];
+export const WIDGET_TRADINGVIEW = ["tradingview", "dimension-tradingview"]; // TODO: Use m.tradingview (https://github.com/turt2live/matrix-dimension/issues/261)
+export const WIDGET_SPOTIFY = ["m.spotify", "spotify", "dimension-spotify"];
 
 export interface EditableWidget {
     /**
