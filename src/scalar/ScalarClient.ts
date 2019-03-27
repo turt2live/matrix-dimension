@@ -3,6 +3,7 @@ import { ScalarRegisterResponse } from "../models/ScalarResponses";
 import * as request from "request";
 import { LogService } from "matrix-js-snippets";
 import Upstream from "../db/models/Upstream";
+import { SCALAR_API_VERSION } from "../utils/common-constants";
 
 export class ScalarClient {
     constructor(private upstream: Upstream) {
@@ -14,6 +15,7 @@ export class ScalarClient {
             request({
                 method: "POST",
                 url: this.upstream.scalarUrl + "/register",
+                qs: {v: SCALAR_API_VERSION},
                 json: openId,
             }, (err, res, _body) => {
                 if (err) {

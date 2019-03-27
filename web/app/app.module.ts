@@ -109,6 +109,7 @@ import { SlackBridgeConfigComponent } from "./configs/bridge/slack/slack.bridge.
 import { AdminSlackBridgeManageSelfhostedComponent } from "./admin/bridges/slack/manage-selfhosted/manage-selfhosted.component";
 import { AdminSlackBridgeComponent } from "./admin/bridges/slack/slack.component";
 import { AdminSlackApiService } from "./shared/services/admin/admin-slack-api.service";
+import { AdminLogoutConfirmationDialogComponent } from "./admin/home/logout-confirmation/logout-confirmation.component";
 import { ReauthExampleWidgetWrapperComponent } from "./widget-wrappers/reauth-example/reauth-example.component";
 import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-test/manager-test.component";
 
@@ -200,6 +201,7 @@ import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-tes
         SlackBridgeConfigComponent,
         AdminSlackBridgeManageSelfhostedComponent,
         AdminSlackBridgeComponent,
+        AdminLogoutConfirmationDialogComponent,
         ReauthExampleWidgetWrapperComponent,
         ManagerTestWidgetWrapperComponent,
 
@@ -254,6 +256,7 @@ import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-tes
         AdminGitterBridgeManageSelfhostedComponent,
         AdminAddCustomBotComponent,
         AdminSlackBridgeManageSelfhostedComponent,
+        AdminLogoutConfirmationDialogComponent,
     ]
 })
 export class AppModule {

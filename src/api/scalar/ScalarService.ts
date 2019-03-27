@@ -49,7 +49,11 @@ export class ScalarService {
 
     @POST
     @Path("register")
-    public async register(request: RegisterRequest): Promise<ScalarRegisterResponse> {
+    public async register(request: RegisterRequest, @QueryParam("v") apiVersion: string): Promise<ScalarRegisterResponse> {
+        if (apiVersion !== "1.1") {
+            throw new ApiError(401, "Invalid API version.");
+        }
+
         const mxClient = new MatrixOpenIdClient(<OpenId>request);
         const mxUserId = await mxClient.getUserId();
 
@@ -95,7 +99,11 @@ export class ScalarService {
 
     @GET
     @Path("account")
-    public async getAccount(@QueryParam("scalar_token") scalarToken: string): Promise<ScalarAccountResponse> {
+    public async getAccount(@QueryParam("scalar_token") scalarToken: string, @QueryParam("v") apiVersion: string): Promise<ScalarAccountResponse> {
+        if (apiVersion !== "1.1") {
+            throw new ApiError(401, "Invalid API version.");
+        }
+
         const userId = await ScalarService.getTokenOwner(scalarToken);
         return {user_id: userId};
     }

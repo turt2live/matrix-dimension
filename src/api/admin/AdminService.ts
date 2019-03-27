@@ -1,10 +1,12 @@
-import { GET, Path, QueryParam } from "typescript-rest";
+import { GET, Path, POST, QueryParam } from "typescript-rest";
 import { ScalarService } from "../scalar/ScalarService";
 import config from "../../config";
 import { ApiError } from "../ApiError";
 import { MatrixLiteClient } from "../../matrix/MatrixLiteClient";
 import { CURRENT_VERSION } from "../../version";
 import { getFederationConnInfo } from "../../matrix/helpers";
+import UserScalarToken from "../../db/models/UserScalarToken";
+import { Cache, CACHE_SCALAR_ACCOUNTS } from "../../MemoryCache";
 
 interface DimensionVersionResponse {
     version: string;
@@ -19,6 +21,9 @@ interface DimensionConfigResponse {
         federationUrl: string;
         federationHostname: string;
         clientServerUrl: string;
+    };
+    sessionInfo: {
+        numTokens: number;
     };
 }
 
@@ -82,6 +87,9 @@ export class AdminService {
                 federationHostname: fedInfo.hostname,
                 clientServerUrl: config.homeserver.clientServerUrl,
             },
+            sessionInfo: {
+                numTokens: await UserScalarToken.count(),
+            },
         };
     }
 
@@ -94,5 +102,24 @@ export class AdminService {
             inputServerName: serverName,
             resolvedServer: await getFederationConnInfo(serverName),
         };
+    }
+
+    @POST
+    @Path("sessions/logout/all")
+    public async logoutAll(@QueryParam("scalar_token") scalarToken: string): Promise<any> {
+        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+
+        // Clear the cache first to hopefully invalidate a bunch of them
+        Cache.for(CACHE_SCALAR_ACCOUNTS).clear();
+
+        const tokens = await UserScalarToken.all();
+        for (const token of tokens) {
+            await token.destroy();
+        }
+
+        // Clear it again because the delete loop can be slow
+        Cache.for(CACHE_SCALAR_ACCOUNTS).clear();
+
+        return {};
     }
 }

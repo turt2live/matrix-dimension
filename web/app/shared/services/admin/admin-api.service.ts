@@ -20,4 +20,8 @@ export class AdminApiService extends AuthedApi {
     public getVersion(): Promise<FE_DimensionVersion> {
         return this.authedGet("/api/v1/dimension/admin/version").map(r => r.json()).toPromise();
     }
+
+    public logoutAll(): Promise<any> {
+        return this.authedPost("/api/v1/dimension/admin/sessions/logout/all").map(r => r.json()).toPromise();
+    }
 }

@@ -28,6 +28,16 @@
                     Utility User ID: {{ config.homeserver.userId }}
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Sessions</strong><br />
+                    Tokens registered: {{ config.sessionInfo.numTokens }}<br />
+                    <button class="btn btn-danger btn-sm" type="button" (click)="logoutAll()">
+                        Logout Everyone
+                    </button>
+                </div>
+            </div>
         </div>
     </my-ibox>
 </div>
