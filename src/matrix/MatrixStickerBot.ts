@@ -15,6 +15,7 @@ import { LicenseMap } from "../utils/LicenseMap";
 class _MatrixStickerBot {
 
     private readonly client: MatrixClient;
+    private updatingPackIds: { [packId: string]: boolean } = {};
 
     constructor() {
         this.client = new MatrixClient(
@@ -73,84 +74,95 @@ class _MatrixStickerBot {
     }
 
     private async updateStickersInPacks(stickerPacks: StickerPack[], roomId: string) {
-        const nameEvent = await this.client.getRoomStateEvent(roomId, "m.room.name", "");
-        if (!nameEvent) return null;
+        if (this.updatingPackIds[roomId]) return;
+        this.updatingPackIds[roomId] = true;
 
-        const canconicalAliasEvent = await this.client.getRoomStateEvent(roomId, "m.room.canonical_alias", "");
-        if (!canconicalAliasEvent) return null;
-
-        const packEvent = await this.client.getRoomStateEvent(roomId, "io.t2bot.stickers.metadata", "");
-        if (!packEvent) return null;
-
-        let authorDisplayName = packEvent.creatorId;
         try {
-            const profile = await this.client.getUserProfile(packEvent.creatorId);
-            if (profile && profile.displayname) authorDisplayName = profile.displayname;
+            const nameEvent = await this.client.getRoomStateEvent(roomId, "m.room.name", "");
+            if (!nameEvent) return null;
+
+            const canconicalAliasEvent = await this.client.getRoomStateEvent(roomId, "m.room.canonical_alias", "");
+            if (!canconicalAliasEvent) return null;
+
+            const packEvent = await this.client.getRoomStateEvent(roomId, "io.t2bot.stickers.metadata", "");
+            if (!packEvent) return null;
+
+            let authorDisplayName = packEvent.creatorId;
+            try {
+                const profile = await this.client.getUserProfile(packEvent.creatorId);
+                if (profile && profile.displayname) authorDisplayName = profile.displayname;
+            } catch (e) {
+                LogService.warn("MatrixStickerBot", e);
+            }
+
+            const mx = new MatrixLiteClient(config.homeserver.accessToken);
+
+            const stickerEvents = [];
+            for (const stickerId of packEvent.activeStickers) {
+                const stickerEvent = await this.client.getRoomStateEvent(roomId, "io.t2bot.stickers.sticker", stickerId);
+                if (!stickerEvent) continue;
+
+                const mxc = stickerEvent.contentUri;
+                if (!mxc.startsWith("mxc://")) continue;
+
+                const serverName = mxc.substring("mxc://".length).split("/")[0];
+                const contentId = mxc.substring("mxc://".length).split("/")[1];
+                stickerEvent.thumbMxc = await mx.uploadFromUrl(await mx.getThumbnailUrl(serverName, contentId, 512, 512, "scale", false), "image/png");
+
+                stickerEvents.push(stickerEvent);
+            }
+
+            const creatorId = packEvent.creatorId;
+            const authorName = packEvent.authorName || packEvent.creatorId;
+            const authorUrl = packEvent.authorUrl || `https://matrix.to/#/${packEvent.creatorId}`;
+            const authorIsCreator = creatorId === authorName;
+
+            let license = LicenseMap.find(packEvent.license || "");
+            if (!license) license = LicenseMap.find(LicenseMap.LICENSE_IMPORTED);
+
+            for (const pack of stickerPacks) {
+                pack.isEnabled = true;
+                pack.trackingRoomAlias = canconicalAliasEvent.alias;
+                pack.name = nameEvent.name;
+                if (authorIsCreator) {
+                    pack.authorType = "matrix";
+                    pack.authorReference = "https://matrix.to/#/" + packEvent.creatorId;
+                    pack.authorName = authorDisplayName;
+                } else {
+                    pack.authorType = "website";
+                    pack.authorReference = authorUrl;
+                    pack.authorName = authorName;
+                }
+                pack.description = "Matrix sticker pack created by " + authorDisplayName;
+                pack.license = license.name;
+                pack.licensePath = license.url;
+                if (stickerEvents.length > 0) pack.avatarUrl = stickerEvents[0].contentUri;
+                await pack.save();
+
+                const existingStickers = await Sticker.findAll({where: {packId: pack.id}});
+                for (const sticker of existingStickers) await sticker.destroy();
+
+                for (const stickerEvent of stickerEvents) {
+                    await Sticker.create({
+                        packId: pack.id,
+                        name: stickerEvent.description,
+                        description: stickerEvent.description,
+                        imageMxc: stickerEvent.contentUri,
+                        thumbnailMxc: stickerEvent.thumbMxc,
+                        thumbnailWidth: 512,
+                        thumbnailHeight: 512,
+                        mimetype: "image/png",
+                    });
+                }
+            }
+
+            LogService.info("MatrixStickerBot", `Updated ${stickerPacks.length} stickerpacks`);
+            Cache.for(CACHE_STICKERS).clear();
         } catch (e) {
-            LogService.warn("MatrixStickerBot", e);
+            LogService.error("MatrixStickerBot", e);
         }
 
-        const mx = new MatrixLiteClient(config.homeserver.accessToken);
-
-        const stickerEvents = [];
-        for (const stickerId of packEvent.activeStickers) {
-            const stickerEvent = await this.client.getRoomStateEvent(roomId, "io.t2bot.stickers.sticker", stickerId);
-            if (!stickerEvent) continue;
-
-            const mxc = stickerEvent.contentUri;
-            const serverName = mxc.substring("mxc://".length).split("/")[0];
-            const contentId = mxc.substring("mxc://".length).split("/")[1];
-            stickerEvent.thumbMxc = await mx.uploadFromUrl(await mx.getThumbnailUrl(serverName, contentId, 512, 512, "scale", false), "image/png");
-
-            stickerEvents.push(stickerEvent);
-        }
-
-        const creatorId = packEvent.creatorId;
-        const authorName = packEvent.authorName || packEvent.creatorId;
-        const authorUrl = packEvent.authorUrl || `https://matrix.to/#/${packEvent.creatorId}`;
-        const authorIsCreator = creatorId === authorName;
-
-        let license = LicenseMap.find(packEvent.license || "");
-        if (!license) license = LicenseMap.find(LicenseMap.LICENSE_IMPORTED);
-
-        for (const pack of stickerPacks) {
-            pack.isEnabled = true;
-            pack.trackingRoomAlias = canconicalAliasEvent.alias;
-            pack.name = nameEvent.name;
-            if (authorIsCreator) {
-                pack.authorType = "matrix";
-                pack.authorReference = "https://matrix.to/#/" + packEvent.creatorId;
-                pack.authorName = authorDisplayName;
-            } else {
-                pack.authorType = "website";
-                pack.authorReference = authorUrl;
-                pack.authorName = authorName;
-            }
-            pack.description = "Matrix sticker pack created by " + authorDisplayName;
-            pack.license = license.name;
-            pack.licensePath = license.url;
-            if (stickerEvents.length > 0) pack.avatarUrl = stickerEvents[0].contentUri;
-            await pack.save();
-
-            const existingStickers = await Sticker.findAll({where: {packId: pack.id}});
-            for (const sticker of existingStickers) await sticker.destroy();
-
-            for (const stickerEvent of stickerEvents) {
-                await Sticker.create({
-                    packId: pack.id,
-                    name: stickerEvent.description,
-                    description: stickerEvent.description,
-                    imageMxc: stickerEvent.contentUri,
-                    thumbnailMxc: stickerEvent.thumbMxc,
-                    thumbnailWidth: 512,
-                    thumbnailHeight: 512,
-                    mimetype: "image/png",
-                });
-            }
-        }
-
-        LogService.info("MatrixStickerBot", `Updated ${stickerPacks.length} stickerpacks`);
-        Cache.for(CACHE_STICKERS).clear();
+        delete this.updatingPackIds[roomId];
     }
 }
 
