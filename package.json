@@ -28,7 +28,7 @@
     "express": "^4.16.4",
     "git-rev-sync": "^1.12.0",
     "isipaddress": "0.0.2",
-    "js-yaml": "^3.12.0",
+    "js-yaml": "^3.13.0",
     "lodash": "^4.17.5",
     "matrix-bot-sdk": "^0.3.4",
     "matrix-js-snippets": "^0.2.8",
