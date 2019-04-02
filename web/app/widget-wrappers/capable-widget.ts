@@ -48,6 +48,7 @@ export abstract class CapableWidget implements OnInit, OnDestroy {
                     this.openIdRequest.resolve({openId: null, blocked: true});
                 }
                 this.openIdRequest = null;
+                ScalarWidgetApi.replyAcknowledge(request);
             }
         });
         this.responseSubscription = ScalarWidgetApi.replyReceived.subscribe(request => {
