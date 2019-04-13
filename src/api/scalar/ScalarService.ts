@@ -72,6 +72,10 @@ export class ScalarService {
 
         const upstreams = await Upstream.findAll();
         await Promise.all(upstreams.map(async upstream => {
+            if (!await ScalarStore.isUpstreamOnline(upstream)) {
+                LogService.warn("ScalarService", `Skipping registration for ${mxUserId} on upstream ${upstream.id} (${upstream.name}) because it is offline`);
+                return null;
+            }
             const tokens = await UserScalarToken.findAll({where: {userId: mxUserId, upstreamId: upstream.id}});
             if (!tokens || tokens.length === 0) {
                 LogService.info("ScalarService", "Registering " + mxUserId + " for a token at upstream " + upstream.id + " (" + upstream.name + ")");
@@ -84,7 +88,7 @@ export class ScalarService {
                     upstreamId: upstream.id,
                 });
             }
-        }));
+        }).filter(token => !!token));
 
         const dimensionToken = randomString({length: 25});
         const dimensionScalarToken = await UserScalarToken.create({
