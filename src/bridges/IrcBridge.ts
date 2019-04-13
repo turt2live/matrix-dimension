@@ -48,6 +48,11 @@ export class IrcBridge {
     constructor(private requestingUserId: string) {
     }
 
+    public async isBridgingEnabled(): Promise<boolean> {
+        const bridges = await IrcBridgeRecord.findAll({where: {isEnabled: true}});
+        return !!bridges && bridges.length > 0;
+    }
+
     public async hasNetworks(): Promise<boolean> {
         const allNetworks = (await this.getAllNetworks()).filter(n => n.isEnabled);
         return allNetworks.length > 0;

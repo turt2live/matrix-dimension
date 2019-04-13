@@ -12,6 +12,7 @@ import { TelegramBridge } from "../bridges/TelegramBridge";
 import { WebhooksBridge } from "../bridges/WebhooksBridge";
 import { GitterBridge } from "../bridges/GitterBridge";
 import { SlackBridge } from "../bridges/SlackBridge";
+import { AdminService } from "../api/admin/AdminService";
 
 export class BridgeStore {
 
@@ -23,15 +24,20 @@ export class BridgeStore {
         const enabledBridges: Bridge[] = [];
 
         for (const bridgeRecord of allRecords) {
+            LogService.info("BridgeStore", "Checking bridge configuration: " + bridgeRecord.name);
+            let isLogicallyEnabled = await BridgeStore.hasBridgesConfigured(bridgeRecord, requestingUserId);
             try {
                 if (isEnabled === true || isEnabled === false) {
-                    const isLogicallyEnabled = await BridgeStore.isLogicallyEnabled(bridgeRecord, requestingUserId);
+                    isLogicallyEnabled = await BridgeStore.isLogicallyEnabled(bridgeRecord, requestingUserId);
                     if (isLogicallyEnabled !== isEnabled) continue;
                 }
 
                 const bridgeConfig = await BridgeStore.getConfiguration(bridgeRecord, requestingUserId, inRoomId);
                 enabledBridges.push(new Bridge(bridgeRecord, bridgeConfig));
             } catch (e) {
+                // Skip bridges which just aren't online
+                if (!isLogicallyEnabled) continue;
+
                 LogService.error("BridgeStore", "Failed to load configuration for bridge: " + bridgeRecord.name);
                 LogService.error("BridgeStore", e);
 
@@ -39,6 +45,10 @@ export class BridgeStore {
                 bridge.isOnline = false;
                 enabledBridges.push(bridge);
             }
+        }
+
+        if (!AdminService.isAdmin(requestingUserId)) {
+            return enabledBridges.filter(b => b.isOnline);
         }
 
         return enabledBridges;
@@ -79,6 +89,25 @@ export class BridgeStore {
             const slack = new SlackBridge(requestingUserId);
             return slack.isBridgingEnabled();
         } else return true;
+    }
+
+    private static async hasBridgesConfigured(record: BridgeRecord, requestingUserId: string): Promise<boolean> {
+        if (record.type === "irc") {
+            const irc = new IrcBridge(requestingUserId);
+            return irc.isBridgingEnabled();
+        } else if (record.type === "telegram") {
+            const telegram = new TelegramBridge(requestingUserId);
+            return telegram.isBridgingEnabled();
+        } else if (record.type === "webhooks") {
+            const webhooks = new WebhooksBridge(requestingUserId);
+            return webhooks.isBridgingEnabled();
+        } else if (record.type === "gitter") {
+            const gitter = new GitterBridge(requestingUserId);
+            return gitter.isBridgingEnabled();
+        } else if (record.type === "slack") {
+            const slack = new SlackBridge(requestingUserId);
+            return slack.isBridgingEnabled();
+        } else return false;
     }
 
     private static async getConfiguration(record: BridgeRecord, requestingUserId: string, inRoomId?: string): Promise<any> {

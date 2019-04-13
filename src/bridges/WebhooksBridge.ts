@@ -25,7 +25,7 @@ export class WebhooksBridge {
 
     public async isBridgingEnabled(): Promise<boolean> {
         const bridges = await WebhookBridgeRecord.findAll({where: {isEnabled: true}});
-        return !!bridges;
+        return !!bridges && bridges.length > 0;
     }
 
     public async getBridgeInfo(): Promise<WebhookBridgeInfo> {

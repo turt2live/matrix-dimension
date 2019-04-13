@@ -42,7 +42,7 @@ export class SlackBridge {
 
     public async isBridgingEnabled(): Promise<boolean> {
         const bridges = await SlackBridgeRecord.findAll({where: {isEnabled: true}});
-        return !!bridges;
+        return !!bridges && bridges.length > 0;
     }
 
     public async getBridgeInfo(): Promise<SlackBridgeInfo> {
