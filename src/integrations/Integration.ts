@@ -13,6 +13,7 @@ export class Integration {
     public description: string;
     public isEnabled: boolean;
     public isPublic: boolean;
+    public isOnline: boolean;
 
     constructor(record: IntegrationRecord) {
         this.type = record.type;
@@ -21,6 +22,7 @@ export class Integration {
         this.description = record.description;
         this.isEnabled = record.isEnabled;
         this.isPublic = record.isPublic;
+        this.isOnline = true;
     }
 }
 

@@ -34,6 +34,10 @@ export class BridgeStore {
             } catch (e) {
                 LogService.error("BridgeStore", "Failed to load configuration for bridge: " + bridgeRecord.name);
                 LogService.error("BridgeStore", e);
+
+                const bridge = new Bridge(bridgeRecord, {});
+                bridge.isOnline = false;
+                enabledBridges.push(bridge);
             }
         }
 

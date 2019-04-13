@@ -129,7 +129,15 @@ export class NebStore {
         const rawIntegrations = await NebStore.listEnabledNebSimpleBots();
         return Promise.all(rawIntegrations.map(async i => {
             const proxy = new NebProxy(i.neb, requestingUserId);
-            return SimpleBot.fromNeb(i.integration, await proxy.getBotUserId(i.integration));
+            let userId = null;
+            try {
+                userId = await proxy.getBotUserId(i.integration);
+            } catch (e) {
+                LogService.error("NebStore", e);
+            }
+            const bot = SimpleBot.fromNeb(i.integration, userId);
+            bot.isOnline = !!userId;
+            return bot;
         }));
     }
 
@@ -137,10 +145,18 @@ export class NebStore {
         const rawIntegrations = await NebStore.listEnabledNebComplexBots();
         return Promise.all(rawIntegrations.map(async i => {
             const proxy = new NebProxy(i.neb, requestingUserId);
-            const notifUserId = await proxy.getNotificationUserId(i.integration, roomId);
-            const botUserId = null; // TODO: For github
-            const botConfig = await proxy.getServiceConfiguration(i.integration, roomId);
-            return new ComplexBot(i.integration, notifUserId, botUserId, botConfig);
+            try {
+                const notifUserId = await proxy.getNotificationUserId(i.integration, roomId);
+                const botUserId = null; // TODO: For github
+                const botConfig = await proxy.getServiceConfiguration(i.integration, roomId);
+                return new ComplexBot(i.integration, notifUserId, botUserId, botConfig);
+            } catch (e) {
+                LogService.error("NebStore", e);
+
+                const bot = new ComplexBot(i.integration, null, null, null);
+                bot.isOnline = false;
+                return bot;
+            }
         }));
     }
 

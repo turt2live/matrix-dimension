@@ -3,6 +3,7 @@ export interface FE_IrcBridge {
     upstreamId?: number;
     provisionUrl?: string;
     isEnabled: boolean;
+    isOnline: boolean;
     availableNetworks: FE_IrcBridgeAvailableNetworks;
 }
 

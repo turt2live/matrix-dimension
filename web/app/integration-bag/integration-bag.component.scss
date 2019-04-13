@@ -55,4 +55,10 @@
     margin-right: 5px;
     color: themed(integrationDescriptionColor);
   }
+
+  .integration .integration-offline {
+    position: absolute;
+    top: 5px;
+    right: 6px;
+  }
 }

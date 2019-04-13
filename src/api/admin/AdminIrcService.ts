@@ -22,6 +22,7 @@ interface BridgeResponse {
     provisionUrl?: string;
     isEnabled: boolean;
     availableNetworks: AvailableNetworks;
+    isOnline: boolean;
 }
 
 interface SetEnabledRequest {
@@ -42,12 +43,21 @@ export class AdminIrcService {
         const bridges = await IrcBridgeRecord.findAll();
         const client = new IrcBridge(userId);
         return Promise.all(bridges.map(async b => {
+            let networks = null;
+            let isOnline = true;
+            try {
+                networks = await client.getNetworks(b);
+            } catch (e) {
+                LogService.error("AdminIrcService", e);
+                isOnline = false;
+            }
             return {
                 id: b.id,
                 upstreamId: b.upstreamId,
                 provisionUrl: b.provisionUrl,
                 isEnabled: b.isEnabled,
-                availableNetworks: await client.getNetworks(b),
+                availableNetworks: networks,
+                isOnline: isOnline,
             };
         }));
     }
@@ -61,12 +71,21 @@ export class AdminIrcService {
         if (!ircBridge) throw new ApiError(404, "IRC Bridge not found");
 
         const client = new IrcBridge(userId);
+        let networks = null;
+        let isOnline = true;
+        try {
+            networks = await client.getNetworks(ircBridge);
+        } catch (e) {
+            LogService.error("AdminIrcService", e);
+            isOnline = false;
+        }
         return {
             id: ircBridge.id,
             upstreamId: ircBridge.upstreamId,
             provisionUrl: ircBridge.provisionUrl,
             isEnabled: ircBridge.isEnabled,
-            availableNetworks: await client.getNetworks(ircBridge),
+            availableNetworks: networks,
+            isOnline: isOnline,
         };
     }
 

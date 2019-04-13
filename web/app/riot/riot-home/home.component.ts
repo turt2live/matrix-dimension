@@ -233,6 +233,12 @@ export class RiotHomeComponent {
     }
 
     private async updateIntegrationState(integration: FE_Integration) {
+        if (!integration.isOnline) {
+            integration._isSupported = false;
+            integration._notSupportedReason = "This integration is offline or unavailable";
+            return;
+        }
+
         if (!integration.requirements) return;
 
         let promises = integration.requirements.map(r => this.checkRequirement(r));

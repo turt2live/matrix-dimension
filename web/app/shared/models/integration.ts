@@ -8,6 +8,7 @@ export interface FE_Integration {
     description: string;
     isEnabled: boolean;
     isPublic: boolean;
+    isOnline: boolean;
 
     // Used by us
     _inRoom: boolean;

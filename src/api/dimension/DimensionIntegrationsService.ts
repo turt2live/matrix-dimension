@@ -11,6 +11,7 @@ import { ComplexBot } from "../../integrations/ComplexBot";
 import { Bridge } from "../../integrations/Bridge";
 import { BridgeStore } from "../../db/BridgeStore";
 import { BotStore } from "../../db/BotStore";
+import { AdminService } from "../admin/AdminService";
 
 export interface IntegrationsResponse {
     widgets: Widget[],
@@ -65,6 +66,11 @@ export class DimensionIntegrationsService {
             .map(b => SimpleBot.fromCached(b));
         const bots = [...nebs, ...custom];
         Cache.for(CACHE_INTEGRATIONS).put("simple_bots", bots);
+
+        if (!AdminService.isAdmin(userId)) {
+            return bots.filter(b => b.isOnline);
+        }
+
         return bots;
     }
 
@@ -80,6 +86,11 @@ export class DimensionIntegrationsService {
 
         const bots = await NebStore.listComplexBots(userId, roomId);
         Cache.for(CACHE_INTEGRATIONS).put("complex_bots_" + roomId, bots);
+
+        if (!AdminService.isAdmin(userId)) {
+            return bots.filter(b => b.isOnline);
+        }
+
         return bots;
     }
 
