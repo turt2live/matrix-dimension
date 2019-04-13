@@ -17,14 +17,18 @@ export class FullscreenButtonComponent implements OnDestroy, OnInit {
     }
 
     public ngOnInit(): void {
+        // @ts-ignore
         this.listener = screenfull.on("change", () => {
+            // @ts-ignore
             this.isFullscreen = screenfull.isFullscreen;
         });
+        // @ts-ignore
         this.isFullscreen = screenfull.isFullscreen;
     }
 
     public ngOnDestroy(): void {
         if (this.listener) {
+            // @ts-ignore
             screenfull.off(this.listener);
         }
     }

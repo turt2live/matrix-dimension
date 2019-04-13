@@ -1,6 +1,7 @@
 // styles in src/style directory are applied to the whole page
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:100|Roboto:300');
 @import '../../node_modules/angular2-toaster/toaster';
+@import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import "themes/themes";
 @import "components/ibox";
 @import "components/dialog";

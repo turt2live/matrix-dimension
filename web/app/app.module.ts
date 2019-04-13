@@ -10,7 +10,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { RiotComponent } from "./riot/riot.component";
 import { UiSwitchModule } from "angular2-ui-switch";
 import { ScalarClientApiService } from "./shared/services/scalar/scalar-client-api.service";
-import { ToasterModule } from "angular2-toaster";
+import { ToasterModule, ToasterService } from "angular2-toaster";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component";
 import { BootstrapModalModule } from "ngx-modialog/plugins/bootstrap";
@@ -119,7 +119,7 @@ import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-tes
         HttpModule,
         FormsModule,
         routing,
-        NgbModule.forRoot(),
+        NgbModule,
         UiSwitchModule,
         ToasterModule,
         BrowserAnimationsModule,
@@ -232,6 +232,7 @@ import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-tes
         AdminCustomSimpleBotsApiService,
         SlackApiService,
         AdminSlackApiService,
+        ToasterService,
         {provide: Window, useValue: window},
 
         // Vendor
