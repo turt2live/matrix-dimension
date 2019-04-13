@@ -1,10 +1,10 @@
 <div class="ibox">
     <div class="ibox-title" (click)="isCollapsible ? (collapsed = !collapsed) : false"
          [ngClass]="[isCollapsible ? 'ibox-title-collapsible' : '']">
-        <h5 *ngIf="title">
-            {{ title }}
+        <h5 *ngIf="boxTitle">
+            {{ boxTitle }}
         </h5>
-        <ng-content select=".my-ibox-title" *ngIf="!title"></ng-content>
+        <ng-content select=".my-ibox-title" *ngIf="!boxTitle"></ng-content>
         <ng-content select=".my-ibox-addl-title"></ng-content>
         <i class="ibox-icon fa fa-chevron-down" *ngIf="isCollapsible"></i>
     </div>

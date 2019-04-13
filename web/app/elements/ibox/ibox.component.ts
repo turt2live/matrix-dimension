@@ -8,7 +8,7 @@ import { ANIMATION_FADE_IN_NOT_OUT } from "../../app.animations";
     animations: [ANIMATION_FADE_IN_NOT_OUT],
 })
 export class IboxComponent implements OnInit {
-    @Input() title: string;
+    @Input() boxTitle: string;
     @Input() isCollapsible: boolean;
     @Input() defaultCollapsed: boolean;
 
