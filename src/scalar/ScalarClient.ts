@@ -1,5 +1,5 @@
 import { OpenId } from "../models/OpenId";
-import { ScalarRegisterResponse } from "../models/ScalarResponses";
+import { ScalarAccountResponse, ScalarRegisterResponse } from "../models/ScalarResponses";
 import * as request from "request";
 import { LogService } from "matrix-js-snippets";
 import Upstream from "../db/models/Upstream";
@@ -25,6 +25,28 @@ export class ScalarClient {
                 } else if (res.statusCode !== 200) {
                     LogService.error("ScalarClient", "Got status code " + res.statusCode + " while registering for token");
                     reject(new Error("Could not get token"));
+                } else {
+                    resolve(res.body);
+                }
+            });
+        });
+    }
+
+    public getAccount(token: string): Promise<ScalarAccountResponse> {
+        LogService.info("ScalarClient", "Doing upstream scalar request: " + this.upstream.scalarUrl + "/account");
+        return new Promise((resolve, reject) => {
+            request({
+                method: "GET",
+                url: this.upstream.scalarUrl + "/account",
+                qs: {v: SCALAR_API_VERSION, scalar_token: token},
+            }, (err, res, _body) => {
+                if (err) {
+                    LogService.error("ScalarClient", "Error getting information for token");
+                    LogService.error("ScalarClient", err);
+                    reject(err);
+                } else if (res.statusCode !== 200) {
+                    LogService.error("ScalarClient", "Got status code " + res.statusCode + " while getting information for token");
+                    reject(res.statusCode);
                 } else {
                     resolve(res.body);
                 }

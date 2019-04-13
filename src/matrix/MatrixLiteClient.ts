@@ -2,6 +2,7 @@ import { doClientApiCall } from "./helpers";
 import config from "../config";
 import * as request from "request";
 import { LogService } from "matrix-js-snippets";
+import { OpenId } from "../models/OpenId";
 
 export interface MatrixUrlPreview {
     // This is really the only parameter we care about
@@ -42,6 +43,14 @@ export class MatrixLiteClient {
             {access_token: this.accessToken}
         );
         return response['user_id'];
+    }
+
+    public async getOpenId(): Promise<OpenId> {
+        return await doClientApiCall(
+            "POST",
+            `/_matrix/client/r0/user/${await this.whoAmI()}/openid/request_token`,
+            {access_token: this.accessToken},
+        );
     }
 
     public async leaveRoom(roomId: string): Promise<string> {

@@ -11,6 +11,7 @@ import Sticker from "../db/models/Sticker";
 import { MatrixLiteClient } from "./MatrixLiteClient";
 import { Cache, CACHE_STICKERS } from "../MemoryCache";
 import { LicenseMap } from "../utils/LicenseMap";
+import { OpenId } from "../models/OpenId";
 
 class _MatrixStickerBot {
 
@@ -34,6 +35,11 @@ class _MatrixStickerBot {
 
     public getUserId(): Promise<string> {
         return this.client.getUserId();
+    }
+
+    public getOpenId(): Promise<OpenId> {
+        const liteClient = new MatrixLiteClient(config.homeserver.accessToken);
+        return liteClient.getOpenId();
     }
 
     private async onEvent(roomId, event) {

@@ -45,6 +45,7 @@ export const CACHE_INTEGRATIONS = "integrations";
 export const CACHE_NEB = "neb";
 export const CACHE_UPSTREAM = "upstream";
 export const CACHE_SCALAR_ACCOUNTS = "scalar-accounts";
+export const CACHE_SCALAR_ONLINE_STATE = "scalar-online-state";
 export const CACHE_WIDGET_TITLES = "widget-titles";
 export const CACHE_FEDERATION = "federation";
 export const CACHE_IRC_BRIDGE = "irc-bridge";
