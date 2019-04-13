@@ -257,21 +257,26 @@ export class SlackBridge {
                 qs: qs,
                 json: body,
             }, (err, res, _body) => {
-                if (err) {
-                    LogService.error("SlackBridge", "Error calling " + url);
-                    LogService.error("SlackBridge", err);
-                    reject(err);
-                } else if (!res) {
-                    LogService.error("SlackBridge", "There is no response for " + url);
-                    reject(new Error("No response provided - is the service online?"));
-                } else if (res.statusCode !== 200) {
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
-                    LogService.error("SlackBridge", "Got status code " + res.statusCode + " when calling " + url);
-                    LogService.error("SlackBridge", res.body);
-                    reject({body: res.body, status: res.statusCode});
-                } else {
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
-                    resolve(res.body);
+                try {
+                    if (err) {
+                        LogService.error("SlackBridge", "Error calling " + url);
+                        LogService.error("SlackBridge", err);
+                        reject(err);
+                    } else if (!res) {
+                        LogService.error("SlackBridge", "There is no response for " + url);
+                        reject(new Error("No response provided - is the service online?"));
+                    } else if (res.statusCode !== 200) {
+                        if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
+                        LogService.error("SlackBridge", "Got status code " + res.statusCode + " when calling " + url);
+                        LogService.error("SlackBridge", res.body);
+                        reject({body: res.body, status: res.statusCode});
+                    } else {
+                        if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
+                        resolve(res.body);
+                    }
+                } catch (e) {
+                    LogService.error("SlackBridge", e);
+                    reject(e);
                 }
             });
         });
@@ -290,21 +295,26 @@ export class SlackBridge {
                 qs: qs,
                 json: body,
             }, (err, res, _body) => {
-                if (err) {
-                    LogService.error("SlackBridge", "Error calling" + url);
-                    LogService.error("SlackBridge", err);
-                    reject(err);
-                } else if (!res) {
-                    LogService.error("SlackBridge", "There is no response for " + url);
-                    reject(new Error("No response provided - is the service online?"));
-                } else if (res.statusCode !== 200) {
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
-                    LogService.error("SlackBridge", "Got status code " + res.statusCode + " when calling " + url);
-                    LogService.error("SlackBridge", res.body);
-                    reject({body: res.body, status: res.statusCode});
-                } else {
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
-                    resolve(res.body);
+                try {
+                    if (err) {
+                        LogService.error("SlackBridge", "Error calling" + url);
+                        LogService.error("SlackBridge", err);
+                        reject(err);
+                    } else if (!res) {
+                        LogService.error("SlackBridge", "There is no response for " + url);
+                        reject(new Error("No response provided - is the service online?"));
+                    } else if (res.statusCode !== 200) {
+                        if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
+                        LogService.error("SlackBridge", "Got status code " + res.statusCode + " when calling " + url);
+                        LogService.error("SlackBridge", res.body);
+                        reject({body: res.body, status: res.statusCode});
+                    } else {
+                        if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
+                        resolve(res.body);
+                    }
+                } catch (e) {
+                    LogService.error("SlackBridge", e);
+                    reject(e);
                 }
             });
         });

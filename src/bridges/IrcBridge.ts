@@ -281,20 +281,25 @@ export class IrcBridge {
                 qs: qs,
                 json: body,
             }, (err, res, _body) => {
-                if (err) {
-                    LogService.error("IrcBridge", "Error calling " + url);
-                    LogService.error("IrcBridge", err);
-                    reject(err);
-                } else if (!res) {
-                    LogService.error("IrcBridge", "There is no response for " + url);
-                    reject(new Error("No response provided - is the service online?"));
-                } else if (res.statusCode !== 200) {
-                    LogService.error("IrcBridge", "Got status code " + res.statusCode + " when calling " + url);
-                    LogService.error("IrcBridge", res.body);
-                    reject(new Error("Request failed"));
-                } else {
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
-                    resolve(res.body);
+                try {
+                    if (err) {
+                        LogService.error("IrcBridge", "Error calling " + url);
+                        LogService.error("IrcBridge", err);
+                        reject(err);
+                    } else if (!res) {
+                        LogService.error("IrcBridge", "There is no response for " + url);
+                        reject(new Error("No response provided - is the service online?"));
+                    } else if (res.statusCode !== 200) {
+                        LogService.error("IrcBridge", "Got status code " + res.statusCode + " when calling " + url);
+                        LogService.error("IrcBridge", res.body);
+                        reject(new Error("Request failed"));
+                    } else {
+                        if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
+                        resolve(res.body);
+                    }
+                } catch (e) {
+                    LogService.error("IrcBridge", e);
+                    reject(e);
                 }
             });
         });
@@ -313,20 +318,25 @@ export class IrcBridge {
                 qs: qs,
                 json: body,
             }, (err, res, _body) => {
-                if (err) {
-                    LogService.error("IrcBridge", "Error calling" + url);
-                    LogService.error("IrcBridge", err);
-                    reject(err);
-                } else if (!res) {
-                    LogService.error("IrcBridge", "There is no response for " + url);
-                    reject(new Error("No response provided - is the service online?"));
-                } else if (res.statusCode !== 200) {
-                    LogService.error("IrcBridge", "Got status code " + res.statusCode + " when calling " + url);
-                    LogService.error("IrcBridge", res.body);
-                    reject(new Error("Request failed"));
-                } else {
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
-                    resolve(res.body);
+                try {
+                    if (err) {
+                        LogService.error("IrcBridge", "Error calling" + url);
+                        LogService.error("IrcBridge", err);
+                        reject(err);
+                    } else if (!res) {
+                        LogService.error("IrcBridge", "There is no response for " + url);
+                        reject(new Error("No response provided - is the service online?"));
+                    } else if (res.statusCode !== 200) {
+                        LogService.error("IrcBridge", "Got status code " + res.statusCode + " when calling " + url);
+                        LogService.error("IrcBridge", res.body);
+                        reject(new Error("Request failed"));
+                    } else {
+                        if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
+                        resolve(res.body);
+                    }
+                } catch (e) {
+                    LogService.error("IrcBridge", e);
+                    reject(e);
                 }
             });
         });

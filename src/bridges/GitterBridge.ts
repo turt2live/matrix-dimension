@@ -140,21 +140,26 @@ export class GitterBridge {
                 qs: qs,
                 json: body,
             }, (err, res, _body) => {
-                if (err) {
-                    LogService.error("GitterBridge", "Error calling " + url);
-                    LogService.error("GitterBridge", err);
-                    reject(err);
-                } else if (!res) {
-                    LogService.error("GitterBridge", "There is no response for " + url);
-                    reject(new Error("No response provided - is the service online?"));
-                } else if (res.statusCode !== 200) {
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
-                    LogService.error("GitterBridge", "Got status code " + res.statusCode + " when calling " + url);
-                    LogService.error("GitterBridge", res.body);
-                    reject({body: res.body, status: res.statusCode});
-                } else {
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
-                    resolve(res.body);
+                try {
+                    if (err) {
+                        LogService.error("GitterBridge", "Error calling " + url);
+                        LogService.error("GitterBridge", err);
+                        reject(err);
+                    } else if (!res) {
+                        LogService.error("GitterBridge", "There is no response for " + url);
+                        reject(new Error("No response provided - is the service online?"));
+                    } else if (res.statusCode !== 200) {
+                        if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
+                        LogService.error("GitterBridge", "Got status code " + res.statusCode + " when calling " + url);
+                        LogService.error("GitterBridge", res.body);
+                        reject({body: res.body, status: res.statusCode});
+                    } else {
+                        if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
+                        resolve(res.body);
+                    }
+                } catch (e) {
+                    LogService.error("GitterBridge", e);
+                    reject(e);
                 }
             });
         });
@@ -173,21 +178,26 @@ export class GitterBridge {
                 qs: qs,
                 json: body,
             }, (err, res, _body) => {
-                if (err) {
-                    LogService.error("GitterBridge", "Error calling" + url);
-                    LogService.error("GitterBridge", err);
-                    reject(err);
-                } else if (!res) {
-                    LogService.error("GitterBridge", "There is no response for " + url);
-                    reject(new Error("No response provided - is the service online?"));
-                } else if (res.statusCode !== 200) {
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
-                    LogService.error("GitterBridge", "Got status code " + res.statusCode + " when calling " + url);
-                    LogService.error("GitterBridge", res.body);
-                    reject({body: res.body, status: res.statusCode});
-                } else {
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
-                    resolve(res.body);
+                try {
+                    if (err) {
+                        LogService.error("GitterBridge", "Error calling" + url);
+                        LogService.error("GitterBridge", err);
+                        reject(err);
+                    } else if (!res) {
+                        LogService.error("GitterBridge", "There is no response for " + url);
+                        reject(new Error("No response provided - is the service online?"));
+                    } else if (res.statusCode !== 200) {
+                        if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
+                        LogService.error("GitterBridge", "Got status code " + res.statusCode + " when calling " + url);
+                        LogService.error("GitterBridge", res.body);
+                        reject({body: res.body, status: res.statusCode});
+                    } else {
+                        if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
+                        resolve(res.body);
+                    }
+                } catch (e) {
+                    LogService.error("GitterBridge", e);
+                    reject(e);
                 }
             });
         });

@@ -209,21 +209,26 @@ export class TelegramBridge {
                     "Authorization": `Bearer ${bridge.sharedSecret}`,
                 },
             }, (err, res, _body) => {
-                if (err) {
-                    LogService.error("TelegramBridge", "Error calling" + url);
-                    LogService.error("TelegramBridge", err);
-                    reject(err);
-                } else if (!res) {
-                    LogService.error("TelegramBridge", "There is no response for " + url);
-                    reject(new Error("No response provided - is the service online?"));
-                } else if (res.statusCode !== 200 && res.statusCode !== 202) {
-                    LogService.error("TelegramBridge", "Got status code " + res.statusCode + " when calling " + url);
-                    LogService.error("TelegramBridge", res.body);
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
-                    reject({errBody: res.body, error: new Error("Request failed")});
-                } else {
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
-                    resolve(res.body);
+                try {
+                    if (err) {
+                        LogService.error("TelegramBridge", "Error calling" + url);
+                        LogService.error("TelegramBridge", err);
+                        reject(err);
+                    } else if (!res) {
+                        LogService.error("TelegramBridge", "There is no response for " + url);
+                        reject(new Error("No response provided - is the service online?"));
+                    } else if (res.statusCode !== 200 && res.statusCode !== 202) {
+                        LogService.error("TelegramBridge", "Got status code " + res.statusCode + " when calling " + url);
+                        LogService.error("TelegramBridge", res.body);
+                        if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
+                        reject({errBody: res.body, error: new Error("Request failed")});
+                    } else {
+                        if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
+                        resolve(res.body);
+                    }
+                } catch (e) {
+                    LogService.error("TelegramBridge", e);
+                    reject(e);
                 }
             });
         });
