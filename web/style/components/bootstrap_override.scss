@@ -6,7 +6,8 @@
   }
 
   table, td, th {
-    border-color: themed(tableBorderColor);
+    border-color: themed(tableBorderColor) !important;
+    color: themed(defaultFgColor) !important;
   }
 
   code {
