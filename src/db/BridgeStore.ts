@@ -12,7 +12,6 @@ import { TelegramBridge } from "../bridges/TelegramBridge";
 import { WebhooksBridge } from "../bridges/WebhooksBridge";
 import { GitterBridge } from "../bridges/GitterBridge";
 import { SlackBridge } from "../bridges/SlackBridge";
-import { AdminService } from "../api/admin/AdminService";
 
 export class BridgeStore {
 
@@ -45,10 +44,6 @@ export class BridgeStore {
                 bridge.isOnline = false;
                 enabledBridges.push(bridge);
             }
-        }
-
-        if (!AdminService.isAdmin(requestingUserId)) {
-            return enabledBridges.filter(b => b.isOnline);
         }
 
         return enabledBridges;

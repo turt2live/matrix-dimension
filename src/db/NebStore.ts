@@ -149,7 +149,9 @@ export class NebStore {
                 const notifUserId = await proxy.getNotificationUserId(i.integration, roomId);
                 const botUserId = null; // TODO: For github
                 const botConfig = await proxy.getServiceConfiguration(i.integration, roomId);
-                return new ComplexBot(i.integration, notifUserId, botUserId, botConfig);
+                const bot = new ComplexBot(i.integration, notifUserId, botUserId, botConfig);
+                bot.isOnline = !!bot.botUserId;
+                return bot;
             } catch (e) {
                 LogService.error("NebStore", e);
 
