@@ -1,29 +1,31 @@
 @import "../themes/themes";
 
 @include themifyRoot() {
-  a {
-    color: themed(anchorColor);
-  }
+  .main-app {
+    a {
+      color: themed(anchorColor);
+    }
 
-  table, td, th {
-    border-color: themed(tableBorderColor) !important;
-    color: themed(defaultFgColor) !important;
-  }
+    table, td, th {
+      border-color: themed(tableBorderColor);
+      color: themed(defaultFgColor);
+    }
 
-  code {
-    background-color: themed(codeBgColor);
-  }
+    code {
+      background-color: themed(codeBgColor);
+    }
 
-  *.text-muted {
-    color: themed(altMutedColor) !important;
-  }
+    *.text-muted {
+      color: themed(altMutedColor) !important;
+    }
 
-  .form-control {
-    color: themed(formControlFgColor);
-    background-color: themed(formControlBgColor);
-  }
+    .form-control {
+      color: themed(formControlFgColor);
+      background-color: themed(formControlBgColor);
+    }
 
-  .form-control::placeholder {
-    color: themed(formControlPlaceholderColor);
+    .form-control::placeholder {
+      color: themed(formControlPlaceholderColor);
+    }
   }
 }
