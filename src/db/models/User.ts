@@ -11,4 +11,7 @@ export default class User extends Model<User> {
     @PrimaryKey
     @Column
     userId: string;
+
+    @Column
+    isSelfBot: boolean;
 }

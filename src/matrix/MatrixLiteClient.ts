@@ -49,7 +49,7 @@ export class MatrixLiteClient {
         return await doClientApiCall(
             "POST",
             `/_matrix/client/r0/user/${await this.whoAmI()}/openid/request_token`,
-            {access_token: this.accessToken},
+            {access_token: this.accessToken}, {},
         );
     }
 

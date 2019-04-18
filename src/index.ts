@@ -4,8 +4,8 @@ import { DimensionStore } from "./db/DimensionStore";
 import Webserver from "./api/Webserver";
 import { CURRENT_VERSION } from "./version";
 import { MatrixStickerBot } from "./matrix/MatrixStickerBot";
-import UserScalarToken from "./db/models/UserScalarToken";
 import * as BotSdk from "matrix-bot-sdk";
+import User from "./db/models/User";
 
 LogService.configure(config.logging);
 LogService.info("index", "Starting dimension " + CURRENT_VERSION);
@@ -25,8 +25,8 @@ async function startup() {
     await webserver.start();
 
     const userId = await MatrixStickerBot.getUserId();
-    const tokens = await UserScalarToken.findAll({where: {userId: userId}});
-    if (tokens.length > 0) {
+    const users = await User.findAll({where: {userId: userId, isSelfBot: false}});
+    if (users.length > 0) {
         LogService.error("index", "The access token configured for Dimension belongs to a user which is also " +
             "a user known to Dimension. This usually indicates that the access token is not a dedicated user " +
             "account for Dimension. To prevent potential confusion to this user, Dimension will refuse to start " +

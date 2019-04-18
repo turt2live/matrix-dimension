@@ -39,6 +39,7 @@ export class ScalarClient {
                 method: "GET",
                 url: this.upstream.scalarUrl + "/account",
                 qs: {v: SCALAR_API_VERSION, scalar_token: token},
+                json: true,
             }, (err, res, _body) => {
                 if (err) {
                     LogService.error("ScalarClient", "Error getting information for token");

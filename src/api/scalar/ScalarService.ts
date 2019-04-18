@@ -33,7 +33,7 @@ export class ScalarService {
      * @returns {Promise<string>} Resolves to the owner's user ID if the token is valid.
      * @throws {ApiError} Thrown with a status code of 401 if the token is invalid.
      */
-    public static async getTokenOwner(scalarToken: string, ignoreUpstreams?: boolean): Promise<string> {
+    public static async getTokenOwner(scalarToken: string, ignoreUpstreams = false): Promise<string> {
         const cachedUserId = Cache.for(CACHE_SCALAR_ACCOUNTS).get(scalarToken);
         if (cachedUserId) return cachedUserId;
 

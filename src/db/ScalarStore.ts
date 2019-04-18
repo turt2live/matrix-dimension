@@ -33,7 +33,7 @@ export class ScalarStore {
         return true;
     }
 
-    public static async getTokenOwner(scalarToken: string, ignoreUpstreams?: boolean): Promise<User> {
+    public static async getTokenOwner(scalarToken: string, ignoreUpstreams = false): Promise<User> {
         const tokens = await UserScalarToken.findAll({
             where: {isDimensionToken: true, scalarToken: scalarToken},
             include: [User]
@@ -102,6 +102,14 @@ export class ScalarStore {
                 for (const token of existingTokens) {
                     await token.destroy();
                 }
+            }
+
+            const user = await User.findByPk(testUserId);
+            if (!user) {
+                await User.create({
+                    userId: testUserId,
+                    isSelfBot: true,
+                });
             }
 
             const openId = await MatrixStickerBot.getOpenId();
