@@ -90,11 +90,18 @@ export class StickerpickerComponent implements OnInit {
             const stickerPicker = widgets.response.find(w => w.content && w.content.type === "m.stickerpicker");
             const widgetId = stickerPicker ? ((<any>stickerPicker).id || stickerPicker.state_key) : "dimension-stickerpicker-" + (new Date().getTime());
 
+            const targetUrl = this.window.location.origin + "/widgets/stickerpicker";
+
+            if (widgets.response[0].content.url === targetUrl) {
+                console.warn("Not replacing Dimension sticker picker");
+                return;
+            }
+
             console.log("Force-setting new widget of ID " + widgetId);
             await this.scalarClient.setUserWidget({
                 id: widgetId,
                 type: WIDGET_STICKER_PICKER[0],
-                url: this.window.location.origin + "/widgets/stickerpicker",
+                url: targetUrl,
                 data: {
                     dimension: {
                         wrapperId: "stickerpicker",
