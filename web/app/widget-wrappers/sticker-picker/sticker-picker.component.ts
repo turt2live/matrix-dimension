@@ -127,7 +127,7 @@ export class StickerPickerWidgetWrapperComponent extends CapableWidget implement
             this.packs = packs.filter(p => p.isSelected);
             console.log("User has " + this.packs.length + "/" + packs.length + " sticker packs selected");
             this.isLoading = false;
-            this.changeDetector.detectChanges();
+            this.changeDetector.markForCheck();
         } catch (e) {
             console.error(e);
         }
