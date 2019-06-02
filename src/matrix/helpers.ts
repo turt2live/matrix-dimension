@@ -157,8 +157,6 @@ export async function doFederatedApiCall(method: string, serverName: string, end
             url: federationInfo.url + endpoint,
             qs: query,
             json: body,
-            // TODO: Remove this for MSC1711 support
-            rejectUnauthorized: false, // allow self signed certs (for federation)
             headers: {
                 "Host": federationInfo.hostname,
             },
