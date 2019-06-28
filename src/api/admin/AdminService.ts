@@ -1,5 +1,4 @@
 import { GET, Path, POST, QueryParam } from "typescript-rest";
-import { ScalarService } from "../scalar/ScalarService";
 import config from "../../config";
 import { ApiError } from "../ApiError";
 import { MatrixLiteClient } from "../../matrix/MatrixLiteClient";
@@ -7,6 +6,7 @@ import { CURRENT_VERSION } from "../../version";
 import { getFederationConnInfo } from "../../matrix/helpers";
 import UserScalarToken from "../../db/models/UserScalarToken";
 import { Cache, CACHE_SCALAR_ACCOUNTS } from "../../MemoryCache";
+import AccountController from "../controllers/AccountController";
 
 interface DimensionVersionResponse {
     version: string;
@@ -50,7 +50,8 @@ export class AdminService {
      * @throws {ApiError} Thrown with a status code of 401 if the owner is not an administrator
      */
     public static async validateAndGetAdminTokenOwner(scalarToken: string): Promise<string> {
-        const userId = await ScalarService.getTokenOwner(scalarToken, true);
+        const accountController = new AccountController();
+        const userId = await accountController.getTokenOwner(scalarToken, true);
         if (!AdminService.isAdmin(userId))
             throw new ApiError(401, "You must be an administrator to use this API");
         return userId;

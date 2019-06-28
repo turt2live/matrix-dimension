@@ -1,18 +1,23 @@
 import { DELETE, FormParam, HeaderParam, Path, PathParam, POST, QueryParam } from "typescript-rest";
-import { ScalarService } from "../scalar/ScalarService";
 import { SuccessResponse, WebhookConfiguration, WebhookOptions } from "../../bridges/models/webhooks";
 import { WebhooksBridge } from "../../bridges/WebhooksBridge";
 import Webhook from "../../db/models/Webhook";
 import { ApiError } from "../ApiError";
 import { LogService } from "matrix-js-snippets";
 import * as request from "request";
+import { AutoWired, Inject } from "typescript-ioc/es6";
+import AccountController from "../controllers/AccountController";
 
 /**
  * API for interacting with the Webhooks bridge, and for setting up proxies to other
  * services.
  */
 @Path("/api/v1/dimension/webhooks")
+@AutoWired
 export class DimensionWebhooksService {
+
+    @Inject
+    private accountController: AccountController;
 
     @POST
     @Path("/travisci/:webhookId")
@@ -43,7 +48,7 @@ export class DimensionWebhooksService {
     @POST
     @Path("room/:roomId/webhooks/new")
     public async newWebhook(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, options: WebhookOptions): Promise<WebhookConfiguration> {
-        const userId = await ScalarService.getTokenOwner(scalarToken);
+        const userId = await this.accountController.getTokenOwner(scalarToken);
 
         const webhooks = new WebhooksBridge(userId);
         return webhooks.createWebhook(roomId, options);
@@ -52,7 +57,7 @@ export class DimensionWebhooksService {
     @POST
     @Path("room/:roomId/webhooks/:hookId")
     public async updateWebhook(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, @PathParam("hookId") hookId: string, options: WebhookOptions): Promise<WebhookConfiguration> {
-        const userId = await ScalarService.getTokenOwner(scalarToken);
+        const userId = await this.accountController.getTokenOwner(scalarToken);
 
         const webhooks = new WebhooksBridge(userId);
         return webhooks.updateWebhook(roomId, hookId, options);
@@ -61,7 +66,7 @@ export class DimensionWebhooksService {
     @DELETE
     @Path("room/:roomId/webhooks/:hookId")
     public async deleteWebhook(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, @PathParam("hookId") hookId: string): Promise<SuccessResponse> {
-        const userId = await ScalarService.getTokenOwner(scalarToken);
+        const userId = await this.accountController.getTokenOwner(scalarToken);
 
         const webhooks = new WebhooksBridge(userId);
         return webhooks.deleteWebhook(roomId, hookId);

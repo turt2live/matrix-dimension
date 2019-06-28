@@ -2,12 +2,13 @@ import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
 import { Cache, CACHE_STICKERS } from "../../MemoryCache";
 import StickerPack from "../../db/models/StickerPack";
 import Sticker from "../../db/models/Sticker";
-import { ScalarService } from "../scalar/ScalarService";
 import UserStickerPack from "../../db/models/UserStickerPack";
 import { ApiError } from "../ApiError";
 import { StickerpackMetadataDownloader } from "../../utils/StickerpackMetadataDownloader";
 import { MatrixStickerBot } from "../../matrix/MatrixStickerBot";
 import config from "../../config";
+import { AutoWired, Inject } from "typescript-ioc/es6";
+import AccountController from "../controllers/AccountController";
 
 export interface MemoryStickerPack {
     id: number;
@@ -63,7 +64,11 @@ interface StickerConfig {
  * API for stickers
  */
 @Path("/api/v1/dimension/stickers")
+@AutoWired
 export class DimensionStickerService {
+
+    @Inject
+    private accountController: AccountController;
 
     public static async getStickerPacks(enabledOnly = false): Promise<MemoryStickerPack[]> {
         const cachedPacks = Cache.for(CACHE_STICKERS).get("packs");
@@ -86,7 +91,7 @@ export class DimensionStickerService {
     @GET
     @Path("config")
     public async getConfig(@QueryParam("scalar_token") scalarToken: string): Promise<StickerConfig> {
-        await ScalarService.getTokenOwner(scalarToken);
+        await this.accountController.getTokenOwner(scalarToken);
 
         return {
             enabled: config.stickers.enabled,
@@ -98,7 +103,7 @@ export class DimensionStickerService {
     @GET
     @Path("packs")
     public async getStickerPacks(@QueryParam("scalar_token") scalarToken: string): Promise<MemoryStickerPack[]> {
-        const userId = await ScalarService.getTokenOwner(scalarToken);
+        const userId = await this.accountController.getTokenOwner(scalarToken);
 
         const cachedPacks = Cache.for(CACHE_STICKERS).get("packs_" + userId);
         if (cachedPacks) return cachedPacks;
@@ -125,7 +130,7 @@ export class DimensionStickerService {
     @POST
     @Path("packs/:packId/selected")
     public async setPackSelected(@QueryParam("scalar_token") scalarToken: string, @PathParam("packId") packId: number, request: SetSelectedRequest): Promise<any> {
-        const userId = await ScalarService.getTokenOwner(scalarToken);
+        const userId = await this.accountController.getTokenOwner(scalarToken);
 
         const pack = await StickerPack.findByPrimary(packId);
         if (!pack) throw new ApiError(404, "Sticker pack not found");
@@ -149,7 +154,7 @@ export class DimensionStickerService {
     @POST
     @Path("packs/import")
     public async importPack(@QueryParam("scalar_token") scalarToken: string, request: ImportPackRequest): Promise<MemoryUserStickerPack> {
-        await ScalarService.getTokenOwner(scalarToken);
+        await this.accountController.getTokenOwner(scalarToken);
 
         if (!config.stickers.enabled) {
             throw new ApiError(400, "Custom stickerpacks are disabled on this homeserver");

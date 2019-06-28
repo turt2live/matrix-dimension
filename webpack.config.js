@@ -142,7 +142,11 @@ module.exports = function () {
             '/api': {
                 target: 'http://localhost:8184',
                 secure: false
-            }
+            },
+            '/_matrix': {
+                target: 'http://localhost:8184',
+                secure: false
+            },
         }
     };
 
