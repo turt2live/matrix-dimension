@@ -2,7 +2,7 @@ import { AutoIncrement, Column, Model, PrimaryKey, Table } from "sequelize-types
 
 @Table({
     tableName: "dimension_upstreams",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class Upstream extends Model<Upstream> {

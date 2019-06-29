@@ -4,7 +4,7 @@ import NebConfiguration from "./NebConfiguration";
 
 @Table({
     tableName: "dimension_neb_integrations",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class NebIntegration extends Model<NebIntegration> implements IntegrationRecord {

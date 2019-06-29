@@ -26,7 +26,7 @@ export class DimensionIrcService {
         const userId = await this.accountController.getTokenOwner(scalarToken);
 
         const parsed = IrcBridge.parseNetworkId(networkId);
-        const bridge = await IrcBridgeRecord.findByPrimary(parsed.bridgeId);
+        const bridge = await IrcBridgeRecord.findByPk(parsed.bridgeId);
         if (!bridge) throw new ApiError(404, "Bridge not found");
 
         const client = new IrcBridge(userId);
@@ -42,7 +42,7 @@ export class DimensionIrcService {
         const userId = await this.accountController.getTokenOwner(scalarToken);
 
         const parsed = IrcBridge.parseNetworkId(networkId);
-        const bridge = await IrcBridgeRecord.findByPrimary(parsed.bridgeId);
+        const bridge = await IrcBridgeRecord.findByPk(parsed.bridgeId);
         if (!bridge) throw new ApiError(404, "Bridge not found");
 
         const client = new IrcBridge(userId);
@@ -58,7 +58,7 @@ export class DimensionIrcService {
         const userId = await this.accountController.getTokenOwner(scalarToken);
 
         const parsed = IrcBridge.parseNetworkId(networkId);
-        const bridge = await IrcBridgeRecord.findByPrimary(parsed.bridgeId);
+        const bridge = await IrcBridgeRecord.findByPk(parsed.bridgeId);
         if (!bridge) throw new ApiError(404, "Bridge not found");
 
         const client = new IrcBridge(userId);

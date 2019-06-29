@@ -3,7 +3,7 @@ import Upstream from "./Upstream";
 
 @Table({
     tableName: "dimension_webhook_bridges",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class WebhookBridgeRecord extends Model<WebhookBridgeRecord> {

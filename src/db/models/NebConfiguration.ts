@@ -4,7 +4,7 @@ import AppService from "./AppService";
 
 @Table({
     tableName: "dimension_neb_configurations",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class NebConfiguration extends Model<NebConfiguration> {

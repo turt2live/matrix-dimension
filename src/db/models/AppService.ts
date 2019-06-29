@@ -2,7 +2,7 @@ import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 @Table({
     tableName: "dimension_appservice",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class AppService extends Model<AppService> {

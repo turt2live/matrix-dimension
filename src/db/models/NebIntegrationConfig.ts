@@ -3,7 +3,7 @@ import NebIntegration from "./NebIntegration";
 
 @Table({
     tableName: "dimension_neb_integration_config",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class NebIntegrationConfig extends Model<NebIntegrationConfig> {

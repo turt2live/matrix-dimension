@@ -37,7 +37,7 @@ export class BotStore {
     }
 
     public static async updateCustom(id: number, template: SimpleBotTemplate): Promise<CachedSimpleBot> {
-        const record = await CustomSimpleBotRecord.findByPrimary(id);
+        const record = await CustomSimpleBotRecord.findByPk(id);
         if (!record) return null;
 
         record.name = template.name;
@@ -53,7 +53,7 @@ export class BotStore {
     }
 
     public static async deleteCustom(id: number): Promise<any> {
-        const record = await CustomSimpleBotRecord.findByPrimary(id);
+        const record = await CustomSimpleBotRecord.findByPk(id);
         if (!record) return null;
 
         await record.destroy();

@@ -3,7 +3,7 @@ import Upstream from "./Upstream";
 
 @Table({
     tableName: "dimension_slack_bridges",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class SlackBridgeRecord extends Model<SlackBridgeRecord> {

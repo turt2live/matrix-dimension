@@ -7,7 +7,7 @@ import Upstream from "./Upstream";
 
 @Table({
     tableName: "dimension_scalar_tokens",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class UserScalarToken extends Model<UserScalarToken> {

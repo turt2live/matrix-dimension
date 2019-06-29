@@ -132,7 +132,7 @@ export class DimensionStickerService {
     public async setPackSelected(@QueryParam("scalar_token") scalarToken: string, @PathParam("packId") packId: number, request: SetSelectedRequest): Promise<any> {
         const userId = await this.accountController.getTokenOwner(scalarToken);
 
-        const pack = await StickerPack.findByPrimary(packId);
+        const pack = await StickerPack.findByPk(packId);
         if (!pack) throw new ApiError(404, "Sticker pack not found");
 
         let userPack = await UserStickerPack.findOne({where: {userId: userId, packId: packId}});

@@ -36,7 +36,7 @@ export class AdminStickerService {
     @Path("packs/:id/enabled")
     public async setPackEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("id") packId: number, request: SetEnabledRequest): Promise<any> {
         await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-        const pack = await StickerPack.findByPrimary(packId);
+        const pack = await StickerPack.findByPk(packId);
         if (!pack) throw new ApiError(404, "Sticker pack not found");
 
         pack.isEnabled = request.isEnabled;

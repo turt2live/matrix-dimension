@@ -3,7 +3,7 @@ import { IntegrationRecord } from "./IntegrationRecord";
 
 @Table({
     tableName: "dimension_custom_simple_bots",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class CustomSimpleBotRecord extends Model<CustomSimpleBotRecord> implements IntegrationRecord {

@@ -70,7 +70,7 @@ export class AppserviceStore {
     }
 
     public static async getAppservice(id: string): Promise<AppService> {
-        const appservice = await AppService.findByPrimary(id);
+        const appservice = await AppService.findByPk(id);
         if (!appservice) throw new Error("Appservice not found");
         return appservice;
     }

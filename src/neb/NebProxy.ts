@@ -314,13 +314,13 @@ export class NebProxy {
 
     private async setWebhookTarget(serviceId: string, targetUrl: string): Promise<any> {
         const webhookId = await this.getWebhookId(serviceId);
-        const webhook = await Webhook.findByPrimary(webhookId);
+        const webhook = await Webhook.findByPk(webhookId);
         webhook.targetUrl = targetUrl;
         return webhook.save();
     }
 
     private async doUpstreamRequest<T>(endpoint: string, body?: any): Promise<T> {
-        const upstream = await Upstream.findByPrimary(this.neb.upstreamId);
+        const upstream = await Upstream.findByPk(this.neb.upstreamId);
         const token = await UserScalarToken.findOne({
             where: {
                 upstreamId: upstream.id,

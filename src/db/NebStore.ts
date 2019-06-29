@@ -186,7 +186,7 @@ export class NebStore {
     }
 
     public static async getConfig(id: number): Promise<NebConfig> {
-        const nebConfig = await NebConfiguration.findByPrimary(id);
+        const nebConfig = await NebConfiguration.findByPk(id);
         if (!nebConfig) throw new Error("Configuration not found");
 
         const integrations = await NebIntegration.findAll({where: {nebId: id}});
@@ -196,7 +196,7 @@ export class NebStore {
     }
 
     public static async createForUpstream(upstreamId: number): Promise<NebConfig> {
-        const upstream = await Upstream.findByPrimary(upstreamId);
+        const upstream = await Upstream.findByPk(upstreamId);
         if (!upstream) throw new Error("Upstream not found");
 
         const nebConfig = await NebConfiguration.create({
@@ -207,7 +207,7 @@ export class NebStore {
     }
 
     public static async createForAppservice(appserviceId: string, adminUrl: string): Promise<NebConfig> {
-        const appservice = await AppService.findByPrimary(appserviceId);
+        const appservice = await AppService.findByPk(appserviceId);
         if (!appservice) throw new Error("Appservice not found");
 
         const nebConfig = await NebConfiguration.create({
@@ -221,7 +221,7 @@ export class NebStore {
     public static async getOrCreateIntegration(configurationId: number, integrationType: string): Promise<NebIntegration> {
         if (!NebStore.INTEGRATIONS[integrationType]) throw new Error("Integration not supported");
 
-        const nebConfig = await NebConfiguration.findByPrimary(configurationId);
+        const nebConfig = await NebConfiguration.findByPk(configurationId);
         if (!nebConfig) throw new Error("Configuration not found");
 
         let integration = await NebIntegration.findOne({where: {nebId: nebConfig.id, type: integrationType}});

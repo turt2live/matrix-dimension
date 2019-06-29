@@ -3,7 +3,7 @@ import IrcBridgeRecord from "./IrcBridgeRecord";
 
 @Table({
     tableName: "dimension_irc_bridge_networks",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class IrcBridgeNetwork extends Model<IrcBridgeNetwork> {

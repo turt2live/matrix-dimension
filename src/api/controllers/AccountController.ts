@@ -67,7 +67,7 @@ export default class AccountController {
             throw new ApiError(401, "Invalid token");
         }
 
-        const user = await User.findByPrimary(mxUserId);
+        const user = await User.findByPk(mxUserId);
         if (!user) {
             // There's a small chance we'll get a validation error because of:
             // https://github.com/vector-im/riot-web/issues/5846

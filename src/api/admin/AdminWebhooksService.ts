@@ -50,7 +50,7 @@ export class AdminWebhooksService {
     public async getBridge(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
         await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
-        const webhookBridge = await WebhookBridgeRecord.findByPrimary(bridgeId);
+        const webhookBridge = await WebhookBridgeRecord.findByPk(bridgeId);
         if (!webhookBridge) throw new ApiError(404, "Webhook Bridge not found");
 
         return {
@@ -67,7 +67,7 @@ export class AdminWebhooksService {
     public async updateBridge(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number, request: CreateSelfhosted): Promise<BridgeResponse> {
         const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
-        const bridge = await WebhookBridgeRecord.findByPrimary(bridgeId);
+        const bridge = await WebhookBridgeRecord.findByPk(bridgeId);
         if (!bridge) throw new ApiError(404, "Bridge not found");
 
         bridge.provisionUrl = request.provisionUrl;

@@ -3,7 +3,7 @@ import StickerPack from "./StickerPack";
 
 @Table({
     tableName: "dimension_stickers",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class Sticker extends Model<Sticker> {

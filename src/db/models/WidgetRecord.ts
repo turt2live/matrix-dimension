@@ -3,7 +3,7 @@ import { IntegrationRecord } from "./IntegrationRecord";
 
 @Table({
     tableName: "dimension_widgets",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class WidgetRecord extends Model<WidgetRecord> implements IntegrationRecord {

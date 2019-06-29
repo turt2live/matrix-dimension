@@ -113,7 +113,7 @@ export class AdminService {
         // Clear the cache first to hopefully invalidate a bunch of them
         Cache.for(CACHE_SCALAR_ACCOUNTS).clear();
 
-        const tokens = await UserScalarToken.all();
+        const tokens = await UserScalarToken.findAll();
         for (const token of tokens) {
             await token.destroy();
         }

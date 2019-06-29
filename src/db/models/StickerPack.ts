@@ -3,7 +3,7 @@ import { IntegrationRecord } from "./IntegrationRecord";
 
 @Table({
     tableName: "dimension_sticker_packs",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class StickerPack extends Model<StickerPack> implements IntegrationRecord {

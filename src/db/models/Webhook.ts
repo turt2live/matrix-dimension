@@ -3,7 +3,7 @@ import User from "./User";
 
 @Table({
     tableName: "dimension_webhooks",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class Webhook extends Model<Webhook> {

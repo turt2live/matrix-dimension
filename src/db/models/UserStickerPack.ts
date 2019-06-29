@@ -4,7 +4,7 @@ import User from "./User";
 
 @Table({
     tableName: "dimension_user_sticker_packs",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class UserStickerPack extends Model<UserStickerPack> {

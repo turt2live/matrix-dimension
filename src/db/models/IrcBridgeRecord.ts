@@ -3,7 +3,7 @@ import Upstream from "./Upstream";
 
 @Table({
     tableName: "dimension_irc_bridges",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class IrcBridgeRecord extends Model<IrcBridgeRecord> {

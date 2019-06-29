@@ -3,7 +3,7 @@ import { IntegrationRecord } from "./IntegrationRecord";
 
 @Table({
     tableName: "dimension_bridges",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class BridgeRecord extends Model<BridgeRecord> implements IntegrationRecord {

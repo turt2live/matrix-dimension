@@ -67,7 +67,7 @@ export class AdminIrcService {
     public async getBridge(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
         const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
-        const ircBridge = await IrcBridgeRecord.findByPrimary(bridgeId);
+        const ircBridge = await IrcBridgeRecord.findByPk(bridgeId);
         if (!ircBridge) throw new ApiError(404, "IRC Bridge not found");
 
         const client = new IrcBridge(userId);
@@ -94,7 +94,7 @@ export class AdminIrcService {
     public async setNetworkEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number, @PathParam("networkId") networkId: string, request: SetEnabledRequest): Promise<any> {
         const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
-        const ircBridge = await IrcBridgeRecord.findByPrimary(bridgeId);
+        const ircBridge = await IrcBridgeRecord.findByPk(bridgeId);
         if (!ircBridge) throw new ApiError(404, "IRC Bridge not found");
 
         const localNetworkId = IrcBridge.parseNetworkId(networkId).bridgeNetworkId;
@@ -119,7 +119,7 @@ export class AdminIrcService {
     public async newConfigForUpstream(@QueryParam("scalar_token") scalarToken: string, request: CreateWithUpstream): Promise<BridgeResponse> {
         const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
-        const upstream = await Upstream.findByPrimary(request.upstreamId);
+        const upstream = await Upstream.findByPk(request.upstreamId);
         if (!upstream) throw new ApiError(400, "Upstream not found");
 
         const bridge = await IrcBridgeRecord.create({

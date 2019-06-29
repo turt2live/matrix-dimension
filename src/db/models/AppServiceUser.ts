@@ -3,7 +3,7 @@ import AppService from "./AppService";
 
 @Table({
     tableName: "dimension_appservice_users",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class AppServiceUser extends Model<AppServiceUser> {

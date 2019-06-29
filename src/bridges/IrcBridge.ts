@@ -263,7 +263,7 @@ export class IrcBridge {
     }
 
     private async doUpstreamRequest<T>(bridge: IrcBridgeRecord, method: string, endpoint: string, qs?: any, body?: any): Promise<T> {
-        const upstream = await Upstream.findByPrimary(bridge.upstreamId);
+        const upstream = await Upstream.findByPk(bridge.upstreamId);
         const token = await UserScalarToken.findOne({
             where: {
                 upstreamId: upstream.id,

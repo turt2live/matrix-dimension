@@ -48,7 +48,7 @@ export class AdminGitterService {
     public async getBridge(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
         await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
-        const telegramBridge = await GitterBridgeRecord.findByPrimary(bridgeId);
+        const telegramBridge = await GitterBridgeRecord.findByPk(bridgeId);
         if (!telegramBridge) throw new ApiError(404, "Gitter Bridge not found");
 
         return {
@@ -64,7 +64,7 @@ export class AdminGitterService {
     public async updateBridge(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number, request: CreateSelfhosted): Promise<BridgeResponse> {
         const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
-        const bridge = await GitterBridgeRecord.findByPrimary(bridgeId);
+        const bridge = await GitterBridgeRecord.findByPk(bridgeId);
         if (!bridge) throw new ApiError(404, "Bridge not found");
 
         bridge.provisionUrl = request.provisionUrl;
@@ -82,7 +82,7 @@ export class AdminGitterService {
     public async newConfigForUpstream(@QueryParam("scalar_token") scalarToken: string, request: CreateWithUpstream): Promise<BridgeResponse> {
         const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
 
-        const upstream = await Upstream.findByPrimary(request.upstreamId);
+        const upstream = await Upstream.findByPk(request.upstreamId);
         if (!upstream) throw new ApiError(400, "Upstream not found");
 
         const bridge = await GitterBridgeRecord.create({

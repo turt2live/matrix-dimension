@@ -3,7 +3,7 @@ import Upstream from "./Upstream";
 
 @Table({
     tableName: "dimension_gitter_bridges",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class GitterBridgeRecord extends Model<GitterBridgeRecord> {

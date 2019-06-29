@@ -5,7 +5,7 @@ import User from "./User";
 
 @Table({
     tableName: "dimension_neb_notification_users",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class NebNotificationUser extends Model<NebNotificationUser> {

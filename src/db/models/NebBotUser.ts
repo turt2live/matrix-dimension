@@ -4,7 +4,7 @@ import NebIntegration from "./NebIntegration";
 
 @Table({
     tableName: "dimension_neb_bot_users",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class NebBotUser extends Model<NebBotUser> {

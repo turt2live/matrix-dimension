@@ -3,7 +3,7 @@ import Upstream from "./Upstream";
 
 @Table({
     tableName: "dimension_telegram_bridges",
-    underscoredAll: false,
+    underscored: false,
     timestamps: false,
 })
 export default class TelegramBridgeRecord extends Model<TelegramBridgeRecord> {
