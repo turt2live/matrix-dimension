@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
 import {
     FE_ScalarAccountResponse,
     FE_ScalarOpenIdRequestBody,
@@ -7,27 +6,25 @@ import {
 } from "../../models/scalar-server-responses";
 import { AuthedApi } from "../authed-api";
 import { SCALAR_API_VERSION } from "../../../../../src/utils/common-constants";
-import { map } from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class ScalarServerApiService extends AuthedApi {
-    constructor(http: Http) {
+    constructor(http: HttpClient) {
         super(http)
     }
 
     public ping(): Promise<any> {
-        return this.http.get("/api/v1/scalar/ping")
-            .pipe(map(res => res.json())).toPromise();
+        return this.http.get("/api/v1/scalar/ping").toPromise();
     }
 
     public getAccount(): Promise<FE_ScalarAccountResponse> {
-        return this.authedGet("/api/v1/scalar/account", {v: SCALAR_API_VERSION})
-            .pipe(map(res => res.json())).toPromise();
+        return this.authedGet<FE_ScalarAccountResponse>("/api/v1/scalar/account", {v: SCALAR_API_VERSION}).toPromise();
     }
 
     public register(openId: FE_ScalarOpenIdRequestBody): Promise<FE_ScalarRegisterResponse> {
-        return this.http.post("/api/v1/scalar/register", openId, {
+        return this.http.post<FE_ScalarRegisterResponse>("/api/v1/scalar/register", openId, {
             params: {v: SCALAR_API_VERSION},
-        }).pipe(map(res => res.json())).toPromise();
+        }).toPromise();
     }
 }

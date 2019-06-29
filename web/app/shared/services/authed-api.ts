@@ -1,26 +1,26 @@
-import { Http, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import { SessionStorage } from "../SessionStorage";
+import { HttpClient } from "@angular/common/http";
 
 export class AuthedApi {
-    constructor(protected http: Http) {
+    constructor(protected http: HttpClient) {
     }
 
-    protected authedGet(url: string, qs?: any): Observable<Response> {
+    protected authedGet<T>(url: string, qs?: any): Observable<T> {
         if (!qs) qs = {};
         qs["scalar_token"] = SessionStorage.scalarToken;
-        return this.http.get(url, {params: qs});
+        return this.http.get<T>(url, {params: qs});
     }
 
-    protected authedPost(url: string, body?: any): Observable<Response> {
+    protected authedPost<T>(url: string, body?: any): Observable<T> {
         if (!body) body = {};
         const qs = {scalar_token: SessionStorage.scalarToken};
-        return this.http.post(url, body, {params: qs});
+        return this.http.post<T>(url, body, {params: qs});
     }
 
-    protected authedDelete(url: string, qs?: any): Observable<Response> {
+    protected authedDelete<T>(url: string, qs?: any): Observable<T> {
         if (!qs) qs = {};
         qs["scalar_token"] = SessionStorage.scalarToken;
-        return this.http.delete(url, {params: qs});
+        return this.http.delete<T>(url, {params: qs});
     }
 }

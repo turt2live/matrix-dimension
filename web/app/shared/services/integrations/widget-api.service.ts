@@ -1,13 +1,12 @@
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
 import { AuthedApi } from "../authed-api";
 import { FE_Widget } from "../../models/integration";
 import { IntegrationsApiService } from "./integrations-api.service";
-import { map } from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class WidgetApiService extends AuthedApi {
-    constructor(http: Http, private integrationsApi: IntegrationsApiService) {
+    constructor(http: HttpClient, private integrationsApi: IntegrationsApiService) {
         super(http);
     }
 
@@ -16,7 +15,6 @@ export class WidgetApiService extends AuthedApi {
     }
 
     public isEmbeddable(url: string): Promise<any> { // 200 = success, anything else = error
-        return this.http.get("/api/v1/dimension/widgets/embeddable", {params: {url: url}})
-            .pipe(map(r => r.json())).toPromise();
+        return this.http.get("/api/v1/dimension/widgets/embeddable", {params: {url: url}}).toPromise();
     }
 }

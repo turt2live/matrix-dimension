@@ -1,32 +1,28 @@
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
 import { AuthedApi } from "../authed-api";
 import { FE_Appservice } from "../../models/admin-responses";
-import { map } from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class AdminAppserviceApiService extends AuthedApi {
-    constructor(http: Http) {
+    constructor(http: HttpClient) {
         super(http);
     }
 
     public getAppservices(): Promise<FE_Appservice[]> {
-        return this.authedGet("/api/v1/dimension/admin/appservices/all")
-            .pipe(map(r => r.json())).toPromise();
+        return this.authedGet<FE_Appservice[]>("/api/v1/dimension/admin/appservices/all").toPromise();
     }
 
     public getAppservice(appserviceId: string): Promise<FE_Appservice> {
-        return this.authedGet("/api/v1/dimension/admin/appservices/" + appserviceId)
-            .pipe(map(r => r.json())).toPromise();
+        return this.authedGet<FE_Appservice>("/api/v1/dimension/admin/appservices/" + appserviceId).toPromise();
     }
 
     public createAppservice(userPrefix: string): Promise<FE_Appservice> {
-        return this.authedPost("/api/v1/dimension/admin/appservices/new", {userPrefix: userPrefix})
-            .pipe(map(r => r.json())).toPromise();
+        return this.authedPost<FE_Appservice>("/api/v1/dimension/admin/appservices/new", {userPrefix: userPrefix})
+            .toPromise();
     }
 
     public test(appserviceId: string): Promise<any> {
-        return this.authedPost("/api/v1/dimension/admin/appservices/" + appserviceId + "/test")
-            .pipe(map(r => r.json())).toPromise();
+        return this.authedPost("/api/v1/dimension/admin/appservices/" + appserviceId + "/test").toPromise();
     }
 }

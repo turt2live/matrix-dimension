@@ -1,6 +1,5 @@
 import { ApplicationRef, Injector, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-import { HttpModule } from "@angular/http";
 import { FormsModule } from "@angular/forms";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
@@ -112,11 +111,12 @@ import { AdminSlackApiService } from "./shared/services/admin/admin-slack-api.se
 import { AdminLogoutConfirmationDialogComponent } from "./admin/home/logout-confirmation/logout-confirmation.component";
 import { ReauthExampleWidgetWrapperComponent } from "./widget-wrappers/reauth-example/reauth-example.component";
 import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-test/manager-test.component";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
     imports: [
         BrowserModule,
-        HttpModule,
+        HttpClientModule,
         FormsModule,
         routing,
         NgbModule,
