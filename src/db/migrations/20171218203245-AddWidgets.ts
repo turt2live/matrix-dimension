@@ -30,7 +30,7 @@ export default {
                     isEnabled: true,
                     isPublic: true,
                     description: "Collaborate on documents with members of your room.",
-                    optionsJson: '{"defaultUrl":"https://demo.riot.im/etherpad/p/$roomId_$padName"}',
+                    optionsJson: '{"defaultUrl":"https://scalar.vector.im/etherpad/p/$roomId_$padName"}',
                 },
                 {
                     type: "googlecalendar",

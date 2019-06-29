@@ -26,7 +26,7 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent {
                 const padName = parsedUrl.query["padName"];
 
                 // Set the new URL so that it unpacks correctly
-                widget.url = `https://demo.riot.im/etherpad/p/${padName}`;
+                widget.url = `https://scalar.vector.im/etherpad/p/${padName}`;
             }
         }
     }
@@ -34,7 +34,7 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent {
     protected OnNewWidgetPrepared(widget: EditableWidget): void {
         const name = this.nameService.getHumanReadableName();
 
-        let template = "https://demo.riot.im/etherpad/p/$roomId_$padName";
+        let template = "https://scalar.vector.im/etherpad/p/$roomId_$padName";
         if (this.etherpadWidget.options && this.etherpadWidget.options.defaultUrl) {
             template = this.etherpadWidget.options.defaultUrl;
         }

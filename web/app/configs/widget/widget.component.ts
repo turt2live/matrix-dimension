@@ -10,6 +10,7 @@ const SCALAR_WIDGET_LINKS = [
     "https://scalar-staging.vector.im/scalar/api/widgets/__TYPE__.html?__PNAME__=",
     "https://scalar-develop.riot.im/scalar/api/widgets/__TYPE__.html?__PNAME__=",
     "https://demo.riot.im/scalar/api/widgets/__TYPE__.html?__PNAME__=",
+    "https://scalar.vector.im/scalar/api/widgets/__TYPE__.html?__PNAME__=",
 ];
 
 export const DISABLE_AUTOMATIC_WRAPPING = "";
