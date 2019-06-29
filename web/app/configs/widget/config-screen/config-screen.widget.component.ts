@@ -9,7 +9,7 @@ import { Component, ContentChild, Input, TemplateRef } from "@angular/core";
 export class ConfigScreenWidgetComponent {
 
     @Input() widgetComponent: WidgetComponent;
-    @ContentChild(TemplateRef) widgetParamsTemplate: TemplateRef<any>;
+    @ContentChild(TemplateRef, {static: false}) widgetParamsTemplate: TemplateRef<any>;
 
     constructor() {
     }

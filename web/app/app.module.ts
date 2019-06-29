@@ -1,19 +1,21 @@
 import { ApplicationRef, Injector, NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
+import { ModalModule } from "ngx-modialog";
+import { BootstrapModalModule } from "ngx-modialog/plugins/bootstrap";
+import { BreadcrumbsModule } from "ng2-breadcrumbs";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { UiSwitchModule } from "angular2-ui-switch";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { routing } from "./app.routing";
 import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
+import { BrowserModule } from "@angular/platform-browser";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
-import { routing } from "./app.routing";
 import { createNewHosts, removeNgStyles } from "@angularclass/hmr";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { RiotComponent } from "./riot/riot.component";
-import { UiSwitchModule } from "angular2-ui-switch";
 import { ScalarClientApiService } from "./shared/services/scalar/scalar-client-api.service";
 import { ToasterModule, ToasterService } from "angular2-toaster";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component";
-import { BootstrapModalModule } from "ngx-modialog/plugins/bootstrap";
-import { ModalModule } from "ngx-modialog";
 import { GenericWidgetWrapperComponent } from "./widget-wrappers/generic/generic.component";
 import { ToggleFullscreenDirective } from "./shared/directives/toggle-fullscreen.directive";
 import { FullscreenButtonComponent } from "./elements/fullscreen-button/fullscreen-button.component";
@@ -22,7 +24,6 @@ import { JitsiWidgetWrapperComponent } from "./widget-wrappers/jitsi/jitsi.compo
 import { GCalWidgetWrapperComponent } from "./widget-wrappers/gcal/gcal.component";
 import { PageHeaderComponent } from "./page-header/page-header.component";
 import { SpinnerComponent } from "./elements/spinner/spinner.component";
-import { BreadcrumbsModule } from "ng2-breadcrumbs";
 import { RiotHomeComponent } from "./riot/riot-home/home.component";
 import { IntegrationBagComponent } from "./integration-bag/integration-bag.component";
 import { ScalarServerApiService } from "./shared/services/scalar/scalar-server-api.service";
@@ -111,7 +112,6 @@ import { AdminSlackApiService } from "./shared/services/admin/admin-slack-api.se
 import { AdminLogoutConfirmationDialogComponent } from "./admin/home/logout-confirmation/logout-confirmation.component";
 import { ReauthExampleWidgetWrapperComponent } from "./widget-wrappers/reauth-example/reauth-example.component";
 import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-test/manager-test.component";
-import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
     imports: [

@@ -9,7 +9,7 @@ import { Component, ContentChild, Input, TemplateRef } from "@angular/core";
 export class ConfigScreenComplexBotComponent {
 
     @Input() botComponent: ComplexBotComponent<any>;
-    @ContentChild(TemplateRef) botParamsTemplate: TemplateRef<any>;
+    @ContentChild(TemplateRef, {static: false}) botParamsTemplate: TemplateRef<any>;
 
     constructor() {
     }

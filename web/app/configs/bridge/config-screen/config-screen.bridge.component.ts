@@ -9,7 +9,7 @@ import { BridgeComponent } from "../bridge.component";
 export class ConfigScreenBridgeComponent {
 
     @Input() bridgeComponent: BridgeComponent<any>;
-    @ContentChild(TemplateRef) bridgeParamsTemplate: TemplateRef<any>;
+    @ContentChild(TemplateRef, {static: false}) bridgeParamsTemplate: TemplateRef<any>;
 
     constructor() {
     }
