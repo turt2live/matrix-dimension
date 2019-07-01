@@ -10,6 +10,7 @@ export interface IMSCUser {
 }
 
 export const ROLE_MSC_USER = "ROLE_MSC_USER";
+export const ROLE_MSC_TERMS_SIGNED = "ROLE_MSC_TERMS_SIGNED";
 
 export default class MSCSecurity implements ServiceAuthenticator {
 
@@ -23,21 +24,27 @@ export default class MSCSecurity implements ServiceAuthenticator {
     getMiddleware(): RequestHandler {
         return (async (req: Request, res: Response, next: () => void) => {
             try {
+                let token = null;
+
                 if (req.headers.authorization) {
                     const header = req.headers.authorization;
                     if (!header.startsWith("Bearer ")) {
                         return res.status(401).json({errcode: "M_INVALID_TOKEN", error: "Invalid token"});
                     }
+                    token = header.substring("Bearer ".length);
+                } else if (req.query && req.query.access_token) {
+                    token = req.query.access_token;
+                }
 
-                    const token = header.substring("Bearer ".length);
+                if (token) {
                     req.user = <IMSCUser>{
                         userId: await this.accountController.getTokenOwner(token),
                         token: token,
                     };
                     return next();
+                } else {
+                    return res.status(401).json({errcode: "M_INVALID_TOKEN", error: "Invalid token"});
                 }
-
-                console.log(req.query);
             } catch (e) {
                 if (e instanceof ApiError) {
                     // TODO: Proper error message
