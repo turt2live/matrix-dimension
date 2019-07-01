@@ -3,6 +3,7 @@ import { Request, RequestHandler, Response, Router } from "express";
 import { ApiError } from "../ApiError";
 import { LogService } from "matrix-js-snippets";
 import AccountController from "../controllers/AccountController";
+import TermsController from "../controllers/TermsController";
 
 export interface IMSCUser {
     userId: string;
@@ -10,18 +11,25 @@ export interface IMSCUser {
 }
 
 export const ROLE_MSC_USER = "ROLE_MSC_USER";
-export const ROLE_MSC_TERMS_SIGNED = "ROLE_MSC_TERMS_SIGNED";
+
+const TERMS_IGNORED_ROUTES = [
+    {method: "GET", path: "/_matrix/integrations/v1/terms"},
+    {method: "POST", path: "/_matrix/integrations/v1/terms"},
+    {method: "POST", path: "/_matrix/integrations/v1/register"},
+    {method: "POST", path: "/_matrix/integrations/v1/logout"},
+];
 
 export default class MSCSecurity implements ServiceAuthenticator {
 
     private accountController = new AccountController();
+    private termsController = new TermsController();
 
     public getRoles(req: Request): string[] {
         if (req.user) return [ROLE_MSC_USER];
         return [];
     }
 
-    getMiddleware(): RequestHandler {
+    public getMiddleware(): RequestHandler {
         return (async (req: Request, res: Response, next: () => void) => {
             try {
                 let token = null;
@@ -41,6 +49,27 @@ export default class MSCSecurity implements ServiceAuthenticator {
                         userId: await this.accountController.getTokenOwner(token),
                         token: token,
                     };
+
+                    let needTerms = true;
+                    if (req.method !== "OPTIONS") {
+                        for (const route of TERMS_IGNORED_ROUTES) {
+                            if (route.method === req.method && route.path === req.path) {
+                                needTerms = false;
+                                break;
+                            }
+                        }
+                    } else needTerms = false;
+
+                    if (needTerms) {
+                        const signatureNeeded = await this.termsController.doesUserNeedToSignTerms(req.user);
+                        if (signatureNeeded) {
+                            return res.status(403).json({
+                                errcode: "M_TERMS_NOT_SIGNED",
+                                error: "The user has not accepted all terms of service for this integration manager",
+                            });
+                        }
+                    }
+
                     return next();
                 } else {
                     return res.status(401).json({errcode: "M_INVALID_TOKEN", error: "Invalid token"});
@@ -57,7 +86,7 @@ export default class MSCSecurity implements ServiceAuthenticator {
         });
     }
 
-    initialize(_router: Router): void {
+    public initialize(_router: Router): void {
     }
 
 }
