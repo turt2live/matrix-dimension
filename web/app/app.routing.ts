@@ -44,6 +44,7 @@ import { AdminSlackBridgeComponent } from "./admin/bridges/slack/slack.component
 import { SlackBridgeConfigComponent } from "./configs/bridge/slack/slack.bridge.component";
 import { ReauthExampleWidgetWrapperComponent } from "./widget-wrappers/reauth-example/reauth-example.component";
 import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-test/manager-test.component";
+import { AdminTermsComponent } from "./admin/terms/terms.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -145,7 +146,17 @@ const routes: Routes = [
                                 component: AdminStickerPacksComponent,
                             },
                         ],
-                    }
+                    },
+                    {
+                        path: "terms",
+                        data: {breadcrumb: "Terms of Service", name: "Terms of Service"},
+                        children: [
+                            {
+                                path: "",
+                                component: AdminTermsComponent,
+                            },
+                        ],
+                    },
                 ],
             },
             {

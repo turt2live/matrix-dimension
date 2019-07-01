@@ -4,6 +4,7 @@ import { ApiError } from "../ApiError";
 import { LogService } from "matrix-js-snippets";
 import AccountController from "../controllers/AccountController";
 import TermsController from "../controllers/TermsController";
+import config from "../../config";
 
 export interface IMSCUser {
     userId: string;
@@ -11,6 +12,7 @@ export interface IMSCUser {
 }
 
 export const ROLE_MSC_USER = "ROLE_MSC_USER";
+export const ROLE_MSC_ADMIN = "ROLE_MSC_ADMIN";
 
 const TERMS_IGNORED_ROUTES = [
     {method: "GET", path: "/_matrix/integrations/v1/terms"},
@@ -25,7 +27,13 @@ export default class MSCSecurity implements ServiceAuthenticator {
     private termsController = new TermsController();
 
     public getRoles(req: Request): string[] {
-        if (req.user) return [ROLE_MSC_USER];
+        if (req.user) {
+            const roles = [ROLE_MSC_USER];
+            if (config.admins.includes(req.user.userId)) {
+                roles.push(ROLE_MSC_ADMIN);
+            }
+            return roles;
+        }
         return [];
     }
 

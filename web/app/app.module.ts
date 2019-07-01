@@ -112,6 +112,8 @@ import { AdminSlackApiService } from "./shared/services/admin/admin-slack-api.se
 import { AdminLogoutConfirmationDialogComponent } from "./admin/home/logout-confirmation/logout-confirmation.component";
 import { ReauthExampleWidgetWrapperComponent } from "./widget-wrappers/reauth-example/reauth-example.component";
 import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-test/manager-test.component";
+import { AdminTermsApiService } from "./shared/services/admin/admin-terms-api.service";
+import { AdminTermsComponent } from "./admin/terms/terms.component";
 
 @NgModule({
     imports: [
@@ -204,6 +206,7 @@ import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-tes
         AdminLogoutConfirmationDialogComponent,
         ReauthExampleWidgetWrapperComponent,
         ManagerTestWidgetWrapperComponent,
+        AdminTermsComponent,
 
         // Vendor
     ],
@@ -233,6 +236,7 @@ import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-tes
         SlackApiService,
         AdminSlackApiService,
         ToasterService,
+        AdminTermsApiService,
         {provide: Window, useValue: window},
 
         // Vendor
