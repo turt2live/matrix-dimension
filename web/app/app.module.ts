@@ -114,6 +114,8 @@ import { ReauthExampleWidgetWrapperComponent } from "./widget-wrappers/reauth-ex
 import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-test/manager-test.component";
 import { AdminTermsApiService } from "./shared/services/admin/admin-terms-api.service";
 import { AdminTermsComponent } from "./admin/terms/terms.component";
+import { AdminNewTermsComponent } from "./admin/terms/new/new.component";
+import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
 
 @NgModule({
     imports: [
@@ -128,6 +130,7 @@ import { AdminTermsComponent } from "./admin/terms/terms.component";
         ModalModule.forRoot(),
         BootstrapModalModule,
         BreadcrumbsModule,
+        CKEditorModule,
     ],
     declarations: [
         AppComponent,
@@ -207,6 +210,7 @@ import { AdminTermsComponent } from "./admin/terms/terms.component";
         ReauthExampleWidgetWrapperComponent,
         ManagerTestWidgetWrapperComponent,
         AdminTermsComponent,
+        AdminNewTermsComponent,
 
         // Vendor
     ],

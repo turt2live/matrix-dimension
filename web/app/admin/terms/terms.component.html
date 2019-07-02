@@ -15,7 +15,7 @@
                 <thead>
                 <tr>
                     <th>Policy Name</th>
-                    <th>Published Version</th>
+                    <th>Version</th>
                     <th class="text-center" style="width: 120px;">Actions</th>
                 </tr>
                 </thead>
@@ -35,6 +35,9 @@
                 </tr>
                 </tbody>
             </table>
+            <button type="button" class="btn btn-success btn-sm" (click)="createPolicy()">
+                <i class="fa fa-plus"></i> New draft policy
+            </button>
         </div>
     </my-ibox>
 </div>

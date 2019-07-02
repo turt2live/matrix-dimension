@@ -1,0 +1,70 @@
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!isLoading">
+    <my-ibox boxTitle="Policy information">
+        <div class="my-ibox-content">
+            <label class="label-block">
+                Name
+                <span class="text-muted ">The name of your policy, in English. Example: "Terms of Service"</span>
+                <input type="text" class="form-control"
+                       placeholder="My Policy" (keyup)="onNameKeyUp()"
+                       [(ngModel)]="languages['en'].name" [disabled]="isUpdating"/>
+            </label>
+            <label class="label-block">
+                Shortcode
+                <span class="text-muted ">This is automatically generated to give the policy a unique identifier.</span>
+                <input type="text" class="form-control"
+                       [(ngModel)]="shortcode" [disabled]="true"/>
+            </label>
+        </div>
+    </my-ibox>
+    <my-ibox>
+        <div class="my-ibox-title">
+            <h5>English version</h5>
+        </div>
+        <div class="my-ibox-content">
+            <label class="label-block">
+                Policy text
+                <span class="text-muted ">This is where you put your policy's content.</span>
+            </label>
+            <ckeditor [editor]="Editor" [(ngModel)]="languages['en'].text"></ckeditor>
+        </div>
+    </my-ibox>
+    <my-ibox *ngFor="let code of otherLanguageCodes">
+        <div class="my-ibox-title">
+            <h5>{{languages[code].langName}} version</h5>
+        </div>
+        <div class="my-ibox-content">
+            <label class="label-block">
+                Name
+                <span class="text-muted ">The translated name of your policy</span>
+                <input type="text" class="form-control"
+                       placeholder="My Policy"
+                       [(ngModel)]="languages[code].name" [disabled]="isUpdating"/>
+            </label>
+            <label class="label-block">
+                Policy text
+                <span class="text-muted ">This is where you put your policy's content.</span>
+            </label>
+            <ckeditor [editor]="Editor" [(ngModel)]="languages[code].text" [disabled]="isUpdating"></ckeditor>
+        </div>
+    </my-ibox>
+    <my-ibox [hasTitle]="false">
+        <div class="my-ibox-content buttons">
+            <select [(ngModel)]="chosenLanguage" [disabled]="isUpdating" class="form-control form-control-sm">
+                <option *ngFor="let lang of availableLanguages" [ngValue]="lang.code">{{lang.name}}</option>
+            </select>
+            <button type="button" (click)="addLanguage()" title="save" class="btn btn-outline-success btn-sm">
+                <i class="fa fa-plus"></i> Add language
+            </button>
+        </div>
+    </my-ibox>
+    <my-ibox [hasTitle]="false">
+        <div class="my-ibox-content buttons">
+            <button type="button" (click)="create()" title="save" class="btn btn-primary btn-sm">
+                <i class="far fa-save"></i> Create draft
+            </button>
+        </div>
+    </my-ibox>
+</div>
