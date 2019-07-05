@@ -12,4 +12,8 @@ export class AdminTermsApiService extends AuthedApi {
     public getAllPolicies(): Promise<FE_TermsEditable[]> {
         return this.authedGet<FE_TermsEditable[]>("/api/v1/dimension/admin/terms/all").toPromise();
     }
+
+    public createDraft(shortcode: string, policyInfo: { name: string, text: string, url: string }): Promise<FE_TermsEditable> {
+        return this.authedPost<FE_TermsEditable>(`/api/v1/dimension/admin/terms/${shortcode}/draft`, policyInfo).toPromise();
+    }
 }
