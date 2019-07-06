@@ -68,6 +68,32 @@ export default class TermsController {
         return this.mapPolicy(true, terms);
     }
 
+    public async updatePolicy(name: string, shortcode: string, version: string, text: string, url: string): Promise<ITerms> {
+        const terms = await TermsRecord.findOne({where: {shortcode, version}, include: [TermsTextRecord]});
+        const termsText = terms.texts.find(e => e.language === "en");
+
+        termsText.url = url;
+        termsText.text = text;
+        termsText.name = name;
+
+        await termsText.save();
+
+        return this.mapPolicy(true, terms);
+    }
+
+    public async publishPolicy(shortcode: string, targetVersion: string): Promise<ITerms> {
+        const terms = await TermsRecord.findOne({
+            where: {shortcode, version: VERSION_DRAFT},
+            include: [TermsTextRecord],
+        });
+        if (!terms) throw new Error("Missing terms");
+
+        terms.version = targetVersion;
+        await terms.save();
+
+        return this.mapPolicy(true, terms);
+    }
+
     private mapPolicy(withText: boolean, policy: TermsRecord): ITerms {
         const languages = {};
         policy.texts.forEach(pt => languages[pt.language] = {

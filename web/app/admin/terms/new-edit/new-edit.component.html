@@ -14,7 +14,7 @@
             </label>
             <label class="label-block">
                 Policy text
-                <span class="text-muted ">This is where you put your policy's content.</span>
+                <span class="text-muted">This is where you put your policy's content.</span>
             </label>
             <ckeditor [editor]="Editor" [(ngModel)]="languages[code].text" [disabled]="isUpdating"></ckeditor>
         </div>
@@ -31,8 +31,14 @@
 <!--    </my-ibox>-->
     <my-ibox [hasTitle]="false">
         <div class="my-ibox-content buttons">
-            <button type="button" (click)="create()" title="save" class="btn btn-primary btn-sm">
+            <button type="button" (click)="create()" title="save" class="btn btn-primary btn-sm" *ngIf="!isEditing">
                 <i class="far fa-save"></i> Create draft
+            </button>
+            <button type="button" (click)="create()" title="save" class="btn btn-primary btn-sm" *ngIf="isEditing">
+                <i class="far fa-save"></i> Save draft
+            </button>
+            <button type="button" (click)="publish()" title="save" class="btn btn-primary btn-sm" *ngIf="isEditing">
+                <i class="fas fa-upload"></i> Publish
             </button>
         </div>
     </my-ibox>

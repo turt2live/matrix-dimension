@@ -10,6 +10,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 })
 export class AdminTermsComponent implements OnInit {
 
+    // TODO: "New draft" per policy button
+    // TODO: Delete button
+
     public isLoading = true;
     public policies: FE_TermsEditable[];
 

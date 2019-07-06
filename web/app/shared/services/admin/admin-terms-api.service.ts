@@ -16,4 +16,16 @@ export class AdminTermsApiService extends AuthedApi {
     public createDraft(shortcode: string, policyInfo: { name: string, text: string, url: string }): Promise<FE_TermsEditable> {
         return this.authedPost<FE_TermsEditable>(`/api/v1/dimension/admin/terms/${shortcode}/draft`, policyInfo).toPromise();
     }
+
+    public getDraft(shortcode: string): Promise<FE_TermsEditable> {
+        return this.authedGet<FE_TermsEditable>(`/api/v1/dimension/admin/terms/${shortcode}/draft`).toPromise();
+    }
+
+    public updateDraft(shortcode: string, policyInfo: { name: string, text: string, url: string }): Promise<FE_TermsEditable> {
+        return this.authedPut<FE_TermsEditable>(`/api/v1/dimension/admin/terms/${shortcode}/draft`, policyInfo).toPromise();
+    }
+
+    public publishDraft(shortcode: string, newVersion: string): Promise<FE_TermsEditable> {
+        return this.authedPost<FE_TermsEditable>(`/api/v1/dimension/admin/terms/${shortcode}/publish/${newVersion}`).toPromise();
+    }
 }

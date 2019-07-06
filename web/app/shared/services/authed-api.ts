@@ -17,6 +17,12 @@ export class AuthedApi {
         return this.http.post<T>(url, body, opts);
     }
 
+    protected authedPut<T>(url: string, body?: any): Observable<T> {
+        if (!body) body = {};
+        const opts = this.fillAuthOptions(null, null, null);
+        return this.http.put<T>(url, body, opts);
+    }
+
     protected authedDelete<T>(url: string, qs?: any): Observable<T> {
         const opts = this.fillAuthOptions(null, qs, null);
         return this.http.delete<T>(url, opts);

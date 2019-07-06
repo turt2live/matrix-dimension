@@ -28,7 +28,7 @@
                     <td>{{ policy.version }}</td>
 
                     <td class="text-center">
-                        <span class="previewButton" title="edit draft" *ngIf="policy.version == 'draft'">
+                        <span class="editButton" [routerLink]="['edit', policy.shortcode]" title="edit draft" *ngIf="policy.version == 'draft'">
                             <i class="fa fa-pencil-alt"></i>
                         </span>
                     </td>

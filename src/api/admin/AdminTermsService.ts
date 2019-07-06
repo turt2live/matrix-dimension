@@ -1,4 +1,4 @@
-import { GET, Path, PathParam, POST, Security } from "typescript-rest";
+import { GET, Path, PathParam, POST, PUT, Security } from "typescript-rest";
 import TermsController, { ITerms } from "../controllers/TermsController";
 import { AutoWired, Inject } from "typescript-ioc/es6";
 import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
@@ -38,5 +38,19 @@ export class AdminTermsService {
     @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
     public async createDraftPolicy(@PathParam("shortcode") shortcode: string, request: CreatePolicyObject): Promise<ITerms> {
         return this.termsController.createDraftPolicy(request.name, shortcode, request.text, request.url);
+    }
+
+    @POST
+    @Path(":shortcode/publish/:version")
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async publishDraftPolicy(@PathParam("shortcode") shortcode: string, @PathParam("version") version: string): Promise<ITerms> {
+        return this.termsController.publishPolicy(shortcode, version);
+    }
+
+    @PUT
+    @Path(":shortcode/:version")
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async updatePolicy(@PathParam("shortcode") shortcode: string, @PathParam("version") version: string, request: CreatePolicyObject): Promise<ITerms> {
+        return this.termsController.updatePolicy(request.name, shortcode, version, request.text, request.url);
     }
 }
