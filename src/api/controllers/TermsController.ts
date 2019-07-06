@@ -2,6 +2,8 @@ import { AutoWired } from "typescript-ioc/es6";
 import { IMSCUser } from "../security/MSCSecurity";
 import TermsRecord from "../../db/models/TermsRecord";
 import TermsTextRecord from "../../db/models/TermsTextRecord";
+import TermsSignedRecord from "../../db/models/TermsSignedRecord";
+import { Op } from "sequelize";
 
 export interface ILanguagePolicy {
     name: string;
@@ -45,9 +47,53 @@ export default class TermsController {
         return Object.keys((await this.getMissingTermsForUser(user)).policies).length > 0;
     }
 
-    public async getMissingTermsForUser(_user: IMSCUser): Promise<ITermsNotSignedResponse> {
+    public async getMissingTermsForUser(user: IMSCUser): Promise<ITermsNotSignedResponse> {
         // TODO: Abuse a cache for non-draft policies
-        return {policies: {}};
+        // TODO: Upstream policies
+
+        const notDrafts = await TermsRecord.findAll({
+            where: {version: {[Op.ne]: VERSION_DRAFT}},
+            include: [TermsTextRecord],
+        });
+        const signed = await TermsSignedRecord.findAll({where: {userId: user.userId}});
+
+        const latest: { [shortcode: string]: TermsRecord } = {};
+        for (const record of notDrafts) {
+            if (!latest[record.shortcode]) {
+                latest[record.shortcode] = record;
+            }
+            if (latest[record.shortcode].id < record.id) {
+                latest[record.shortcode] = record;
+            }
+        }
+
+        const missing = Object.values(latest).filter(d => !signed.find(s => s.termsId === d.id));
+        const policies: ITermsNotSignedResponse = {policies: {}};
+
+        for (const missingPolicy of missing) {
+            policies.policies[missingPolicy.shortcode] = {
+                version: missingPolicy.version,
+            };
+
+            for (const text of missingPolicy.texts) {
+                policies.policies[missingPolicy.shortcode][text.language] = {
+                    name: text.name,
+                    url: text.url,
+                };
+            }
+        }
+
+        return policies;
+    }
+
+    public async signTermsMatching(user: IMSCUser, urls: string[]): Promise<any> {
+        const terms = await TermsTextRecord.findAll({where: {url: {[Op.in]: urls}}});
+        const signed = await TermsSignedRecord.findAll({where: {userId: user.userId}});
+
+        const toAdd = terms.filter(t => !signed.find(s => s.termsId === t.termsId));
+        for (const termsToSign of toAdd) {
+            await TermsSignedRecord.create({termsId: termsToSign.id, userId: user.userId});
+        }
     }
 
     public async getPoliciesForAdmin(): Promise<ITerms[]> {

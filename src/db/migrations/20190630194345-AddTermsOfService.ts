@@ -13,7 +13,7 @@ export default {
             .then(() => queryInterface.createTable("dimension_terms_text", {
                 "id": {type: DataType.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false},
                 "termsId": {
-                    type: DataType.INTEGER, allowNull: true,
+                    type: DataType.INTEGER, allowNull: false,
                     references: {model: "dimension_terms", key: "id"},
                     onUpdate: "cascade", onDelete: "cascade",
                 },

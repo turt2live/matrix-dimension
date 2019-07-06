@@ -28,6 +28,7 @@ import CustomSimpleBotRecord from "./models/CustomSimpleBotRecord";
 import SlackBridgeRecord from "./models/SlackBridgeRecord";
 import TermsRecord from "./models/TermsRecord";
 import TermsTextRecord from "./models/TermsTextRecord";
+import TermsSignedRecord from "./models/TermsSignedRecord";
 
 class _DimensionStore {
     private sequelize: Sequelize;
@@ -67,6 +68,7 @@ class _DimensionStore {
             SlackBridgeRecord,
             TermsRecord,
             TermsTextRecord,
+            TermsSignedRecord,
         ]);
     }
 
