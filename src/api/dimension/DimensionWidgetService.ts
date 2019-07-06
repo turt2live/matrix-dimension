@@ -1,4 +1,4 @@
-import { GET, Path, QueryParam } from "typescript-rest";
+import { GET, Path, PathParam, QueryParam } from "typescript-rest";
 import { LogService } from "matrix-js-snippets";
 import * as url from "url";
 import { ApiError } from "../ApiError";
@@ -6,9 +6,17 @@ import * as dns from "dns-then";
 import config from "../../config";
 import { Netmask } from "netmask";
 import * as request from "request";
+import { VERSION_DRAFT } from "../controllers/TermsController";
+import TermsRecord from "../../db/models/TermsRecord";
+import TermsTextRecord from "../../db/models/TermsTextRecord";
 
 interface EmbedCapabilityResponse {
     canEmbed: boolean;
+}
+
+interface MinimalTermsResponse {
+    name: string;
+    text: string;
 }
 
 /**
@@ -16,6 +24,24 @@ interface EmbedCapabilityResponse {
  */
 @Path("/api/v1/dimension/widgets")
 export class DimensionWidgetService {
+
+    @GET
+    @Path("/terms/:shortcode/:language/:version")
+    public async getPolicy(@PathParam("shortcode") shortcode: string, @PathParam("language") language: string, @PathParam("version") version: string): Promise<MinimalTermsResponse> {
+        if (version === VERSION_DRAFT) {
+            throw new ApiError(401, "Cannot access draft versions of policies", "M_UNAUTHORIZED");
+        }
+
+        const terms = await TermsRecord.findOne({where: {shortcode, version}, include: [TermsTextRecord]});
+        if (!terms) throw new ApiError(404, "Not found", "M_NOT_FOUND");
+
+        const text = terms.texts.find(t => t.language === language);
+
+        return {
+            name: text.name,
+            text: text.text,
+        };
+    }
 
     @GET
     @Path("embeddable")

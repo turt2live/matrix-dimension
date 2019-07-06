@@ -9,3 +9,8 @@ export interface FE_TermsEditable {
         };
     };
 }
+
+export interface FE_MinimalTerms {
+    name: string;
+    text: string;
+}

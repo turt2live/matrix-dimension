@@ -1,0 +1,4 @@
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!isLoading" [innerHTML]="html" class="terms"></div>

@@ -46,6 +46,7 @@ import { ReauthExampleWidgetWrapperComponent } from "./widget-wrappers/reauth-ex
 import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-test/manager-test.component";
 import { AdminTermsComponent } from "./admin/terms/terms.component";
 import { AdminNewEditTermsComponent } from "./admin/terms/new-edit/new-edit.component";
+import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -280,6 +281,7 @@ const routes: Routes = [
     {
         path: "widgets",
         children: [
+            {path: "terms/:shortcode/:lang/:version", component: TermsWidgetWrapperComponent},
             {path: "generic", component: GenericWidgetWrapperComponent},
             {path: "video", component: VideoWidgetWrapperComponent},
             {path: "jitsi", component: JitsiWidgetWrapperComponent},
