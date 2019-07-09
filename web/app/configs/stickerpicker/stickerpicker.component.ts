@@ -92,7 +92,7 @@ export class StickerpickerComponent implements OnInit {
 
             const targetUrl = this.window.location.origin + "/widgets/stickerpicker";
 
-            if (widgets.response[0].content.url === targetUrl) {
+            if (Array.isArray(widgets.response) && widgets.response.length && widgets.response[0].content.url === targetUrl) {
                 console.warn("Not replacing Dimension sticker picker");
                 return;
             }
