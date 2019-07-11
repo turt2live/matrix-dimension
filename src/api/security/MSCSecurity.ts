@@ -15,6 +15,7 @@ export const ROLE_MSC_USER = "ROLE_MSC_USER";
 export const ROLE_MSC_ADMIN = "ROLE_MSC_ADMIN";
 
 const TERMS_IGNORED_ROUTES = [
+    {method: "*", path: "/api/v1/dimension/admin/"},
     {method: "GET", path: "/_matrix/integrations/v1/terms"},
     {method: "POST", path: "/_matrix/integrations/v1/terms"},
     {method: "POST", path: "/_matrix/integrations/v1/register"},
@@ -61,6 +62,10 @@ export default class MSCSecurity implements ServiceAuthenticator {
                     let needTerms = true;
                     if (req.method !== "OPTIONS") {
                         for (const route of TERMS_IGNORED_ROUTES) {
+                            if (route.method === "*" && req.path.startsWith(route.path)) {
+                                needTerms = false;
+                                break;
+                            }
                             if (route.method === req.method && route.path === req.path) {
                                 needTerms = false;
                                 break;
