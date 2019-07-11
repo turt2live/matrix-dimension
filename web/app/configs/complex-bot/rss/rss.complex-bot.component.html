@@ -19,11 +19,11 @@
                             <td>{{ feed.url }}</td>
                             <td>{{ feed.addedByUserId }}</td>
                             <td class="actions-col">
-                               <button type="button" class="btn btn-sm btn-outline-danger"
-                                       [disabled]="isUpdating || !feed.isSelf"
-                                       (click)="removeFeed(feed)">
-                                   <i class="far fa-trash-alt"></i> Remove
-                               </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                        [disabled]="isUpdating || !feed.isSelf"
+                                        (click)="removeFeed(feed)">
+                                    <i class="far fa-trash-alt"></i> Remove
+                                </button>
                             </td>
                         </tr>
                         <tr>
@@ -33,7 +33,7 @@
                                            [(ngModel)]="newFeedUrl"
                                            placeholder="https://example.org/feed.atom"
                                            name="newFeedUrl"
-                                           title="New feed URL" />
+                                           title="New feed URL"/>
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-outline-success"
                                                 [disabled]="isUpdating"

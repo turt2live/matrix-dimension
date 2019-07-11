@@ -36,7 +36,8 @@
                     <span class="name">{{ pack.displayName }}</span>
                     <span class="description">{{ pack.description }}</span>
 
-                    <span class="author" *ngIf="pack.author.type !== 'none'">Created by <a [href]="pack.author.reference">{{ pack.author.name }}</a> under </span>
+                    <span class="author" *ngIf="pack.author.type !== 'none'">Created by <a
+                            [href]="pack.author.reference">{{ pack.author.name }}</a> under </span>
                     <span class="license"><a [href]="pack.license.urlPath">{{ pack.license.name }}</a></span>
                 </div>
             </div>

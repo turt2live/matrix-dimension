@@ -11,7 +11,7 @@ export class GoogleCalendarWidgetConfigComponent extends WidgetComponent {
         super(WIDGET_GOOGLE_CALENDAR, "Google Calendar", DISABLE_AUTOMATIC_WRAPPING, "googleCalendar");
     }
 
-    protected  OnNewWidgetPrepared(widget: EditableWidget) {
+    protected OnNewWidgetPrepared(widget: EditableWidget) {
         widget.dimension.newData.shareId = "";
     }
 

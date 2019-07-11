@@ -24,7 +24,8 @@
                 <tr *ngFor="let neb of configurations trackById">
                     <td>
                         {{ neb.upstreamId ? "matrix.org's go-neb" : "Self-hosted go-neb" }}
-                        <span class="text-muted" style="display: inline-block;" *ngIf="!neb.upstreamId">({{ neb.adminUrl }})</span>
+                        <span class="text-muted" style="display: inline-block;"
+                              *ngIf="!neb.upstreamId">({{ neb.adminUrl }})</span>
                     </td>
                     <td>
                         {{ getEnabledBotsString(neb) }}

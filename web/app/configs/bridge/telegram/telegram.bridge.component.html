@@ -8,7 +8,8 @@
                 <div *ngIf="isBridged">
                     This room is bridged to "{{ chatName }}" (<code>{{ chatId }}</code>) on Telegram.
                     <div *ngIf="canUnbridge">
-                        <button type="button" class="btn btn-sm btn-danger" [disabled]="isUpdating" (click)="unbridgeRoom()">
+                        <button type="button" class="btn btn-sm btn-danger" [disabled]="isUpdating"
+                                (click)="unbridgeRoom()">
                             Unbridge
                         </button>
                     </div>
@@ -20,7 +21,8 @@
                     <label class="label-block">
                         Chat ID
                         <span class="text-muted">After inviting <a href="https://t.me/{{ botUsername }}" target="_blank">@{{ botUsername }}</a> to your Telegram chat, run the command <code>/id</code> in the Telegram room to get the chat ID.</span>
-                        <input title="chat ID" type="text" class="form-control form-control-sm col-md-3" [(ngModel)]="chatId" [disabled]="isUpdating" />
+                        <input title="chat ID" type="text" class="form-control form-control-sm col-md-3"
+                               [(ngModel)]="chatId" [disabled]="isUpdating"/>
                     </label>
                     <button type="button" class="btn btn-sm btn-primary" [disabled]="isUpdating" (click)="bridgeRoom()">
                         Bridge

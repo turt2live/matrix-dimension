@@ -10,7 +10,8 @@
             <label class="label-block">
                 Name
                 <span class="text-muted ">The translated name of your policy</span>
-                <input type="text" class="form-control" placeholder="My Policy" [(ngModel)]="languages[code].name" [disabled]="isUpdating"/>
+                <input type="text" class="form-control" placeholder="My Policy" [(ngModel)]="languages[code].name"
+                       [disabled]="isUpdating"/>
             </label>
             <label class="label-block">
                 Policy text
@@ -19,16 +20,16 @@
             <ckeditor [editor]="Editor" [(ngModel)]="languages[code].text" [disabled]="isUpdating"></ckeditor>
         </div>
     </my-ibox>
-<!--    <my-ibox [hasTitle]="false">-->
-<!--        <div class="my-ibox-content buttons">-->
-<!--            <select [(ngModel)]="chosenLanguage" [disabled]="isUpdating" class="form-control form-control-sm">-->
-<!--                <option *ngFor="let lang of availableLanguages" [ngValue]="lang.code">{{lang.name}}</option>-->
-<!--            </select>-->
-<!--            <button type="button" (click)="addLanguage()" title="save" class="btn btn-outline-success btn-sm">-->
-<!--                <i class="fa fa-plus"></i> Add language-->
-<!--            </button>-->
-<!--        </div>-->
-<!--    </my-ibox>-->
+    <!--    <my-ibox [hasTitle]="false">-->
+    <!--        <div class="my-ibox-content buttons">-->
+    <!--            <select [(ngModel)]="chosenLanguage" [disabled]="isUpdating" class="form-control form-control-sm">-->
+    <!--                <option *ngFor="let lang of availableLanguages" [ngValue]="lang.code">{{lang.name}}</option>-->
+    <!--            </select>-->
+    <!--            <button type="button" (click)="addLanguage()" title="save" class="btn btn-outline-success btn-sm">-->
+    <!--                <i class="fa fa-plus"></i> Add language-->
+    <!--            </button>-->
+    <!--        </div>-->
+    <!--    </my-ibox>-->
     <my-ibox [hasTitle]="false">
         <div class="my-ibox-content buttons">
             <button type="button" (click)="create()" title="save" class="btn btn-primary btn-sm" *ngIf="!isEditing">

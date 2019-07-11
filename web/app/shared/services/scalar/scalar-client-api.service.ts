@@ -5,7 +5,8 @@ import {
     JoinRuleStateResponse,
     MembershipStateResponse,
     RoomEncryptionStatusResponse,
-    ScalarSuccessResponse, ScalarWidget,
+    ScalarSuccessResponse,
+    ScalarWidget,
     SetPowerLevelResponse,
     WidgetsResponse
 } from "../../models/server-client-responses";
@@ -73,7 +74,7 @@ export class ScalarClientApiService {
         });
     }
 
-    public deleteWidget(roomId: string, widget: EditableWidget|ScalarWidget): Promise<ScalarSuccessResponse> {
+    public deleteWidget(roomId: string, widget: EditableWidget | ScalarWidget): Promise<ScalarSuccessResponse> {
         const anyWidget: any = widget;
         return this.callAction("set_widget", {
             room_id: roomId,
@@ -83,7 +84,7 @@ export class ScalarClientApiService {
         });
     }
 
-    public deleteUserWidget(widget: EditableWidget|ScalarWidget): Promise<ScalarSuccessResponse> {
+    public deleteUserWidget(widget: EditableWidget | ScalarWidget): Promise<ScalarSuccessResponse> {
         const anyWidget: any = widget;
         return this.callAction("set_widget", {
             userWidget: true,

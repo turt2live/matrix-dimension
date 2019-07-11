@@ -11,5 +11,6 @@ export class LogoutConfirmationDialogContext extends BSModalContext {
 })
 export class AdminLogoutConfirmationDialogComponent implements ModalComponent<LogoutConfirmationDialogContext> {
 
-    constructor(public dialog: DialogRef<LogoutConfirmationDialogContext>) {}
+    constructor(public dialog: DialogRef<LogoutConfirmationDialogContext>) {
+    }
 }

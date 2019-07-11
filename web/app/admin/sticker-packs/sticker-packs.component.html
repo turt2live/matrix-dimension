@@ -11,8 +11,9 @@
             </p>
 
             <div class="input-group input-group-sm telegram-import">
-                <input type="text" class="form-control" [(ngModel)]="tgUrl" placeholder="https://t.me/addstickers/YourPackID"
-                       [disabled]="isImporting" />
+                <input type="text" class="form-control" [(ngModel)]="tgUrl"
+                       placeholder="https://t.me/addstickers/YourPackID"
+                       [disabled]="isImporting"/>
                 <span class="input-group-btn">
                     <button class="btn btn-primary" (click)="startTelegramImport()" [disabled]="!tgUrl || isImporting">
                         <i class="fa fa-download"></i>

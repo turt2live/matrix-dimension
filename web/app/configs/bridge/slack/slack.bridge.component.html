@@ -11,7 +11,7 @@
                 <div *ngIf="isBridged && bridge.config.link.isWebhook">
                     This room is bridged to Slack using webhooks. Webhook bridging is legacy and doesn't support as
                     rich bridging as the new approach. It is recommended to re-create the bridge with the new process.
-                    <br />
+                    <br/>
                     <button type="button" class="btn btn-sm btn-danger" [disabled]="isBusy" (click)="unbridgeRoom()">
                         Unbridge
                     </button>
@@ -28,7 +28,7 @@
                         and channels. Please click the button below to do so.
                     </p>
                     <a [href]="authUrl" rel="noopener" target="_blank">
-                        <img src="/img/slack_auth_button.png" class="slack-auth-button" alt="sign in with slack" />
+                        <img src="/img/slack_auth_button.png" class="slack-auth-button" alt="sign in with slack"/>
                     </a>
                 </div>
                 <div *ngIf="!isBridged && !needsAuth">

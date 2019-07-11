@@ -20,7 +20,8 @@
                     <td>{{ widget.displayName }}</td>
                     <td>{{ widget.description }}</td>
                     <td class="text-right">
-                        <span class="editButton" (click)="editWidget(widget)" *ngIf="widget.isEnabled && hasConfiguration(widget)">
+                        <span class="editButton" (click)="editWidget(widget)"
+                              *ngIf="widget.isEnabled && hasConfiguration(widget)">
                             <i class="fa fa-pencil-alt"></i>
                         </span>
                         <ui-switch [checked]="widget.isEnabled" size="small" [disabled]="isUpdating"

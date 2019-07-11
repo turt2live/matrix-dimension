@@ -5,7 +5,9 @@
                 .travis.yml configuration and template information
             </h5>
             <div class="my-ibox-content">
-                <p>The following section needs to be added to your <code>.travis.yml</code> file in your repositories:</p>
+                <p>
+                    The following section needs to be added to your <code>.travis.yml</code> file in your repositories:
+                </p>
                 <pre>{{ travisYaml }}</pre>
 
                 <p>
@@ -50,15 +52,17 @@
                         <tr *ngFor="let repo of getRepos()">
                             <td>{{ repo.repoKey }}</td>
                             <td>
-                                <textarea title="Repository Template" class="repo-template form-control" rows="3" (change)="repo.template = $event.target.value" [disabled]="isUpdating || !repo.isSelf">{{ repo.template }}</textarea>
+                                <textarea title="Repository Template" class="repo-template form-control" rows="3"
+                                          (change)="repo.template = $event.target.value"
+                                          [disabled]="isUpdating || !repo.isSelf">{{ repo.template }}</textarea>
                             </td>
                             <td>{{ repo.addedByUserId }}</td>
                             <td class="actions-col">
-                               <button type="button" class="btn btn-sm btn-outline-danger"
-                                       [disabled]="isUpdating || !repo.isSelf"
-                                       (click)="removeRepo(repo)">
-                                   <i class="far fa-trash-alt"></i> Remove
-                               </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                        [disabled]="isUpdating || !repo.isSelf"
+                                        (click)="removeRepo(repo)">
+                                    <i class="far fa-trash-alt"></i> Remove
+                                </button>
                             </td>
                         </tr>
                         <tr>
@@ -68,7 +72,7 @@
                                            [(ngModel)]="newRepoKey"
                                            placeholder="matrix-org/synapse"
                                            name="newRepoKey"
-                                           title="New repository name" />
+                                           title="New repository name"/>
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-outline-success"
                                                 [disabled]="isUpdating"

@@ -14,7 +14,7 @@ body {
   font-family: 'Roboto', 'Open Sans', Arial, sans-serif;
 }
 
-@include themifyRoot(){
+@include themifyRoot() {
   color: themed(defaultFgColor);
 
   // HACK: We specify the spinner color here because we can't use the mixin
