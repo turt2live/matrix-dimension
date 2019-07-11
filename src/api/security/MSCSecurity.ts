@@ -51,6 +51,9 @@ export default class MSCSecurity implements ServiceAuthenticator {
                     token = header.substring("Bearer ".length);
                 } else if (req.query && req.query.access_token) {
                     token = req.query.access_token;
+                } else if (req.query && req.query.scalar_token) {
+                    LogService.warn("MSCSecurity", "Request used old scalar_token auth - this will be removed in a future version");
+                    token = req.query.scalar_token;
                 }
 
                 if (token) {

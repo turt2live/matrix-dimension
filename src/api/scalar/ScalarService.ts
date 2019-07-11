@@ -1,9 +1,10 @@
-import { GET, Path, POST, QueryParam } from "typescript-rest";
+import { GET, Path, POST, QueryParam, Security } from "typescript-rest";
 import { ApiError } from "../ApiError";
 import { OpenId } from "../../models/OpenId";
 import { ScalarAccountResponse, ScalarRegisterResponse } from "../../models/ScalarResponses";
 import { AutoWired, Inject } from "typescript-ioc/es6";
 import AccountController from "../controllers/AccountController";
+import { ROLE_MSC_USER } from "../security/MSCSecurity";
 
 /**
  * API for the minimum Scalar API we need to implement to be compatible with clients. Used for registration
@@ -29,6 +30,7 @@ export class ScalarService {
 
     @GET
     @Path("account")
+    @Security(ROLE_MSC_USER)
     public async getAccount(@QueryParam("scalar_token") scalarToken: string, @QueryParam("v") apiVersion: string): Promise<ScalarAccountResponse> {
         if (apiVersion !== "1.1") {
             throw new ApiError(401, "Invalid API version.");
