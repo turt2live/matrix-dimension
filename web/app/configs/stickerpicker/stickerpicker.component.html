@@ -2,12 +2,12 @@
     <my-spinner></my-spinner>
 </div>
 <div *ngIf="!isLoading">
-    <my-ibox boxTitle="Sticker Packs" *ngIf="packs.length <= 0">
+    <my-ibox boxTitle="Sticker Packs" *ngIf="packs.length <= 0 && !customEnabled">
         <div class="my-ibox-content">
             <h5 style="text-align: center;">Sticker packs are not enabled on this Dimension instance.</h5>
         </div>
     </my-ibox>
-    <my-ibox boxTitle="Add Sticker Packs" *ngIf="packs.length > 0 && customEnabled">
+    <my-ibox boxTitle="Add Sticker Packs" *ngIf="customEnabled">
         <div class="my-ibox-content">
             <form (submit)="importPack()" novalidate name="importForm">
                 <label class="label-block">
