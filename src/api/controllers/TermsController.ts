@@ -4,6 +4,7 @@ import TermsRecord from "../../db/models/TermsRecord";
 import TermsTextRecord from "../../db/models/TermsTextRecord";
 import TermsSignedRecord from "../../db/models/TermsSignedRecord";
 import { Op } from "sequelize";
+import { Cache, CACHE_TERMS } from "../../MemoryCache";
 
 export interface ILanguagePolicy {
     name: string;
@@ -33,6 +34,10 @@ export interface ITerms {
     };
 }
 
+export interface ICachedTerms extends ITerms {
+    id: number;
+}
+
 export const VERSION_DRAFT = "draft";
 
 /**
@@ -43,22 +48,19 @@ export default class TermsController {
     constructor() {
     }
 
-    public async doesUserNeedToSignTerms(user: IMSCUser): Promise<boolean> {
-        return Object.keys((await this.getMissingTermsForUser(user)).policies).length > 0;
-    }
+    private async getPublishedTerms(): Promise<ICachedTerms[]> {
+        const cache = Cache.for(CACHE_TERMS);
 
-    public async getMissingTermsForUser(user: IMSCUser): Promise<ITermsNotSignedResponse> {
-        // TODO: Abuse a cache for non-draft policies
-        // TODO: Upstream policies
+        let terms = cache.get("published");
+        if (terms) return terms;
 
-        const notDrafts = await TermsRecord.findAll({
+        terms = (await TermsRecord.findAll({
             where: {version: {[Op.ne]: VERSION_DRAFT}},
             include: [TermsTextRecord],
-        });
-        const signed = await TermsSignedRecord.findAll({where: {userId: user.userId}});
+        }));
 
         const latest: { [shortcode: string]: TermsRecord } = {};
-        for (const record of notDrafts) {
+        for (const record of terms) {
             if (!latest[record.shortcode]) {
                 latest[record.shortcode] = record;
             }
@@ -66,6 +68,27 @@ export default class TermsController {
                 latest[record.shortcode] = record;
             }
         }
+
+        terms = Object.values(latest).map(p => {
+            const mapped = this.mapPolicy(false, p);
+            return <ICachedTerms>Object.assign({}, mapped, {
+                id: p.id,
+            });
+        });
+        cache.put("published", terms);
+
+        return terms;
+    }
+
+    public async doesUserNeedToSignTerms(user: IMSCUser): Promise<boolean> {
+        return Object.keys((await this.getMissingTermsForUser(user)).policies).length > 0;
+    }
+
+    public async getMissingTermsForUser(user: IMSCUser): Promise<ITermsNotSignedResponse> {
+        // TODO: Upstream policies
+
+        const latest = await this.getPublishedTerms();
+        const signed = await TermsSignedRecord.findAll({where: {userId: user.userId}});
 
         const missing = Object.values(latest).filter(d => !signed.find(s => s.termsId === d.id));
         const policies: ITermsNotSignedResponse = {policies: {}};
@@ -75,10 +98,10 @@ export default class TermsController {
                 version: missingPolicy.version,
             };
 
-            for (const text of missingPolicy.texts) {
-                policies.policies[missingPolicy.shortcode][text.language] = {
-                    name: text.name,
-                    url: text.url,
+            for (const language in missingPolicy.languages) {
+                policies.policies[missingPolicy.shortcode][language] = {
+                    name: missingPolicy.languages[language].name,
+                    url: missingPolicy.languages[language].url,
                 };
             }
         }
@@ -123,6 +146,7 @@ export default class TermsController {
         termsText.name = name;
 
         await termsText.save();
+        Cache.for(CACHE_TERMS).clear();
 
         return this.mapPolicy(true, terms);
     }
@@ -136,6 +160,7 @@ export default class TermsController {
 
         terms.version = targetVersion;
         await terms.save();
+        Cache.for(CACHE_TERMS).clear();
 
         return this.mapPolicy(true, terms);
     }
