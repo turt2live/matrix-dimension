@@ -1,5 +1,11 @@
 import {
-    AllowNull, AutoIncrement, BelongsTo, Column, ForeignKey, Model, PrimaryKey,
+    AllowNull,
+    AutoIncrement,
+    BelongsTo,
+    Column,
+    ForeignKey,
+    Model,
+    PrimaryKey,
     Table
 } from "sequelize-typescript";
 import User from "./User";
@@ -33,4 +39,7 @@ export default class UserScalarToken extends Model<UserScalarToken> {
     @Column
     @ForeignKey(() => Upstream)
     upstreamId?: number;
+
+    @BelongsTo(() => Upstream)
+    upstream: Upstream;
 }

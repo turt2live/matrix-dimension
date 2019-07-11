@@ -112,9 +112,13 @@ export default class AccountController {
      * @returns {Promise<*>} Resolves when complete.
      */
     public async logout(user: IMSCUser): Promise<any> {
-        // TODO: Create a link to upstream tokens to log them out too
-        const tokens = await UserScalarToken.findAll({where: {scalarToken: user.token}});
+        const tokens = await UserScalarToken.findAll({where: {scalarToken: user.token}, include: [Upstream]});
         for (const token of tokens) {
+            if (token.upstream) {
+                LogService.info("AccountController", "Logging user out of upstream");
+                const client = new ScalarClient(token.upstream, ScalarClient.KIND_MATRIX_V1);
+                await client.logout(token.scalarToken);
+            }
             await token.destroy();
         }
         Cache.for(CACHE_SCALAR_ACCOUNTS).clear();

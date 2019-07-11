@@ -4,7 +4,6 @@ import * as request from "request";
 import { LogService } from "matrix-js-snippets";
 import Upstream from "../db/models/Upstream";
 import { SCALAR_API_VERSION } from "../utils/common-constants";
-import * as url from "url";
 
 const REGISTER_ROUTE = "/register";
 const ACCOUNT_INFO_ROUTE = "/account";
@@ -30,8 +29,8 @@ export class ScalarClient {
                 },
             };
         } else {
-            const parsed = url.parse(this.upstream.scalarUrl);
-            parsed.path = '/_matrix/integrations/v1' + (path === ACCOUNT_INFO_ROUTE ? path : `${ACCOUNT_INFO_ROUTE}${path}`);
+            const parsed = new URL(this.upstream.scalarUrl);
+            parsed.pathname = '/_matrix/integrations/v1' + (path === ACCOUNT_INFO_ROUTE ? path : `${ACCOUNT_INFO_ROUTE}${path}`);
 
             const headers = {};
             if (token) headers['Authorization'] = `Bearer ${token}`;
@@ -110,7 +109,7 @@ export class ScalarClient {
                     LogService.error("ScalarClient", err);
                     reject(err);
                 } else if (res.statusCode !== 200) {
-                    LogService.error("ScalarClient", "Got status code " + res.statusCode + " while getting information for token");
+                    LogService.error("ScalarClient", "Got status code " + res.statusCode + " while logging out token");
                     reject(res.statusCode);
                 } else {
                     resolve(res.body);
