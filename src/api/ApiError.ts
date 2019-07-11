@@ -31,7 +31,7 @@ export class ApiError {
         // https://stackoverflow.com/questions/31626231/custom-error-class-in-typescript
         Error.apply(this, ["ApiError"]);
 
-        if (typeof(json) === "string") json = {message: json};
+        if (typeof (json) === "string") json = {message: json};
         this.jsonResponse = json;
         this.statusCode = statusCode;
         this.errorCode = errCode;
