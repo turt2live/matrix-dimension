@@ -4,10 +4,12 @@ import * as request from "request";
 import { LogService } from "matrix-js-snippets";
 import Upstream from "../db/models/Upstream";
 import { SCALAR_API_VERSION } from "../utils/common-constants";
+import { ITermsNotSignedResponse } from "../api/controllers/TermsController";
 
 const REGISTER_ROUTE = "/register";
 const ACCOUNT_INFO_ROUTE = "/account";
 const LOGOUT_ROUTE = "/logout";
+const TERMS_ROUTE = "/terms";
 
 export class ScalarClient {
     public static readonly KIND_LEGACY = "legacy";
@@ -30,7 +32,11 @@ export class ScalarClient {
             };
         } else {
             const parsed = new URL(this.upstream.scalarUrl);
-            parsed.pathname = '/_matrix/integrations/v1' + (path === ACCOUNT_INFO_ROUTE ? path : `${ACCOUNT_INFO_ROUTE}${path}`);
+            if (path === ACCOUNT_INFO_ROUTE || path === TERMS_ROUTE) {
+                parsed.pathname = `/_matrix/integrations/v1${path}`;
+            } else {
+                parsed.pathname = `/_matrix/integrations/v1${ACCOUNT_INFO_ROUTE}${path}`;
+            }
 
             const headers = {};
             if (token) headers['Authorization'] = `Bearer ${token}`;
@@ -105,11 +111,61 @@ export class ScalarClient {
                 json: true,
             }, (err, res, _body) => {
                 if (err) {
-                    LogService.error("ScalarClient", "Error getting information for token");
+                    LogService.error("ScalarClient", "Error logging out token");
                     LogService.error("ScalarClient", err);
                     reject(err);
                 } else if (res.statusCode !== 200) {
                     LogService.error("ScalarClient", "Got status code " + res.statusCode + " while logging out token");
+                    reject(res.statusCode);
+                } else {
+                    resolve(res.body);
+                }
+            });
+        });
+    }
+
+    public getMissingTerms(token: string): Promise<ITermsNotSignedResponse> {
+        const {scalarUrl, headers, queryString} = this.makeRequestArguments(TERMS_ROUTE, token);
+        LogService.info("ScalarClient", "Doing upstream scalar request: GET " + scalarUrl);
+        return new Promise((resolve, reject) => {
+            request({
+                method: "GET",
+                url: scalarUrl,
+                qs: queryString,
+                headers: headers,
+                json: true,
+            }, (err, res, _body) => {
+                if (err) {
+                    LogService.error("ScalarClient", "Error getting terms for token");
+                    LogService.error("ScalarClient", err);
+                    reject(err);
+                } else if (res.statusCode !== 200) {
+                    LogService.error("ScalarClient", "Got status code " + res.statusCode + " while getting terms for token");
+                    reject(res.statusCode);
+                } else {
+                    resolve(res.body);
+                }
+            });
+        });
+    }
+
+    public signTermsUrls(token: string, urls: string[]): Promise<any> {
+        const {scalarUrl, headers, queryString} = this.makeRequestArguments(TERMS_ROUTE, token);
+        LogService.info("ScalarClient", "Doing upstream scalar request: POST " + scalarUrl);
+        return new Promise((resolve, reject) => {
+            request({
+                method: "POST",
+                url: scalarUrl,
+                qs: queryString,
+                headers: headers,
+                json: {user_accepts: urls},
+            }, (err, res, _body) => {
+                if (err) {
+                    LogService.error("ScalarClient", "Error updating terms for token");
+                    LogService.error("ScalarClient", err);
+                    reject(err);
+                } else if (res.statusCode !== 200) {
+                    LogService.error("ScalarClient", "Got status code " + res.statusCode + " while updating terms for token");
                     reject(res.statusCode);
                 } else {
                     resolve(res.body);

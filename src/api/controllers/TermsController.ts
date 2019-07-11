@@ -5,6 +5,12 @@ import TermsTextRecord from "../../db/models/TermsTextRecord";
 import TermsSignedRecord from "../../db/models/TermsSignedRecord";
 import { Op } from "sequelize";
 import { Cache, CACHE_TERMS } from "../../MemoryCache";
+import UserScalarToken from "../../db/models/UserScalarToken";
+import Upstream from "../../db/models/Upstream";
+import { LogService } from "matrix-js-snippets";
+import { ScalarClient } from "../../scalar/ScalarClient";
+import { md5 } from "../../utils/hashing";
+import TermsUpstreamRecord from "../../db/models/TermsUpstreamRecord";
 
 export interface ILanguagePolicy {
     name: string;
@@ -85,8 +91,6 @@ export default class TermsController {
     }
 
     public async getMissingTermsForUser(user: IMSCUser): Promise<ITermsNotSignedResponse> {
-        // TODO: Upstream policies
-
         const latest = await this.getPublishedTerms();
         const signed = await TermsSignedRecord.findAll({where: {userId: user.userId}});
 
@@ -106,6 +110,47 @@ export default class TermsController {
             }
         }
 
+        // Get upstream terms for the user
+        const tokensForUser = await UserScalarToken.findAll({where: {userId: user.userId}, include: [Upstream]});
+        const upstreamTokens = tokensForUser.filter(t => t.upstream);
+        const urlsToUpstream = {}; // {url: [upstreamId]}
+        for (const upstreamToken of upstreamTokens) {
+            try {
+                const scalarClient = new ScalarClient(upstreamToken.upstream, ScalarClient.KIND_MATRIX_V1);
+                const upstreamTerms = await scalarClient.getMissingTerms(upstreamToken.scalarToken);
+
+                // rewrite the shortcodes to avoid conflicts
+                const shortcodePrefix = `upstream_${md5(`${upstreamToken.id}:${upstreamToken.upstream.apiUrl}`)}`;
+                for (const shortcode of Object.keys(upstreamTerms.policies)) {
+                    policies.policies[`${shortcodePrefix}_${shortcode}`] = upstreamTerms.policies[shortcode];
+
+                    // copy all urls for later adding to the database
+                    for (const language of Object.keys(upstreamTerms.policies[shortcode])) {
+                        const upstreamUrl = upstreamTerms.policies[shortcode][language]['url'];
+                        if (!urlsToUpstream[upstreamUrl]) urlsToUpstream[upstreamUrl] = [];
+                        const upstreamsArr = urlsToUpstream[upstreamUrl];
+                        if (!upstreamsArr.includes(upstreamToken.upstream.id)) {
+                            upstreamsArr.push(upstreamToken.upstream.id);
+                        }
+                    }
+                }
+            } catch (e) {
+                LogService.error("TermsController", e);
+            }
+        }
+
+        // actually cache the urls in the database
+        const existingCache = await TermsUpstreamRecord.findAll({where: {url: {[Op.in]: Object.keys(urlsToUpstream)}}});
+        for (const upstreamUrl of Object.keys(urlsToUpstream)) {
+            const upstreamIds = urlsToUpstream[upstreamUrl];
+            const existingIds = existingCache.filter(c => c.url === upstreamUrl).map(c => c.upstreamId);
+            const missingIds = upstreamIds.filter(i => !existingIds.includes(i));
+            for (const targetUpstreamId of missingIds) {
+                const item = await TermsUpstreamRecord.create({url: upstreamUrl, upstreamId: targetUpstreamId});
+                existingCache.push(item);
+            }
+        }
+
         return policies;
     }
 
@@ -116,6 +161,37 @@ export default class TermsController {
         const toAdd = terms.filter(t => !signed.find(s => s.termsId === t.termsId));
         for (const termsToSign of toAdd) {
             await TermsSignedRecord.create({termsId: termsToSign.id, userId: user.userId});
+        }
+
+        // Check upstreams too, if there are any
+        const upstreamPolicies = await TermsUpstreamRecord.findAll({
+            where: {url: {[Op.in]: urls}},
+            include: [Upstream]
+        });
+        const upstreamsToSignatures: { [upstreamId: number]: { upstream: Upstream, token: string, urls: string[] } } = {};
+        for (const upstreamPolicy of upstreamPolicies) {
+            const userToken = await UserScalarToken.findOne({
+                where: {
+                    upstreamId: upstreamPolicy.upstreamId,
+                    userId: user.userId,
+                },
+            });
+            if (!userToken) {
+                LogService.warn("TermsController", `User ${user.userId} is missing an upstream token for ${upstreamPolicy.upstream.scalarUrl}`);
+                continue;
+            }
+
+            if (!upstreamsToSignatures[upstreamPolicy.upstreamId]) upstreamsToSignatures[upstreamPolicy.upstreamId] = {
+                upstream: upstreamPolicy.upstream,
+                token: userToken.scalarToken,
+                urls: [],
+            };
+            upstreamsToSignatures[upstreamPolicy.upstreamId].urls.push(upstreamPolicy.url);
+        }
+
+        for (const upstreamSignature of Object.values(upstreamsToSignatures)) {
+            const client = new ScalarClient(upstreamSignature.upstream, ScalarClient.KIND_MATRIX_V1);
+            await client.signTermsUrls(upstreamSignature.token, upstreamSignature.urls);
         }
     }
 
