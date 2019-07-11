@@ -5,6 +5,8 @@ import { ScalarAccountResponse, ScalarRegisterResponse } from "../../models/Scal
 import { AutoWired, Inject } from "typescript-ioc/es6";
 import AccountController from "../controllers/AccountController";
 import { ROLE_MSC_USER } from "../security/MSCSecurity";
+import TermsController, { ITermsNotSignedResponse } from "../controllers/TermsController";
+import { SignTermsRequest } from "../msc/MSCTermsService";
 
 /**
  * API for the minimum Scalar API we need to implement to be compatible with clients. Used for registration
@@ -16,6 +18,9 @@ export class ScalarService {
 
     @Inject
     private accountController: AccountController;
+
+    @Inject
+    private termsController: TermsController;
 
     @Context
     private context: ServiceContext;
@@ -40,6 +45,21 @@ export class ScalarService {
         }
 
         return {user_id: this.context.request.user.userId};
+    }
+
+    @GET
+    @Path("terms")
+    @Security(ROLE_MSC_USER)
+    public async getTerms(): Promise<ITermsNotSignedResponse> {
+        return this.termsController.getMissingTermsForUser(this.context.request.user);
+    }
+
+    @POST
+    @Path("terms")
+    @Security(ROLE_MSC_USER)
+    public async signTerms(request: SignTermsRequest): Promise<any> {
+        await this.termsController.signTermsMatching(this.context.request.user, request.user_accepts);
+        return {};
     }
 
     @GET

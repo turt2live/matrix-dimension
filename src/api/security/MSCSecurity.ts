@@ -21,6 +21,11 @@ const TERMS_IGNORED_ROUTES = [
     {method: "POST", path: "/_matrix/integrations/v1/terms"},
     {method: "POST", path: "/_matrix/integrations/v1/register"},
     {method: "POST", path: "/_matrix/integrations/v1/logout"},
+
+    // Legacy scalar routes
+    {method: "GET", path: "/api/v1/scalar/terms"},
+    {method: "POST", path: "/api/v1/scalar/terms"},
+    {method: "POST", path: "/api/v1/scalar/register"},
 ];
 
 const ADMIN_ROUTES = [

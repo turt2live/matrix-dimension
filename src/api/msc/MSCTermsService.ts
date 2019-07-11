@@ -3,7 +3,7 @@ import { AutoWired, Inject } from "typescript-ioc/es6";
 import { ROLE_MSC_USER } from "../security/MSCSecurity";
 import TermsController, { ITermsNotSignedResponse } from "../controllers/TermsController";
 
-interface SignTermsRequest {
+export interface SignTermsRequest {
     user_accepts: string[];
 }
 
