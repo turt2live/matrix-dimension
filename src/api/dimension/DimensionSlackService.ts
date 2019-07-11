@@ -1,10 +1,9 @@
-import { DELETE, GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
+import { Context, DELETE, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { ApiError } from "../ApiError";
 import { LogService } from "matrix-js-snippets";
 import { BridgedChannel, SlackBridge } from "../../bridges/SlackBridge";
 import { SlackChannel, SlackTeam } from "../../bridges/models/slack";
-import { AutoWired, Inject } from "typescript-ioc/es6";
-import AccountController from "../controllers/AccountController";
+import { ROLE_MSC_USER } from "../security/MSCSecurity";
 
 interface BridgeRoomRequest {
     teamId: string;
@@ -15,16 +14,16 @@ interface BridgeRoomRequest {
  * API for interacting with the Slack bridge
  */
 @Path("/api/v1/dimension/slack")
-@AutoWired
 export class DimensionSlackService {
 
-    @Inject
-    private accountController: AccountController;
+    @Context
+    private context: ServiceContext;
 
     @GET
     @Path("room/:roomId/link")
-    public async getLink(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string): Promise<BridgedChannel> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
+    @Security(ROLE_MSC_USER)
+    public async getLink(@PathParam("roomId") roomId: string): Promise<BridgedChannel> {
+        const userId = this.context.request.user.userId;
 
         try {
             const slack = new SlackBridge(userId);
@@ -37,8 +36,9 @@ export class DimensionSlackService {
 
     @POST
     @Path("room/:roomId/link")
-    public async bridgeRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, request: BridgeRoomRequest): Promise<BridgedChannel> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
+    @Security(ROLE_MSC_USER)
+    public async bridgeRoom(@PathParam("roomId") roomId: string, request: BridgeRoomRequest): Promise<BridgedChannel> {
+        const userId = this.context.request.user.userId;
 
         try {
             const slack = new SlackBridge(userId);
@@ -52,8 +52,8 @@ export class DimensionSlackService {
 
     @DELETE
     @Path("room/:roomId/link")
-    public async unbridgeRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string): Promise<any> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
+    public async unbridgeRoom(@PathParam("roomId") roomId: string): Promise<any> {
+        const userId = this.context.request.user.userId;
 
         try {
             const slack = new SlackBridge(userId);
@@ -69,8 +69,9 @@ export class DimensionSlackService {
 
     @GET
     @Path("teams")
-    public async getTeams(@QueryParam("scalar_token") scalarToken: string): Promise<SlackTeam[]> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
+    @Security(ROLE_MSC_USER)
+    public async getTeams(): Promise<SlackTeam[]> {
+        const userId = this.context.request.user.userId;
 
         const slack = new SlackBridge(userId);
         const teams = await slack.getTeams();
@@ -80,8 +81,9 @@ export class DimensionSlackService {
 
     @GET
     @Path("teams/:teamId/channels")
-    public async getChannels(@QueryParam("scalar_token") scalarToken: string, @PathParam("teamId") teamId: string): Promise<SlackChannel[]> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
+    @Security(ROLE_MSC_USER)
+    public async getChannels(@PathParam("teamId") teamId: string): Promise<SlackChannel[]> {
+        const userId = this.context.request.user.userId;
 
         try {
             const slack = new SlackBridge(userId);
@@ -94,8 +96,9 @@ export class DimensionSlackService {
 
     @GET
     @Path("auth")
-    public async getAuthUrl(@QueryParam("scalar_token") scalarToken: string): Promise<{ authUrl: string }> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
+    @Security(ROLE_MSC_USER)
+    public async getAuthUrl(): Promise<{ authUrl: string }> {
+        const userId = this.context.request.user.userId;
 
         try {
             const slack = new SlackBridge(userId);

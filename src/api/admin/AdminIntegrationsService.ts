@@ -1,12 +1,12 @@
-import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
+import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { ApiError } from "../ApiError";
-import { AdminService } from "./AdminService";
 import { DimensionIntegrationsService } from "../dimension/DimensionIntegrationsService";
 import { WidgetStore } from "../../db/WidgetStore";
 import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
 import { Integration } from "../../integrations/Integration";
 import { LogService } from "matrix-js-snippets";
 import { BridgeStore } from "../../db/BridgeStore";
+import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
 
 interface SetEnabledRequest {
     enabled: boolean;
@@ -23,10 +23,14 @@ interface SetOptionsRequest {
 @Path("/api/v1/dimension/admin/integrations")
 export class AdminIntegrationsService {
 
+    @Context
+    private context: ServiceContext;
+
     @POST
     @Path(":category/:type/options")
-    public async setOptions(@QueryParam("scalar_token") scalarToken: string, @PathParam("category") category: string, @PathParam("type") type: string, body: SetOptionsRequest): Promise<any> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async setOptions(@PathParam("category") category: string, @PathParam("type") type: string, body: SetOptionsRequest): Promise<any> {
+        const userId = this.context.request.user.userId;
 
         if (category === "widget") await WidgetStore.setOptions(type, body.options);
         else throw new ApiError(400, "Unrecognized category");
@@ -39,8 +43,9 @@ export class AdminIntegrationsService {
 
     @POST
     @Path(":category/:type/enabled")
-    public async setEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("category") category: string, @PathParam("type") type: string, body: SetEnabledRequest): Promise<any> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async setEnabled(@PathParam("category") category: string, @PathParam("type") type: string, body: SetEnabledRequest): Promise<any> {
+        const userId = this.context.request.user.userId;
 
         if (category === "widget") await WidgetStore.setEnabled(type, body.enabled);
         else if (category === "bridge") await BridgeStore.setEnabled(type, body.enabled);
@@ -53,8 +58,9 @@ export class AdminIntegrationsService {
 
     @GET
     @Path(":category/all")
-    public async getAllIntegrations(@QueryParam("scalar_token") scalarToken: string, @PathParam("category") category: string): Promise<Integration[]> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async getAllIntegrations(@PathParam("category") category: string): Promise<Integration[]> {
+        const userId = this.context.request.user.userId;
 
         if (category === "widget") return await DimensionIntegrationsService.getWidgets(false);
         else if (category === "bridge") return await DimensionIntegrationsService.getBridges(false, userId);

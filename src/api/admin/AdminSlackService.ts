@@ -1,10 +1,10 @@
-import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
-import { AdminService } from "./AdminService";
+import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { Cache, CACHE_INTEGRATIONS, CACHE_SLACK_BRIDGE } from "../../MemoryCache";
 import { LogService } from "matrix-js-snippets";
 import { ApiError } from "../ApiError";
 import Upstream from "../../db/models/Upstream";
 import SlackBridgeRecord from "../../db/models/SlackBridgeRecord";
+import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
 
 interface CreateWithUpstream {
     upstreamId: number;
@@ -27,11 +27,13 @@ interface BridgeResponse {
 @Path("/api/v1/dimension/admin/slack")
 export class AdminSlackService {
 
+    @Context
+    private context: ServiceContext;
+
     @GET
     @Path("all")
-    public async getBridges(@QueryParam("scalar_token") scalarToken: string): Promise<BridgeResponse[]> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async getBridges(): Promise<BridgeResponse[]> {
         const bridges = await SlackBridgeRecord.findAll();
         return Promise.all(bridges.map(async b => {
             return {
@@ -45,9 +47,8 @@ export class AdminSlackService {
 
     @GET
     @Path(":bridgeId")
-    public async getBridge(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async getBridge(@PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
         const telegramBridge = await SlackBridgeRecord.findByPk(bridgeId);
         if (!telegramBridge) throw new ApiError(404, "Slack Bridge not found");
 
@@ -61,9 +62,9 @@ export class AdminSlackService {
 
     @POST
     @Path(":bridgeId")
-    public async updateBridge(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number, request: CreateSelfhosted): Promise<BridgeResponse> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async updateBridge(@PathParam("bridgeId") bridgeId: number, request: CreateSelfhosted): Promise<BridgeResponse> {
+        const userId = this.context.request.user.userId;
         const bridge = await SlackBridgeRecord.findByPk(bridgeId);
         if (!bridge) throw new ApiError(404, "Bridge not found");
 
@@ -74,14 +75,14 @@ export class AdminSlackService {
 
         Cache.for(CACHE_SLACK_BRIDGE).clear();
         Cache.for(CACHE_INTEGRATIONS).clear();
-        return this.getBridge(scalarToken, bridge.id);
+        return this.getBridge(bridge.id);
     }
 
     @POST
     @Path("new/upstream")
-    public async newConfigForUpstream(@QueryParam("scalar_token") scalarToken: string, request: CreateWithUpstream): Promise<BridgeResponse> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async newConfigForUpstream(request: CreateWithUpstream): Promise<BridgeResponse> {
+        const userId = this.context.request.user.userId;
         const upstream = await Upstream.findByPk(request.upstreamId);
         if (!upstream) throw new ApiError(400, "Upstream not found");
 
@@ -93,14 +94,14 @@ export class AdminSlackService {
 
         Cache.for(CACHE_SLACK_BRIDGE).clear();
         Cache.for(CACHE_INTEGRATIONS).clear();
-        return this.getBridge(scalarToken, bridge.id);
+        return this.getBridge(bridge.id);
     }
 
     @POST
     @Path("new/selfhosted")
-    public async newSelfhosted(@QueryParam("scalar_token") scalarToken: string, request: CreateSelfhosted): Promise<BridgeResponse> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async newSelfhosted(request: CreateSelfhosted): Promise<BridgeResponse> {
+        const userId = this.context.request.user.userId;
         const bridge = await SlackBridgeRecord.create({
             provisionUrl: request.provisionUrl,
             isEnabled: true,
@@ -109,6 +110,6 @@ export class AdminSlackService {
 
         Cache.for(CACHE_SLACK_BRIDGE).clear();
         Cache.for(CACHE_INTEGRATIONS).clear();
-        return this.getBridge(scalarToken, bridge.id);
+        return this.getBridge(bridge.id);
     }
 }

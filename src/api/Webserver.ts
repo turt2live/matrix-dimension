@@ -71,6 +71,11 @@ export default class Webserver {
             next();
         });
         this.app.use((_req, res, next) => {
+            if (res.headersSent) {
+                next();
+                return;
+            }
+
             res.setHeader("Access-Control-Allow-Origin", "*");
             res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             next();

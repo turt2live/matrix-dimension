@@ -1,8 +1,7 @@
-import { DELETE, GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
+import { Context, DELETE, GET, Path, PathParam, POST, QueryParam, Security, ServiceContext } from "typescript-rest";
 import { TelegramBridge } from "../../bridges/TelegramBridge";
 import { ApiError } from "../ApiError";
-import { AutoWired, Inject } from "typescript-ioc/es6";
-import AccountController from "../controllers/AccountController";
+import { ROLE_MSC_USER } from "../security/MSCSecurity";
 
 interface PortalInfoResponse {
     bridged: boolean;
@@ -20,16 +19,16 @@ interface BridgeRoomRequest {
  * API for interacting with the Telegram bridge
  */
 @Path("/api/v1/dimension/telegram")
-@AutoWired
 export class DimensionTelegramService {
 
-    @Inject
-    private accountController: AccountController;
+    @Context
+    private context: ServiceContext;
 
     @GET
     @Path("chat/:chatId")
-    public async getPortalInfo(@QueryParam("scalar_token") scalarToken: string, @PathParam("chatId") chatId: number, @QueryParam("roomId") roomId: string): Promise<PortalInfoResponse> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
+    @Security(ROLE_MSC_USER)
+    public async getPortalInfo(@PathParam("chatId") chatId: number, @QueryParam("roomId") roomId: string): Promise<PortalInfoResponse> {
+        const userId = this.context.request.user.userId;
 
         try {
             const telegram = new TelegramBridge(userId);
@@ -51,8 +50,9 @@ export class DimensionTelegramService {
 
     @POST
     @Path("chat/:chatId/room/:roomId")
-    public async bridgeRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("chatId") chatId: number, @PathParam("roomId") roomId: string, request: BridgeRoomRequest): Promise<PortalInfoResponse> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
+    @Security(ROLE_MSC_USER)
+    public async bridgeRoom(@PathParam("chatId") chatId: number, @PathParam("roomId") roomId: string, request: BridgeRoomRequest): Promise<PortalInfoResponse> {
+        const userId = this.context.request.user.userId;
 
         try {
             const telegram = new TelegramBridge(userId);
@@ -73,8 +73,9 @@ export class DimensionTelegramService {
 
     @DELETE
     @Path("room/:roomId")
-    public async unbridgeRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string): Promise<PortalInfoResponse> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
+    @Security(ROLE_MSC_USER)
+    public async unbridgeRoom(@PathParam("roomId") roomId: string): Promise<PortalInfoResponse> {
+        const userId = this.context.request.user.userId;
 
         try {
             const telegram = new TelegramBridge(userId);

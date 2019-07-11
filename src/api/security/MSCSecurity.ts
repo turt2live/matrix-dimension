@@ -5,6 +5,7 @@ import { LogService } from "matrix-js-snippets";
 import AccountController from "../controllers/AccountController";
 import TermsController from "../controllers/TermsController";
 import config from "../../config";
+import { ScalarStore } from "../../db/ScalarStore";
 
 export interface IMSCUser {
     userId: string;
@@ -20,6 +21,10 @@ const TERMS_IGNORED_ROUTES = [
     {method: "POST", path: "/_matrix/integrations/v1/terms"},
     {method: "POST", path: "/_matrix/integrations/v1/register"},
     {method: "POST", path: "/_matrix/integrations/v1/logout"},
+];
+
+const ADMIN_ROUTES = [
+    {method: "*", path: "/api/v1/dimension/admin/"},
 ];
 
 export default class MSCSecurity implements ServiceAuthenticator {
@@ -62,20 +67,15 @@ export default class MSCSecurity implements ServiceAuthenticator {
                         token: token,
                     };
 
-                    let needTerms = true;
-                    if (req.method !== "OPTIONS") {
-                        for (const route of TERMS_IGNORED_ROUTES) {
-                            if (route.method === "*" && req.path.startsWith(route.path)) {
-                                needTerms = false;
-                                break;
-                            }
-                            if (route.method === req.method && route.path === req.path) {
-                                needTerms = false;
-                                break;
-                            }
+                    const needUpstreams = !this.matchesAnyRoute(req, ADMIN_ROUTES);
+                    if (needUpstreams) {
+                        const hasUpstreams = await ScalarStore.doesUserHaveTokensForAllUpstreams(req.user.userId);
+                        if (!hasUpstreams) {
+                            return res.status(401).json({errcode: "M_INVALID_TOKEN", error: "Invalid token"});
                         }
-                    } else needTerms = false;
+                    }
 
+                    const needTerms = !this.matchesAnyRoute(req, TERMS_IGNORED_ROUTES);
                     if (needTerms) {
                         const signatureNeeded = await this.termsController.doesUserNeedToSignTerms(req.user);
                         if (signatureNeeded) {
@@ -86,14 +86,17 @@ export default class MSCSecurity implements ServiceAuthenticator {
                         }
                     }
 
+                    if (this.matchesAnyRoute(req, ADMIN_ROUTES, false) && !this.getRoles(req).includes(ROLE_MSC_ADMIN)) {
+                        return res.status(403).json({errcode: "M_UNAUTHORIZED", error: "User is not an admin"});
+                    }
+
                     return next();
                 } else {
                     return res.status(401).json({errcode: "M_INVALID_TOKEN", error: "Invalid token"});
                 }
             } catch (e) {
                 if (e instanceof ApiError) {
-                    // TODO: Proper error message
-                    res.status(e.statusCode).json({errcode: e.errorCode, error: "Error"});
+                    res.status(e.statusCode).json(e.jsonResponse);
                 } else {
                     LogService.error("MSCSecurity", e);
                     res.status(500).json({errcode: "M_UNKNOWN", error: "Unknown server error"});
@@ -103,6 +106,21 @@ export default class MSCSecurity implements ServiceAuthenticator {
     }
 
     public initialize(_router: Router): void {
+    }
+
+    private matchesAnyRoute(req: Request, routes: { method: string, path: string }[], valForOptions = true): boolean {
+        if (req.method === 'OPTIONS') return valForOptions;
+
+        for (const route of routes) {
+            if (route.method === '*' && req.path.startsWith(route.path)) {
+                return true;
+            }
+            if (route.method === req.method && route.path === req.path) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

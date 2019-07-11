@@ -1,5 +1,4 @@
-import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
-import { AdminService } from "./AdminService";
+import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import StickerPack from "../../db/models/StickerPack";
 import { ApiError } from "../ApiError";
 import { DimensionStickerService, MemoryStickerPack } from "../dimension/DimensionStickerService";
@@ -10,6 +9,7 @@ import config from "../../config";
 import Sticker from "../../db/models/Sticker";
 import { LogService } from "matrix-js-snippets";
 import * as sharp from "sharp";
+import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
 
 interface SetEnabledRequest {
     isEnabled: boolean;
@@ -25,17 +25,20 @@ interface ImportTelegramRequest {
 @Path("/api/v1/dimension/admin/stickers")
 export class AdminStickerService {
 
+    @Context
+    private context: ServiceContext;
+
     @GET
     @Path("packs")
-    public async getStickerPacks(@QueryParam("scalar_token") scalarToken: string): Promise<MemoryStickerPack[]> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async getStickerPacks(): Promise<MemoryStickerPack[]> {
         return await DimensionStickerService.getStickerPacks(false);
     }
 
     @POST
     @Path("packs/:id/enabled")
-    public async setPackEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("id") packId: number, request: SetEnabledRequest): Promise<any> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async setPackEnabled(@PathParam("id") packId: number, request: SetEnabledRequest): Promise<any> {
         const pack = await StickerPack.findByPk(packId);
         if (!pack) throw new ApiError(404, "Sticker pack not found");
 
@@ -48,8 +51,9 @@ export class AdminStickerService {
 
     @POST
     @Path("packs/import/telegram")
-    public async importFromTelegram(@QueryParam("scalar_token") scalarToken: string, request: ImportTelegramRequest): Promise<MemoryStickerPack> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async importFromTelegram(request: ImportTelegramRequest): Promise<MemoryStickerPack> {
+        const userId = this.context.request.user.userId;
 
         if (!request.packUrl || (!request.packUrl.startsWith("https://t.me/addstickers/") && !request.packUrl.startsWith("https://telegram.me/addstickers/"))) {
             throw new ApiError(400, "Invalid pack URL");

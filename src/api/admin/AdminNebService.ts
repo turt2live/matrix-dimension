@@ -1,10 +1,10 @@
-import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
-import { AdminService } from "./AdminService";
+import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { Cache, CACHE_INTEGRATIONS, CACHE_NEB } from "../../MemoryCache";
 import { NebStore } from "../../db/NebStore";
 import { NebConfig } from "../../models/neb";
 import { LogService } from "matrix-js-snippets";
 import { ApiError } from "../ApiError";
+import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
 
 interface CreateWithUpstream {
     upstreamId: number;
@@ -26,11 +26,13 @@ interface SetEnabledRequest {
 @Path("/api/v1/dimension/admin/neb")
 export class AdminNebService {
 
+    @Context
+    private context: ServiceContext;
+
     @GET
     @Path("all")
-    public async getNebConfigs(@QueryParam("scalar_token") scalarToken: string): Promise<NebConfig[]> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async getNebConfigs(): Promise<NebConfig[]> {
         const cachedConfigs = Cache.for(CACHE_NEB).get("configurations");
         if (cachedConfigs) return cachedConfigs;
 
@@ -41,8 +43,9 @@ export class AdminNebService {
 
     @GET
     @Path(":id/config")
-    public async getNebConfig(@QueryParam("scalar_token") scalarToken: string, @PathParam("id") nebId: number): Promise<NebConfig> {
-        const configs = await this.getNebConfigs(scalarToken); // does auth for us
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async getNebConfig(@PathParam("id") nebId: number): Promise<NebConfig> {
+        const configs = await this.getNebConfigs();
         const firstConfig = configs.filter(c => c.id === nebId)[0];
         if (!firstConfig) throw new ApiError(404, "Configuration not found");
         return firstConfig;
@@ -50,8 +53,9 @@ export class AdminNebService {
 
     @POST
     @Path(":id/integration/:type/enabled")
-    public async setIntegrationEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("id") nebId: number, @PathParam("type") integrationType: string, request: SetEnabledRequest): Promise<any> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async setIntegrationEnabled(@PathParam("id") nebId: number, @PathParam("type") integrationType: string, request: SetEnabledRequest): Promise<any> {
+        const userId = this.context.request.user.userId;
 
         await NebStore.setIntegrationEnabled(nebId, integrationType, request.enabled);
         LogService.info("AdminNebService", userId + " set the " + integrationType + " on NEB " + nebId + " to " + (request.enabled ? "enabled" : "disabled"));
@@ -63,8 +67,9 @@ export class AdminNebService {
 
     @POST
     @Path(":id/integration/:type/config")
-    public async setIntegrationConfig(@QueryParam("scalar_token") scalarToken: string, @PathParam("id") nebId: number, @PathParam("type") integrationType: string, newConfig: any): Promise<any> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async setIntegrationConfig(@PathParam("id") nebId: number, @PathParam("type") integrationType: string, newConfig: any): Promise<any> {
+        const userId = this.context.request.user.userId;
 
         await NebStore.setIntegrationConfig(nebId, integrationType, newConfig);
         LogService.info("AdminNebService", userId + " updated the configuration for " + integrationType + " on NEB " + nebId);
@@ -76,15 +81,16 @@ export class AdminNebService {
 
     @GET
     @Path(":id/integration/:type/config")
-    public async getIntegrationConfig(@QueryParam("scalar_token") scalarToken: string, @PathParam("id") nebId: number, @PathParam("type") integrationType: string): Promise<any> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async getIntegrationConfig(@PathParam("id") nebId: number, @PathParam("type") integrationType: string): Promise<any> {
         return NebStore.getIntegrationConfig(nebId, integrationType);
     }
 
     @POST
     @Path("new/upstream")
-    public async newConfigForUpstream(@QueryParam("scalar_token") scalarToken: string, request: CreateWithUpstream): Promise<NebConfig> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async newConfigForUpstream(request: CreateWithUpstream): Promise<NebConfig> {
+        const userId = this.context.request.user.userId;
 
         try {
             const neb = await NebStore.createForUpstream(request.upstreamId);
@@ -101,8 +107,9 @@ export class AdminNebService {
 
     @POST
     @Path("new/appservice")
-    public async newConfigForAppservice(@QueryParam("scalar_token") scalarToken: string, request: CreateWithAppservice): Promise<NebConfig> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async newConfigForAppservice(request: CreateWithAppservice): Promise<NebConfig> {
+        const userId = this.context.request.user.userId;
 
         try {
             const neb = await NebStore.createForAppservice(request.appserviceId, request.adminUrl);

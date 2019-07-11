@@ -1,4 +1,4 @@
-import { GET, Path, POST, QueryParam, Security } from "typescript-rest";
+import { Context, GET, Path, POST, QueryParam, Security, ServiceContext } from "typescript-rest";
 import { ApiError } from "../ApiError";
 import { OpenId } from "../../models/OpenId";
 import { ScalarAccountResponse, ScalarRegisterResponse } from "../../models/ScalarResponses";
@@ -17,6 +17,9 @@ export class ScalarService {
     @Inject
     private accountController: AccountController;
 
+    @Context
+    private context: ServiceContext;
+
     @POST
     @Path("register")
     public async register(request: OpenId, @QueryParam("v") apiVersion: string): Promise<ScalarRegisterResponse> {
@@ -31,13 +34,12 @@ export class ScalarService {
     @GET
     @Path("account")
     @Security(ROLE_MSC_USER)
-    public async getAccount(@QueryParam("scalar_token") scalarToken: string, @QueryParam("v") apiVersion: string): Promise<ScalarAccountResponse> {
+    public async getAccount(@QueryParam("v") apiVersion: string): Promise<ScalarAccountResponse> {
         if (apiVersion !== "1.1") {
             throw new ApiError(401, "Invalid API version.");
         }
 
-        const userId = await this.accountController.getTokenOwner(scalarToken);
-        return {user_id: userId};
+        return {user_id: this.context.request.user.userId};
     }
 
     @GET

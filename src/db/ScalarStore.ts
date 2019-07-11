@@ -4,7 +4,7 @@ import Upstream from "./models/Upstream";
 import User from "./models/User";
 import { MatrixStickerBot } from "../matrix/MatrixStickerBot";
 import { ScalarClient } from "../scalar/ScalarClient";
-import { CACHE_SCALAR_ONLINE_STATE, Cache } from "../MemoryCache";
+import { Cache, CACHE_SCALAR_ONLINE_STATE } from "../MemoryCache";
 
 export class ScalarStore {
 
@@ -33,21 +33,14 @@ export class ScalarStore {
         return true;
     }
 
-    public static async getTokenOwner(scalarToken: string, ignoreUpstreams = false): Promise<User> {
+    public static async getTokenOwner(scalarToken: string): Promise<User> {
         const tokens = await UserScalarToken.findAll({
             where: {isDimensionToken: true, scalarToken: scalarToken},
             include: [User]
         });
         if (!tokens || tokens.length === 0) throw new Error("Invalid token");
 
-        const user = tokens[0].user;
-        if (ignoreUpstreams) return user; // skip upstreams check
-
-        const hasAllTokens = await ScalarStore.doesUserHaveTokensForAllUpstreams(user.userId);
-        if (!hasAllTokens) {
-            throw new Error("Invalid token"); // They are missing an upstream, so we'll lie and say they are not authorized
-        }
-        return user;
+        return tokens[0].user;
     }
 
     public static async isUpstreamOnline(upstream: Upstream): Promise<boolean> {

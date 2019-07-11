@@ -1,5 +1,4 @@
-import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
-import { AdminService } from "./AdminService";
+import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { Cache, CACHE_INTEGRATIONS, CACHE_IRC_BRIDGE } from "../../MemoryCache";
 import { LogService } from "matrix-js-snippets";
 import { ApiError } from "../ApiError";
@@ -7,6 +6,7 @@ import IrcBridgeRecord from "../../db/models/IrcBridgeRecord";
 import { AvailableNetworks, IrcBridge } from "../../bridges/IrcBridge";
 import Upstream from "../../db/models/Upstream";
 import IrcBridgeNetwork from "../../db/models/IrcBridgeNetwork";
+import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
 
 interface CreateWithUpstream {
     upstreamId: number;
@@ -35,10 +35,14 @@ interface SetEnabledRequest {
 @Path("/api/v1/dimension/admin/irc")
 export class AdminIrcService {
 
+    @Context
+    private context: ServiceContext;
+
     @GET
     @Path("all")
-    public async getBridges(@QueryParam("scalar_token") scalarToken: string): Promise<BridgeResponse[]> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async getBridges(): Promise<BridgeResponse[]> {
+        const userId = this.context.request.user.userId;
 
         const bridges = await IrcBridgeRecord.findAll();
         const client = new IrcBridge(userId);
@@ -64,8 +68,9 @@ export class AdminIrcService {
 
     @GET
     @Path(":bridgeId")
-    public async getBridge(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async getBridge(@PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
+        const userId = this.context.request.user.userId;
 
         const ircBridge = await IrcBridgeRecord.findByPk(bridgeId);
         if (!ircBridge) throw new ApiError(404, "IRC Bridge not found");
@@ -91,8 +96,9 @@ export class AdminIrcService {
 
     @POST
     @Path(":bridgeId/network/:networkId/enabled")
-    public async setNetworkEnabled(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number, @PathParam("networkId") networkId: string, request: SetEnabledRequest): Promise<any> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async setNetworkEnabled(@PathParam("bridgeId") bridgeId: number, @PathParam("networkId") networkId: string, request: SetEnabledRequest): Promise<any> {
+        const userId = this.context.request.user.userId;
 
         const ircBridge = await IrcBridgeRecord.findByPk(bridgeId);
         if (!ircBridge) throw new ApiError(404, "IRC Bridge not found");
@@ -116,8 +122,9 @@ export class AdminIrcService {
 
     @POST
     @Path("new/upstream")
-    public async newConfigForUpstream(@QueryParam("scalar_token") scalarToken: string, request: CreateWithUpstream): Promise<BridgeResponse> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async newConfigForUpstream(request: CreateWithUpstream): Promise<BridgeResponse> {
+        const userId = this.context.request.user.userId;
 
         const upstream = await Upstream.findByPk(request.upstreamId);
         if (!upstream) throw new ApiError(400, "Upstream not found");
@@ -130,13 +137,14 @@ export class AdminIrcService {
 
         Cache.for(CACHE_IRC_BRIDGE).clear();
         Cache.for(CACHE_INTEGRATIONS).clear();
-        return this.getBridge(scalarToken, bridge.id);
+        return this.getBridge(bridge.id);
     }
 
     @POST
     @Path("new/selfhosted")
-    public async newSelfhosted(@QueryParam("scalar_token") scalarToken: string, request: CreateSelfhosted): Promise<BridgeResponse> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async newSelfhosted(request: CreateSelfhosted): Promise<BridgeResponse> {
+        const userId = this.context.request.user.userId;
 
         const bridge = await IrcBridgeRecord.create({
             provisionUrl: request.provisionUrl,
@@ -146,6 +154,6 @@ export class AdminIrcService {
 
         Cache.for(CACHE_IRC_BRIDGE).clear();
         Cache.for(CACHE_INTEGRATIONS).clear();
-        return this.getBridge(scalarToken, bridge.id);
+        return this.getBridge(bridge.id);
     }
 }

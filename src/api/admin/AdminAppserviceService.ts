@@ -1,10 +1,10 @@
-import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
-import { AdminService } from "./AdminService";
+import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import AppService from "../../db/models/AppService";
 import { AppserviceStore } from "../../db/AppserviceStore";
 import { ApiError } from "../ApiError";
 import { MatrixAppserviceClient } from "../../matrix/MatrixAppserviceClient";
 import { LogService } from "matrix-js-snippets";
+import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
 
 interface AppserviceResponse {
     id: string;
@@ -23,18 +23,20 @@ interface AppserviceCreateRequest {
 @Path("/api/v1/dimension/admin/appservices")
 export class AdminAppserviceService {
 
+    @Context
+    private context: ServiceContext;
+
     @GET
     @Path("all")
-    public async getAppservices(@QueryParam("scalar_token") scalarToken: string): Promise<AppserviceResponse[]> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async getAppservices(): Promise<AppserviceResponse[]> {
         return (await AppService.findAll()).map(a => this.mapAppservice(a));
     }
 
     @GET
     @Path(":appserviceId")
-    public async getAppservice(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string): Promise<AppserviceResponse> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async getAppservice(@PathParam("appserviceId") asId: string): Promise<AppserviceResponse> {
         try {
             const appservice = await AppserviceStore.getAppservice(asId);
             return this.mapAppservice(appservice);
@@ -46,8 +48,9 @@ export class AdminAppserviceService {
 
     @POST
     @Path("new")
-    public async createAppservice(@QueryParam("scalar_token") scalarToken: string, request: AppserviceCreateRequest): Promise<AppserviceResponse> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async createAppservice(request: AppserviceCreateRequest): Promise<AppserviceResponse> {
+        const userId = this.context.request.user.userId;
 
         // Trim off the @ sign if it's on the prefix
         if (request.userPrefix[0] === "@") {
@@ -66,9 +69,8 @@ export class AdminAppserviceService {
 
     @POST
     @Path(":appserviceId/test")
-    public async test(@QueryParam("scalar_token") scalarToken: string, @PathParam("appserviceId") asId: string): Promise<any> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    public async test(@PathParam("appserviceId") asId: string): Promise<any> {
         const appservice = await AppserviceStore.getAppservice(asId);
         const client = new MatrixAppserviceClient(appservice);
         const userId = await client.whoAmI();
