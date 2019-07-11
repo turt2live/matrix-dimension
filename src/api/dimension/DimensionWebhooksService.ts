@@ -15,7 +15,7 @@ import Webhook from "../../db/models/Webhook";
 import { ApiError } from "../ApiError";
 import { LogService } from "matrix-js-snippets";
 import * as request from "request";
-import { ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_USER } from "../security/MatrixSecurity";
 
 /**
  * API for interacting with the Webhooks bridge, and for setting up proxies to other
@@ -55,7 +55,7 @@ export class DimensionWebhooksService {
 
     @POST
     @Path("room/:roomId/webhooks/new")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async newWebhook(@PathParam("roomId") roomId: string, options: WebhookOptions): Promise<WebhookConfiguration> {
         const userId = this.context.request.user.userId;
         const webhooks = new WebhooksBridge(userId);
@@ -64,7 +64,7 @@ export class DimensionWebhooksService {
 
     @POST
     @Path("room/:roomId/webhooks/:hookId")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async updateWebhook(@PathParam("roomId") roomId: string, @PathParam("hookId") hookId: string, options: WebhookOptions): Promise<WebhookConfiguration> {
         const userId = this.context.request.user.userId;
         const webhooks = new WebhooksBridge(userId);
@@ -73,7 +73,7 @@ export class DimensionWebhooksService {
 
     @DELETE
     @Path("room/:roomId/webhooks/:hookId")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async deleteWebhook(@PathParam("roomId") roomId: string, @PathParam("hookId") hookId: string): Promise<SuccessResponse> {
         const userId = this.context.request.user.userId;
         const webhooks = new WebhooksBridge(userId);

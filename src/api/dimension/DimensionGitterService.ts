@@ -2,7 +2,7 @@ import { Context, DELETE, GET, Path, PathParam, POST, Security, ServiceContext }
 import { ApiError } from "../ApiError";
 import { BridgedRoom, GitterBridge } from "../../bridges/GitterBridge";
 import { LogService } from "matrix-js-snippets";
-import { ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_USER } from "../security/MatrixSecurity";
 
 interface BridgeRoomRequest {
     gitterRoomName: string;
@@ -19,7 +19,7 @@ export class DimensionGitterService {
 
     @GET
     @Path("room/:roomId/link")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getLink(@PathParam("roomId") roomId: string): Promise<BridgedRoom> {
         const userId = this.context.request.user.userId;
         try {
@@ -33,7 +33,7 @@ export class DimensionGitterService {
 
     @POST
     @Path("room/:roomId/link")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async bridgeRoom(@PathParam("roomId") roomId: string, request: BridgeRoomRequest): Promise<BridgedRoom> {
         const userId = this.context.request.user.userId;
         try {
@@ -48,7 +48,7 @@ export class DimensionGitterService {
 
     @DELETE
     @Path("room/:roomId/link")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async unbridgeRoom(@PathParam("roomId") roomId: string): Promise<any> {
         const userId = this.context.request.user.userId;
         try {

@@ -10,7 +10,7 @@ import { ScalarClient } from "../../scalar/ScalarClient";
 import * as randomString from "random-string";
 import { AutoWired } from "typescript-ioc/es6";
 import { Cache, CACHE_SCALAR_ACCOUNTS } from "../../MemoryCache";
-import { IMSCUser } from "../security/MSCSecurity";
+import { ILoggedInUser } from "../security/MatrixSecurity";
 
 export interface IAccountRegisteredResponse {
     token: string;
@@ -108,10 +108,10 @@ export default class AccountController {
 
     /**
      * Logs a user out
-     * @param {IMSCUser} user The user to log out
+     * @param {ILoggedInUser} user The user to log out
      * @returns {Promise<*>} Resolves when complete.
      */
-    public async logout(user: IMSCUser): Promise<any> {
+    public async logout(user: ILoggedInUser): Promise<any> {
         const tokens = await UserScalarToken.findAll({where: {scalarToken: user.token}, include: [Upstream]});
         for (const token of tokens) {
             if (token.upstream) {

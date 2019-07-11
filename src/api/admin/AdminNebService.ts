@@ -4,7 +4,7 @@ import { NebStore } from "../../db/NebStore";
 import { NebConfig } from "../../models/neb";
 import { LogService } from "matrix-js-snippets";
 import { ApiError } from "../ApiError";
-import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 
 interface CreateWithUpstream {
     upstreamId: number;
@@ -31,7 +31,7 @@ export class AdminNebService {
 
     @GET
     @Path("all")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getNebConfigs(): Promise<NebConfig[]> {
         const cachedConfigs = Cache.for(CACHE_NEB).get("configurations");
         if (cachedConfigs) return cachedConfigs;
@@ -43,7 +43,7 @@ export class AdminNebService {
 
     @GET
     @Path(":id/config")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getNebConfig(@PathParam("id") nebId: number): Promise<NebConfig> {
         const configs = await this.getNebConfigs();
         const firstConfig = configs.filter(c => c.id === nebId)[0];
@@ -53,7 +53,7 @@ export class AdminNebService {
 
     @POST
     @Path(":id/integration/:type/enabled")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async setIntegrationEnabled(@PathParam("id") nebId: number, @PathParam("type") integrationType: string, request: SetEnabledRequest): Promise<any> {
         const userId = this.context.request.user.userId;
 
@@ -67,7 +67,7 @@ export class AdminNebService {
 
     @POST
     @Path(":id/integration/:type/config")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async setIntegrationConfig(@PathParam("id") nebId: number, @PathParam("type") integrationType: string, newConfig: any): Promise<any> {
         const userId = this.context.request.user.userId;
 
@@ -81,14 +81,14 @@ export class AdminNebService {
 
     @GET
     @Path(":id/integration/:type/config")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getIntegrationConfig(@PathParam("id") nebId: number, @PathParam("type") integrationType: string): Promise<any> {
         return NebStore.getIntegrationConfig(nebId, integrationType);
     }
 
     @POST
     @Path("new/upstream")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async newConfigForUpstream(request: CreateWithUpstream): Promise<NebConfig> {
         const userId = this.context.request.user.userId;
 
@@ -107,7 +107,7 @@ export class AdminNebService {
 
     @POST
     @Path("new/appservice")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async newConfigForAppservice(request: CreateWithAppservice): Promise<NebConfig> {
         const userId = this.context.request.user.userId;
 

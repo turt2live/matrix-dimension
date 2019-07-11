@@ -6,7 +6,7 @@ import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
 import { Integration } from "../../integrations/Integration";
 import { LogService } from "matrix-js-snippets";
 import { BridgeStore } from "../../db/BridgeStore";
-import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 
 interface SetEnabledRequest {
     enabled: boolean;
@@ -28,7 +28,7 @@ export class AdminIntegrationsService {
 
     @POST
     @Path(":category/:type/options")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async setOptions(@PathParam("category") category: string, @PathParam("type") type: string, body: SetOptionsRequest): Promise<any> {
         const userId = this.context.request.user.userId;
 
@@ -43,7 +43,7 @@ export class AdminIntegrationsService {
 
     @POST
     @Path(":category/:type/enabled")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async setEnabled(@PathParam("category") category: string, @PathParam("type") type: string, body: SetEnabledRequest): Promise<any> {
         const userId = this.context.request.user.userId;
 
@@ -58,7 +58,7 @@ export class AdminIntegrationsService {
 
     @GET
     @Path(":category/all")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getAllIntegrations(@PathParam("category") category: string): Promise<Integration[]> {
         const userId = this.context.request.user.userId;
 

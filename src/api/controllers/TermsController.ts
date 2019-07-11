@@ -1,5 +1,5 @@
 import { AutoWired } from "typescript-ioc/es6";
-import { IMSCUser } from "../security/MSCSecurity";
+import { ILoggedInUser } from "../security/MatrixSecurity";
 import TermsRecord from "../../db/models/TermsRecord";
 import TermsTextRecord from "../../db/models/TermsTextRecord";
 import TermsSignedRecord from "../../db/models/TermsSignedRecord";
@@ -86,11 +86,11 @@ export default class TermsController {
         return terms;
     }
 
-    public async doesUserNeedToSignTerms(user: IMSCUser): Promise<boolean> {
+    public async doesUserNeedToSignTerms(user: ILoggedInUser): Promise<boolean> {
         return Object.keys((await this.getMissingTermsForUser(user)).policies).length > 0;
     }
 
-    public async getMissingTermsForUser(user: IMSCUser): Promise<ITermsNotSignedResponse> {
+    public async getMissingTermsForUser(user: ILoggedInUser): Promise<ITermsNotSignedResponse> {
         const latest = await this.getPublishedTerms();
         const signed = await TermsSignedRecord.findAll({where: {userId: user.userId}});
 
@@ -154,7 +154,7 @@ export default class TermsController {
         return policies;
     }
 
-    public async signTermsMatching(user: IMSCUser, urls: string[]): Promise<any> {
+    public async signTermsMatching(user: ILoggedInUser, urls: string[]): Promise<any> {
         const terms = await TermsTextRecord.findAll({where: {url: {[Op.in]: urls}}});
         const signed = await TermsSignedRecord.findAll({where: {userId: user.userId}});
 

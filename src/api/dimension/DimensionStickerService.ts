@@ -7,7 +7,7 @@ import { ApiError } from "../ApiError";
 import { StickerpackMetadataDownloader } from "../../utils/StickerpackMetadataDownloader";
 import { MatrixStickerBot } from "../../matrix/MatrixStickerBot";
 import config from "../../config";
-import { ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_USER } from "../security/MatrixSecurity";
 
 export interface MemoryStickerPack {
     id: number;
@@ -88,7 +88,7 @@ export class DimensionStickerService {
 
     @GET
     @Path("config")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getConfig(): Promise<StickerConfig> {
         return {
             enabled: config.stickers.enabled,
@@ -99,7 +99,7 @@ export class DimensionStickerService {
 
     @GET
     @Path("packs")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getStickerPacks(): Promise<MemoryStickerPack[]> {
         const userId = this.context.request.user.userId;
         const cachedPacks = Cache.for(CACHE_STICKERS).get("packs_" + userId);
@@ -126,7 +126,7 @@ export class DimensionStickerService {
 
     @POST
     @Path("packs/:packId/selected")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async setPackSelected(@PathParam("packId") packId: number, request: SetSelectedRequest): Promise<any> {
         const userId = this.context.request.user.userId;
         const pack = await StickerPack.findByPk(packId);
@@ -150,7 +150,7 @@ export class DimensionStickerService {
 
     @POST
     @Path("packs/import")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async importPack(request: ImportPackRequest): Promise<MemoryUserStickerPack> {
         if (!config.stickers.enabled) {
             throw new ApiError(400, "Custom stickerpacks are disabled on this homeserver");

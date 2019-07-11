@@ -10,7 +10,7 @@ import { ComplexBot } from "../../integrations/ComplexBot";
 import { Bridge } from "../../integrations/Bridge";
 import { BridgeStore } from "../../db/BridgeStore";
 import { BotStore } from "../../db/BotStore";
-import { ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_USER } from "../security/MatrixSecurity";
 
 export interface IntegrationsResponse {
     widgets: Widget[],
@@ -88,7 +88,7 @@ export class DimensionIntegrationsService {
 
     @GET
     @Path("room/:roomId")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getIntegrationsInRoom(@PathParam("roomId") roomId: string): Promise<IntegrationsResponse> {
         const userId = this.context.request.user.userId;
         return {
@@ -101,7 +101,7 @@ export class DimensionIntegrationsService {
 
     @GET
     @Path("room/:roomId/integrations/:category/:type")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getIntegrationInRoom(@PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string): Promise<any> {
         const roomConfig = await this.getIntegrationsInRoom(roomId); // does auth for us
 
@@ -114,7 +114,7 @@ export class DimensionIntegrationsService {
 
     @POST
     @Path("room/:roomId/integrations/:category/:type/config")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async setIntegrationConfigurationInRoom(@PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string, newConfig: any): Promise<any> {
         const userId = this.context.request.user.userId;
 
@@ -128,7 +128,7 @@ export class DimensionIntegrationsService {
 
     @DELETE
     @Path("room/:roomId/integrations/:category/:type")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async removeIntegrationInRoom(@PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string): Promise<any> {
         const userId = this.context.request.user.userId;
 

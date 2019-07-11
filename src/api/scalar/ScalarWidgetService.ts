@@ -3,7 +3,7 @@ import { LogService } from "matrix-js-snippets";
 import { Cache, CACHE_WIDGET_TITLES } from "../../MemoryCache";
 import { MatrixLiteClient } from "../../matrix/MatrixLiteClient";
 import config from "../../config";
-import { ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_USER } from "../security/MatrixSecurity";
 import moment = require("moment");
 
 interface UrlPreviewResponse {
@@ -26,7 +26,7 @@ export class ScalarWidgetService {
 
     @GET
     @Path("title_lookup")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async titleLookup(@QueryParam("curl") url: string): Promise<UrlPreviewResponse> {
         const cachedResult = Cache.for(CACHE_WIDGET_TITLES).get(url);
         if (cachedResult) {

@@ -7,7 +7,7 @@ import { Server } from "typescript-rest";
 import * as _ from "lodash";
 import config from "../config";
 import { ApiError } from "./ApiError";
-import MSCSecurity from "./security/MSCSecurity";
+import MatrixSecurity from "./security/MatrixSecurity";
 
 /**
  * Web server for Dimension. Handles the API routes for the admin, scalar, dimension, and matrix APIs.
@@ -26,10 +26,10 @@ export default class Webserver {
     private loadRoutes() {
         // TODO: Rename services to controllers, and controllers to services. They're backwards.
 
-        const apis = ["scalar", "dimension", "admin", "matrix", "msc"].map(a => path.join(__dirname, a, "*.js"));
+        const apis = ["scalar", "dimension", "admin", "matrix"].map(a => path.join(__dirname, a, "*.js"));
         const router = express.Router();
         Server.useIoC();
-        Server.registerAuthenticator(new MSCSecurity());
+        Server.registerAuthenticator(new MatrixSecurity());
         apis.forEach(a => Server.loadServices(router, [a]));
         const routes = _.uniq(router.stack.map(r => r.route.path));
         for (const route of routes) {

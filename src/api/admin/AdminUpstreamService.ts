@@ -2,7 +2,7 @@ import { Context, GET, Path, POST, Security, ServiceContext } from "typescript-r
 import { Cache, CACHE_SCALAR_ACCOUNTS, CACHE_UPSTREAM } from "../../MemoryCache";
 import Upstream from "../../db/models/Upstream";
 import { LogService } from "matrix-js-snippets";
-import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 
 interface UpstreamRepsonse {
     id: number;
@@ -31,7 +31,7 @@ export class AdminUpstreamService {
 
     @GET
     @Path("all")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getUpstreams(): Promise<UpstreamRepsonse[]> {
         const cachedUpstreams = Cache.for(CACHE_UPSTREAM).get("upstreams");
         if (cachedUpstreams) return cachedUpstreams;
@@ -44,7 +44,7 @@ export class AdminUpstreamService {
 
     @POST
     @Path("new")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async createUpstream(request: NewUpstreamRequest): Promise<UpstreamRepsonse> {
         const userId = this.context.request.user.userId;
 

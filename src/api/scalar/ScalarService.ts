@@ -4,9 +4,9 @@ import { OpenId } from "../../models/OpenId";
 import { ScalarAccountResponse, ScalarRegisterResponse } from "../../models/ScalarResponses";
 import { AutoWired, Inject } from "typescript-ioc/es6";
 import AccountController from "../controllers/AccountController";
-import { ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_USER } from "../security/MatrixSecurity";
 import TermsController, { ITermsNotSignedResponse } from "../controllers/TermsController";
-import { SignTermsRequest } from "../msc/MSCTermsService";
+import { SignTermsRequest } from "../matrix/MatrixTermsService";
 import { ScalarClient } from "../../scalar/ScalarClient";
 
 /**
@@ -39,7 +39,7 @@ export class ScalarService {
 
     @GET
     @Path("account")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getAccount(@QueryParam("v") apiVersion: string): Promise<ScalarAccountResponse> {
         if (apiVersion !== "1.1") {
             throw new ApiError(401, "Invalid API version.");
@@ -50,14 +50,14 @@ export class ScalarService {
 
     @GET
     @Path("terms")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getTerms(): Promise<ITermsNotSignedResponse> {
         return this.termsController.getMissingTermsForUser(this.context.request.user);
     }
 
     @POST
     @Path("terms")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async signTerms(request: SignTermsRequest): Promise<any> {
         await this.termsController.signTermsMatching(this.context.request.user, request.user_accepts);
         return {};

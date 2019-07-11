@@ -6,7 +6,7 @@ import IrcBridgeRecord from "../../db/models/IrcBridgeRecord";
 import { AvailableNetworks, IrcBridge } from "../../bridges/IrcBridge";
 import Upstream from "../../db/models/Upstream";
 import IrcBridgeNetwork from "../../db/models/IrcBridgeNetwork";
-import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 
 interface CreateWithUpstream {
     upstreamId: number;
@@ -40,7 +40,7 @@ export class AdminIrcService {
 
     @GET
     @Path("all")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getBridges(): Promise<BridgeResponse[]> {
         const userId = this.context.request.user.userId;
 
@@ -68,7 +68,7 @@ export class AdminIrcService {
 
     @GET
     @Path(":bridgeId")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getBridge(@PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
         const userId = this.context.request.user.userId;
 
@@ -96,7 +96,7 @@ export class AdminIrcService {
 
     @POST
     @Path(":bridgeId/network/:networkId/enabled")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async setNetworkEnabled(@PathParam("bridgeId") bridgeId: number, @PathParam("networkId") networkId: string, request: SetEnabledRequest): Promise<any> {
         const userId = this.context.request.user.userId;
 
@@ -122,7 +122,7 @@ export class AdminIrcService {
 
     @POST
     @Path("new/upstream")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async newConfigForUpstream(request: CreateWithUpstream): Promise<BridgeResponse> {
         const userId = this.context.request.user.userId;
 
@@ -142,7 +142,7 @@ export class AdminIrcService {
 
     @POST
     @Path("new/selfhosted")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async newSelfhosted(request: CreateSelfhosted): Promise<BridgeResponse> {
         const userId = this.context.request.user.userId;
 

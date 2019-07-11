@@ -1,7 +1,7 @@
 import { Context, DELETE, GET, Path, PathParam, POST, QueryParam, Security, ServiceContext } from "typescript-rest";
 import { TelegramBridge } from "../../bridges/TelegramBridge";
 import { ApiError } from "../ApiError";
-import { ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_USER } from "../security/MatrixSecurity";
 
 interface PortalInfoResponse {
     bridged: boolean;
@@ -26,7 +26,7 @@ export class DimensionTelegramService {
 
     @GET
     @Path("chat/:chatId")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getPortalInfo(@PathParam("chatId") chatId: number, @QueryParam("roomId") roomId: string): Promise<PortalInfoResponse> {
         const userId = this.context.request.user.userId;
 
@@ -50,7 +50,7 @@ export class DimensionTelegramService {
 
     @POST
     @Path("chat/:chatId/room/:roomId")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async bridgeRoom(@PathParam("chatId") chatId: number, @PathParam("roomId") roomId: string, request: BridgeRoomRequest): Promise<PortalInfoResponse> {
         const userId = this.context.request.user.userId;
 
@@ -73,7 +73,7 @@ export class DimensionTelegramService {
 
     @DELETE
     @Path("room/:roomId")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async unbridgeRoom(@PathParam("roomId") roomId: string): Promise<PortalInfoResponse> {
         const userId = this.context.request.user.userId;
 

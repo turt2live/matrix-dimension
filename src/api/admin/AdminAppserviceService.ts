@@ -4,7 +4,7 @@ import { AppserviceStore } from "../../db/AppserviceStore";
 import { ApiError } from "../ApiError";
 import { MatrixAppserviceClient } from "../../matrix/MatrixAppserviceClient";
 import { LogService } from "matrix-js-snippets";
-import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 
 interface AppserviceResponse {
     id: string;
@@ -28,14 +28,14 @@ export class AdminAppserviceService {
 
     @GET
     @Path("all")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getAppservices(): Promise<AppserviceResponse[]> {
         return (await AppService.findAll()).map(a => this.mapAppservice(a));
     }
 
     @GET
     @Path(":appserviceId")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getAppservice(@PathParam("appserviceId") asId: string): Promise<AppserviceResponse> {
         try {
             const appservice = await AppserviceStore.getAppservice(asId);
@@ -48,7 +48,7 @@ export class AdminAppserviceService {
 
     @POST
     @Path("new")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async createAppservice(request: AppserviceCreateRequest): Promise<AppserviceResponse> {
         const userId = this.context.request.user.userId;
 
@@ -69,7 +69,7 @@ export class AdminAppserviceService {
 
     @POST
     @Path(":appserviceId/test")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async test(@PathParam("appserviceId") asId: string): Promise<any> {
         const appservice = await AppserviceStore.getAppservice(asId);
         const client = new MatrixAppserviceClient(appservice);

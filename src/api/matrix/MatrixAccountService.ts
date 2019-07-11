@@ -2,7 +2,7 @@ import { Context, GET, Path, POST, Security, ServiceContext } from "typescript-r
 import { OpenId } from "../../models/OpenId";
 import AccountController, { IAccountInfoResponse, IAccountRegisteredResponse } from "../controllers/AccountController";
 import { AutoWired, Inject } from "typescript-ioc/es6";
-import { IMSCUser, ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ILoggedInUser, ROLE_USER } from "../security/MatrixSecurity";
 import { ScalarClient } from "../../scalar/ScalarClient";
 
 /**
@@ -10,7 +10,7 @@ import { ScalarClient } from "../../scalar/ScalarClient";
  */
 @Path("/_matrix/integrations/v1/account")
 @AutoWired
-export class MSCAccountService {
+export class MatrixAccountService {
 
     @Inject
     private accountController: AccountController;
@@ -26,15 +26,15 @@ export class MSCAccountService {
 
     @GET
     @Path("")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async info(): Promise<IAccountInfoResponse> {
-        const user: IMSCUser = this.context.request.user;
+        const user: ILoggedInUser = this.context.request.user;
         return {user_id: user.userId};
     }
 
     @POST
     @Path("logout")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async logout(): Promise<any> {
         await this.accountController.logout(this.context.request.user);
         return {};

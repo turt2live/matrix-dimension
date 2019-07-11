@@ -3,7 +3,7 @@ import { LogService } from "matrix-js-snippets";
 import { IrcBridge } from "../../bridges/IrcBridge";
 import IrcBridgeRecord from "../../db/models/IrcBridgeRecord";
 import { ApiError } from "../ApiError";
-import { ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_USER } from "../security/MatrixSecurity";
 
 interface RequestLinkRequest {
     op: string;
@@ -20,7 +20,7 @@ export class DimensionIrcService {
 
     @GET
     @Path(":networkId/channel/:channel/ops")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getOps(@PathParam("networkId") networkId: string, @PathParam("channel") channelNoHash: string): Promise<string[]> {
         const userId = this.context.request.user.userId;
         const parsed = IrcBridge.parseNetworkId(networkId);
@@ -36,7 +36,7 @@ export class DimensionIrcService {
 
     @POST
     @Path(":networkId/channel/:channel/link/:roomId")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async requestLink(@PathParam("networkId") networkId: string, @PathParam("channel") channelNoHash: string, @PathParam("roomId") roomId: string, request: RequestLinkRequest): Promise<any> {
         const userId = this.context.request.user.userId;
         const parsed = IrcBridge.parseNetworkId(networkId);
@@ -52,7 +52,7 @@ export class DimensionIrcService {
 
     @POST
     @Path(":networkId/channel/:channel/unlink/:roomId")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async unlink(@PathParam("networkId") networkId: string, @PathParam("channel") channelNoHash: string, @PathParam("roomId") roomId: string): Promise<any> {
         const userId = this.context.request.user.userId;
         const parsed = IrcBridge.parseNetworkId(networkId);

@@ -3,7 +3,7 @@ import { SessionStorage } from "../SessionStorage";
 import { HttpClient } from "@angular/common/http";
 
 export class AuthedApi {
-    constructor(protected http: HttpClient, private mscAuth = false) {
+    constructor(protected http: HttpClient, private matrixAuth = false) {
     }
 
     protected authedGet<T>(url: string, qs?: any): Observable<T> {
@@ -32,7 +32,7 @@ export class AuthedApi {
         if (!opts) opts = {};
         if (!qs) qs = {};
         if (!headers) headers = {};
-        if (this.mscAuth) {
+        if (this.matrixAuth) {
             headers["Authorization"] = `Bearer ${SessionStorage.scalarToken}`;
         } else {
             qs["scalar_token"] = SessionStorage.scalarToken;

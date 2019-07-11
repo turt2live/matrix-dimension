@@ -4,7 +4,7 @@ import { LogService } from "matrix-js-snippets";
 import { ApiError } from "../ApiError";
 import Upstream from "../../db/models/Upstream";
 import SlackBridgeRecord from "../../db/models/SlackBridgeRecord";
-import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 
 interface CreateWithUpstream {
     upstreamId: number;
@@ -32,7 +32,7 @@ export class AdminSlackService {
 
     @GET
     @Path("all")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getBridges(): Promise<BridgeResponse[]> {
         const bridges = await SlackBridgeRecord.findAll();
         return Promise.all(bridges.map(async b => {
@@ -47,7 +47,7 @@ export class AdminSlackService {
 
     @GET
     @Path(":bridgeId")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getBridge(@PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
         const telegramBridge = await SlackBridgeRecord.findByPk(bridgeId);
         if (!telegramBridge) throw new ApiError(404, "Slack Bridge not found");
@@ -62,7 +62,7 @@ export class AdminSlackService {
 
     @POST
     @Path(":bridgeId")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async updateBridge(@PathParam("bridgeId") bridgeId: number, request: CreateSelfhosted): Promise<BridgeResponse> {
         const userId = this.context.request.user.userId;
         const bridge = await SlackBridgeRecord.findByPk(bridgeId);
@@ -80,7 +80,7 @@ export class AdminSlackService {
 
     @POST
     @Path("new/upstream")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async newConfigForUpstream(request: CreateWithUpstream): Promise<BridgeResponse> {
         const userId = this.context.request.user.userId;
         const upstream = await Upstream.findByPk(request.upstreamId);
@@ -99,7 +99,7 @@ export class AdminSlackService {
 
     @POST
     @Path("new/selfhosted")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async newSelfhosted(request: CreateSelfhosted): Promise<BridgeResponse> {
         const userId = this.context.request.user.userId;
         const bridge = await SlackBridgeRecord.create({

@@ -8,13 +8,13 @@ import config from "../../config";
 import { ScalarStore } from "../../db/ScalarStore";
 import { ScalarClient } from "../../scalar/ScalarClient";
 
-export interface IMSCUser {
+export interface ILoggedInUser {
     userId: string;
     token: string;
 }
 
-export const ROLE_MSC_USER = "ROLE_MSC_USER";
-export const ROLE_MSC_ADMIN = "ROLE_MSC_ADMIN";
+export const ROLE_USER = "ROLE_USER";
+export const ROLE_ADMIN = "ROLE_ADMIN";
 
 const TERMS_IGNORED_ROUTES = [
     {method: "*", path: "/api/v1/dimension/admin/"},
@@ -33,16 +33,16 @@ const ADMIN_ROUTES = [
     {method: "*", path: "/api/v1/dimension/admin/"},
 ];
 
-export default class MSCSecurity implements ServiceAuthenticator {
+export default class MatrixSecurity implements ServiceAuthenticator {
 
     private accountController = new AccountController();
     private termsController = new TermsController();
 
     public getRoles(req: Request): string[] {
         if (req.user) {
-            const roles = [ROLE_MSC_USER];
+            const roles = [ROLE_USER];
             if (config.admins.includes(req.user.userId)) {
-                roles.push(ROLE_MSC_ADMIN);
+                roles.push(ROLE_ADMIN);
             }
             return roles;
         }
@@ -63,12 +63,12 @@ export default class MSCSecurity implements ServiceAuthenticator {
                 } else if (req.query && req.query.access_token) {
                     token = req.query.access_token;
                 } else if (req.query && req.query.scalar_token) {
-                    LogService.warn("MSCSecurity", "Request used old scalar_token auth - this will be removed in a future version");
+                    LogService.warn("MatrixSecurity", "Request used old scalar_token auth - this will be removed in a future version");
                     token = req.query.scalar_token;
                 }
 
                 if (token) {
-                    req.user = <IMSCUser>{
+                    req.user = <ILoggedInUser>{
                         userId: await this.accountController.getTokenOwner(token),
                         token: token,
                     };
@@ -93,7 +93,7 @@ export default class MSCSecurity implements ServiceAuthenticator {
                         }
                     }
 
-                    if (this.matchesAnyRoute(req, ADMIN_ROUTES, false) && !this.getRoles(req).includes(ROLE_MSC_ADMIN)) {
+                    if (this.matchesAnyRoute(req, ADMIN_ROUTES, false) && !this.getRoles(req).includes(ROLE_ADMIN)) {
                         return res.status(403).json({errcode: "M_UNAUTHORIZED", error: "User is not an admin"});
                     }
 
@@ -105,7 +105,7 @@ export default class MSCSecurity implements ServiceAuthenticator {
                 if (e instanceof ApiError) {
                     res.status(e.statusCode).json(e.jsonResponse);
                 } else {
-                    LogService.error("MSCSecurity", e);
+                    LogService.error("MatrixSecurity", e);
                     res.status(500).json({errcode: "M_UNKNOWN", error: "Unknown server error"});
                 }
             }

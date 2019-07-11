@@ -9,7 +9,7 @@ import config from "../../config";
 import Sticker from "../../db/models/Sticker";
 import { LogService } from "matrix-js-snippets";
 import * as sharp from "sharp";
-import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 
 interface SetEnabledRequest {
     isEnabled: boolean;
@@ -30,14 +30,14 @@ export class AdminStickerService {
 
     @GET
     @Path("packs")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getStickerPacks(): Promise<MemoryStickerPack[]> {
         return await DimensionStickerService.getStickerPacks(false);
     }
 
     @POST
     @Path("packs/:id/enabled")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async setPackEnabled(@PathParam("id") packId: number, request: SetEnabledRequest): Promise<any> {
         const pack = await StickerPack.findByPk(packId);
         if (!pack) throw new ApiError(404, "Sticker pack not found");
@@ -51,7 +51,7 @@ export class AdminStickerService {
 
     @POST
     @Path("packs/import/telegram")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async importFromTelegram(request: ImportTelegramRequest): Promise<MemoryStickerPack> {
         const userId = this.context.request.user.userId;
 

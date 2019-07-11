@@ -3,7 +3,7 @@ import { ApiError } from "../ApiError";
 import { LogService } from "matrix-js-snippets";
 import { BridgedChannel, SlackBridge } from "../../bridges/SlackBridge";
 import { SlackChannel, SlackTeam } from "../../bridges/models/slack";
-import { ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_USER } from "../security/MatrixSecurity";
 
 interface BridgeRoomRequest {
     teamId: string;
@@ -21,7 +21,7 @@ export class DimensionSlackService {
 
     @GET
     @Path("room/:roomId/link")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getLink(@PathParam("roomId") roomId: string): Promise<BridgedChannel> {
         const userId = this.context.request.user.userId;
 
@@ -36,7 +36,7 @@ export class DimensionSlackService {
 
     @POST
     @Path("room/:roomId/link")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async bridgeRoom(@PathParam("roomId") roomId: string, request: BridgeRoomRequest): Promise<BridgedChannel> {
         const userId = this.context.request.user.userId;
 
@@ -69,7 +69,7 @@ export class DimensionSlackService {
 
     @GET
     @Path("teams")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getTeams(): Promise<SlackTeam[]> {
         const userId = this.context.request.user.userId;
 
@@ -81,7 +81,7 @@ export class DimensionSlackService {
 
     @GET
     @Path("teams/:teamId/channels")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getChannels(@PathParam("teamId") teamId: string): Promise<SlackChannel[]> {
         const userId = this.context.request.user.userId;
 
@@ -96,7 +96,7 @@ export class DimensionSlackService {
 
     @GET
     @Path("auth")
-    @Security(ROLE_MSC_USER)
+    @Security(ROLE_USER)
     public async getAuthUrl(): Promise<{ authUrl: string }> {
         const userId = this.context.request.user.userId;
 

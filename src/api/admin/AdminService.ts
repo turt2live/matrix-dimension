@@ -5,7 +5,7 @@ import { CURRENT_VERSION } from "../../version";
 import { getFederationConnInfo } from "../../matrix/helpers";
 import UserScalarToken from "../../db/models/UserScalarToken";
 import { Cache, CACHE_SCALAR_ACCOUNTS } from "../../MemoryCache";
-import { ROLE_MSC_ADMIN, ROLE_MSC_USER } from "../security/MSCSecurity";
+import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 
 interface DimensionVersionResponse {
     version: string;
@@ -34,21 +34,21 @@ export class AdminService {
 
     @GET
     @Path("check")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async checkIfAdmin(): Promise<{}> {
         return {}; // A 200 OK essentially means "you're an admin".
     }
 
     @GET
     @Path("version")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getVersion(): Promise<DimensionVersionResponse> {
         return {version: CURRENT_VERSION};
     }
 
     @GET
     @Path("config")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async getConfig(): Promise<DimensionConfigResponse> {
         const client = new MatrixLiteClient(config.homeserver.accessToken);
         const fedInfo = await getFederationConnInfo(config.homeserver.name);
@@ -70,7 +70,7 @@ export class AdminService {
 
     @GET
     @Path("test/federation")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async testFederationRouting(@QueryParam("server_name") serverName: string): Promise<any> {
         return {
             inputServerName: serverName,
@@ -80,7 +80,7 @@ export class AdminService {
 
     @POST
     @Path("sessions/logout/all")
-    @Security([ROLE_MSC_USER, ROLE_MSC_ADMIN])
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async logoutAll(): Promise<any> {
         // Clear the cache first to hopefully invalidate a bunch of them
         Cache.for(CACHE_SCALAR_ACCOUNTS).clear();
