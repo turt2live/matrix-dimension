@@ -1,21 +1,58 @@
 import { OpenId } from "../models/OpenId";
-import { ScalarAccountResponse, ScalarRegisterResponse } from "../models/ScalarResponses";
+import { ScalarAccountResponse, ScalarLogoutResponse, ScalarRegisterResponse } from "../models/ScalarResponses";
 import * as request from "request";
 import { LogService } from "matrix-js-snippets";
 import Upstream from "../db/models/Upstream";
 import { SCALAR_API_VERSION } from "../utils/common-constants";
+import * as url from "url";
+
+const REGISTER_ROUTE = "/register";
+const ACCOUNT_INFO_ROUTE = "/account";
+const LOGOUT_ROUTE = "/logout";
 
 export class ScalarClient {
-    constructor(private upstream: Upstream) {
+    public static readonly KIND_LEGACY = "legacy";
+    public static readonly KIND_MATRIX_V1 = "matrix_v1";
+
+    constructor(private upstream: Upstream, private kind = ScalarClient.KIND_LEGACY) {
+    }
+
+    private makeRequestArguments(path: string, token: string): { scalarUrl: string, headers: any, queryString: any } {
+        if (this.kind === ScalarClient.KIND_LEGACY) {
+            const addlQuery = {};
+            if (token) addlQuery['scalar_token'] = token;
+            return {
+                scalarUrl: this.upstream.scalarUrl + path,
+                headers: {},
+                queryString: {
+                    v: SCALAR_API_VERSION,
+                    ...addlQuery,
+                },
+            };
+        } else {
+            const parsed = url.parse(this.upstream.scalarUrl);
+            parsed.path = '/_matrix/integrations/v1' + (path === ACCOUNT_INFO_ROUTE ? path : `${ACCOUNT_INFO_ROUTE}${path}`);
+
+            const headers = {};
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            return {
+                scalarUrl: parsed.toString(),
+                headers: headers,
+                queryString: {},
+            };
+        }
     }
 
     public register(openId: OpenId): Promise<ScalarRegisterResponse> {
-        LogService.info("ScalarClient", "Doing upstream scalar request: " + this.upstream.scalarUrl + "/register");
+        const {scalarUrl, headers, queryString} = this.makeRequestArguments(REGISTER_ROUTE, null);
+        LogService.info("ScalarClient", "Doing upstream scalar request: " + scalarUrl);
         return new Promise((resolve, reject) => {
             request({
                 method: "POST",
-                url: this.upstream.scalarUrl + "/register",
-                qs: {v: SCALAR_API_VERSION},
+                url: scalarUrl,
+                qs: queryString,
+                headers: headers,
                 json: openId,
             }, (err, res, _body) => {
                 if (err) {
@@ -33,12 +70,39 @@ export class ScalarClient {
     }
 
     public getAccount(token: string): Promise<ScalarAccountResponse> {
-        LogService.info("ScalarClient", "Doing upstream scalar request: " + this.upstream.scalarUrl + "/account");
+        const {scalarUrl, headers, queryString} = this.makeRequestArguments(ACCOUNT_INFO_ROUTE, token);
+        LogService.info("ScalarClient", "Doing upstream scalar request: " + scalarUrl);
         return new Promise((resolve, reject) => {
             request({
                 method: "GET",
-                url: this.upstream.scalarUrl + "/account",
-                qs: {v: SCALAR_API_VERSION, scalar_token: token},
+                url: scalarUrl,
+                qs: queryString,
+                headers: headers,
+                json: true,
+            }, (err, res, _body) => {
+                if (err) {
+                    LogService.error("ScalarClient", "Error getting information for token");
+                    LogService.error("ScalarClient", err);
+                    reject(err);
+                } else if (res.statusCode !== 200) {
+                    LogService.error("ScalarClient", "Got status code " + res.statusCode + " while getting information for token");
+                    reject(res.statusCode);
+                } else {
+                    resolve(res.body);
+                }
+            });
+        });
+    }
+
+    public logout(token: string): Promise<ScalarLogoutResponse> {
+        const {scalarUrl, headers, queryString} = this.makeRequestArguments(LOGOUT_ROUTE, token);
+        LogService.info("ScalarClient", "Doing upstream scalar request: " + scalarUrl);
+        return new Promise((resolve, reject) => {
+            request({
+                method: "POST",
+                url: scalarUrl,
+                qs: queryString,
+                headers: headers,
                 json: true,
             }, (err, res, _body) => {
                 if (err) {

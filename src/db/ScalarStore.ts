@@ -8,7 +8,7 @@ import { Cache, CACHE_SCALAR_ONLINE_STATE } from "../MemoryCache";
 
 export class ScalarStore {
 
-    public static async doesUserHaveTokensForAllUpstreams(userId: string): Promise<boolean> {
+    public static async doesUserHaveTokensForAllUpstreams(userId: string, scalarKind: string): Promise<boolean> {
         const scalarTokens = await UserScalarToken.findAll({where: {userId: userId}});
         const upstreamTokenIds = scalarTokens.filter(t => !t.isDimensionToken).map(t => t.upstreamId);
         const hasDimensionToken = scalarTokens.filter(t => t.isDimensionToken).length >= 1;
@@ -20,7 +20,7 @@ export class ScalarStore {
 
         const upstreams = await Upstream.findAll();
         for (const upstream of upstreams) {
-            if (!await ScalarStore.isUpstreamOnline(upstream)) {
+            if (!await ScalarStore.isUpstreamOnline(upstream, scalarKind)) {
                 LogService.warn("ScalarStore", `Upstream ${upstream.apiUrl} is offline - assuming token is valid`);
                 continue;
             }
@@ -43,7 +43,7 @@ export class ScalarStore {
         return tokens[0].user;
     }
 
-    public static async isUpstreamOnline(upstream: Upstream): Promise<boolean> {
+    public static async isUpstreamOnline(upstream: Upstream, scalarKind: string): Promise<boolean> {
         const cache = Cache.for(CACHE_SCALAR_ONLINE_STATE);
         const cacheKey = `Upstream ${upstream.id}`;
         const result = cache.get(cacheKey);
@@ -51,17 +51,17 @@ export class ScalarStore {
             return result;
         }
 
-        const state = ScalarStore.checkIfUpstreamOnline(upstream);
+        const state = ScalarStore.checkIfUpstreamOnline(upstream, scalarKind);
         cache.put(cacheKey, state, 60 * 60 * 1000); // 1 hour
         return state;
     }
 
-    private static async checkIfUpstreamOnline(upstream: Upstream): Promise<boolean> {
+    private static async checkIfUpstreamOnline(upstream: Upstream, scalarKind: string): Promise<boolean> {
         try {
             // The sticker bot can be used for this for now
 
             const testUserId = await MatrixStickerBot.getUserId();
-            const scalarClient = new ScalarClient(upstream);
+            const scalarClient = new ScalarClient(upstream, scalarKind);
 
             // First see if we have a token for the upstream so we can try it
             const existingTokens = await UserScalarToken.findAll({

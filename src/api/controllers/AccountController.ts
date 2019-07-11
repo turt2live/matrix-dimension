@@ -51,9 +51,10 @@ export default class AccountController {
     /**
      * Registers an account to use the Integration Manager
      * @param {OpenId} openId The OpenID request information.
+     * @param {string} scalarKind The kind of scalar client to use.
      * @returns {Promise<IAccountRegisteredResponse>} Resolves when registered.
      */
-    public async registerAccount(openId: OpenId): Promise<IAccountRegisteredResponse> {
+    public async registerAccount(openId: OpenId, scalarKind: string): Promise<IAccountRegisteredResponse> {
         if (!openId || !openId.matrix_server_name || !openId.access_token) {
             throw new ApiError(400, "Missing OpenID information");
         }
@@ -76,7 +77,7 @@ export default class AccountController {
 
         const upstreams = await Upstream.findAll();
         await Promise.all(upstreams.map(async upstream => {
-            if (!await ScalarStore.isUpstreamOnline(upstream)) {
+            if (!await ScalarStore.isUpstreamOnline(upstream, scalarKind)) {
                 LogService.warn("AccountController", `Skipping registration for ${mxUserId} on upstream ${upstream.id} (${upstream.name}) because it is offline`);
                 return null;
             }

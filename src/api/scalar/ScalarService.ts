@@ -7,6 +7,7 @@ import AccountController from "../controllers/AccountController";
 import { ROLE_MSC_USER } from "../security/MSCSecurity";
 import TermsController, { ITermsNotSignedResponse } from "../controllers/TermsController";
 import { SignTermsRequest } from "../msc/MSCTermsService";
+import { ScalarClient } from "../../scalar/ScalarClient";
 
 /**
  * API for the minimum Scalar API we need to implement to be compatible with clients. Used for registration
@@ -32,7 +33,7 @@ export class ScalarService {
             throw new ApiError(401, "Invalid API version.");
         }
 
-        const response = await this.accountController.registerAccount(request);
+        const response = await this.accountController.registerAccount(request, ScalarClient.KIND_LEGACY);
         return {scalar_token: response.token};
     }
 
