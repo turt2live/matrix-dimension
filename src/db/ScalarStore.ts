@@ -5,6 +5,7 @@ import User from "./models/User";
 import { MatrixStickerBot } from "../matrix/MatrixStickerBot";
 import { ScalarClient } from "../scalar/ScalarClient";
 import { Cache, CACHE_SCALAR_ONLINE_STATE } from "../MemoryCache";
+import { ILanguagePolicy } from "../api/controllers/TermsController";
 
 export class ScalarStore {
 
@@ -56,7 +57,7 @@ export class ScalarStore {
         return state;
     }
 
-    private static async checkIfUpstreamOnline(upstream: Upstream, scalarKind: string): Promise<boolean> {
+    private static async checkIfUpstreamOnline(upstream: Upstream, scalarKind: string, signTerms = true): Promise<boolean> {
         try {
             // The sticker bot can be used for this for now
 
@@ -78,8 +79,14 @@ export class ScalarStore {
                     return true; // it's online
                 } catch (e) {
                     LogService.error("ScalarStore", e);
-                    if (!isNaN(Number(e))) {
-                        if (e === 401 || e === 403) {
+                    if (e && !isNaN(Number(e.statusCode))) {
+                        if (e.statusCode === 403 && e.body) {
+                            if (e.body.errcode === 'M_TERMS_NOT_SIGNED' && signTerms) {
+                                await ScalarStore.signAllTerms(existingTokens[0], scalarKind);
+                                return ScalarStore.checkIfUpstreamOnline(upstream, scalarKind, false);
+                            }
+                        }
+                        if (e.statusCode === 401 || e.statusCode === 403) {
                             LogService.info("ScalarStore", "Test user token expired");
                         } else {
                             // Assume offline
@@ -107,17 +114,35 @@ export class ScalarStore {
 
             const openId = await MatrixStickerBot.getOpenId();
             const token = await scalarClient.register(openId);
-            await UserScalarToken.create({
+            const scalarToken = await UserScalarToken.create({
                 userId: testUserId,
                 scalarToken: token.scalar_token,
                 isDimensionToken: false,
                 upstreamId: upstream.id,
             });
 
+            // Accept all terms of service for the user
+            await ScalarStore.signAllTerms(scalarToken, scalarKind);
+
             return true;
         } catch (e) {
             LogService.error("ScalarStore", e);
             return false;
+        }
+    }
+
+    private static async signAllTerms(token: UserScalarToken, scalarKind: string) {
+        try {
+            const client = new ScalarClient(token.upstream, scalarKind);
+            const terms = await client.getAvailableTerms();
+            const urlsToSign = Object.values(terms.policies).map(p => {
+                const englishCode = Object.keys(p).find(k => k.toLowerCase() === 'en' || k.toLowerCase().startsWith('en_'));
+                if (!englishCode) return null;
+                return (<ILanguagePolicy>p[englishCode]).url;
+            }).filter(v => !!v);
+            await client.signTermsUrls(token.scalarToken, urlsToSign);
+        } catch (e) {
+            LogService.error("ScalarStore", e);
         }
     }
 

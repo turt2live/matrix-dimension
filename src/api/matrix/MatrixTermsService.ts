@@ -1,7 +1,7 @@
 import { Context, GET, Path, POST, Security, ServiceContext } from "typescript-rest";
 import { AutoWired, Inject } from "typescript-ioc/es6";
 import { ROLE_USER } from "../security/MatrixSecurity";
-import TermsController, { ITermsNotSignedResponse } from "../controllers/TermsController";
+import TermsController, { ITermsResponse } from "../controllers/TermsController";
 
 export interface SignTermsRequest {
     user_accepts: string[];
@@ -22,9 +22,8 @@ export class MatrixTermsService {
 
     @GET
     @Path("")
-    @Security(ROLE_USER)
-    public async needsSignatures(): Promise<ITermsNotSignedResponse> {
-        return this.termsController.getMissingTermsForUser(this.context.request.user);
+    public async getAllTerms(): Promise<ITermsResponse> {
+        return this.termsController.getAvailableTerms();
     }
 
     @POST

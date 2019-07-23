@@ -24,7 +24,7 @@ export interface IPolicy {
     [language: string]: string | ILanguagePolicy;
 }
 
-export interface ITermsNotSignedResponse {
+export interface ITermsResponse {
     policies: { [policyName: string]: IPolicy };
 }
 
@@ -87,40 +87,57 @@ export default class TermsController {
     }
 
     public async doesUserNeedToSignTerms(user: ILoggedInUser): Promise<boolean> {
-        return Object.keys((await this.getMissingTermsForUser(user)).policies).length > 0;
-    }
-
-    public async getMissingTermsForUser(user: ILoggedInUser): Promise<ITermsNotSignedResponse> {
         const latest = await this.getPublishedTerms();
         const signed = await TermsSignedRecord.findAll({where: {userId: user.userId}});
 
         const missing = Object.values(latest).filter(d => !signed.find(s => s.termsId === d.id));
-        const policies: ITermsNotSignedResponse = {policies: {}};
+        if (missing.length > 0) return true;
 
-        for (const missingPolicy of missing) {
-            policies.policies[missingPolicy.shortcode] = {
-                version: missingPolicy.version,
+        // Test upstream terms for the user
+        const tokensForUser = await UserScalarToken.findAll({where: {userId: user.userId}, include: [Upstream]});
+        const upstreamTokens = tokensForUser.filter(t => t.upstream);
+        for (const upstreamToken of upstreamTokens) {
+            try {
+                const scalarClient = new ScalarClient(upstreamToken.upstream, ScalarClient.KIND_MATRIX_V1);
+                await scalarClient.getAccount(upstreamToken.scalarToken);
+                // 200 OK means we're fine
+            } catch (e) {
+                if (e.statusCode === 403 && e.body && e.body.errcode === 'M_TERMS_NOT_SIGNED') {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public async getAvailableTerms(): Promise<ITermsResponse> {
+        const latest = await this.getPublishedTerms();
+        const policies: ITermsResponse = {policies: {}};
+
+        for (const termsPolicy of Object.values(latest)) {
+            policies.policies[termsPolicy.shortcode] = {
+                version: termsPolicy.version,
             };
 
-            for (const language in missingPolicy.languages) {
-                policies.policies[missingPolicy.shortcode][language] = {
-                    name: missingPolicy.languages[language].name,
-                    url: missingPolicy.languages[language].url,
+            for (const language in termsPolicy.languages) {
+                policies.policies[termsPolicy.shortcode][language] = {
+                    name: termsPolicy.languages[language].name,
+                    url: termsPolicy.languages[language].url,
                 };
             }
         }
 
-        // Get upstream terms for the user
-        const tokensForUser = await UserScalarToken.findAll({where: {userId: user.userId}, include: [Upstream]});
-        const upstreamTokens = tokensForUser.filter(t => t.upstream);
+        // Get upstream terms
+        const usptreams = await Upstream.findAll();
         const urlsToUpstream = {}; // {url: [upstreamId]}
-        for (const upstreamToken of upstreamTokens) {
+        for (const upstream of usptreams) {
             try {
-                const scalarClient = new ScalarClient(upstreamToken.upstream, ScalarClient.KIND_MATRIX_V1);
-                const upstreamTerms = await scalarClient.getMissingTerms(upstreamToken.scalarToken);
+                const scalarClient = new ScalarClient(upstream, ScalarClient.KIND_MATRIX_V1);
+                const upstreamTerms = await scalarClient.getAvailableTerms();
 
                 // rewrite the shortcodes to avoid conflicts
-                const shortcodePrefix = `upstream_${md5(`${upstreamToken.id}:${upstreamToken.upstream.apiUrl}`)}`;
+                const shortcodePrefix = `upstream_${md5(`${upstream.id}:${upstream.apiUrl}`)}`;
                 for (const shortcode of Object.keys(upstreamTerms.policies)) {
                     policies.policies[`${shortcodePrefix}_${shortcode}`] = upstreamTerms.policies[shortcode];
 
@@ -129,8 +146,8 @@ export default class TermsController {
                         const upstreamUrl = upstreamTerms.policies[shortcode][language]['url'];
                         if (!urlsToUpstream[upstreamUrl]) urlsToUpstream[upstreamUrl] = [];
                         const upstreamsArr = urlsToUpstream[upstreamUrl];
-                        if (!upstreamsArr.includes(upstreamToken.upstream.id)) {
-                            upstreamsArr.push(upstreamToken.upstream.id);
+                        if (!upstreamsArr.includes(upstream.id)) {
+                            upstreamsArr.push(upstream.id);
                         }
                     }
                 }

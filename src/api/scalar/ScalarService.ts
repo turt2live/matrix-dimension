@@ -5,7 +5,7 @@ import { ScalarAccountResponse, ScalarRegisterResponse } from "../../models/Scal
 import { AutoWired, Inject } from "typescript-ioc/es6";
 import AccountController from "../controllers/AccountController";
 import { ROLE_USER } from "../security/MatrixSecurity";
-import TermsController, { ITermsNotSignedResponse } from "../controllers/TermsController";
+import TermsController, { ITermsResponse } from "../controllers/TermsController";
 import { SignTermsRequest } from "../matrix/MatrixTermsService";
 import { ScalarClient } from "../../scalar/ScalarClient";
 
@@ -50,9 +50,8 @@ export class ScalarService {
 
     @GET
     @Path("terms")
-    @Security(ROLE_USER)
-    public async getTerms(): Promise<ITermsNotSignedResponse> {
-        return this.termsController.getMissingTermsForUser(this.context.request.user);
+    public async getTerms(): Promise<ITermsResponse> {
+        return this.termsController.getAvailableTerms();
     }
 
     @POST

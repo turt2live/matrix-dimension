@@ -4,7 +4,8 @@ import * as request from "request";
 import { LogService } from "matrix-js-snippets";
 import Upstream from "../db/models/Upstream";
 import { SCALAR_API_VERSION } from "../utils/common-constants";
-import { ITermsNotSignedResponse } from "../api/controllers/TermsController";
+import { ITermsResponse } from "../api/controllers/TermsController";
+import { subscriptionLogsToBeFn } from "rxjs/internal/testing/TestScheduler";
 
 const REGISTER_ROUTE = "/register";
 const ACCOUNT_INFO_ROUTE = "/account";
@@ -90,8 +91,16 @@ export class ScalarClient {
                     LogService.error("ScalarClient", err);
                     reject(err);
                 } else if (res.statusCode !== 200) {
+                    if (typeof(res.body) === 'string') {
+                        try {
+                            res.body = JSON.parse(res.body);
+                        } catch (e) {
+                            LogService.error("ScalarClient", "Got error parsing error response:");
+                            LogService.error("ScalarClient", e);
+                        }
+                    }
                     LogService.error("ScalarClient", "Got status code " + res.statusCode + " while getting information for token");
-                    reject(res.statusCode);
+                    reject(res);
                 } else {
                     resolve(res.body);
                 }
@@ -124,8 +133,8 @@ export class ScalarClient {
         });
     }
 
-    public getMissingTerms(token: string): Promise<ITermsNotSignedResponse> {
-        const {scalarUrl, headers, queryString} = this.makeRequestArguments(TERMS_ROUTE, token);
+    public getAvailableTerms(): Promise<ITermsResponse> {
+        const {scalarUrl, headers, queryString} = this.makeRequestArguments(TERMS_ROUTE, null);
         LogService.info("ScalarClient", "Doing upstream scalar request: GET " + scalarUrl);
         return new Promise((resolve, reject) => {
             request({
