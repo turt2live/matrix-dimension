@@ -5,7 +5,6 @@ import { LogService } from "matrix-js-snippets";
 import Upstream from "../db/models/Upstream";
 import { SCALAR_API_VERSION } from "../utils/common-constants";
 import { ITermsResponse } from "../api/controllers/TermsController";
-import { subscriptionLogsToBeFn } from "rxjs/internal/testing/TestScheduler";
 
 const REGISTER_ROUTE = "/register";
 const ACCOUNT_INFO_ROUTE = "/account";
@@ -91,7 +90,7 @@ export class ScalarClient {
                     LogService.error("ScalarClient", err);
                     reject(err);
                 } else if (res.statusCode !== 200) {
-                    if (typeof(res.body) === 'string') {
+                    if (typeof (res.body) === 'string') {
                         try {
                             res.body = JSON.parse(res.body);
                         } catch (e) {
