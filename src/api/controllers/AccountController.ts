@@ -10,7 +10,7 @@ import { ScalarClient } from "../../scalar/ScalarClient";
 import * as randomString from "random-string";
 import { AutoWired } from "typescript-ioc/es6";
 import { Cache, CACHE_SCALAR_ACCOUNTS } from "../../MemoryCache";
-import { IMSCUser } from "../security/MSCSecurity";
+import { ILoggedInUser } from "../security/MatrixSecurity";
 
 export interface IAccountRegisteredResponse {
     token: string;
@@ -31,16 +31,15 @@ export default class AccountController {
     /**
      * Gets the owner of a given scalar token, throwing an ApiError if the token is invalid.
      * @param {string} scalarToken The scalar token to validate
-     * @param {boolean} ignoreUpstreams True to consider the token valid if it is missing links to other upstreams
      * @returns {Promise<string>} Resolves to the owner's user ID if the token is valid.
      * @throws {ApiError} Thrown with a status code of 401 if the token is invalid.
      */
-    public async getTokenOwner(scalarToken: string, ignoreUpstreams = false): Promise<string> {
+    public async getTokenOwner(scalarToken: string): Promise<string> {
         const cachedUserId = Cache.for(CACHE_SCALAR_ACCOUNTS).get(scalarToken);
         if (cachedUserId) return cachedUserId;
 
         try {
-            const user = await ScalarStore.getTokenOwner(scalarToken, ignoreUpstreams);
+            const user = await ScalarStore.getTokenOwner(scalarToken);
             Cache.for(CACHE_SCALAR_ACCOUNTS).put(scalarToken, user.userId, 30 * 60 * 1000); // 30 minutes
             return user.userId;
         } catch (err) {
@@ -52,9 +51,10 @@ export default class AccountController {
     /**
      * Registers an account to use the Integration Manager
      * @param {OpenId} openId The OpenID request information.
+     * @param {string} scalarKind The kind of scalar client to use.
      * @returns {Promise<IAccountRegisteredResponse>} Resolves when registered.
      */
-    public async registerAccount(openId: OpenId): Promise<IAccountRegisteredResponse> {
+    public async registerAccount(openId: OpenId, scalarKind: string): Promise<IAccountRegisteredResponse> {
         if (!openId || !openId.matrix_server_name || !openId.access_token) {
             throw new ApiError(400, "Missing OpenID information");
         }
@@ -77,7 +77,7 @@ export default class AccountController {
 
         const upstreams = await Upstream.findAll();
         await Promise.all(upstreams.map(async upstream => {
-            if (!await ScalarStore.isUpstreamOnline(upstream)) {
+            if (!await ScalarStore.isUpstreamOnline(upstream, scalarKind)) {
                 LogService.warn("AccountController", `Skipping registration for ${mxUserId} on upstream ${upstream.id} (${upstream.name}) because it is offline`);
                 return null;
             }
@@ -108,13 +108,17 @@ export default class AccountController {
 
     /**
      * Logs a user out
-     * @param {IMSCUser} user The user to log out
+     * @param {ILoggedInUser} user The user to log out
      * @returns {Promise<*>} Resolves when complete.
      */
-    public async logout(user: IMSCUser): Promise<any> {
-        // TODO: Create a link to upstream tokens to log them out too
-        const tokens = await UserScalarToken.findAll({where: {scalarToken: user.token}});
+    public async logout(user: ILoggedInUser): Promise<any> {
+        const tokens = await UserScalarToken.findAll({where: {scalarToken: user.token}, include: [Upstream]});
         for (const token of tokens) {
+            if (token.upstream) {
+                LogService.info("AccountController", "Logging user out of upstream");
+                const client = new ScalarClient(token.upstream, ScalarClient.KIND_MATRIX_V1);
+                await client.logout(token.scalarToken);
+            }
             await token.destroy();
         }
         Cache.for(CACHE_SCALAR_ACCOUNTS).clear();

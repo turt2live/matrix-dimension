@@ -349,7 +349,7 @@ export class NebProxy {
                     LogService.error("NebProxy", res.body);
                     reject(new Error("Request failed"));
                 } else {
-                    if (typeof(res.body) === "string") res.body = JSON.parse(res.body);
+                    if (typeof (res.body) === "string") res.body = JSON.parse(res.body);
                     resolve(res.body);
                 }
             });

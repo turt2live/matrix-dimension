@@ -26,16 +26,19 @@ export class ApiError {
      * then converted to JSON as {message: "your_message"})
      * @param {string} errCode The internal error code to describe what went wrong
      */
-    constructor(statusCode: number, json: string | object, errCode = "D_UNKNOWN") {
+    constructor(statusCode: number, json: string | object, errCode = "M_UNKNOWN") {
         // Because typescript is just plain dumb
         // https://stackoverflow.com/questions/31626231/custom-error-class-in-typescript
         Error.apply(this, ["ApiError"]);
 
-        if (typeof(json) === "string") json = {message: json};
+        if (typeof (json) === "string") json = {message: json};
         this.jsonResponse = json;
         this.statusCode = statusCode;
         this.errorCode = errCode;
 
         this.jsonResponse["dim_errcode"] = this.errorCode;
+
+        if (!this.jsonResponse['error']) this.jsonResponse['error'] = this.jsonResponse['message'];
+        if (!this.jsonResponse['errcode']) this.jsonResponse['errcode'] = errCode;
     }
 }

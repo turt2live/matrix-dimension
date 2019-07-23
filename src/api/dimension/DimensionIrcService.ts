@@ -1,10 +1,9 @@
-import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
+import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { LogService } from "matrix-js-snippets";
 import { IrcBridge } from "../../bridges/IrcBridge";
 import IrcBridgeRecord from "../../db/models/IrcBridgeRecord";
 import { ApiError } from "../ApiError";
-import AccountController from "../controllers/AccountController";
-import { AutoWired, Inject } from "typescript-ioc/es6";
+import { ROLE_USER } from "../security/MatrixSecurity";
 
 interface RequestLinkRequest {
     op: string;
@@ -14,17 +13,16 @@ interface RequestLinkRequest {
  * API for interacting with the IRC bridge
  */
 @Path("/api/v1/dimension/irc")
-@AutoWired
 export class DimensionIrcService {
 
-    @Inject
-    private accountController: AccountController;
+    @Context
+    private context: ServiceContext;
 
     @GET
     @Path(":networkId/channel/:channel/ops")
-    public async getOps(@QueryParam("scalar_token") scalarToken: string, @PathParam("networkId") networkId: string, @PathParam("channel") channelNoHash: string): Promise<string[]> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
-
+    @Security(ROLE_USER)
+    public async getOps(@PathParam("networkId") networkId: string, @PathParam("channel") channelNoHash: string): Promise<string[]> {
+        const userId = this.context.request.user.userId;
         const parsed = IrcBridge.parseNetworkId(networkId);
         const bridge = await IrcBridgeRecord.findByPk(parsed.bridgeId);
         if (!bridge) throw new ApiError(404, "Bridge not found");
@@ -38,9 +36,9 @@ export class DimensionIrcService {
 
     @POST
     @Path(":networkId/channel/:channel/link/:roomId")
-    public async requestLink(@QueryParam("scalar_token") scalarToken: string, @PathParam("networkId") networkId: string, @PathParam("channel") channelNoHash: string, @PathParam("roomId") roomId: string, request: RequestLinkRequest): Promise<any> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
-
+    @Security(ROLE_USER)
+    public async requestLink(@PathParam("networkId") networkId: string, @PathParam("channel") channelNoHash: string, @PathParam("roomId") roomId: string, request: RequestLinkRequest): Promise<any> {
+        const userId = this.context.request.user.userId;
         const parsed = IrcBridge.parseNetworkId(networkId);
         const bridge = await IrcBridgeRecord.findByPk(parsed.bridgeId);
         if (!bridge) throw new ApiError(404, "Bridge not found");
@@ -54,9 +52,9 @@ export class DimensionIrcService {
 
     @POST
     @Path(":networkId/channel/:channel/unlink/:roomId")
-    public async unlink(@QueryParam("scalar_token") scalarToken: string, @PathParam("networkId") networkId: string, @PathParam("channel") channelNoHash: string, @PathParam("roomId") roomId: string): Promise<any> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
-
+    @Security(ROLE_USER)
+    public async unlink(@PathParam("networkId") networkId: string, @PathParam("channel") channelNoHash: string, @PathParam("roomId") roomId: string): Promise<any> {
+        const userId = this.context.request.user.userId;
         const parsed = IrcBridge.parseNetworkId(networkId);
         const bridge = await IrcBridgeRecord.findByPk(parsed.bridgeId);
         if (!bridge) throw new ApiError(404, "Bridge not found");

@@ -55,3 +55,4 @@ export const CACHE_WEBHOOKS_BRIDGE = "webhooks-bridge";
 export const CACHE_GITTER_BRIDGE = "gitter-bridge";
 export const CACHE_SIMPLE_BOTS = "simple-bots";
 export const CACHE_SLACK_BRIDGE = "slack-bridge";
+export const CACHE_TERMS = "terms";

@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="no-stickers" *ngIf="!isLoading && !authError && (!packs || packs.length === 0)">
-        <img src="/img/no_stickers.png" />
+        <img src="/img/no_stickers.png"/>
         <span class="message">You have no sticker packs.</span>
         <button class="btn btn-link btn-sm" (click)="openIntegrationManager()">Add some stickers</button>
     </div>
@@ -17,16 +17,18 @@
         <div class="sticker-pack" *ngFor="let pack of packs trackById">
             <div class="header">
                 <span class="title">{{ pack.displayName }}</span>
-                <span class="license"><a [href]="pack.license.urlPath" target="_blank">{{ pack.license.name }}</a></span>
+                <span class="license"><a [href]="pack.license.urlPath"
+                                         target="_blank">{{ pack.license.name }}</a></span>
                 <span class="author" *ngIf="pack.author.type !== 'none'">
                     <a [href]="pack.author.reference" target="_blank">{{ pack.author.name }}</a>
                 </span>
             </div>
 
             <div class="stickers">
-                <div class="sticker" *ngFor="let sticker of pack.stickers trackById" (click)="sendSticker(sticker, pack)">
+                <div class="sticker" *ngFor="let sticker of pack.stickers trackById"
+                     (click)="sendSticker(sticker, pack)">
                     <img [src]="getThumbnailUrl(sticker.thumbnail.mxc, 48, 48)" width="48" height="48" class="image"
-                         [alt]="sticker.name" [ngbTooltip]="sticker.name" placement="bottom" />
+                         [alt]="sticker.name" [ngbTooltip]="sticker.name" placement="bottom"/>
                 </div>
             </div>
         </div>

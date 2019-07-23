@@ -1,11 +1,10 @@
-import { GET, Path, QueryParam } from "typescript-rest";
+import { GET, Path, QueryParam, Security } from "typescript-rest";
 import { LogService } from "matrix-js-snippets";
 import { Cache, CACHE_WIDGET_TITLES } from "../../MemoryCache";
 import { MatrixLiteClient } from "../../matrix/MatrixLiteClient";
 import config from "../../config";
+import { ROLE_USER } from "../security/MatrixSecurity";
 import moment = require("moment");
-import { AutoWired, Inject } from "typescript-ioc/es6";
-import AccountController from "../controllers/AccountController";
 
 interface UrlPreviewResponse {
     cached_response: boolean;
@@ -23,17 +22,12 @@ interface UrlPreviewResponse {
  * API for the minimum Scalar API for widget functionality in clients.
  */
 @Path("/api/v1/scalar/widgets")
-@AutoWired
 export class ScalarWidgetService {
-
-    @Inject
-    private accountController: AccountController;
 
     @GET
     @Path("title_lookup")
-    public async titleLookup(@QueryParam("scalar_token") scalarToken: string, @QueryParam("curl") url: string): Promise<UrlPreviewResponse> {
-        await this.accountController.getTokenOwner(scalarToken);
-
+    @Security(ROLE_USER)
+    public async titleLookup(@QueryParam("curl") url: string): Promise<UrlPreviewResponse> {
         const cachedResult = Cache.for(CACHE_WIDGET_TITLES).get(url);
         if (cachedResult) {
             cachedResult.cached_response = true;

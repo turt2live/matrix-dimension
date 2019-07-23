@@ -25,10 +25,12 @@
                     </label>
                     <div class="input-group input-group-sm">
                         <div class="input-group-addon">#</div>
-                        <input title="channel" type="text" class="form-control form-control-sm" [(ngModel)]="channel" [disabled]="loadingOps">
+                        <input title="channel" type="text" class="form-control form-control-sm" [(ngModel)]="channel"
+                               [disabled]="loadingOps">
                     </div>
                     <div style="margin-top: 25px">
-                        <button type="button" class="btn btn-sm btn-primary" [disabled]="loadingOps" (click)="loadOps()">
+                        <button type="button" class="btn btn-sm btn-primary" [disabled]="loadingOps"
+                                (click)="loadOps()">
                             Next
                         </button>
                     </div>
@@ -43,7 +45,8 @@
                         </select>
                     </label>
                     <div style="margin-top: 25px">
-                        <button type="button" class="btn btn-sm btn-primary" [disabled]="requestingBridge" (click)="requestBridge()">
+                        <button type="button" class="btn btn-sm btn-primary" [disabled]="requestingBridge"
+                                (click)="requestBridge()">
                             Request Bridge
                         </button>
                     </div>

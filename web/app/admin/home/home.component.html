@@ -4,7 +4,10 @@
 <div *ngIf="!isLoading">
     <my-ibox boxTitle="Configuration">
         <div class="my-ibox-content">
-            <p>Parts of your configuration are displayed below. To change these values, edit your configuration and restart Dimension.</p>
+            <p>
+                Parts of your configuration are displayed below. To change these values, edit your configuration and
+                restart Dimension.
+            </p>
 
             <div class="row">
                 <div class="col-md-4">
@@ -20,19 +23,19 @@
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <strong>Homeserver</strong><br />
-                    Name: {{ config.homeserver.name }}<br />
-                    Federation URL: {{ config.homeserver.federationUrl }}<br />
-                    Federation Hostname: {{ config.homeserver.federationHostname }}<br />
-                    Client/Server URL: {{ config.homeserver.clientServerUrl }}<br />
+                    <strong>Homeserver</strong><br/>
+                    Name: {{ config.homeserver.name }}<br/>
+                    Federation URL: {{ config.homeserver.federationUrl }}<br/>
+                    Federation Hostname: {{ config.homeserver.federationHostname }}<br/>
+                    Client/Server URL: {{ config.homeserver.clientServerUrl }}<br/>
                     Utility User ID: {{ config.homeserver.userId }}
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4">
-                    <strong>Sessions</strong><br />
-                    Tokens registered: {{ config.sessionInfo.numTokens }}<br />
+                    <strong>Sessions</strong><br/>
+                    Tokens registered: {{ config.sessionInfo.numTokens }}<br/>
                     <button class="btn btn-danger btn-sm" type="button" (click)="logoutAll()">
                         Logout Everyone
                     </button>

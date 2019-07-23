@@ -1,7 +1,6 @@
 // The CSS for the Riot breadcrumb is specified here to ensure that it's style can be overridden.
 // In it's current position (as a component), the component-level stylesheet cannot access the
 // elements, so we specify it in a more generic location.
-
 @import "themes/themes";
 
 .main-app {

@@ -25,7 +25,8 @@
                 <tr *ngFor="let bridge of configurations trackById">
                     <td>
                         {{ bridge.upstreamId ? "matrix.org's bridge" : "Self-hosted bridge" }}
-                        <span class="text-muted" style="display: inline-block;" *ngIf="!bridge.upstreamId">({{ bridge.provisionUrl }})</span>
+                        <span class="text-muted" style="display: inline-block;"
+                              *ngIf="!bridge.upstreamId">({{ bridge.provisionUrl }})</span>
                     </td>
                     <td *ngIf="bridge.isOnline">
                         {{ getEnabledNetworksString(bridge) }}
@@ -42,7 +43,8 @@
                 </tr>
                 </tbody>
             </table>
-            <button type="button" class="btn btn-success btn-sm" (click)="addModularHostedBridge()" *ngIf="!hasModularBridge">
+            <button type="button" class="btn btn-success btn-sm" (click)="addModularHostedBridge()"
+                    *ngIf="!hasModularBridge">
                 <i class="fa fa-plus"></i> Add matrix.org's bridge
             </button>
             <button type="button" class="btn btn-success btn-sm" (click)="addSelfHostedBridge()">

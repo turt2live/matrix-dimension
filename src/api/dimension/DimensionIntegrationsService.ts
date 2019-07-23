@@ -1,4 +1,4 @@
-import { DELETE, GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
+import { Context, DELETE, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { Widget } from "../../integrations/Widget";
 import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
 import { Integration } from "../../integrations/Integration";
@@ -10,8 +10,7 @@ import { ComplexBot } from "../../integrations/ComplexBot";
 import { Bridge } from "../../integrations/Bridge";
 import { BridgeStore } from "../../db/BridgeStore";
 import { BotStore } from "../../db/BotStore";
-import AccountController from "../controllers/AccountController";
-import { AutoWired, Inject } from "typescript-ioc/es6";
+import { ROLE_USER } from "../security/MatrixSecurity";
 
 export interface IntegrationsResponse {
     widgets: Widget[],
@@ -24,11 +23,10 @@ export interface IntegrationsResponse {
  * API for managing integrations, primarily for a given room
  */
 @Path("/api/v1/dimension/integrations")
-@AutoWired
 export class DimensionIntegrationsService {
 
-    @Inject
-    private accountController: AccountController;
+    @Context
+    private context: ServiceContext;
 
     /**
      * Gets a list of widgets
@@ -90,8 +88,9 @@ export class DimensionIntegrationsService {
 
     @GET
     @Path("room/:roomId")
-    public async getIntegrationsInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string): Promise<IntegrationsResponse> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
+    @Security(ROLE_USER)
+    public async getIntegrationsInRoom(@PathParam("roomId") roomId: string): Promise<IntegrationsResponse> {
+        const userId = this.context.request.user.userId;
         return {
             widgets: await DimensionIntegrationsService.getWidgets(true),
             bots: await DimensionIntegrationsService.getSimpleBots(userId),
@@ -102,8 +101,9 @@ export class DimensionIntegrationsService {
 
     @GET
     @Path("room/:roomId/integrations/:category/:type")
-    public async getIntegrationInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string): Promise<any> {
-        const roomConfig = await this.getIntegrationsInRoom(scalarToken, roomId); // does auth for us
+    @Security(ROLE_USER)
+    public async getIntegrationInRoom(@PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string): Promise<any> {
+        const roomConfig = await this.getIntegrationsInRoom(roomId); // does auth for us
 
         if (category === "widget") return roomConfig.widgets.find(i => i.type === integrationType);
         else if (category === "bot") return roomConfig.bots.find(i => i.type === integrationType);
@@ -114,8 +114,9 @@ export class DimensionIntegrationsService {
 
     @POST
     @Path("room/:roomId/integrations/:category/:type/config")
-    public async setIntegrationConfigurationInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string, newConfig: any): Promise<any> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
+    @Security(ROLE_USER)
+    public async setIntegrationConfigurationInRoom(@PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string, newConfig: any): Promise<any> {
+        const userId = this.context.request.user.userId;
 
         if (category === "complex-bot") await NebStore.setComplexBotConfig(userId, integrationType, roomId, newConfig);
         else if (category === "bridge") await BridgeStore.setBridgeRoomConfig(userId, integrationType, roomId, newConfig);
@@ -127,8 +128,9 @@ export class DimensionIntegrationsService {
 
     @DELETE
     @Path("room/:roomId/integrations/:category/:type")
-    public async removeIntegrationInRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string): Promise<any> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
+    @Security(ROLE_USER)
+    public async removeIntegrationInRoom(@PathParam("roomId") roomId: string, @PathParam("category") category: string, @PathParam("type") integrationType: string): Promise<any> {
+        const userId = this.context.request.user.userId;
 
         if (category === "widget") throw new ApiError(400, "Widgets should be removed client-side");
         else if (category === "bot") {

@@ -1,9 +1,9 @@
-import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
-import { AdminService } from "./AdminService";
+import { Context, GET, Path, PathParam, POST, QueryParam, Security, ServiceContext } from "typescript-rest";
 import { Cache, CACHE_INTEGRATIONS, CACHE_WEBHOOKS_BRIDGE } from "../../MemoryCache";
 import { LogService } from "matrix-js-snippets";
 import { ApiError } from "../ApiError";
 import WebhookBridgeRecord from "../../db/models/WebhookBridgeRecord";
+import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 
 interface CreateWithUpstream {
     upstreamId: number;
@@ -28,11 +28,13 @@ interface BridgeResponse {
 @Path("/api/v1/dimension/admin/webhooks")
 export class AdminWebhooksService {
 
+    @Context
+    private context: ServiceContext;
+
     @GET
     @Path("all")
-    public async getBridges(@QueryParam("scalar_token") scalarToken: string): Promise<BridgeResponse[]> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_USER, ROLE_ADMIN])
+    public async getBridges(): Promise<BridgeResponse[]> {
         const bridges = await WebhookBridgeRecord.findAll();
         return Promise.all(bridges.map(async b => {
             return {
@@ -47,9 +49,8 @@ export class AdminWebhooksService {
 
     @GET
     @Path(":bridgeId")
-    public async getBridge(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_USER, ROLE_ADMIN])
+    public async getBridge(@PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
         const webhookBridge = await WebhookBridgeRecord.findByPk(bridgeId);
         if (!webhookBridge) throw new ApiError(404, "Webhook Bridge not found");
 
@@ -64,8 +65,9 @@ export class AdminWebhooksService {
 
     @POST
     @Path(":bridgeId")
-    public async updateBridge(@QueryParam("scalar_token") scalarToken: string, @PathParam("bridgeId") bridgeId: number, request: CreateSelfhosted): Promise<BridgeResponse> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_USER, ROLE_ADMIN])
+    public async updateBridge(@PathParam("bridgeId") bridgeId: number, request: CreateSelfhosted): Promise<BridgeResponse> {
+        const userId = this.context.request.user.userId;
 
         const bridge = await WebhookBridgeRecord.findByPk(bridgeId);
         if (!bridge) throw new ApiError(404, "Bridge not found");
@@ -78,19 +80,21 @@ export class AdminWebhooksService {
 
         Cache.for(CACHE_WEBHOOKS_BRIDGE).clear();
         Cache.for(CACHE_INTEGRATIONS).clear();
-        return this.getBridge(scalarToken, bridge.id);
+        return this.getBridge(bridge.id);
     }
 
     @POST
     @Path("new/upstream")
+    @Security([ROLE_USER, ROLE_ADMIN])
     public async newConfigForUpstream(@QueryParam("scalar_token") _scalarToken: string, _request: CreateWithUpstream): Promise<BridgeResponse> {
         throw new ApiError(400, "Cannot create a webhook bridge from an upstream");
     }
 
     @POST
     @Path("new/selfhosted")
-    public async newSelfhosted(@QueryParam("scalar_token") scalarToken: string, request: CreateSelfhosted): Promise<BridgeResponse> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_USER, ROLE_ADMIN])
+    public async newSelfhosted(request: CreateSelfhosted): Promise<BridgeResponse> {
+        const userId = this.context.request.user.userId;
 
         const bridge = await WebhookBridgeRecord.create({
             provisionUrl: request.provisionUrl,
@@ -101,6 +105,6 @@ export class AdminWebhooksService {
 
         Cache.for(CACHE_WEBHOOKS_BRIDGE).clear();
         Cache.for(CACHE_INTEGRATIONS).clear();
-        return this.getBridge(scalarToken, bridge.id);
+        return this.getBridge(bridge.id);
     }
 }

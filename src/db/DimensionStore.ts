@@ -26,6 +26,10 @@ import WebhookBridgeRecord from "./models/WebhookBridgeRecord";
 import GitterBridgeRecord from "./models/GitterBridgeRecord";
 import CustomSimpleBotRecord from "./models/CustomSimpleBotRecord";
 import SlackBridgeRecord from "./models/SlackBridgeRecord";
+import TermsRecord from "./models/TermsRecord";
+import TermsTextRecord from "./models/TermsTextRecord";
+import TermsSignedRecord from "./models/TermsSignedRecord";
+import TermsUpstreamRecord from "./models/TermsUpstreamRecord";
 
 class _DimensionStore {
     private sequelize: Sequelize;
@@ -63,6 +67,10 @@ class _DimensionStore {
             GitterBridgeRecord,
             CustomSimpleBotRecord,
             SlackBridgeRecord,
+            TermsRecord,
+            TermsTextRecord,
+            TermsSignedRecord,
+            TermsUpstreamRecord,
         ]);
     }
 

@@ -44,6 +44,9 @@ import { AdminSlackBridgeComponent } from "./admin/bridges/slack/slack.component
 import { SlackBridgeConfigComponent } from "./configs/bridge/slack/slack.bridge.component";
 import { ReauthExampleWidgetWrapperComponent } from "./widget-wrappers/reauth-example/reauth-example.component";
 import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-test/manager-test.component";
+import { AdminTermsComponent } from "./admin/terms/terms.component";
+import { AdminNewEditTermsComponent } from "./admin/terms/new-edit/new-edit.component";
+import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -145,7 +148,27 @@ const routes: Routes = [
                                 component: AdminStickerPacksComponent,
                             },
                         ],
-                    }
+                    },
+                    {
+                        path: "terms",
+                        data: {breadcrumb: "Terms of Service", name: "Terms of Service"},
+                        children: [
+                            {
+                                path: "",
+                                component: AdminTermsComponent,
+                            },
+                            {
+                                path: "new",
+                                component: AdminNewEditTermsComponent,
+                                data: {breadcrumb: "New policy", name: "New policy"},
+                            },
+                            {
+                                path: "edit/:shortcode",
+                                component: AdminNewEditTermsComponent,
+                                data: {breadcrumb: "Edit policy", name: "Edit policy"},
+                            },
+                        ],
+                    },
                 ],
             },
             {
@@ -258,6 +281,7 @@ const routes: Routes = [
     {
         path: "widgets",
         children: [
+            {path: "terms/:shortcode/:lang/:version", component: TermsWidgetWrapperComponent},
             {path: "generic", component: GenericWidgetWrapperComponent},
             {path: "video", component: VideoWidgetWrapperComponent},
             {path: "jitsi", component: JitsiWidgetWrapperComponent},

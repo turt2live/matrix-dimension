@@ -11,6 +11,7 @@ export class IboxComponent implements OnInit {
     @Input() boxTitle: string;
     @Input() isCollapsible: boolean;
     @Input() defaultCollapsed: boolean;
+    @Input() hasTitle = true;
 
     public collapsed = false;
 

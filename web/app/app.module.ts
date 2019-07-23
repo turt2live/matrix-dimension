@@ -112,6 +112,12 @@ import { AdminSlackApiService } from "./shared/services/admin/admin-slack-api.se
 import { AdminLogoutConfirmationDialogComponent } from "./admin/home/logout-confirmation/logout-confirmation.component";
 import { ReauthExampleWidgetWrapperComponent } from "./widget-wrappers/reauth-example/reauth-example.component";
 import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-test/manager-test.component";
+import { AdminTermsApiService } from "./shared/services/admin/admin-terms-api.service";
+import { AdminTermsComponent } from "./admin/terms/terms.component";
+import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
+import { AdminNewEditTermsComponent } from "./admin/terms/new-edit/new-edit.component";
+import { AdminTermsNewEditPublishDialogComponent } from "./admin/terms/new-edit/publish/publish.component";
+import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.component";
 
 @NgModule({
     imports: [
@@ -126,6 +132,7 @@ import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-tes
         ModalModule.forRoot(),
         BootstrapModalModule,
         BreadcrumbsModule,
+        CKEditorModule,
     ],
     declarations: [
         AppComponent,
@@ -204,6 +211,10 @@ import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-tes
         AdminLogoutConfirmationDialogComponent,
         ReauthExampleWidgetWrapperComponent,
         ManagerTestWidgetWrapperComponent,
+        AdminTermsComponent,
+        AdminNewEditTermsComponent,
+        AdminTermsNewEditPublishDialogComponent,
+        TermsWidgetWrapperComponent,
 
         // Vendor
     ],
@@ -233,6 +244,7 @@ import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-tes
         SlackApiService,
         AdminSlackApiService,
         ToasterService,
+        AdminTermsApiService,
         {provide: Window, useValue: window},
 
         // Vendor
@@ -258,6 +270,7 @@ import { ManagerTestWidgetWrapperComponent } from "./widget-wrappers/manager-tes
         AdminAddCustomBotComponent,
         AdminSlackBridgeManageSelfhostedComponent,
         AdminLogoutConfirmationDialogComponent,
+        AdminTermsNewEditPublishDialogComponent,
     ]
 })
 export class AppModule {

@@ -1,9 +1,8 @@
-import { DELETE, GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
+import { Context, DELETE, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { ApiError } from "../ApiError";
 import { BridgedRoom, GitterBridge } from "../../bridges/GitterBridge";
 import { LogService } from "matrix-js-snippets";
-import { AutoWired, Inject } from "typescript-ioc/es6";
-import AccountController from "../controllers/AccountController";
+import { ROLE_USER } from "../security/MatrixSecurity";
 
 interface BridgeRoomRequest {
     gitterRoomName: string;
@@ -13,17 +12,16 @@ interface BridgeRoomRequest {
  * API for interacting with the Gitter bridge
  */
 @Path("/api/v1/dimension/gitter")
-@AutoWired
 export class DimensionGitterService {
 
-    @Inject
-    private accountController: AccountController;
+    @Context
+    private context: ServiceContext;
 
     @GET
     @Path("room/:roomId/link")
-    public async getLink(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string): Promise<BridgedRoom> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
-
+    @Security(ROLE_USER)
+    public async getLink(@PathParam("roomId") roomId: string): Promise<BridgedRoom> {
+        const userId = this.context.request.user.userId;
         try {
             const gitter = new GitterBridge(userId);
             return gitter.getLink(roomId);
@@ -35,9 +33,9 @@ export class DimensionGitterService {
 
     @POST
     @Path("room/:roomId/link")
-    public async bridgeRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string, request: BridgeRoomRequest): Promise<BridgedRoom> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
-
+    @Security(ROLE_USER)
+    public async bridgeRoom(@PathParam("roomId") roomId: string, request: BridgeRoomRequest): Promise<BridgedRoom> {
+        const userId = this.context.request.user.userId;
         try {
             const gitter = new GitterBridge(userId);
             await gitter.requestLink(roomId, request.gitterRoomName);
@@ -50,9 +48,9 @@ export class DimensionGitterService {
 
     @DELETE
     @Path("room/:roomId/link")
-    public async unbridgeRoom(@QueryParam("scalar_token") scalarToken: string, @PathParam("roomId") roomId: string): Promise<any> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
-
+    @Security(ROLE_USER)
+    public async unbridgeRoom(@PathParam("roomId") roomId: string): Promise<any> {
+        const userId = this.context.request.user.userId;
         try {
             const gitter = new GitterBridge(userId);
             const link = await gitter.getLink(roomId);

@@ -1,4 +1,4 @@
-import { GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
+import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { Cache, CACHE_STICKERS } from "../../MemoryCache";
 import StickerPack from "../../db/models/StickerPack";
 import Sticker from "../../db/models/Sticker";
@@ -7,8 +7,7 @@ import { ApiError } from "../ApiError";
 import { StickerpackMetadataDownloader } from "../../utils/StickerpackMetadataDownloader";
 import { MatrixStickerBot } from "../../matrix/MatrixStickerBot";
 import config from "../../config";
-import { AutoWired, Inject } from "typescript-ioc/es6";
-import AccountController from "../controllers/AccountController";
+import { ROLE_USER } from "../security/MatrixSecurity";
 
 export interface MemoryStickerPack {
     id: number;
@@ -64,11 +63,10 @@ interface StickerConfig {
  * API for stickers
  */
 @Path("/api/v1/dimension/stickers")
-@AutoWired
 export class DimensionStickerService {
 
-    @Inject
-    private accountController: AccountController;
+    @Context
+    private context: ServiceContext;
 
     public static async getStickerPacks(enabledOnly = false): Promise<MemoryStickerPack[]> {
         const cachedPacks = Cache.for(CACHE_STICKERS).get("packs");
@@ -90,9 +88,8 @@ export class DimensionStickerService {
 
     @GET
     @Path("config")
-    public async getConfig(@QueryParam("scalar_token") scalarToken: string): Promise<StickerConfig> {
-        await this.accountController.getTokenOwner(scalarToken);
-
+    @Security(ROLE_USER)
+    public async getConfig(): Promise<StickerConfig> {
         return {
             enabled: config.stickers.enabled,
             stickerBot: config.stickers.stickerBot,
@@ -102,9 +99,9 @@ export class DimensionStickerService {
 
     @GET
     @Path("packs")
-    public async getStickerPacks(@QueryParam("scalar_token") scalarToken: string): Promise<MemoryStickerPack[]> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
-
+    @Security(ROLE_USER)
+    public async getStickerPacks(): Promise<MemoryStickerPack[]> {
+        const userId = this.context.request.user.userId;
         const cachedPacks = Cache.for(CACHE_STICKERS).get("packs_" + userId);
         if (cachedPacks) return cachedPacks;
 
@@ -129,9 +126,9 @@ export class DimensionStickerService {
 
     @POST
     @Path("packs/:packId/selected")
-    public async setPackSelected(@QueryParam("scalar_token") scalarToken: string, @PathParam("packId") packId: number, request: SetSelectedRequest): Promise<any> {
-        const userId = await this.accountController.getTokenOwner(scalarToken);
-
+    @Security(ROLE_USER)
+    public async setPackSelected(@PathParam("packId") packId: number, request: SetSelectedRequest): Promise<any> {
+        const userId = this.context.request.user.userId;
         const pack = await StickerPack.findByPk(packId);
         if (!pack) throw new ApiError(404, "Sticker pack not found");
 
@@ -153,9 +150,8 @@ export class DimensionStickerService {
 
     @POST
     @Path("packs/import")
-    public async importPack(@QueryParam("scalar_token") scalarToken: string, request: ImportPackRequest): Promise<MemoryUserStickerPack> {
-        await this.accountController.getTokenOwner(scalarToken);
-
+    @Security(ROLE_USER)
+    public async importPack(request: ImportPackRequest): Promise<MemoryUserStickerPack> {
         if (!config.stickers.enabled) {
             throw new ApiError(400, "Custom stickerpacks are disabled on this homeserver");
         }
@@ -171,7 +167,7 @@ export class DimensionStickerService {
         const pack = stickerPacks[0];
 
         // Simulate a call to setPackSelected
-        await this.setPackSelected(scalarToken, pack.id, {isSelected: true});
+        await this.setPackSelected(pack.id, {isSelected: true});
 
         const memoryPack = await DimensionStickerService.packToMemory(pack);
         return Object.assign({isSelected: true}, memoryPack);

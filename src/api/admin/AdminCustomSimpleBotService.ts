@@ -1,9 +1,9 @@
-import { DELETE, GET, Path, PathParam, POST, QueryParam } from "typescript-rest";
-import { AdminService } from "./AdminService";
+import { Context, DELETE, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { ApiError } from "../ApiError";
 import { LogService } from "matrix-js-snippets";
 import { BotStore } from "../../db/BotStore";
 import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
+import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 
 interface BotResponse extends BotRequest {
     id: number;
@@ -31,18 +31,20 @@ interface BotProfile {
 @Path("/api/v1/dimension/admin/bots/simple/custom")
 export class AdminCustomSimpleBotService {
 
+    @Context
+    private context: ServiceContext;
+
     @GET
     @Path("all")
-    public async getBots(@QueryParam("scalar_token") scalarToken: string): Promise<BotResponse[]> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
+    @Security([ROLE_USER, ROLE_ADMIN])
+    public async getBots(): Promise<BotResponse[]> {
         return BotStore.getCustomBots();
     }
 
     @GET
     @Path(":botId")
-    public async getBot(@QueryParam("scalar_token") scalarToken: string, @PathParam("botId") botId: number): Promise<BotResponse> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_USER, ROLE_ADMIN])
+    public async getBot(@PathParam("botId") botId: number): Promise<BotResponse> {
         const bot = await BotStore.getCustomBot(botId);
         if (!bot) throw new ApiError(404, "Bot not found");
         return bot;
@@ -50,9 +52,9 @@ export class AdminCustomSimpleBotService {
 
     @POST
     @Path("new")
-    public async createBot(@QueryParam("scalar_token") scalarToken: string, request: BotRequest): Promise<BotResponse> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_USER, ROLE_ADMIN])
+    public async createBot(request: BotRequest): Promise<BotResponse> {
+        const userId = this.context.request.user.userId;
         const bot = await BotStore.createCustom(request);
         LogService.info("AdminCustomSimpleBotService", userId + " created a simple bot");
         Cache.for(CACHE_INTEGRATIONS).clear();
@@ -61,9 +63,9 @@ export class AdminCustomSimpleBotService {
 
     @POST
     @Path(":botId")
-    public async updateBot(@QueryParam("scalar_token") scalarToken: string, @PathParam("botId") botId: number, request: BotRequest): Promise<BotResponse> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_USER, ROLE_ADMIN])
+    public async updateBot(@PathParam("botId") botId: number, request: BotRequest): Promise<BotResponse> {
+        const userId = this.context.request.user.userId;
         const bot = await BotStore.updateCustom(botId, request);
         LogService.info("AdminCustomSimpleBotService", userId + " updated a simple bot");
         Cache.for(CACHE_INTEGRATIONS).clear();
@@ -72,9 +74,9 @@ export class AdminCustomSimpleBotService {
 
     @DELETE
     @Path(":botId")
-    public async deleteBot(@QueryParam("scalar_token") scalarToken: string, @PathParam("botId") botId: number): Promise<any> {
-        const userId = await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_USER, ROLE_ADMIN])
+    public async deleteBot(@PathParam("botId") botId: number): Promise<any> {
+        const userId = this.context.request.user.userId;
         await BotStore.deleteCustom(botId);
         LogService.info("AdminCustomSimpleBotService", userId + " deleted a simple bot");
         Cache.for(CACHE_INTEGRATIONS).clear();
@@ -83,9 +85,8 @@ export class AdminCustomSimpleBotService {
 
     @GET
     @Path("profile/:userId")
-    public async getProfile(@QueryParam("scalar_token") scalarToken: string, @PathParam("userId") userId: string): Promise<BotProfile> {
-        await AdminService.validateAndGetAdminTokenOwner(scalarToken);
-
+    @Security([ROLE_USER, ROLE_ADMIN])
+    public async getProfile(@PathParam("userId") userId: string): Promise<BotProfile> {
         const profile = await BotStore.getProfile(userId);
         return {name: profile.displayName, avatarUrl: profile.avatarMxc};
     }

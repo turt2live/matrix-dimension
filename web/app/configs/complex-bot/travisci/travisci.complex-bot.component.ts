@@ -57,9 +57,9 @@ export class TravisCiComplexBotConfigComponent extends ComplexBotComponent<Travi
         this.newConfig.repos[this.newRepoKey] = {
             addedByUserId: SessionStorage.userId,
             template: "" +
-            "%{repository_slug}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}\n" +
-            "    Change view : %{compare_url}\n" +
-            "    Build details : %{build_url}\n"
+                "%{repository_slug}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}\n" +
+                "    Change view : %{compare_url}\n" +
+                "    Build details : %{build_url}\n"
         };
         this.newRepoKey = "";
     }

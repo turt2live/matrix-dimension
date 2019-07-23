@@ -1,0 +1,44 @@
+<div *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div *ngIf="!isLoading">
+    <my-ibox boxTitle="Terms of Service">
+        <div class="my-ibox-content">
+            <p>
+                Before users can use Dimension they must agree to the terms of service for using your
+                instance. If you're using any matrix.org bridges, users will be required to accept
+                the terms of service for your upstream integration managers (scalar.vector.im usually)
+                in addition to the terms you add here.
+            </p>
+
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                <tr>
+                    <th>Policy Name</th>
+                    <th>Version</th>
+                    <th class="text-center" style="width: 120px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngIf="!policies || policies.length === 0">
+                    <td colspan="3"><i>No policies written.</i></td>
+                </tr>
+                <tr *ngFor="let policy of policies trackById">
+                    <td>{{ policy.languages['en'].name }}</td>
+                    <td>{{ policy.version }}</td>
+
+                    <td class="text-center">
+                        <span class="editButton" [routerLink]="['edit', policy.shortcode]" title="edit draft"
+                              *ngIf="policy.version == 'draft'">
+                            <i class="fa fa-pencil-alt"></i>
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-success btn-sm" (click)="createPolicy()">
+                <i class="fa fa-plus"></i> New draft policy
+            </button>
+        </div>
+    </my-ibox>
+</div>
