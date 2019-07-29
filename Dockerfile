@@ -1,4 +1,4 @@
-FROM node:9.11.2-alpine
+FROM node:10.16.0-alpine
 
 LABEL maintainer="Andreas Peters <support@aventer.biz>"
 #Upstream URL: https://git.aventer.biz/AVENTER/docker-matrix-dimension
