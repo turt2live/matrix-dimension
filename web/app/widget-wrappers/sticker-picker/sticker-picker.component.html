@@ -27,7 +27,7 @@
             <div class="stickers">
                 <div class="sticker" *ngFor="let sticker of pack.stickers trackById"
                      (click)="sendSticker(sticker, pack)">
-                    <img [src]="getThumbnailUrl(sticker.thumbnail.mxc, 48, 48)" width="48" height="48" class="image"
+                    <img [src]="getThumbnailUrl(sticker.thumbnail.mxc, 48, 48)" class="image"
                          [alt]="sticker.name" [ngbTooltip]="sticker.name" placement="bottom"/>
                 </div>
             </div>
