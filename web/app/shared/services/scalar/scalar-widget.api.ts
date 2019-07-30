@@ -43,6 +43,7 @@ export class ScalarWidgetApi {
             data: {
                 description: sticker.description,
                 content: {
+                    // Riot Android needs body in content or else sticker sending fails
                     body: sticker.description,
                     url: sticker.thumbnail.mxc,
                     info: {
