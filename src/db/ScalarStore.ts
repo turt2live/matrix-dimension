@@ -67,6 +67,7 @@ export class ScalarStore {
             // First see if we have a token for the upstream so we can try it
             const existingTokens = await UserScalarToken.findAll({
                 where: {isDimensionToken: false, userId: testUserId, upstreamId: upstream.id},
+                include: [Upstream],
             });
             if (existingTokens && existingTokens.length) {
                 // Test that the token works
@@ -120,6 +121,7 @@ export class ScalarStore {
                 isDimensionToken: false,
                 upstreamId: upstream.id,
             });
+            scalarToken.upstream = upstream;
 
             // Accept all terms of service for the user
             await ScalarStore.signAllTerms(scalarToken, scalarKind);
