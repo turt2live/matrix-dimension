@@ -1,6 +1,6 @@
 import { GET, Path } from "typescript-rest";
 import { AutoWired } from "typescript-ioc/es6";
-import {URL} from "url";
+import { URL } from "url";
 import config from "../../config";
 
 interface WellknownResponse {
