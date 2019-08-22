@@ -32,6 +32,9 @@ export interface DimensionConfig {
         stickerBot: string;
         managerUrl: string;
     };
+    dimension: {
+        publicUrl: string;
+    };
     logging: LogConfig;
 }
 

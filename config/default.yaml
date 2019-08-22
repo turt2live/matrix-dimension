@@ -85,6 +85,11 @@ stickers:
   # The sticker manager URL to promote
   managerUrl: "https://stickers.t2bot.io"
 
+# Settings for how Dimension is represented to the public
+dimension:
+  # This is where Dimension is accessible from clients. Be sure to set this
+  # to your own Dimension instance.
+  publicUrl: "https://dimension.example.org"
 
 # Settings for controlling how logging works
 logging:

@@ -147,6 +147,10 @@ module.exports = function () {
                 target: 'http://localhost:8184',
                 secure: false
             },
+            '/.well-known': {
+                target: 'http://localhost:8184',
+                secure: false
+            },
         }
     };
 
