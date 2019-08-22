@@ -44,7 +44,11 @@ export class ScalarClient {
             return {
                 scalarUrl: parsed.toString(),
                 headers: headers,
-                queryString: {},
+                queryString: {
+                    // HACK: This is due to a Scalar bug
+                    // https://github.com/vector-im/riot-web/issues/10498
+                    v: SCALAR_API_VERSION,
+                },
             };
         }
     }
