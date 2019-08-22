@@ -67,6 +67,10 @@ export default class Webserver {
                 parsedUrl.query["scalar_token"] = "redacted";
                 parsedUrl.search = undefined; // to force URL.format to use `query`
             }
+            if (parsedUrl.query && parsedUrl.query["access_token"]) {
+                parsedUrl.query["access_token"] = "redacted";
+                parsedUrl.search = undefined; // to force URL.format to use `query`
+            }
             LogService.info("Webserver", "Incoming request: " + req.method + " " + URL.format(parsedUrl));
             next();
         });
