@@ -1,4 +1,4 @@
-import { Model, Sequelize } from "sequelize-typescript";
+import { Sequelize } from "sequelize-typescript";
 import config from "../config";
 import { LogService } from "matrix-js-snippets";
 import User from "./models/User";
@@ -43,7 +43,7 @@ class _DimensionStore {
             password: "",
             logging: i => LogService.verbose("DimensionStore [SQL]", i)
         });
-        this.sequelize.addModels(<Array<typeof Model>>[
+        this.sequelize.addModels([
             User,
             UserScalarToken,
             Upstream,

@@ -45,7 +45,7 @@
     "require-dir-all": "^0.4.15",
     "semver": "^6.0.0",
     "sequelize": "^5.15.1",
-    "sequelize-typescript": "^1.0.0-beta.3",
+    "sequelize-typescript": "^1.0.0",
     "sharp": "^0.21.1",
     "split-host": "^0.1.1",
     "spotify-uri": "^1.0.0",
