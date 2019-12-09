@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { ToasterService } from "angular2-toaster";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
-import { AdminGitterApiService } from "../../../../shared/services/admin/admin-gitter-api.service";
+import { AdminSlackApiService } from "../../../../shared/services/admin/admin-slack-api.service";
 
 export class ManageSelfhostedSlackBridgeDialogContext extends BSModalContext {
     public provisionUrl: string;
@@ -21,7 +21,7 @@ export class AdminSlackBridgeManageSelfhostedComponent implements ModalComponent
     public isAdding = false;
 
     constructor(public dialog: DialogRef<ManageSelfhostedSlackBridgeDialogContext>,
-                private gitterApi: AdminGitterApiService,
+                private slackApi: AdminSlackApiService,
                 private toaster: ToasterService) {
         this.provisionUrl = dialog.context.provisionUrl;
         this.bridgeId = dialog.context.bridgeId;
@@ -31,7 +31,7 @@ export class AdminSlackBridgeManageSelfhostedComponent implements ModalComponent
     public add() {
         this.isSaving = true;
         if (this.isAdding) {
-            this.gitterApi.newSelfhosted(this.provisionUrl).then(() => {
+            this.slackApi.newSelfhosted(this.provisionUrl).then(() => {
                 this.toaster.pop("success", "Slack bridge added");
                 this.dialog.close();
             }).catch(err => {
@@ -40,7 +40,7 @@ export class AdminSlackBridgeManageSelfhostedComponent implements ModalComponent
                 this.toaster.pop("error", "Failed to create Slack bridge");
             });
         } else {
-            this.gitterApi.updateSelfhosted(this.bridgeId, this.provisionUrl).then(() => {
+            this.slackApi.updateSelfhosted(this.bridgeId, this.provisionUrl).then(() => {
                 this.toaster.pop("success", "Slack bridge updated");
                 this.dialog.close();
             }).catch(err => {
