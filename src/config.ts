@@ -36,6 +36,13 @@ export interface DimensionConfig {
         publicUrl: string;
     };
     logging: LogConfig;
+    jitsi: {
+        domain: string;
+        scriptUrl: string;
+    };
+    etherpad: {
+        defaultUrl: string;
+    };
 }
 
 export default <DimensionConfig>config;

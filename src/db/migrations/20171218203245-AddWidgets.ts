@@ -1,5 +1,6 @@
 import { QueryInterface } from "sequelize";
 import { DataType } from "sequelize-typescript";
+import config from "../../config";
 
 export default {
     up: (queryInterface: QueryInterface) => {
@@ -30,7 +31,9 @@ export default {
                     isEnabled: true,
                     isPublic: true,
                     description: "Collaborate on documents with members of your room.",
-                    optionsJson: '{"defaultUrl":"https://scalar.vector.im/etherpad/p/$roomId_$padName"}',
+                    optionsJson: JSON.stringify({
+                        defaultUrl: config.etherpad && config.etherpad.defaultUrl || "https://scalar.vector.im/etherpad/p/$roomId_$padName",
+                    }),
                 },
                 {
                     type: "googlecalendar",
@@ -71,7 +74,10 @@ export default {
                     isPublic: true,
                     avatarUrl: "/img/avatars/jitsi.png",
                     description: "Hold a video conference with Jitsi Meet",
-                    optionsJson: '{"jitsiDomain":"jitsi.riot.im", "scriptUrl":"https://jitsi.riot.im/libs/external_api.min.js"}',
+                    optionsJson: JSON.stringify({
+                        jitsiDomain: config.jitsi && config.jitsi.domain || "jitsi.riot.im",
+                        scriptUrl: config.jitsi && config.jitsi.scriptUrl || "https://jitsi.riot.im/libs/external_api.min.js",
+                    }),
                 },
             ]));
     },
