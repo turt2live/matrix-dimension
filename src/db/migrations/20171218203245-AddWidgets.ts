@@ -77,6 +77,7 @@ export default {
                     optionsJson: JSON.stringify({
                         jitsiDomain: config.jitsi && config.jitsi.domain || "jitsi.riot.im",
                         scriptUrl: config.jitsi && config.jitsi.scriptUrl || "https://jitsi.riot.im/libs/external_api.min.js",
+                        useDomainAsDefault: config.jitsi && config.jitsi.useDomainAsDefault || false,
                     }),
                 },
             ]));

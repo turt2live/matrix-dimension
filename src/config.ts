@@ -39,6 +39,7 @@ export interface DimensionConfig {
     jitsi: {
         domain: string;
         scriptUrl: string;
+        useDomainAsDefault: boolean;
     };
     etherpad: {
         defaultUrl: string;
