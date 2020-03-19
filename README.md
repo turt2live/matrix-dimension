@@ -3,7 +3,7 @@
 
 [![TravisCI badge](https://travis-ci.org/turt2live/matrix-dimension.svg?branch=master)](https://travis-ci.org/turt2live/matrix-dimension)
 
-An open source integrations manager for matrix clients, like Riot. For help and support, please visit
+An open source integration manager for matrix clients, like Riot. For help and support, please visit
 us in [#dimension:t2bot.io](https://matrix.to/#/#dimension:t2bot.io) on Matrix.
 
 # Installing Dimension / Running your own
