@@ -1,7 +1,4 @@
-#!/bin/bash
-set -e
-
-cd /home/node/matrix-dimension/
+#!/bin/sh
 
 if [ -f "/data/config.yaml" ]; then
 	cp /data/config.yaml /home/node/matrix-dimension/config/production.yaml

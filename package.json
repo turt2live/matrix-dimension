@@ -46,7 +46,7 @@
     "semver": "^6.0.0",
     "sequelize": "^5.15.1",
     "sequelize-typescript": "^1.0.0",
-    "sharp": "^0.21.1",
+    "sharp": "^0.24.1",
     "split-host": "^0.1.1",
     "spotify-uri": "^1.0.0",
     "sqlite3": "^4.0.9",
