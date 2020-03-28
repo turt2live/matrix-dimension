@@ -7,5 +7,12 @@
                    [(ngModel)]="widget.dimension.newData.conferenceUrl" name="widget-url-{{widget.id}}"
                    [disabled]="isUpdating"/>
         </label>
+        <label class="label-block">
+            Audio only
+            <span class="text-muted">Starts the conference without camera by default. Users can still manually turn on the camera when joining or joined.</span>
+            <ui-switch size="medium"
+                   [(ngModel)]="widget.dimension.newData.isAudioOnly" name="widget-audio-{{widget.id}}"
+                   [disabled]="isUpdating"></ui-switch>
+        </label>
     </ng-template>
 </my-widget-config>

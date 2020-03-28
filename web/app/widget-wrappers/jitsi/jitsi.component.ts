@@ -17,12 +17,14 @@ declare var JitsiMeetExternalAPI: any;
 export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit, OnDestroy {
 
     public isJoined = false;
+    public toggleVideo = false;
 
     private domain: string;
     private conferenceId: string;
     private displayName: string;
     private avatarUrl: string;
     private userId: string;
+    private isAudioOnly: boolean;
     private jitsiApiObj: any;
     private jitsiApiSubscription: Subscription;
 
@@ -37,6 +39,9 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
         this.displayName = params.displayName;
         this.avatarUrl = params.avatarUrl;
         this.userId = params.userId || params.email; // Riot uses `email` when placing a conference call
+        this.isAudioOnly = params.isAudioOnly === 'true';
+
+        this.toggleVideo = !this.isAudioOnly;
 
         // Set the widget ID if we have it
         ScalarWidgetApi.widgetId = params.widgetId;
@@ -108,6 +113,7 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
         if (this.displayName) this.jitsiApiObj.executeCommand("displayName", this.displayName);
         if (this.avatarUrl) this.jitsiApiObj.executeCommand("avatarUrl", this.avatarUrl.toString());
         if (this.userId) this.jitsiApiObj.executeCommand("email", this.userId);
+        if (this.isAudioOnly === this.toggleVideo) this.jitsiApiObj.executeCommand("toggleVideo");
 
         this.jitsiApiObj.on("readyToClose", () => {
             this.isJoined = false;
