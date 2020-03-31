@@ -14,7 +14,7 @@
         <button class="btn btn-link btn-sm" (click)="openIntegrationManager()">Add some stickers</button>
     </div>
     <div class="sticker-picker" *ngIf="!isLoading && !authError">
-        <div class="sticker-pack" *ngFor="let pack of packs trackById">
+        <div class="sticker-pack" *ngFor="let pack of packs trackById" [attr.id]="'pack-' + pack.id">
             <div class="header">
                 <span class="title">{{ pack.displayName }}</span>
                 <span class="license"><a [href]="pack.license.urlPath"
@@ -30,6 +30,16 @@
                     <img [src]="getThumbnailUrl(sticker.thumbnail.mxc, 48, 48)" width="48" height="48" class="image"
                          [alt]="sticker.name" [ngbTooltip]="sticker.name" placement="bottom"/>
                 </div>
+            </div>
+        </div>
+        <div class="sticker-pack-list" [@hideList]="isListVisible ? 'visible' : 'hidden'" (wheel)="scrollHorizontal($event)" >
+            <div class="sticker-pack-list-item" *ngFor="let pack of packs trackById" (click)="scrollToPack('pack-' + pack.id)">
+                <img [src]="getThumbnailUrl(pack.stickers[0].thumbnail.mxc, 48, 48)" width="40" height="40" class="image"
+                         [alt]="pack.displayName" [ngbTooltip]="pack.displayName" placement="top" container="body"/>
+            </div>
+            <div class="sticker-pack-list-config" (click)="openIntegrationManager()"
+                 ngbTooltip="Settings" placement="top" container="body">
+                <i class="fas fa-2x fa-cog"></i>
             </div>
         </div>
     </div>
