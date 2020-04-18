@@ -35,14 +35,20 @@ class _DimensionStore {
     private sequelize: Sequelize;
 
     constructor() {
-        this.sequelize = new Sequelize({
-            dialect: 'sqlite',
-            database: "dimension",
-            storage: process.env['DIMENSION_DB_PATH'] || config.database.file,
-            username: "",
-            password: "",
-            logging: i => LogService.verbose("DimensionStore [SQL]", i)
-        });
+        if (process.env.DATABASE_URI || config.database.uri ) {
+            this.sequelize = new Sequelize(process.env.DATABASE_URI || config.database.uri , {
+                logging: i => LogService.verbose("DimensionStore [SQL]", i)
+            });
+        } else {
+            this.sequelize = new Sequelize({
+                dialect: 'sqlite',
+                database: "dimension",
+                storage: process.env['DIMENSION_DB_PATH'] || config.database.file,
+                username: "",
+                password: "",
+                logging: i => LogService.verbose("DimensionStore [SQL]", i)
+            });
+        }
         this.sequelize.addModels([
             User,
             UserScalarToken,

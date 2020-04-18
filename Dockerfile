@@ -24,7 +24,7 @@ ENV PATH=/home/node/.npm-global/bin:$PATH
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 
 RUN cd /home/node/matrix-dimension && \
-    npm install -D wd rimraf webpack webpack-command sqlite3 && \
+    npm install -D wd rimraf webpack webpack-command sqlite3 pg pg-hstore && \
     NODE_ENV=production npm run-script build:web && npm run-script build:app 
 
 USER root
