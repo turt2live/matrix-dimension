@@ -18,7 +18,9 @@ export default {
                     licensePath: "/licenses/cc_by-nc_4.0.txt",
                 }
             ]))
-            .then(packId => {
+            .then(() =>  queryInterface.rawSelect('dimension_sticker_packs', { where: { name: "Loading Artist" } }, ['id']))
+            .then(packIds => {
+                const packId = Array.isArray(packIds) ? packIds[0] : packIds;
                 return queryInterface.bulkInsert("dimension_stickers", [
                     {
                         packId: packId,
