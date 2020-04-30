@@ -95,7 +95,7 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "iso-639-1": "^2.0.5",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "^0.7.0",
     "ng2-breadcrumbs": "^0.1.281",
