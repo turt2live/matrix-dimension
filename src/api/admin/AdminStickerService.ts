@@ -85,16 +85,18 @@ export class AdminStickerService {
             for (const tgSticker of tgPack.stickers) {
                 LogService.info("AdminStickerService", "Importing sticker from " + tgSticker.url);
                 const buffer = await mx.downloadFromUrl(tgSticker.url);
-                const png = await sharp(buffer).resize({
-                    width: 512,
-                    height: 512,
+                const image = await sharp(buffer);
+                const metadata = await image.metadata();
+                const png = await image.resize({
+                    width: metadata.width,
+                    height: metadata.height,
                     fit: 'contain',
                     background: 'rgba(0,0,0,0)',
                 }).png().toBuffer();
                 const mxc = await mx.upload(png, "image/png");
                 const serverName = mxc.substring("mxc://".length).split("/")[0];
                 const contentId = mxc.substring("mxc://".length).split("/")[1];
-                const thumbMxc = await mx.uploadFromUrl(await mx.getThumbnailUrl(serverName, contentId, 512, 512, "scale", false), "image/png");
+                const thumbMxc = await mx.uploadFromUrl(await mx.getThumbnailUrl(serverName, contentId, metadata.width, metadata.height, "scale", false), "image/png");
 
                 stickers.push(await Sticker.create({
                     packId: pack.id,
@@ -102,8 +104,8 @@ export class AdminStickerService {
                     description: tgSticker.emoji,
                     imageMxc: mxc,
                     thumbnailMxc: thumbMxc,
-                    thumbnailWidth: 512,
-                    thumbnailHeight: 512,
+                    thumbnailWidth: metadata.width,
+                    thumbnailHeight: metadata.height,
                     mimetype: "image/png",
                 }));
 
