@@ -1,9 +1,5 @@
 ## Installing Dimension
 
-**Note**: Dimension is currently only capable of running with Riot Web or Desktop. The iOS and Android
-apps are not directly supported without compiling your own versions. In future, this should be handled
-by [an integration manager specification](https://github.com/turt2live/matrix-dimension/issues/262).
-
 There are several options for installing Dimension. The easiest is dependent on how you have Riot
 and your homeserver set up. If you're using [matrix-docker-ansible-deploy](https://github.com/spantaleev/matrix-docker-ansible-deploy),
 there are already options for configuring Dimension.
