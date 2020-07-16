@@ -1,10 +1,10 @@
-# Scalar API (Riot)
+# Scalar API (Element)
 
-Scalar and Riot communicate using cross-origin messages in a defined format (described in this document). The full source for the messaging layer in Riot can be seen [here](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/ScalarMessaging.js). With this API, the integrations manager is able to invite users, get some basic state information, and interact with the room in a limited capacity. The API is intentionally restricted to ensure that misbehaving domains don't have full control over Riot.
+Scalar and Element communicate using cross-origin messages in a defined format (described in this document). The full source for the messaging layer in Element can be seen [here](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/ScalarMessaging.js). With this API, the integrations manager is able to invite users, get some basic state information, and interact with the room in a limited capacity. The API is intentionally restricted to ensure that misbehaving domains don't have full control over Element.
 
 ## Setting up communications
 
-Riot will automatically open a channel for receiving messages. The integrations manager needs to do the same so it can speak to Riot. Here's some sample JavaScript that will do this for us:
+Element will automatically open a channel for receiving messages. The integrations manager needs to do the same so it can speak to Element. Here's some sample JavaScript that will do this for us:
 
 ```
 window.addEventListener("message", function(event) {
@@ -16,7 +16,7 @@ window.addEventListener("message", function(event) {
 
 function sendMessage(action, roomId, userId, otherFields) {
   if (!otherFields) otherFields = {};
-  
+
   var request = otherFields;
   request["user_id"] = userId;
   request["room_id"] = roomId;
@@ -393,7 +393,7 @@ sendMessage("set_widget", "!curbf:matrix.org", null, {
 ```
 
 *Note*: Widgets are documented by the matrix.org team [on this Google Doc](https://docs.google.com/document/d/1TiWNDcEOULeRYQpkJHQDjgIW32ohIJSi5MKv9oRdzCo/edit). That document is the source of truth for the event structure and usage.
-*Note*: `scalar_token` will be appended to the query string if the widget's url matches the API URL of the integration manager (in Riot)
+*Note*: `scalar_token` will be appended to the query string if the widget's url matches the API URL of the integration manager (in Element)
 
 ### Getting the room's encryption status
 

@@ -77,7 +77,7 @@ export class RiotHomeComponent {
                     console.error("No user returned for token. Is the token registered in Dimension?");
                     this.isError = true;
                     this.isLoading = false;
-                    this.errorMessage = "Could not verify your token. Please try logging out of Riot and back in. Be sure to back up your encryption keys!";
+                    this.errorMessage = "Could not verify your token. Please try logging out of Element and back in. Be sure to back up your encryption keys!";
                 } else {
                     this.userId = userId;
                     console.log("Scalar token belongs to " + userId);
@@ -189,7 +189,7 @@ export class RiotHomeComponent {
             console.error(err);
             this.isError = true;
             this.isLoading = false;
-            this.errorMessage = "Unable to set up Dimension. This version of Riot may not supported or there may be a problem with the server.";
+            this.errorMessage = "Unable to set up Dimension. This version of Element may not supported or there may be a problem with the server.";
         });
 
         this.stickerApi.getPacks().then(packs => {
@@ -265,7 +265,7 @@ export class RiotHomeComponent {
             case "publicRoom":
                 return this.scalar.getJoinRule(this.roomId).then(payload => {
                     if (!payload.response) {
-                        return Promise.reject("Could not communicate with Riot");
+                        return Promise.reject("Could not communicate with Element");
                     }
                     const isPublic = payload.response.join_rule === "public";
                     if (isPublic !== requirement.expectedValue) {
@@ -278,7 +278,7 @@ export class RiotHomeComponent {
                     if (response === true) return Promise.resolve();
                     if (response.error || response.error.message)
                         return Promise.reject("You cannot modify widgets in this room");
-                    return Promise.reject("Error communicating with Riot");
+                    return Promise.reject("Error communicating with Element");
                 };
 
                 let promiseChain = Promise.resolve();

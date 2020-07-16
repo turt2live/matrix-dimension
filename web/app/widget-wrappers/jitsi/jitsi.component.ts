@@ -36,7 +36,7 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
         this.conferenceId = params.conferenceId || params.confId;
         this.displayName = params.displayName;
         this.avatarUrl = params.avatarUrl;
-        this.userId = params.userId || params.email; // Riot uses `email` when placing a conference call
+        this.userId = params.userId || params.email; // Element uses `email` when placing a conference call
 
         // Set the widget ID if we have it
         ScalarWidgetApi.widgetId = params.widgetId;
@@ -49,7 +49,7 @@ export class JitsiWidgetWrapperComponent extends CapableWidget implements OnInit
             $.getScript(widget.options.scriptUrl);
 
             if (!this.domain) {
-                // Always fall back to jitsi.riot.im to maintain compatibility with widgets created by Riot.
+                // Always fall back to jitsi.riot.im to maintain compatibility with widgets created by Element.
                 this.domain = widget.options.useDomainAsDefault ? widget.options.jitsiDomain : "jitsi.riot.im";
             }
         });

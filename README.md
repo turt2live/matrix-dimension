@@ -3,7 +3,7 @@
 
 [![TravisCI badge](https://travis-ci.org/turt2live/matrix-dimension.svg?branch=master)](https://travis-ci.org/turt2live/matrix-dimension)
 
-An open source integration manager for matrix clients, like Riot. For help and support, please visit
+An open source integration manager for matrix clients, like Element. For help and support, please visit
 us in [#dimension:t2bot.io](https://matrix.to/#/#dimension:t2bot.io) on Matrix.
 
 # Installing Dimension / Running your own
@@ -22,13 +22,13 @@ port. Dimension will use the first record it sees and will only communicate over
 3. **Verify the homeserver information in your configuration.** The name, access token, and client/
 server API URL all need to be set to point towards your homeserver. It may also be necessary to set the
 federation URL if you're running a private server.
-4. **Run the troubleshooter.** If you're on Riot 1.1.0 or higher, type `/addwidget https://dimension.t2bot.io/widgets/manager-test`
+4. **Run the troubleshooter.** If you're on Element, type `/addwidget https://dimension.t2bot.io/widgets/manager-test`
 in a private room then click the button.
 
 # Do I need an integrations manager?
 
 Integration managers aim to ease a user's interaction with the various services a homeserver may
-provide. Often times the integrations manager provided by Riot.im, named Modular, is more than suitable.
+provide. Often times the integrations manager provided by Element, is more than suitable.
 However, there are a few cases where running your own makes more sense:
 
 * Wanting to self-host all aspects of your services (client, homeserver, and integrations)

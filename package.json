@@ -1,7 +1,7 @@
 {
   "name": "matrix-dimension",
   "version": "1.0.0",
-  "description": "An alternative integrations manager for Riot",
+  "description": "An alternative integrations manager for Element",
   "main": "build/app/index.js",
   "license": "GPL-3.0",
   "scripts": {

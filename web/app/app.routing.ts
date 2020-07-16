@@ -51,6 +51,7 @@ import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.compo
 const routes: Routes = [
     {path: "", component: HomeComponent},
     {path: "riot", pathMatch: "full", redirectTo: "riot-app"},
+    {path: "element", pathMatch: "full", redirectTo: "riot-app"},
     {
         path: "riot-app",
         component: RiotComponent,

@@ -710,24 +710,8 @@ None of these are officially documented, and are subject to change.
   "session": {
     "Repos": [
       {
-        "name": "riot-welcome-page",
-        "description": "A welcome page specific for tang.ents.ca (built for Riot)",
-        "private": false,
-        "html_url": "https:\/\/github.com\/ENTS-Source\/riot-welcome-page",
-        "created_at": "2017-06-10T16:54:37Z",
-        "updated_at": "2017-06-10T19:10:21Z",
-        "pushed_at": "2017-06-10T18:15:07Z",
-        "fork": false,
-        "full_name": "ENTS-Source\/riot-welcome-page",
-        "permissions": {
-          "admin": true,
-          "pull": true,
-          "push": true
-        }
-      },
-      {
         "name": "matrix-dimension",
-        "description": "An alternative integrations manager for Riot",
+        "description": "An alternative integrations manager for Element",
         "private": false,
         "html_url": "https:\/\/github.com\/turt2live\/matrix-dimension",
         "created_at": "2017-05-25T21:41:55Z",

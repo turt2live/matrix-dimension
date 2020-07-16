@@ -24,7 +24,7 @@ export class MatrixWellknownService {
     public async getIntegrations(): Promise<WellknownResponse> {
         const parsed = new URL(config.dimension.publicUrl);
 
-        parsed.pathname = '/riot';
+        parsed.pathname = '/element';
         const uiUrl = parsed.toString();
 
         parsed.pathname = '/api/v1/scalar';

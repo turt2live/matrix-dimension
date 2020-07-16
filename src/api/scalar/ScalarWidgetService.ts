@@ -11,7 +11,7 @@ interface UrlPreviewResponse {
     page_title_cache_item: {
         expires: string; // "2017-12-18T04:20:04.001806738Z"
         cached_response_err: string;
-        cached_title: string; // the actual thing riot uses
+        cached_title: string; // the actual thing Element uses
     };
     error: {
         message: string;
