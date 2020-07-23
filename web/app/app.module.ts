@@ -119,6 +119,7 @@ import { AdminNewEditTermsComponent } from "./admin/terms/new-edit/new-edit.comp
 import { AdminTermsNewEditPublishDialogComponent } from "./admin/terms/new-edit/publish/publish.component";
 import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.component";
 import { BigBlueButtonConfigComponent } from "./configs/widget/bigbluebutton/bigbluebutton.widget.component";
+import { BigBlueButtonWidgetWrapperComponent } from "./widget-wrappers/bigbluebutton/bigbluebutton.component";
 import { BigBlueButtonApiService } from "./shared/services/integrations/bigbluebutton-api.service";
 
 @NgModule({
@@ -149,6 +150,7 @@ import { BigBlueButtonApiService } from "./shared/services/integrations/bigblueb
         FullscreenButtonComponent,
         VideoWidgetWrapperComponent,
         JitsiWidgetWrapperComponent,
+        BigBlueButtonWidgetWrapperComponent,
         GCalWidgetWrapperComponent,
         BigBlueButtonConfigComponent,
         RiotHomeComponent,

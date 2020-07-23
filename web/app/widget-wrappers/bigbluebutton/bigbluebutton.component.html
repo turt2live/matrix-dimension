@@ -1,0 +1,25 @@
+<iframe *ngIf="embedUrl"
+        id="bigBlueButtonContainer"
+        [src]="embedUrl"
+        (load)="onIframeLoad()"
+        frameborder="0"
+        allowfullscreen
+        width="100%"
+        height="100%"
+></iframe>
+
+<div *ngIf="!embedUrl" class="join-conference-wrapper">
+    <div class="join-conference-boat">
+        <div *ngIf="statusMessage; else joinMeetingPrompt" class="join-conference-prompt">
+            <h4 [innerHTML]="statusMessage"></h4>
+        </div>
+        <ng-template #joinMeetingPrompt>
+            <div class="join-conference-prompt">
+                <h3>BigBlueButton Conference</h3>
+                <button type="button" (click)="joinConference()" class="btn btn-primary btn-large">
+                    Join Conference
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</div>

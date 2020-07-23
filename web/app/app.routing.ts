@@ -2,6 +2,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { HomeComponent } from "./home/home.component";
 import { RiotComponent } from "./riot/riot.component";
 import { GenericWidgetWrapperComponent } from "./widget-wrappers/generic/generic.component";
+import { BigBlueButtonWidgetWrapperComponent } from "./widget-wrappers/bigbluebutton/bigbluebutton.component";
 import { BigBlueButtonConfigComponent } from "./configs/widget/bigbluebutton/bigbluebutton.widget.component";
 import { VideoWidgetWrapperComponent } from "./widget-wrappers/video/video.component";
 import { JitsiWidgetWrapperComponent } from "./widget-wrappers/jitsi/jitsi.component";
@@ -292,6 +293,7 @@ const routes: Routes = [
             {path: "generic", component: GenericWidgetWrapperComponent},
             {path: "video", component: VideoWidgetWrapperComponent},
             {path: "jitsi", component: JitsiWidgetWrapperComponent},
+            {path: "bigbluebutton", component: BigBlueButtonWidgetWrapperComponent},
             {path: "gcal", component: GCalWidgetWrapperComponent},
             {path: "stickerpicker", component: StickerPickerWidgetWrapperComponent},
             {path: "generic-fullscreen", component: GenericFullscreenWidgetWrapperComponent},
