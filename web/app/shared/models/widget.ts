@@ -1,6 +1,7 @@
 import { WidgetsResponse } from "./server-client-responses";
 
 export const WIDGET_CUSTOM = ["m.custom", "customwidget", "dimension-customwidget"];
+export const WIDGET_BIGBLUEBUTTON = ["m.bigbluebutton", "bigbluebutton", "dimension-bigbluebutton"];
 export const WIDGET_ETHERPAD = ["m.etherpad", "etherpad", "dimension-etherpad"];
 export const WIDGET_GOOGLE_DOCS = ["m.googledoc", "googledocs", "dimension-googledocs"];
 export const WIDGET_GOOGLE_CALENDAR = ["m.googlecalendar", "googlecalendar", "dimension-googlecalendar"];

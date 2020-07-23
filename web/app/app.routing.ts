@@ -2,6 +2,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { HomeComponent } from "./home/home.component";
 import { RiotComponent } from "./riot/riot.component";
 import { GenericWidgetWrapperComponent } from "./widget-wrappers/generic/generic.component";
+import { BigBlueButtonConfigComponent } from "./configs/widget/bigbluebutton/bigbluebutton.widget.component";
 import { VideoWidgetWrapperComponent } from "./widget-wrappers/video/video.component";
 import { JitsiWidgetWrapperComponent } from "./widget-wrappers/jitsi/jitsi.component";
 import { GCalWidgetWrapperComponent } from "./widget-wrappers/gcal/gcal.component";
@@ -179,6 +180,11 @@ const routes: Routes = [
                         path: "custom",
                         component: CustomWidgetConfigComponent,
                         data: {breadcrumb: "Custom Widgets", name: "Custom Widgets"},
+                    },
+                    {
+                        path: "bigbluebutton",
+                        component: BigBlueButtonConfigComponent,
+                        data: {breadcrumb: "BigBlueButton Widgets", name: "BigBlueButton Widgets"},
                     },
                     {
                         path: "etherpad",
