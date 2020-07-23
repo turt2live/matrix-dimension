@@ -119,6 +119,7 @@ import { AdminNewEditTermsComponent } from "./admin/terms/new-edit/new-edit.comp
 import { AdminTermsNewEditPublishDialogComponent } from "./admin/terms/new-edit/publish/publish.component";
 import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.component";
 import { BigBlueButtonConfigComponent } from "./configs/widget/bigbluebutton/bigbluebutton.widget.component";
+import { BigBlueButtonApiService } from "./shared/services/integrations/bigbluebutton-api.service";
 
 @NgModule({
     imports: [
@@ -236,6 +237,7 @@ import { BigBlueButtonConfigComponent } from "./configs/widget/bigbluebutton/big
         AdminStickersApiService,
         MediaService,
         StickerApiService,
+        BigBlueButtonApiService,
         AdminTelegramApiService,
         TelegramApiService,
         AdminWebhooksApiService,
