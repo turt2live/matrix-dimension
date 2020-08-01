@@ -1,4 +1,4 @@
-import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
+import { Context, GET, Path, PathParam, POST, DELETE, Security, ServiceContext } from "typescript-rest";
 import StickerPack from "../../db/models/StickerPack";
 import { ApiError } from "../ApiError";
 import { DimensionStickerService, MemoryStickerPack } from "../dimension/DimensionStickerService";
@@ -44,6 +44,19 @@ export class AdminStickerService {
 
         pack.isEnabled = request.isEnabled;
         await pack.save();
+        Cache.for(CACHE_STICKERS).clear();
+
+        return {}; // 200 OK
+    }
+
+    @DELETE
+    @Path("packs/:id")
+    @Security([ROLE_ADMIN])
+    public async removePack(@PathParam("id") packId: number): Promise<any> {
+        const pack = await StickerPack.findByPk(packId);
+        if (!pack) throw new ApiError(404, "Sticker pack not found");
+
+        await pack.destroy();
         Cache.for(CACHE_STICKERS).clear();
 
         return {}; // 200 OK

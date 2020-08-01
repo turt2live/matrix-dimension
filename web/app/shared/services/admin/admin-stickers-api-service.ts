@@ -20,4 +20,8 @@ export class AdminStickersApiService extends AuthedApi {
     public importFromTelegram(packUrl: string): Promise<FE_StickerPack> {
         return this.authedPost<FE_StickerPack>("/api/v1/dimension/admin/stickers/packs/import/telegram", {packUrl: packUrl}).toPromise();
     }
+
+    public removePack(packId: number): Promise<any> {
+        return this.authedDelete("/api/v1/dimension/admin/stickers/packs/" + packId).toPromise();
+    }
 }

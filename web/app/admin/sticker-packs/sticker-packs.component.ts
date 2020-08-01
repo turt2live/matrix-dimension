@@ -68,4 +68,23 @@ export class AdminStickerPacksComponent implements OnInit {
             this.toaster.pop("error", "Error importing sticker pack");
         });
     }
+
+    public removePack(pack: FE_StickerPack) {
+        //console.log(this.packs)
+        //console.log(pack)
+        this.isUpdating = true;
+        this.adminStickers.removePack(pack.id).then(() => {
+            for (let i = 0; i < this.packs.length; ++i)
+                if (this.packs[i].id === pack.id) {
+                    this.packs.splice(i, 1);
+                    break;
+                }
+            this.isUpdating = false;
+            this.toaster.pop("success", "Sticker pack removed");
+        }).catch(err => {
+            console.error(err);
+            this.isUpdating = false;
+            this.toaster.pop("error", "Error removing sticker pack");
+        });
+    }
 }
