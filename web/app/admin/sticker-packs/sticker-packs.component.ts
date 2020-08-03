@@ -70,8 +70,6 @@ export class AdminStickerPacksComponent implements OnInit {
     }
 
     public removePack(pack: FE_StickerPack) {
-        //console.log(this.packs)
-        //console.log(pack)
         this.isUpdating = true;
         this.adminStickers.removePack(pack.id).then(() => {
             for (let i = 0; i < this.packs.length; ++i)
