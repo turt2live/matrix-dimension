@@ -11,6 +11,7 @@ export const WIDGET_TWITCH = ["twitch", "dimension-twitch"]; // TODO: m.* namesp
 export const WIDGET_STICKER_PICKER = ["m.stickerpicker"];
 export const WIDGET_TRADINGVIEW = ["tradingview", "dimension-tradingview"]; // TODO: Use m.tradingview (https://github.com/turt2live/matrix-dimension/issues/261)
 export const WIDGET_SPOTIFY = ["m.spotify", "spotify", "dimension-spotify"];
+export const WIDGET_WHITEBOARD = ["whiteboard", "phoenix-whiteboard"];
 
 export interface EditableWidget {
     /**
