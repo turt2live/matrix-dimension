@@ -118,6 +118,7 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
 import { AdminNewEditTermsComponent } from "./admin/terms/new-edit/new-edit.component";
 import { AdminTermsNewEditPublishDialogComponent } from "./admin/terms/new-edit/publish/publish.component";
 import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.component";
+import { WhiteboardWidgetComponent } from "./configs/widget/whiteboard/whiteboard.widget.component";
 
 @NgModule({
     imports: [
@@ -215,6 +216,7 @@ import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.compo
         AdminNewEditTermsComponent,
         AdminTermsNewEditPublishDialogComponent,
         TermsWidgetWrapperComponent,
+        WhiteboardWidgetComponent
 
         // Vendor
     ],
