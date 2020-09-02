@@ -1,0 +1,18 @@
+<my-widget-config [widgetComponent]="this">
+    <ng-template #widgetParamsTemplate let-widget="widget">
+        <label class="label-block">
+            Whiteboard Name
+            <input type="text" class="form-control"
+                   placeholder="{{ defaultName }}"
+                   [(ngModel)]="widget.dimension.newName" name="widget-name-{{widget.id}}"
+                   [disabled]="isUpdating"/>
+        </label>
+        <label class="label-block">
+            Whiteboard URL
+            <input type="text" class="form-control"
+                   placeholder=""
+                   [(ngModel)]="widget.dimension.newUrl" name="widget-url-{{widget.id}}"
+                   [disabled]="isUpdating"/>
+        </label>
+    </ng-template>
+</my-widget-config>
