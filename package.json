@@ -100,7 +100,7 @@
     "mini-css-extract-plugin": "^0.7.0",
     "ng2-breadcrumbs": "^0.1.281",
     "ngx-modialog": "^5.0.1",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "postcss-cssnext": "^3.1.0",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",
