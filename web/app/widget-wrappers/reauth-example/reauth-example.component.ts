@@ -5,6 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ScalarServerApiService } from "../../shared/services/scalar/scalar-server-api.service";
 import { SessionStorage } from "../../shared/SessionStorage";
 import { FE_ScalarOpenIdRequestBody } from "../../shared/models/scalar-server-responses";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     selector: "my-reauth-example-widget-wrapper",
@@ -18,12 +19,15 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
     public userId: string;
     public blocked = false;
     public error = false;
-    public stateMessage = "Checking client version...";
+    public stateMessage: string;
 
     constructor(activatedRoute: ActivatedRoute,
                 private scalarApi: ScalarServerApiService,
-                private changeDetector: ChangeDetectorRef) {
+                private changeDetector: ChangeDetectorRef,
+                public translate: TranslateService) {
         super();
+        this.translate = translate;
+        this.translate.get('Checking client version...').subscribe((res: string) => {this.stateMessage = res});
 
         const params: any = activatedRoute.snapshot.queryParams;
         ScalarWidgetApi.widgetId = params.widgetId;
@@ -40,7 +44,7 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
             this.error = true;
             this.hasOpenId = false;
             this.blocked = false;
-            this.stateMessage = "Your client is too old to use this widget, sorry";
+            this.translate.get('Your client is too old to use this widget, sorry').subscribe((res: string) => {this.stateMessage = res});
         } else {
             this.busy = false;
             this.error = false;
@@ -56,7 +60,7 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
         this.error = false;
         this.blocked = false;
         this.hasOpenId = false;
-        this.stateMessage = "Please accept the prompt to verify your identity";
+        this.translate.get('Please accept the prompt to verify your identity').subscribe((res: string) => {this.stateMessage = res});
 
         const response = await this.getOpenIdInfo();
         if (response.blocked) {

@@ -1,7 +1,7 @@
 <my-widget-config [widgetComponent]="this">
     <ng-template #widgetParamsTemplate let-widget="widget">
         <label class="label-block">
-            Shared Calendar ID
+            {{'Shared Calendar ID' | translate}}
             <input type="text" class="form-control"
                    placeholder="en.uk#holiday@group.v.calendar.google.com"
                    [(ngModel)]="widget.dimension.newData.shareId" name="widget-url-{{widget.id}}"

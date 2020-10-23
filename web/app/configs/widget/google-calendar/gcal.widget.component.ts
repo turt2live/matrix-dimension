@@ -1,14 +1,15 @@
 import { DISABLE_AUTOMATIC_WRAPPING, WidgetComponent } from "../widget.component";
 import { EditableWidget, WIDGET_GOOGLE_CALENDAR } from "../../../shared/models/widget";
 import { Component } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "gcal.widget.component.html",
     styleUrls: ["gcal.widget.component.scss"],
 })
 export class GoogleCalendarWidgetConfigComponent extends WidgetComponent {
-    constructor() {
-        super(WIDGET_GOOGLE_CALENDAR, "Google Calendar", DISABLE_AUTOMATIC_WRAPPING, "googleCalendar");
+    constructor(public translate: TranslateService) {
+        super(WIDGET_GOOGLE_CALENDAR, "Google Calendar", DISABLE_AUTOMATIC_WRAPPING, translate , "googleCalendar");
     }
 
     protected OnNewWidgetPrepared(widget: EditableWidget) {

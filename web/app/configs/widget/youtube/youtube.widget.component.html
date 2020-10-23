@@ -1,7 +1,7 @@
 <my-widget-config [widgetComponent]="this">
     <ng-template #widgetParamsTemplate let-widget="widget">
         <label class="label-block">
-            Video URL
+            {{'Video URL' | translate}}
             <input type="text" class="form-control"
                    placeholder="https://www.youtube.com/watch?v=jr2mXSKq3B4"
                    [(ngModel)]="widget.dimension.newData.videoUrl" name="widget-url-{{widget.id}}"

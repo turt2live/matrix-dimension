@@ -5,6 +5,7 @@ import { NebBotConfigurationDialogContext } from "../config-context";
 import { AdminNebApiService } from "../../../../shared/services/admin/admin-neb-api.service";
 import { FE_NebConfiguration } from "../../../../shared/models/admin-responses";
 import { FE_Integration } from "../../../../shared/models/integration";
+import { TranslateService } from "@ngx-translate/core";
 
 interface GiphyConfig {
     api_key: string;
@@ -25,7 +26,9 @@ export class AdminNebGiphyConfigComponent implements ModalComponent<NebBotConfig
 
     constructor(public dialog: DialogRef<NebBotConfigurationDialogContext>,
                 private adminNebApi: AdminNebApiService,
-                private toaster: ToasterService) {
+                private toaster: ToasterService,
+                public translate: TranslateService) {
+        this.translate = translate;
         this.neb = dialog.context.neb;
         this.integration = dialog.context.integration;
     }
@@ -36,19 +39,19 @@ export class AdminNebGiphyConfigComponent implements ModalComponent<NebBotConfig
             this.isLoading = false;
         }).catch(err => {
             console.error(err);
-            this.toaster.pop("error", "Error loading configuration");
+            this.translate.get('Error loading configuration').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 
     public save() {
         this.isUpdating = true;
         this.adminNebApi.setIntegrationConfiguration(this.neb.id, this.integration.type, this.config).then(() => {
-            this.toaster.pop("success", "Configuration updated");
+            this.translate.get('Configuration updated').subscribe((res: string) => {this.toaster.pop("success", res); });
             this.dialog.close();
         }).catch(err => {
             this.isUpdating = false;
             console.error(err);
-            this.toaster.pop("error", "Error updating integration");
+            this.translate.get('Error updating integration').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 }

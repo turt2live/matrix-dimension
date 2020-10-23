@@ -1,27 +1,26 @@
-<my-ibox boxTitle="New self-hosted go-neb">
+<my-ibox boxTitle="{{'New self-hosted go-neb' | translate}}">
     <div class="my-ibox-content">
         <p>
-            Self-hosted go-neb instances are powered by application services installed on your homeserver. The
-            application service is responsible for creating the bots dynamically.
+            {{'Self-hosted go-neb instances are powered by application services installed on your homeserver. The application service is responsible for creating the bots dynamically.' | translate}}
         </p>
 
         <label class="label-block">
-            User Prefix
-            <span class="text-muted ">This is the prefix used for all bot users.</span>
+            {{'User Prefix' | translate}}
+            <span class="text-muted ">{{'This is the prefix used for all bot users.' | translate}}</span>
             <input type="text" class="form-control"
                    placeholder="@_neb"
                    [(ngModel)]="userPrefix" [disabled]="isSaving"/>
         </label>
         <label class="label-block">
-            API URL
-            <span class="text-muted ">The admin/api url for go-neb. Be sure to not expose the admin API to the outside world because this endpoint is not authenticated.</span>
+            {{'API URL' | translate}}
+            <span class="text-muted ">{{'The admin/api url for go-neb. Be sure to not expose the admin API to the outside world because this endpoint is not authenticated.' | translate}}</span>
             <input type="text" class="form-control"
                    placeholder="http://localhost:4050"
                    [(ngModel)]="adminUrl" [disabled]="isSaving"/>
         </label>
 
         <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm" [disabled]="isSaving">
-            <i class="far fa-save"></i> Save
+            <i class="far fa-save"></i> {{'Save' | translate}}
         </button>
     </div>
 </my-ibox>

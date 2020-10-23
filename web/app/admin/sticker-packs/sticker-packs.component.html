@@ -5,9 +5,7 @@
     <my-ibox boxTitle="Sticker Packs">
         <div class="my-ibox-content">
             <p>
-                Sticker packs provide a way to convey memes or feelings to others in a room. From here you're able
-                to select which sticker packs users of this Dimension instance can use. If no sticker packs are enabled
-                then the 'sticker picker' widget will be disabled.
+                {{'Sticker packs provide a way to convey memes or feelings to others in a room. From here you\'re able to select which sticker packs users of this Dimension instance can use. If no sticker packs are enabled then the \'sticker picker\' widget will be disabled.' | translate}}
             </p>
 
             <div class="input-group input-group-sm telegram-import">
@@ -17,7 +15,7 @@
                 <span class="input-group-btn">
                     <button class="btn btn-primary" (click)="startTelegramImport()" [disabled]="!tgUrl || isImporting">
                         <i class="fa fa-download"></i>
-                        Import from Telegram
+                        {{'Import from Telegram' | translate}}
                     </button>
                 </span>
             </div>
@@ -26,24 +24,24 @@
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Description</th>
-                    <th>Author</th>
-                    <th>License</th>
-                    <th class="text-center" style="width: 120px;">Actions</th>
+                    <th>{{'Description' | translate}}</th>
+                    <th>{{'Author' | translate}}</th>
+                    <th>{{'License' | translate}}</th>
+                    <th class="text-center" style="width: 120px;">{{'Actions' | translate}}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngIf="!packs || packs.length === 0">
-                    <td colspan="5"><i>No sticker packs installed.</i></td>
+                    <td colspan="5"><i>{{'No sticker packs installed.' | translate}}</i></td>
                 </tr>
                 <tr *ngFor="let pack of packs trackById">
-                    <td>{{ pack.displayName }}</td>
-                    <td>{{ pack.description }}</td>
+                    <td>{{ pack.displayName | translate}}</td>
+                    <td>{{ pack.description | translate }}</td>
 
                     <td *ngIf="pack.author.type !== 'none'">
                         <a [href]="pack.author.reference" target="_blank">{{ pack.author.name }}</a>
                     </td>
-                    <td *ngIf="pack.author.type === 'none'">Dimension</td>
+                    <td *ngIf="pack.author.type === 'none'">{{'Dimension' | translate}}</td>
 
                     <td><a [href]="pack.license.urlPath" target="_blank">{{ pack.license.name }}</a></td>
                     <td class="text-center">

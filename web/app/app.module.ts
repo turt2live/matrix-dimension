@@ -7,7 +7,7 @@ import { UiSwitchModule } from "angular2-ui-switch";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { routing } from "./app.routing";
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { BrowserModule } from "@angular/platform-browser";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
@@ -118,6 +118,13 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
 import { AdminNewEditTermsComponent } from "./admin/terms/new-edit/new-edit.component";
 import { AdminTermsNewEditPublishDialogComponent } from "./admin/terms/new-edit/publish/publish.component";
 import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.component";
+import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http);
+}
 
 @NgModule({
     imports: [
@@ -133,6 +140,13 @@ import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.compo
         BootstrapModalModule,
         BreadcrumbsModule,
         CKEditorModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })
     ],
     declarations: [
         AppComponent,

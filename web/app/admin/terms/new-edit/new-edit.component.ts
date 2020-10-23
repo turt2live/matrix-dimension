@@ -9,6 +9,7 @@ import {
     AdminTermsNewEditPublishDialogComponent,
     AdminTermsNewEditPublishDialogContext
 } from "./publish/publish.component";
+import { TranslateService } from "@ngx-translate/core";
 
 interface ILanguage {
     name: string,
@@ -66,7 +67,9 @@ export class AdminNewEditTermsComponent implements OnInit {
                 private toaster: ToasterService,
                 private router: Router,
                 private activatedRoute: ActivatedRoute,
-                private modal: Modal) {
+                private modal: Modal,
+                public translate: TranslateService) {
+        this.translate = translate;
     }
 
     public ngOnInit() {
@@ -94,7 +97,7 @@ export class AdminNewEditTermsComponent implements OnInit {
                 this.isLoading = false;
             }).catch(err => {
                 console.error(err);
-                this.toaster.pop("error", "Failed to load policy");
+                this.translate.get('Failed to load policy').subscribe((res: string) => {this.toaster.pop("error", res); });
             });
         } else {
             this.adminTerms.getAllPolicies().then(policies => {
@@ -102,7 +105,7 @@ export class AdminNewEditTermsComponent implements OnInit {
                 this.isLoading = false;
             }).catch(err => {
                 console.error(err);
-                this.toaster.pop("error", "Failed to load policies");
+                this.translate.get('Failed to load policies').subscribe((res: string) => {this.toaster.pop("error", res); });
             });
         }
     }
@@ -133,11 +136,11 @@ export class AdminNewEditTermsComponent implements OnInit {
                 });
 
                 await this.adminTerms.publishDraft(this.shortcode, val);
-                this.toaster.pop("success", "Policy published");
+                this.translate.get('Policy published').subscribe((res: string) => {this.toaster.pop("success", res); });
                 this.router.navigate(["../.."], {relativeTo: this.activatedRoute});
             } catch (e) {
                 console.error(e);
-                this.toaster.pop("error", "Error publishing policy");
+                this.translate.get('Error publishing policy').subscribe((res: string) => {this.toaster.pop("error", res); });
                 this.isUpdating = false;
             }
         });
@@ -146,11 +149,11 @@ export class AdminNewEditTermsComponent implements OnInit {
     public async create() {
         for (const languageCode in this.languages) {
             if (this.languages[languageCode].name.trim().length <= 0) {
-                this.toaster.pop("warning", "Please enter a name for all policies");
+                this.translate.get('Please enter a name for all policies').subscribe((res: string) => {this.toaster.pop("warning", res); });
                 return;
             }
             if (this.languages[languageCode].text.trim().length <= 0) {
-                this.toaster.pop("warning", "Please enter text for all policies");
+                this.translate.get('Please enter text for all policies').subscribe((res: string) => {this.toaster.pop("warning", res); });
                 return;
             }
         }
@@ -164,12 +167,11 @@ export class AdminNewEditTermsComponent implements OnInit {
                     text: this.languages['en'].text,
                     url: `${window.location.origin}/widgets/terms/${this.shortcode}/en/draft`,
                 });
-
-                this.toaster.pop("success", "Draft saved");
+                this.translate.get('Draft saved').subscribe((res: string) => {this.toaster.pop("success", res); });
                 this.router.navigate(["../.."], {relativeTo: this.activatedRoute});
             } catch (e) {
                 console.error(e);
-                this.toaster.pop("error", "Error saving policy");
+                this.translate.get('Error saving policy').subscribe((res: string) => {this.toaster.pop("error", res); });
                 this.isUpdating = false;
             }
             return;
@@ -188,12 +190,11 @@ export class AdminNewEditTermsComponent implements OnInit {
                 text: this.languages['en'].text,
                 url: `${window.location.origin}/widgets/terms/${shortcode}/en/draft`,
             });
-
-            this.toaster.pop("success", "Draft created");
+            this.translate.get('Draft created').subscribe((res: string) => {this.toaster.pop("success", res); });
             this.router.navigate([".."], {relativeTo: this.activatedRoute});
         } catch (e) {
             console.error(e);
-            this.toaster.pop("error", "Error creating document");
+            this.translate.get('Error creating document').subscribe((res: string) => {this.toaster.pop("error", res); });
             this.isUpdating = false;
         }
     }

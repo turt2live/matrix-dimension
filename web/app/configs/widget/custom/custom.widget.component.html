@@ -1,14 +1,14 @@
 <my-widget-config [widgetComponent]="this">
     <ng-template #widgetParamsTemplate let-widget="widget">
         <label class="label-block">
-            Widget Name
+            {{'Widget Name' | translate}}
             <input type="text" class="form-control"
-                   placeholder="{{ defaultName }}"
+                   placeholder="{{ defaultName | translate}}"
                    [(ngModel)]="widget.dimension.newName" name="widget-name-{{widget.id}}"
                    [disabled]="isUpdating"/>
         </label>
         <label class="label-block">
-            Widget URL
+            {{'Widget URL' | translate}}
             <input type="text" class="form-control"
                    placeholder="https://matrix.org"
                    [(ngModel)]="widget.dimension.newUrl" name="widget-url-{{widget.id}}"

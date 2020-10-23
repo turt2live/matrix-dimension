@@ -1,6 +1,7 @@
 import { DISABLE_AUTOMATIC_WRAPPING, WidgetComponent } from "../widget.component";
 import { EditableWidget, WIDGET_TRADINGVIEW } from "../../../shared/models/widget";
 import { Component } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "tradingview.widget.component.html",
@@ -73,8 +74,8 @@ export class TradingViewWidgetConfigComponent extends WidgetComponent {
         {value: 'BITTREX:NEOUSDT', label: 'Neo / Tether'},
     ];
 
-    constructor() {
-        super(WIDGET_TRADINGVIEW, "TradingView Chart", DISABLE_AUTOMATIC_WRAPPING, "tradingView");
+    constructor(public translate: TranslateService) {
+        super(WIDGET_TRADINGVIEW, "TradingView Chart", DISABLE_AUTOMATIC_WRAPPING, translate,"tradingView");
     }
 
     protected OnNewWidgetPrepared(widget: EditableWidget): void {

@@ -7,6 +7,7 @@ import {
 } from "./manage-selfhosted/manage-selfhosted.component";
 import { FE_WebhooksBridge } from "../../../shared/models/webhooks";
 import { AdminWebhooksApiService } from "../../../shared/services/admin/admin-webhooks-api.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "./webhooks.component.html",
@@ -20,7 +21,9 @@ export class AdminWebhooksBridgeComponent implements OnInit {
 
     constructor(private webhooksApi: AdminWebhooksApiService,
                 private toaster: ToasterService,
-                private modal: Modal) {
+                private modal: Modal,
+                public translate: TranslateService) {
+        this.translate = translate;
     }
 
     public ngOnInit() {
@@ -32,7 +35,7 @@ export class AdminWebhooksBridgeComponent implements OnInit {
             this.configurations = await this.webhooksApi.getBridges();
         } catch (err) {
             console.error(err);
-            this.toaster.pop("error", "Error loading bridges");
+            this.translate.get('Error loading bridges').subscribe((res: string) => {this.toaster.pop("error", res); });
         }
     }
 
@@ -47,7 +50,7 @@ export class AdminWebhooksBridgeComponent implements OnInit {
         }, ManageSelfhostedWebhooksBridgeDialogContext)).result.then(() => {
             this.reload().catch(err => {
                 console.error(err);
-                this.toaster.pop("error", "Failed to get an update Webhooks bridge list");
+                this.translate.get('Failed to get an update Webhooks bridge list').subscribe((res: string) => {this.toaster.pop("error", res); });
             });
         });
     }
@@ -63,7 +66,7 @@ export class AdminWebhooksBridgeComponent implements OnInit {
         }, ManageSelfhostedWebhooksBridgeDialogContext)).result.then(() => {
             this.reload().catch(err => {
                 console.error(err);
-                this.toaster.pop("error", "Failed to get an update Webhooks bridge list");
+                this.translate.get('Failed to get an update Webhooks bridge list').subscribe((res: string) => {this.toaster.pop("error", res); });
             });
         });
     }

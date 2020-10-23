@@ -1,14 +1,15 @@
 import { WidgetComponent } from "../widget.component";
 import { EditableWidget, WIDGET_GRAFANA } from "../../../shared/models/widget";
 import { Component } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "grafana.widget.component.html",
     styleUrls: ["grafana.widget.component.scss"],
 })
 export class GrafanaWidgetConfigComponent extends WidgetComponent {
-    constructor() {
-        super(WIDGET_GRAFANA, "Grafana", "generic-fullscreen", "grafana");
+    constructor(public translate: TranslateService) {
+        super(WIDGET_GRAFANA, "Grafana", "generic-fullscreen", translate ,"grafana");
     }
 
     protected OnWidgetsDiscovered(widgets: EditableWidget[]) {

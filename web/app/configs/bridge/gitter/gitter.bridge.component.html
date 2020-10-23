@@ -2,18 +2,18 @@
     <ng-template #bridgeParamsTemplate>
         <my-ibox [isCollapsible]="false">
             <h5 class="my-ibox-title">
-                Bridge to Gitter
+                {{'Bridge to Gitter' | translate}}
             </h5>
             <div class="my-ibox-content">
                 <div *ngIf="isBridged">
-                    This room is bridged to "{{ bridge.config.link.gitterRoomName }}" on Gitter.
+                    {{'This room is bridged to on Gitter' | translate}} "{{ bridge.config.link.gitterRoomName }}" {{'on Gitter' | translate}}.
                     <button type="button" class="btn btn-sm btn-danger" [disabled]="isBusy" (click)="unbridgeRoom()">
-                        Unbridge
+                        {{'Unbridge' | translate}}
                     </button>
                 </div>
                 <div *ngIf="!isBridged">
                     <label class="label-block">
-                        Gitter Room
+                        {{'Gitter Room' | translate}}
                         <input title="room name" type="text" class="form-control form-control-sm col-md-3"
                                [(ngModel)]="gitterRoomName" [disabled]="isBusy" placeholder="my-org/room"/>
                     </label>

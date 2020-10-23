@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ToasterService } from "angular2-toaster";
 import { FE_Bridge } from "../../shared/models/integration";
 import { AdminIntegrationsApiService } from "../../shared/services/admin/admin-integrations-api.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "./bridges.component.html",
@@ -13,7 +14,8 @@ export class AdminBridgesComponent implements OnInit {
     public bridges: FE_Bridge<any>[];
 
     constructor(private adminIntegrations: AdminIntegrationsApiService,
-                private toaster: ToasterService) {
+                private toaster: ToasterService, public translate: TranslateService) {
+        this.translate = translate;
     }
 
     public ngOnInit() {
@@ -22,7 +24,7 @@ export class AdminBridgesComponent implements OnInit {
             this.isLoading = false;
         }).catch(err => {
             console.error(err);
-            this.toaster.pop("error", "Failed to load bridges");
+            this.translate.get('Failed to load bridges').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 }

@@ -6,29 +6,23 @@
 </div>
 
 <div *ngIf="!isLoading && !isError">
-    <div class="stickerpacks" *ngIf="hasStickerPacks">
-        Looking for your sticker packs? <a routerLink="stickerpicker">Click here</a>.
-    </div>
+    <div class="stickerpacks" *ngIf="hasStickerPacks">{{'Looking for your sticker packs?' | translate}}<a routerLink='stickerpicker'> {{'Click here' | translate}}</a>.</div>
 
     <!-- ------------------------ -->
     <!-- EMPTY/ENCRYPTED STATES   -->
     <!-- ------------------------ -->
     <div class="alert alert-warning" *ngIf="hasIntegrations() && isRoomEncrypted">
-        <h4>This room is encrypted</h4>
-        <strong>Integrations are not encrypted!</strong>
-        This means that some information about yourself and the
-        room may be leaked to the bot, bridge, or widget. This information includes the room ID, your display
-        name, your username, your avatar, information about Element, and other similar details. Add integrations
-        with caution.
+        <h4>{{'This room is encrypted' | translate}}</h4>
+        <strong>{{'Integrations are not encrypted!' | translate}}</strong>
+        {{'This means that some information about yourself and the room may be leaked to the bot, bridge, or widget. This information includes the room ID, your display name, your username, your avatar, information about Element, and other similar details. Add integrations with caution.' | translate}}
     </div>
     <div class="alert alert-warning" *ngIf="!hasIntegrations() && isRoomEncrypted">
-        <h4>This room is encrypted</h4>
-        There are currently no integrations which support encrypted rooms. Sorry about that!
+        <h4>{{'This room is encrypted' | translate}}</h4>
+        {{'There are currently no integrations which support encrypted rooms. Sorry about that!' | translate}}
     </div>
     <div class="alert alert-warning" *ngIf="!hasIntegrations() && !isRoomEncrypted">
-        <h4>No integrations available</h4>
-        This room does not have any compatible integrations. Please contact the server owner if you're seeing
-        this message.
+        <h4>{{'No integrations available' | translate}}</h4>
+        {{'This room does not have any compatible integrations. Please contact the server owner if you\'re seeing this message.' | translate}}
     </div>
 
     <!-- ------------------------ -->

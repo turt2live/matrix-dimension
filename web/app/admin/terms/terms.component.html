@@ -2,26 +2,23 @@
     <my-spinner></my-spinner>
 </div>
 <div *ngIf="!isLoading">
-    <my-ibox boxTitle="Terms of Service">
+    <my-ibox boxTitle="{{'Terms of Service' | translate}}">
         <div class="my-ibox-content">
             <p>
-                Before users can use Dimension they must agree to the terms of service for using your
-                instance. If you're using any matrix.org bridges, users will be required to accept
-                the terms of service for your upstream integration managers (scalar.vector.im usually)
-                in addition to the terms you add here.
+                {{'Before users can use Dimension they must agree to the terms of service for using your instance. If you\'re using any matrix.org bridges, users will be required to accept the terms of service for your upstream integration managers (scalar.vector.im usually) in addition to the terms you add here.' | translate}}
             </p>
 
             <table class="table table-striped table-condensed table-bordered">
                 <thead>
                 <tr>
-                    <th>Policy Name</th>
-                    <th>Version</th>
-                    <th class="text-center" style="width: 120px;">Actions</th>
+                    <th>{{'Policy Name' | translate}}</th>
+                    <th>{{'Version' | translate}}</th>
+                    <th class="text-center" style="width: 120px;">{{'Actions' | translate}}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngIf="!policies || policies.length === 0">
-                    <td colspan="3"><i>No policies written.</i></td>
+                    <td colspan="3"><i>{{'No policies written.' | translate}}</i></td>
                 </tr>
                 <tr *ngFor="let policy of policies trackById">
                     <td>{{ policy.languages['en'].name }}</td>
@@ -37,7 +34,7 @@
                 </tbody>
             </table>
             <button type="button" class="btn btn-success btn-sm" (click)="createPolicy()">
-                <i class="fa fa-plus"></i> New draft policy
+                <i class="fa fa-plus"></i> {{'New draft policy' | translate}}
             </button>
         </div>
     </my-ibox>

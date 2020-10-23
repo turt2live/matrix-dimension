@@ -2,7 +2,7 @@
     <ng-template #botParamsTemplate>
         <my-ibox>
             <h5 class="my-ibox-title">
-                Feeds
+                {{'Feeds' | translate}}
             </h5>
             <div class="my-ibox-content">
                 <form (submit)="interceptSave()" novalidate name="saveForm">
@@ -10,8 +10,8 @@
                         <thead>
                         <tr>
                             <th>URL</th>
-                            <th>Added by</th>
-                            <th class="actions-col">Actions</th>
+                            <th>{{'Added by' | translate}}</th>
+                            <th class="actions-col">{{'Actions' | translate}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -22,7 +22,7 @@
                                 <button type="button" class="btn btn-sm btn-outline-danger"
                                         [disabled]="isUpdating || !feed.isSelf"
                                         (click)="removeFeed(feed)">
-                                    <i class="far fa-trash-alt"></i> Remove
+                                    <i class="far fa-trash-alt"></i> {{'Remove' | translate}}
                                 </button>
                             </td>
                         </tr>
@@ -38,7 +38,7 @@
                                         <button type="button" class="btn btn-outline-success"
                                                 [disabled]="isUpdating"
                                                 (click)="addFeed()">
-                                            <i class="fa fa-plus"></i> Add
+                                            <i class="fa fa-plus"></i> {{'Add' | translate}}
                                         </button>
                                     </span>
                                 </div>
@@ -48,7 +48,7 @@
                     </table>
                     <div style="margin-top: 25px">
                         <button type="submit" class="btn btn-sm btn-primary" [disabled]="isUpdating">
-                            <i class="far fa-save"></i> Save
+                            <i class="far fa-save"></i> {{'Save' | translate}}
                         </button>
                     </div>
                 </form>

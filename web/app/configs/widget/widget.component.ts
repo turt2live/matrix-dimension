@@ -4,6 +4,7 @@ import { ScalarClientApiService } from "../../shared/services/scalar/scalar-clie
 import { ServiceLocator } from "../../shared/registry/locator.service";
 import { SessionStorage } from "../../shared/SessionStorage";
 import { OnInit } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 
 const SCALAR_WIDGET_LINKS = [
     "https://scalar-staging.riot.im/scalar/api/widgets/__TYPE__.html?__PNAME__=",
@@ -33,8 +34,10 @@ export class WidgetComponent implements OnInit {
     constructor(private widgetTypes: string[],
                 public defaultName: string,
                 private wrapperId = "generic",
+                public translate: TranslateService,
                 private scalarWrapperId = null,
                 private scalarWrapperUrlParamName = "url") {
+        this.translate = translate;
         this.isLoading = true;
         this.isUpdating = false;
     }
@@ -258,12 +261,12 @@ export class WidgetComponent implements OnInit {
         try {
             this.OnWidgetBeforeAdd(this.newWidget);
         } catch (error) {
-            this.toaster.pop("warning", error.message);
+            this.translate.get(error.message).subscribe((res: string) => {this.toaster.pop("warning", res); });
             return;
         }
 
         if (!this.newWidget.dimension.newUrl || this.newWidget.dimension.newUrl.trim().length === 0) {
-            this.toaster.pop("warning", "Please enter a URL for the widget");
+           this.translate.get("Please enter a URL for the widget").subscribe((res: string) => {this.toaster.pop("warning", res ); });
             return;
         }
 
@@ -276,7 +279,7 @@ export class WidgetComponent implements OnInit {
                 this.isUpdating = false;
                 this.OnWidgetAfterAdd(this.newWidget);
                 this.prepareNewWidget();
-                this.toaster.pop("success", "Widget added!");
+                this.translate.get("Widget added!").subscribe((res: string) => {this.toaster.pop("success", res); });
             })
             .catch(err => {
                 this.isUpdating = false;
@@ -300,7 +303,7 @@ export class WidgetComponent implements OnInit {
         }
 
         if (!widget.dimension.newUrl || widget.dimension.newUrl.trim().length === 0) {
-            this.toaster.pop("warning", "Please enter a URL for the widget");
+            this.translate.get("Please enter a URL for the widget").subscribe((res: string) => {this.toaster.pop("warning", res); });
             return;
         }
 
@@ -311,7 +314,7 @@ export class WidgetComponent implements OnInit {
             .then(() => {
                 this.isUpdating = false;
                 this.OnWidgetAfterEdit(widget);
-                this.toaster.pop("success", "Widget updated!");
+                this.translate.get("Widget updated!").subscribe((res: string) => {this.toaster.pop("success", res); });
             })
             .catch(err => {
                 this.isUpdating = false;
@@ -333,7 +336,7 @@ export class WidgetComponent implements OnInit {
             .then(() => {
                 this.isUpdating = false;
                 this.OnWidgetAfterDelete(widget);
-                this.toaster.pop("success", "Widget deleted!");
+                this.translate.get("Widget deleted!").subscribe((res: string) => {this.toaster.pop("success", res); });
             })
             .catch(err => {
                 this.isUpdating = false;

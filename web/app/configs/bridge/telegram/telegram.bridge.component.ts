@@ -8,6 +8,7 @@ import {
     CannotUnbridgeDialogContext,
     TelegramCannotUnbridgeComponent
 } from "./cannot-unbridge/cannot-unbridge.component";
+import { TranslateService } from "@ngx-translate/core";
 
 interface TelegramConfig {
     puppet: {
@@ -39,8 +40,9 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
 
     public isUpdating: boolean;
 
-    constructor(private telegram: TelegramApiService, private modal: Modal) {
-        super("telegram");
+    constructor(private telegram: TelegramApiService, private modal: Modal, public translate: TranslateService) {
+        super("telegram", translate);
+        this.translate = translate;
     }
 
     public get isBridged(): boolean {
@@ -103,20 +105,20 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
             this.bridge.config.portalInfo = portalInfo;
             this.bridge.config.linked = [portalInfo.chatId];
             this.isUpdating = false;
-            this.toaster.pop("success", "Bridge updated");
+            this.translate.get('Bridge updated').subscribe((res: string) => {this.toaster.pop("success", res); });
         }).catch(error => {
             this.isUpdating = false;
             console.error(error);
 
             const body = error.json ? error.json() : null;
-            let message = "Error bridging room";
+            let message = 'Error bridging room';
             if (body) {
-                if (body["dim_errcode"] === "CHAT_ALREADY_BRIDGED") message = "That Telegram chat is already bridged to another room";
-                if (body["dim_errcode"] === "ROOM_ALREADY_BRIDGED") message = "This room is already bridged to a Telegram chat";
-                if (body["dim_errcode"] === "BOT_NOT_IN_CHAT") message = "The Telegram bot has not been invited to the chat";
-                if (body["dim_errcode"] === "NOT_ENOUGH_PERMISSIONS") message = "You do not have permission to bridge that chat";
-            }
-            this.toaster.pop("error", message);
+                if (body["dim_errcode"] === "CHAT_ALREADY_BRIDGED") message = 'That Telegram chat is already bridged to another room';
+                if (body["dim_errcode"] === "ROOM_ALREADY_BRIDGED") message = 'This room is already bridged to a Telegram chat';
+                if (body["dim_errcode"] === "BOT_NOT_IN_CHAT") message = 'The Telegram bot has not been invited to the chat';
+                if (body["dim_errcode"] === "NOT_ENOUGH_PERMISSIONS") message = 'You do not have permission to bridge that chat';
+                }
+            this.translate.get(message).subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 
@@ -126,18 +128,17 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
             this.bridge.config.portalInfo = portalInfo;
             this.bridge.config.linked = [];
             this.isUpdating = false;
-            this.toaster.pop("success", "Bridge removed");
+            this.translate.get('Bridge removed').subscribe((res: string) => {this.toaster.pop("success", res); });
         }).catch(error => {
             this.isUpdating = false;
             console.error(error);
-
             const body = error.json ? error.json() : null;
-            let message = "Error removing bridge";
+            let message = 'Error removing bridge';
             if (body) {
-                if (body["dim_errcode"] === "BOT_NOT_IN_CHAT") message = "The Telegram bot has not been invited to the chat";
-                if (body["dim_errcode"] === "NOT_ENOUGH_PERMISSIONS") message = "You do not have permission to unbridge that chat";
+                if (body["dim_errcode"] === "BOT_NOT_IN_CHAT") message = 'The Telegram bot has not been invited to the chat';
+                if (body["dim_errcode"] === "NOT_ENOUGH_PERMISSIONS")  message = 'You do not have permission to unbridge that chat';
             }
-            this.toaster.pop("error", message);
+            this.translate.get(message).subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 }

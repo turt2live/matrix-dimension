@@ -6,7 +6,7 @@
         <div *ngIf="!isJoined" class="join-conference-prompt">
             <h3>Jitsi Video Conference</h3>
             <button type="button" (click)="joinConference()" class="btn btn-primary btn-large">
-                Join Conference
+                {{'Join Conference' | translate}}
             </button>
         </div>
     </div>

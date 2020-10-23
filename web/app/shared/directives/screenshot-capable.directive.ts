@@ -3,6 +3,7 @@ import { Subscription } from "rxjs/Subscription";
 import { ScalarWidgetApi } from "../services/scalar/scalar-widget.api";
 import { ScalarToWidgetRequest } from "../models/scalar-widget-actions";
 import * as domtoimage from "dom-to-image";
+import { TranslateService } from "@ngx-translate/core";
 
 @Directive({
     selector: "[myScreenshotCapable]",
@@ -11,7 +12,8 @@ export class ScreenshotCapableDirective implements OnInit, OnDestroy {
 
     private widgetApiSubscription: Subscription;
 
-    constructor(private el: ElementRef) {
+    constructor(private el: ElementRef, public translate: TranslateService) {
+        this.translate = translate;
 
     }
 
@@ -28,7 +30,7 @@ export class ScreenshotCapableDirective implements OnInit, OnDestroy {
     private takeScreenshot(request: ScalarToWidgetRequest) {
         if (this.el.nativeElement.tagName === "IFRAME") {
             console.error("Attempted to take a screenshot of an iframe");
-            ScalarWidgetApi.replyError(request, new Error("Cannot take screenshot of iframe"), "Failed to take screenshot: iframe not supported");
+            this.translate.get('Failed to take screenshot: iframe not supported').subscribe((res: string) => {ScalarWidgetApi.replyError(request, new Error("Cannot take screenshot of iframe"), res); });
         } else {
             domtoimage.toBlob(this.el.nativeElement).then(b => {
                 if (!b) {
@@ -38,7 +40,7 @@ export class ScreenshotCapableDirective implements OnInit, OnDestroy {
                 ScalarWidgetApi.replyScreenshot(request, b);
             }).catch(error => {
                 console.error(error);
-                ScalarWidgetApi.replyError(request, error, "Failed to take screenshot");
+                this.translate.get('Failed to take screenshot').subscribe((res: string) => {ScalarWidgetApi.replyError(request, error, res); });
             });
         }
     }

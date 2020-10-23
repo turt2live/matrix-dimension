@@ -4,7 +4,7 @@
 <div *ngIf="!isLoading">
     <my-ibox boxTitle="Sticker Packs" *ngIf="packs.length <= 0 && !customEnabled">
         <div class="my-ibox-content">
-            <h5 style="text-align: center;">Sticker packs are not enabled on this Dimension instance.</h5>
+            <h5 style="text-align: center;">{{'Sticker packs are not enabled on this Dimension instance.' | translate}}</h5>
         </div>
     </my-ibox>
     <my-ibox boxTitle="Add Sticker Packs" *ngIf="customEnabled">
@@ -12,14 +12,14 @@
             <form (submit)="importPack()" novalidate name="importForm">
                 <label class="label-block">
                     Stickerpack URL
-                    <span class="text-muted">Start a conversation with {{stickerBot}} to create your own stickerpack.</span>
+                    <span class="text-muted">{{'Start a conversation with' | translate}} {{stickerBot}} {{'to create your own stickerpack.' | translate}}</span>
                     <input type="text" class="form-control" name="packUrl"
                            placeholder="{{managerUrl}}/pack/..."
                            [(ngModel)]="packUrl" [disabled]="isImporting"/>
                 </label>
                 <div style="margin-top: 25px">
                     <button type="submit" class="btn btn-sm btn-success" [disabled]="isImporting">
-                        <i class="fa fa-plus"></i> Add stickerpack
+                        <i class="fa fa-plus"></i> {{'Add stickerpack' | translate}}
                     </button>
                 </div>
             </form>
@@ -33,11 +33,11 @@
                     <ui-switch [checked]="pack.isSelected" size="medium" [disabled]="isUpdating"
                                (change)="toggleSelected(pack)" class="toggle-switch"></ui-switch>
 
-                    <span class="name">{{ pack.displayName }}</span>
-                    <span class="description">{{ pack.description }}</span>
+                    <span class="name">{{ pack.displayName | translate}}</span>
+                    <span class="description">{{ pack.description | translate}}</span>
 
-                    <span class="author" *ngIf="pack.author.type !== 'none'">Created by <a
-                            [href]="pack.author.reference">{{ pack.author.name }}</a> under </span>
+                    <span class="author" *ngIf="pack.author.type !== 'none'">{{'Created by' | translate}} <a
+                            [href]="pack.author.reference">{{ pack.author.name }}</a> {{'under' | translate}} </span>
                     <span class="license"><a [href]="pack.license.urlPath">{{ pack.license.name }}</a></span>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 <my-widget-config [widgetComponent]="this">
     <ng-template #widgetParamsTemplate let-widget="widget">
         <label class="label-block">
-            Channel Name
+            {{'Channel Name' | translate}}
             <input type="text" class="form-control"
                    placeholder="TwitchUsername"
                    [(ngModel)]="widget.dimension.newData.channelName" name="widget-url-{{widget.id}}"

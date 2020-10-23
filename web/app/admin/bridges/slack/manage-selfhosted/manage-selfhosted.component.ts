@@ -3,6 +3,7 @@ import { ToasterService } from "angular2-toaster";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { AdminSlackApiService } from "../../../../shared/services/admin/admin-slack-api.service";
+import { TranslateService } from "@ngx-translate/core";
 
 export class ManageSelfhostedSlackBridgeDialogContext extends BSModalContext {
     public provisionUrl: string;
@@ -22,7 +23,9 @@ export class AdminSlackBridgeManageSelfhostedComponent implements ModalComponent
 
     constructor(public dialog: DialogRef<ManageSelfhostedSlackBridgeDialogContext>,
                 private slackApi: AdminSlackApiService,
-                private toaster: ToasterService) {
+                private toaster: ToasterService,
+                public translate: TranslateService) {
+        this.translate = translate;
         this.provisionUrl = dialog.context.provisionUrl;
         this.bridgeId = dialog.context.bridgeId;
         this.isAdding = !this.bridgeId;
@@ -32,21 +35,21 @@ export class AdminSlackBridgeManageSelfhostedComponent implements ModalComponent
         this.isSaving = true;
         if (this.isAdding) {
             this.slackApi.newSelfhosted(this.provisionUrl).then(() => {
-                this.toaster.pop("success", "Slack bridge added");
+                this.translate.get('Slack bridge added').subscribe((res: string) => {this.toaster.pop("success", res); });
                 this.dialog.close();
             }).catch(err => {
                 console.error(err);
                 this.isSaving = false;
-                this.toaster.pop("error", "Failed to create Slack bridge");
+                this.translate.get('Failed to create Slack bridge').subscribe((res: string) => {this.toaster.pop("error", res); });
             });
         } else {
             this.slackApi.updateSelfhosted(this.bridgeId, this.provisionUrl).then(() => {
-                this.toaster.pop("success", "Slack bridge updated");
+                this.translate.get('Slack bridge updated').subscribe((res: string) => {this.toaster.pop("success", res);});
                 this.dialog.close();
             }).catch(err => {
                 console.error(err);
                 this.isSaving = false;
-                this.toaster.pop("error", "Failed to update Slack bridge");
+                this.translate.get('Failed to update Slack bridge').subscribe((res: string) => {this.toaster.pop("error", res); });
             });
         }
     }

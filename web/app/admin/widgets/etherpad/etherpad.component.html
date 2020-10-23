@@ -1,11 +1,11 @@
 <div class="dialog">
     <div class="dialog-header">
-        <h4>Etherpad Widget Configuration</h4>
+        <h4>{{'Etherpad Widget Configuration' | translate}}</h4>
     </div>
     <div class="dialog-content">
         <label class="label-block">
-            Default Pad URL Template
-            <span class="text-muted ">$padName and $roomId will be replaced during creation to help create a unique pad URL.</span>
+            {{'Default Pad URL Template' | translate}}
+            <span class="text-muted ">{{'$padName and $roomId will be replaced during creation to help create a unique pad URL.' | translate}}</span>
             <input type="text" class="form-control"
                    placeholder="https://scalar.vector.im/etherpad/p/$padName_$roomId"
                    [(ngModel)]="widget.options.defaultUrl" [disabled]="isUpdating"/>
@@ -13,10 +13,10 @@
     </div>
     <div class="dialog-footer">
         <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm">
-            <i class="far fa-save"></i> Save
+            <i class="far fa-save"></i> {{'Save' | translate}}
         </button>
         <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
-            <i class="far fa-times-circle"></i> Cancel
+            <i class="far fa-times-circle"></i> {{'Cancel' | translate}}
         </button>
     </div>
 </div>

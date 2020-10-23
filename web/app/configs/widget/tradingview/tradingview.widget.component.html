@@ -1,7 +1,7 @@
 <my-widget-config [widgetComponent]="this">
     <ng-template #widgetParamsTemplate let-widget="widget">
         <label class="label-block">
-            Trading Pair
+            {{'Trading Pair' | translate}}
             <select class="form-control form-control-sm" [(ngModel)]="widget.dimension.newData.pair"
                     [disabled]="isUpdating" name="widget-pair-{{widget.id}}">
                 <option *ngFor="let pair of pairs" [ngValue]="pair.value">
@@ -11,7 +11,7 @@
         </label>
 
         <label class="label-block">
-            Interval
+            {{'Interval' | translate}}
             <select class="form-control form-control-sm" [(ngModel)]="widget.dimension.newData.interval"
                     [disabled]="isUpdating" name="widget-interval-{{widget.id}}">
                 <option *ngFor="let interval of intervals" [ngValue]="interval.value">

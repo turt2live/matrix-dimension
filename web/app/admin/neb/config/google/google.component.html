@@ -1,21 +1,21 @@
 <div class="dialog">
     <div class="dialog-header">
-        <h4>Google Configuration</h4>
+        <h4>{{'Google Configuration' | translate}}</h4>
     </div>
     <div class="dialog-content" *ngIf="isLoading">
         <my-spinner></my-spinner>
     </div>
     <div class="dialog-content" *ngIf="!isLoading">
         <label class="label-block">
-            Api Key
-            <span class="text-muted ">The API key for your Google Application.</span>
+            {{'Api Key' | translate}}
+            <span class="text-muted ">{{'The API key for your Google Application.' | translate}}</span>
             <input type="text" class="form-control"
                    placeholder="your_api_key_here"
                    [(ngModel)]="config.api_key" [disabled]="isUpdating"/>
         </label>
         <label class="label-block">
             Search Engine ID
-            <span class="text-muted ">The search engine ID</span>
+            <span class="text-muted ">{{'The search engine ID' | translate}}</span>
             <input type="text" class="form-control"
                    placeholder="your_cx_id_here"
                    [(ngModel)]="config.cx" [disabled]="isUpdating"/>
@@ -23,10 +23,10 @@
     </div>
     <div class="dialog-footer" *ngIf="!isLoading">
         <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm">
-            <i class="far fa-save"></i> Save
+            <i class="far fa-save"></i> {{'Save' | translate}}
         </button>
         <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
-            <i class="far fa-times-circle"></i> Cancel
+            <i class="far fa-times-circle"></i> {{'Cancel' | translate}}
         </button>
     </div>
 </div>

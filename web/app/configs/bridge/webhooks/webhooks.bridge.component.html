@@ -2,17 +2,17 @@
     <ng-template #bridgeParamsTemplate>
         <my-ibox [isCollapsible]="true">
             <h5 class="my-ibox-title">
-                Add a new webhook
+                {{'Add a new webhook' | translate}}
             </h5>
             <div class="my-ibox-content">
                 <label class="label-block">
-                    Webhook Name
+                    {{'Webhook Name' | translate}}
                     <input title="webhook name" type="text" class="form-control form-control-sm"
                            [(ngModel)]="webhookName" [disabled]="isBusy">
                 </label>
                 <div style="margin-top: 25px">
                     <button type="button" class="btn btn-sm btn-primary" [disabled]="isBusy" (click)="newHook()">
-                        Create
+                        {{'Create' | translate}}
                     </button>
                 </div>
             </div>
@@ -26,25 +26,25 @@
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Type</th>
+                        <th>{{'Type' | translate}}</th>
                         <th>URL</th>
-                        <th class="actions-col">Actions</th>
+                        <th class="actions-col">{{'Actions' | translate}}</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngIf="newConfig.webhooks.length === 0">
-                        <td colspan="4">No webhooks</td>
+                        <td colspan="4">{{'No webhooks' | translate}}</td>
                     </tr>
                     <tr *ngFor="let hook of newConfig.webhooks">
                         <td *ngIf="hook.label">{{ hook.label }}</td>
-                        <td *ngIf="!hook.label"><i>No name</i></td>
+                        <td *ngIf="!hook.label"><i>{{'No name' | translate}}</i></td>
                         <td>{{ hook.type }}</td>
                         <td class="webhook-url"><a [href]="hook.url" target="_blank">{{ hook.url }}</a></td>
                         <td class="actions-col">
                             <button type="button" class="btn btn-sm btn-outline-danger"
                                     [disabled]="isBusy"
                                     (click)="removeHook(hook)">
-                                <i class="far fa-trash-alt"></i> Delete
+                                <i class="far fa-trash-alt"></i> {{'Delete' | translate}}
                             </button>
                         </td>
                     </tr>

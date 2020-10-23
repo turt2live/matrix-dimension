@@ -4,12 +4,12 @@
             <div class="diagram">
                 <div class="circle {{selfState}}">
                     <i class="fa fa-user fa-2x"></i>
-                    <span class="title">You</span>
+                    <span class="title">{{'You' | translate}}</span>
                 </div>
                 <div class="link {{managerState}}"></div>
                 <div class="circle {{managerState}}">
                     <i class="fa fa-cubes fa-2x"></i>
-                    <span class="title">Integrations</span>
+                    <span class="title">{{'Integrations' | translate}}</span>
                 </div>
                 <div class="link {{homeserverState}}"></div>
                 <div class="circle {{homeserverState}}">
@@ -18,14 +18,12 @@
                 </div>
             </div>
             <p *ngIf="!isSupported">
-                Your client is too old to use this widget. Try upgrading your client to the latest available version,
-                or contact the author to try and diagnose the problem. Your client needs to support OpenID information
-                exchange.
+                {{'Your client is too old to use this widget. Try upgrading your client to the latest available version, or contact the author to try and diagnose the problem. Your client needs to support OpenID information exchange.' | translate}}
             </p>
             <div *ngIf="isSupported">
                 <p>{{message}}</p>
                 <button type="button" (click)="start()" class="btn btn-primary btn-large" [disabled]="isBusy">
-                    Check connection
+                    {{'Check connection' | translate}}
                 </button>
             </div>
         </div>

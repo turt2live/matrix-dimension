@@ -12,6 +12,7 @@ import { Modal, overlayConfigFactory } from "ngx-modialog";
 import { ConfigSimpleBotComponent, SimpleBotConfigDialogContext } from "../../configs/simple-bot/simple-bot.component";
 import { ToasterService } from "angular2-toaster";
 import { StickerApiService } from "../../shared/services/integrations/sticker-api.service";
+import { TranslateService } from "@ngx-translate/core";
 
 const CATEGORY_MAP = {
     "Widgets": ["widget"],
@@ -46,7 +47,9 @@ export class RiotHomeComponent {
                 private adminApi: AdminApiService,
                 private router: Router,
                 private modal: Modal,
-                private toaster: ToasterService) {
+                private toaster: ToasterService,
+                public translate: TranslateService) {
+        this.translate = translate;
         let params: any = this.activatedRoute.snapshot.queryParams;
 
         this.requestedScreen = params.screen;
@@ -64,7 +67,7 @@ export class RiotHomeComponent {
             console.error("Unable to load Dimension. Missing room ID or scalar token.");
             this.isError = true;
             this.isLoading = false;
-            this.errorMessage = "Unable to load Dimension - missing room ID or token.";
+            this.translate.get('Unable to load Dimension - missing room ID or token.').subscribe((res: string) => {this.errorMessage = res});
         } else {
             this.roomId = params.room_id;
             SessionStorage.scalarToken = params.scalar_token;
@@ -77,7 +80,7 @@ export class RiotHomeComponent {
                     console.error("No user returned for token. Is the token registered in Dimension?");
                     this.isError = true;
                     this.isLoading = false;
-                    this.errorMessage = "Could not verify your token. Please try logging out of Element and back in. Be sure to back up your encryption keys!";
+                    this.translate.get('Could not verify your token. Please try logging out of Element and back in. Be sure to back up your encryption keys!').subscribe((res: string) => {this.errorMessage = res});
                 } else {
                     this.userId = userId;
                     console.log("Scalar token belongs to " + userId);
@@ -88,7 +91,7 @@ export class RiotHomeComponent {
                 console.error(err);
                 this.isError = true;
                 this.isLoading = false;
-                this.errorMessage = "Unable to communicate with Dimension due to an unknown error.";
+                this.translate.get('Unable to communicate with Dimension due to an unknown error.').subscribe((res: string) => {this.errorMessage = res});
             });
         }
     }
@@ -131,8 +134,10 @@ export class RiotHomeComponent {
     public modifyIntegration(integration: FE_Integration) {
         if (!integration._isSupported) {
             console.log(this.userId + " tried to modify " + integration.displayName + " with error: " + integration._notSupportedReason);
-            const reason = integration.category === "widget" ? "You do not appear to have permission to modify widgets in this room" : integration._notSupportedReason;
-            this.toaster.pop("error", reason);
+            this.translate.get('You do not appear to have permission to modify widgets in this room').subscribe((res: string) => {
+                const reason = integration.category === "widget" ? res : integration._notSupportedReason;
+                this.toaster.pop("error", reason);
+            });
             return;
         }
 
@@ -189,7 +194,7 @@ export class RiotHomeComponent {
             console.error(err);
             this.isError = true;
             this.isLoading = false;
-            this.errorMessage = "Unable to set up Dimension. This version of Element may not supported or there may be a problem with the server.";
+            this.translate.get('Unable to set up Dimension. This version of Element may not supported or there may be a problem with the server.').subscribe((res: string) => {this.errorMessage = res});
         });
 
         this.stickerApi.getPacks().then(packs => {
@@ -235,7 +240,7 @@ export class RiotHomeComponent {
     private async updateIntegrationState(integration: FE_Integration) {
         if (!integration.isOnline) {
             integration._isSupported = false;
-            integration._notSupportedReason = "This integration is offline or unavailable";
+            this.translate.get('This integration is offline or unavailable').subscribe((res: string) => {integration._notSupportedReason = res});
             return;
         }
 
@@ -265,34 +270,55 @@ export class RiotHomeComponent {
             case "publicRoom":
                 return this.scalar.getJoinRule(this.roomId).then(payload => {
                     if (!payload.response) {
-                        return Promise.reject("Could not communicate with Element");
+                        let message: string;
+                        this.translate.get('Could not communicate with Element').subscribe((res: string) => {message = res});
+                        return Promise.reject(message);
                     }
                     const isPublic = payload.response.join_rule === "public";
                     if (isPublic !== requirement.expectedValue) {
-                        return Promise.reject("The room must be " + (isPublic ? "non-public" : "public") + " to use this integration");
+                        let message: string;
+                        let message1: string;
+                        this.translate.get(['The room must be', 'to use this integration']).subscribe((res: string) => {message = res[0]; message1 = res[1]});
+                        return Promise.reject(message + (isPublic ? "non-public" : "public") + message1);
                     } else return Promise.resolve();
                 });
             case "canSendEventTypes":
                 const processPayload = payload => {
                     const response = <any>payload.response;
                     if (response === true) return Promise.resolve();
-                    if (response.error || response.error.message)
-                        return Promise.reject("You cannot modify widgets in this room");
-                    return Promise.reject("Error communicating with Element");
+                    if (response.error || response.error.message){
+                        let message: string;
+                        this.translate.get('You cannot modify widgets in this room').subscribe((res: string) => {message = res});
+                        return Promise.reject(message);
+                    }
+                    let message: string;
+                    this.translate.get('Error communicating with Element').subscribe((res: string) => {message = res});
+                    return Promise.reject(message);
                 };
 
                 let promiseChain = Promise.resolve();
                 requirement.argument.forEach(e => promiseChain = promiseChain.then(() => this.scalar.canSendEvent(this.roomId, e.type, e.isState).then(processPayload).catch(processPayload)));
                 return promiseChain.then(() => {
-                    if (!requirement.expectedValue) return Promise.reject("Expected to not be able to send specific event types");
+                    if (!requirement.expectedValue) {
+                        let message: string;
+                        this.translate.get('Expected to not be able to send specific event types').subscribe((res: string) => {message = res});
+                        return Promise.reject(message);
+                    }
                 }).catch(err => {
                     console.error(err);
-                    if (requirement.expectedValue) return Promise.reject("Expected to be able to send specific event types");
+                    if (requirement.expectedValue) {
+                        let message: string;
+                        this.translate.get('Expected to be able to send specific event types').subscribe((res: string) => {message = res});
+                        return Promise.reject(message);
+                    }
                 });
             case "userInRoom":
             // TODO: Implement
             default:
-                return Promise.reject("Requirement '" + requirement.condition + "' not found");
+                let message: string;
+                let message1: string;
+                this.translate.get(['Requirement', 'not found']).subscribe((res: string) => {message = res[0]; message1 = res[1]});
+                return Promise.reject(message + requirement.condition + message1);
         }
     }
 }

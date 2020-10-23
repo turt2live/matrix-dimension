@@ -2,42 +2,41 @@
     <my-spinner></my-spinner>
 </div>
 <div *ngIf="!isLoading">
-    <my-ibox boxTitle="Configuration">
+    <my-ibox boxTitle="{{'Configuration' | translate}}">
         <div class="my-ibox-content">
             <p>
-                Parts of your configuration are displayed below. To change these values, edit your configuration and
-                restart Dimension.
+                {{'Parts of your configuration are displayed below. To change these values, edit your configuration and restart Dimension.' | translate}}
             </p>
 
             <div class="row">
                 <div class="col-md-4">
-                    <strong>Administrators</strong>
+                    <strong>{{'Administrators' | translate}}</strong>
                     <ul>
                         <li *ngFor="let user of config.admins trackById">{{ user }}</li>
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <strong>Widget Blacklist</strong>
+                    <strong>{{'Widget Blacklist' | translate}}</strong>
                     <ul>
                         <li *ngFor="let ip of config.widgetBlacklist trackById">{{ ip }}</li>
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <strong>Homeserver</strong><br/>
+                    <strong>{{'Homeserver' | translate}}</strong><br/>
                     Name: {{ config.homeserver.name }}<br/>
-                    Federation URL: {{ config.homeserver.federationUrl }}<br/>
-                    Federation Hostname: {{ config.homeserver.federationHostname }}<br/>
-                    Client/Server URL: {{ config.homeserver.clientServerUrl }}<br/>
-                    Utility User ID: {{ config.homeserver.userId }}
+                    {{'Federation URL' | translate}}: {{ config.homeserver.federationUrl }}<br/>
+                    {{'Federation Hostname' | translate}}: {{ config.homeserver.federationHostname }}<br/>
+                    {{'Client/Server URL'| translate}}: {{ config.homeserver.clientServerUrl }}<br/>
+                    {{'Utility User ID' | translate}}: {{ config.homeserver.userId }}
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4">
-                    <strong>Sessions</strong><br/>
-                    Tokens registered: {{ config.sessionInfo.numTokens }}<br/>
+                    <strong>{{'Sessions' | translate}}</strong><br/>
+                    {{'Tokens registered' | translate}}: {{ config.sessionInfo.numTokens }}<br/>
                     <button class="btn btn-danger btn-sm" type="button" (click)="logoutAll()">
-                        Logout Everyone
+                        {{'Logout Everyone' | translate}}
                     </button>
                 </div>
             </div>

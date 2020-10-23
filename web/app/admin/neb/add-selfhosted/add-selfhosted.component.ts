@@ -8,6 +8,7 @@ import {
     AdminNebAppserviceConfigComponent,
     AppserviceConfigDialogContext
 } from "../appservice-config/appservice-config.component";
+import { TranslateService } from "@ngx-translate/core";
 
 
 @Component({
@@ -25,7 +26,9 @@ export class AdminAddSelfhostedNebComponent {
                 private toaster: ToasterService,
                 private router: Router,
                 private activatedRoute: ActivatedRoute,
-                private modal: Modal) {
+                private modal: Modal,
+                public translate: TranslateService) {
+        this.translate = translate;
     }
 
     public save(): void {
@@ -33,8 +36,7 @@ export class AdminAddSelfhostedNebComponent {
         this.asApi.createAppservice(this.userPrefix).then(appservice => {
             return this.nebApi.newAppserviceConfiguration(this.adminUrl, appservice);
         }).then(neb => {
-            this.toaster.pop("success", "New go-neb created");
-
+            this.translate.get('New go-neb created').subscribe((res: string) => {this.toaster.pop("success", res); });
             this.modal.open(AdminNebAppserviceConfigComponent, overlayConfigFactory({
                 neb: neb,
 
@@ -44,7 +46,7 @@ export class AdminAddSelfhostedNebComponent {
         }).catch(err => {
             console.error(err);
             this.isSaving = false;
-            this.toaster.pop("error", "Error creating appservice");
+            this.translate.get('Error creating appservice').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 }

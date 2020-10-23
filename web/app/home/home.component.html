@@ -1,12 +1,12 @@
 <div *ngIf="showPromoPage" class="promo">
     <div class="hero">
         <img src="/img/logo/banner-sm.png" class="logo">
-        <h1>An open source integration manager for Matrix</h1>
+        <h1>{{'An open source integration manager for Matrix' | translate}}</h1>
         <div class="banner">
-            Self-host your favourite bots, bridges, and widgets.
+            {{'Self-host your favourite bots, bridges, and widgets.' | translate}}
         </div>
         <div class="links">
-            <a href="https://github.com/turt2live/matrix-dimension" target="_blank">source</a>
+            <a href="https://github.com/turt2live/matrix-dimension" target="_blank">{{'source' | translate}}</a>
             <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a>
         </div>
     </div>
@@ -14,10 +14,10 @@
     <div class="wrapper">
         <div class="subhero-wrapper">
             <div class="info-box try-dimension shadowed">
-                <h3>Try it out or <a href="https://github.com/turt2live/matrix-dimension#running-your-own" target="_blank">run your own</a></h3>
+                <h3>{{'Try it out or' | translate}} <a href="https://github.com/turt2live/matrix-dimension#running-your-own" target="_blank">{{'run your own' | translate}}</a></h3>
                 <p>
-                    Visit <a href="https://element.t2host.io" target="_blank">element.t2host.io</a> and log in with your Matrix account
-                    or point your Element <code>config.json</code> at our servers:
+                    {{'Visit' | translate}} <a href="https://element.t2host.io" target="_blank">element.t2host.io</a>
+                    {{'and log in with your Matrix account or point your Element' | translate}} <code>config.json</code> {{'at our servers:' | translate}}
                 </p>
                 <pre>{{ integrationsConfig }}</pre>
             </div>
@@ -29,21 +29,21 @@
         <hr class="spacer">
 
         <div class="integrations">
-            <h3 class="title">Widgets</h3>
-            <p class="intro">Add utility for everyone in your room by embedding an application.</p>
+            <h3 class="title">{{'Widgets' | translate}}</h3>
+            <p class="intro">{{'Add utility for everyone in your room by embedding an application.' | translate}}</p>
 
             <div class="integration-list">
                 <div class="integration">
                     <img src="/img/avatars/jitsi.png">
-                    <span>Jitsi</span>
+                    <span></span>
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/etherpad.png">
-                    <span>Etherpad</span>
+                    <span>{{'Notes' | translate}}</span>
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/tradingview.png">
-                    <span>TradingView</span>
+                    <span></span>
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/spotify.png">
@@ -67,11 +67,11 @@
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/googlecalendar.png">
-                    <span>Google Calendar</span>
+                    <span>{{'Google Calendar' | translate}}</span>
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/customwidget.png">
-                    <span>Custom Widget</span>
+                    <span>{{'Custom Widget' | translate}}</span>
                 </div>
             </div>
         </div>
@@ -80,7 +80,7 @@
 
         <div class="integrations">
             <h3 class="title">Bots</h3>
-            <p class="intro">Bots bring entertainment or productivity to the room. They're here to help at your command.</p>
+            <p class="intro">{{'Bots bring entertainment or productivity to the room. They\'re here to help at your command.' | translate}}</p>
 
             <div class="integration-list">
                 <!--<div class="integration">-->
@@ -93,27 +93,27 @@
                 <!--</div>-->
                 <div class="integration">
                     <img src="/img/avatars/guggy.png">
-                    <span>Guggy</span>
+                    <span>{{'Guggy' | translate}}</span>
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/giphy.png">
-                    <span>Giphy</span>
+                    <span>{{'Giphy' | translate}}</span>
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/imgur.png">
-                    <span>Imgur</span>
+                    <span>{{'Imgur' | translate}}</span>
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/google.png">
-                    <span>Google Image Search</span>
+                    <span>{{'Google Image Search' | translate}}</span>
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/wikipedia.png">
-                    <span>Wikipedia</span>
+                    <span>{{'Wikipedia' | translate}}</span>
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/travisci.png">
-                    <span>Travis CI</span>
+                    <span>{{'Travis CI' | translate}}</span>
                 </div>
                 <!--<div class="integration">-->
                 <!--<img src="/img/avatars/circleci.png">-->
@@ -121,15 +121,15 @@
                 <!--</div>-->
                 <div class="integration">
                     <img src="/img/avatars/rssbot.png">
-                    <span>RSS Notifications</span>
+                    <span>{{'RSS Notifications' | translate}}</span>
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/echo.png">
-                    <span>Echo</span>
+                    <span>{{'Echo' | translate}}</span>
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/custombots.png">
-                    <span>Custom Bots</span>
+                    <span>{{'Custom Bots' | translate}}</span>
                 </div>
             </div>
         </div>
@@ -138,7 +138,7 @@
 
         <div class="integrations">
             <h3 class="title">Bridges</h3>
-            <p class="intro">Bring the outside world into your room with bridges.</p>
+            <p class="intro">{{'Bring the outside world into your room with bridges.' | translate}}</p>
 
             <div class="integration-list">
                 <div class="integration">
@@ -167,25 +167,25 @@
         <hr class="spacer">
 
         <div class="integrations">
-            <h3 class="title">Stickers</h3>
-            <p class="intro">Have some fun and post a sticker.</p>
+            <h3 class="title">{{'Stickers' | translate}}</h3>
+            <p class="intro">{{'Have some fun and post a sticker.' | translate}}</p>
 
             <div class="integration-list">
                 <div class="integration">
                     <img src="https://t2bot.io/_matrix/media/r0/thumbnail/t2bot.io/193408b58f5e1eb72d9bea13f23914e6?width=64&height=64&method=scale&animated=true">
-                    <span>Huskies</span>
+                    <span>{{'Huskies' | translate}}</span>
                 </div>
                 <div class="integration">
                     <img src="https://t2bot.io/_matrix/media/r0/thumbnail/t2bot.io/8c88a05eb8e5a555830c8fffa36043f5?width=64&height=64&method=scale&animated=true">
-                    <span>Cats</span>
+                    <span>{{'Cats' | translate}}</span>
                 </div>
                 <div class="integration">
                     <img src="https://t2bot.io/_matrix/media/r0/thumbnail/t2bot.io/01e06e2489185ac5b1fc73c904e1d5f0?width=64&height=64&method=scale&animated=true">
-                    <span>Cat Faces</span>
+                    <span>{{'Cat Faces' | translate}}</span>
                 </div>
                 <div class="integration">
                     <img src="https://t2bot.io/_matrix/media/r0/thumbnail/t2bot.io/d7a7c72df5ea59c432eb142646b45a96?width=64&height=64&method=scale&animated=true">
-                    <span>Loading Artist</span>
+                    <span>{{'Loading Artist' | translate}}</span>
                 </div>
             </div>
         </div>
@@ -194,7 +194,7 @@
     </div>
 
     <div class="footer">
-        <a href="https://github.com/turt2live/matrix-dimension" target="_blank">source on GitHub</a>
+        <a href="https://github.com/turt2live/matrix-dimension" target="_blank">{{'source on GitHub' | translate}}</a>
         <a href="https://matrix.org" target="_blank" class="made-for-matrix-anchor">
             <img src="/img/logo/made-for-matrix.svg" class="made-for-matrix">
         </a>
@@ -206,7 +206,7 @@
     <div class="hero">
         <img src="/img/logo/banner-sm.png" class="logo">
         <div class="links">
-            <a href="https://github.com/turt2live/matrix-dimension" target="_blank">source</a>
+            <a href="https://github.com/turt2live/matrix-dimension" target="_blank">{{'source' | translate}}</a>
             <a href="https://matrix.to/#/#dimension:t2bot.io">#dimension:t2bot.io</a>
         </div>
     </div>
@@ -214,48 +214,44 @@
 
     <div class="wrapper">
         <div class="info-box welcome shadowed">
-            <h3>Welcome to Dimension!</h3>
+            <h3>{{'Welcome to Dimension!' | translate}}</h3>
             <p>
-                Join <a href="https://matrix.to/#/#dimension:t2bot.io" target="_blank">#dimension:t2bot.io</a>
-                for news and updates. Don't forget to star the repository on
+                {{'Join' | translate}} <a href="https://matrix.to/#/#dimension:t2bot.io" target="_blank">#dimension:t2bot.io</a>
+                {{'for news and updates. Don\'t forget to star the repository on' | translate}}
                 <a href="https://github.com/turt2live/matrix-dimension" target="_blank">GitHub</a>.
             </p>
-            <p>Here's the configuration options you'll need to update in your Element <code>config.json</code>:</p>
+            <p>{{'Here\'s the configuration options you\'ll need to update in your Element' | translate}} <code>config.json</code>:</p>
             <pre>{{ integrationsConfig }}</pre>
 
-            <h4>Configuring integrations</h4>
+            <h4>{{'Configuring integrations' | translate}}</h4>
             <p>
-                If everything is set up correctly, you'll be able to access the admin area of Dimension by clicking
-                the 3x3 grid in the top right of any room in Element. The gear icon (<i class="fa fa-cog"></i>) in the
-                top right is where you can configure your bots, bridges, and widgets.
+                {{'If everything is set up correctly, you\'ll be able to access the admin area of Dimension by clicking the 3x3 grid in the top right of any room in Element. The gear icon' | translate}}
+                (<i class="fa fa-cog"></i>) {{'in the top right is where you can configure your bots, bridges, and widgets.' | translate}}
             </p>
 
-            <h4>"Could not connect to integrations server" error</h4>
+            <h4>{{'Could not connect to integrations server error' | translate}}</h4>
             <p>
-                When Element cannot reach Dimension or Dimension is unable to reach your homeserver an error saying "Could not
-                contact integrations
-                server" shows up in every room. Before visiting us in <a href="https://matrix.to/#/#dimension:t2bot.io" target="_blank">#dimension:t2bot.io</a>
-                on Matrix, here's a few things to check:
+                {{'When Element cannot reach Dimension or Dimension is unable to reach your homeserver an error saying \'Could not contact integrations server\' shows up in every room. Before visiting us in' | translate}}
+                <a href="https://matrix.to/#/#dimension:t2bot.io" target="_blank">#dimension:t2bot.io</a>
+                {{'on Matrix, here\'s a few things to check:' | translate}}
             </p>
             <ul>
-                <li><strong>Verify the homeserver configuration in Dimension.</strong> The name, client/server URL, and
-                    access token all need to be valid and directed at your homeserver.
+                <li><strong>{{'Verify the homeserver configuration in Dimension.' | translate}}</strong>
+                    {{'The name, client/server URL, and access token all need to be valid and directed at your homeserver.' | translate}}
                 </li>
-                <li><strong>Verify federation is enabled on your homeserver.</strong> Even in a private, or non-federated,
-                    environment federation needs to be enabled so Dimension can work correctly. Dimension should still work
-                    okay if federation on your homeserver is bound to a private interface instead of being public - just be
-                    sure to set the federation URL in your configuration.
+                <li><strong>{{'Verify federation is enabled on your homeserver.' | translate}}</strong>
+                    {{'Even in a private, or non-federated, environment federation needs to be enabled so Dimension can work correctly. Dimension should still work okay if federation on your homeserver is bound to a private interface instead of being public - just be sure to set the federation URL in your configuration.' | translate}}
                 </li>
-                <li><strong>Verify that federation is working on your homeserver.</strong> Using tools like the <a
-                        href="https://matrix.org/federationtester/api/report?server_name=YOUR_SERVER_HERE.com">federation
-                    tester</a>, make sure that federation is working on your homeserver.
+                <li><strong>{{'Verify that federation is working on your homeserver.' | translate}}</strong>
+                    {{'Using tools like the' | translate}} <a href="https://matrix.org/federationtester/api/report?server_name=YOUR_SERVER_HERE.com">{{'federation tester' | translate}}</a>
+                    {{', make sure that federation is working on your homeserver.' | translate}}
                 </li>
             </ul>
         </div>
     </div>
 
     <div class="footer">
-        <a href="https://github.com/turt2live/matrix-dimension" target="_blank">source on GitHub</a>
+        <a href="https://github.com/turt2live/matrix-dimension" target="_blank">{{'source on GitHub' | translate}}</a>
         <a href="https://matrix.org" target="_blank" class="made-for-matrix-anchor">
             <img src="/img/logo/made-for-matrix.svg" class="made-for-matrix">
         </a>
