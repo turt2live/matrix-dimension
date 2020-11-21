@@ -8,6 +8,6 @@
             <h4>Sorry, this content cannot be embedded</h4>
         </div>
     </div>
-    <iframe [src]="embedUrl" *ngIf="!isLoading && canEmbed" frameborder="0" allowfullscreen></iframe>
+    <iframe allow="microphone; camera; encrypted-media; autoplay; display-capture;" [src]="embedUrl" *ngIf="!isLoading && canEmbed" frameborder="0" allowfullscreen></iframe>
     <my-fullscreen-button *ngIf="!isLoading && canEmbed" class="toggleFullscreen"></my-fullscreen-button>
 </div>
