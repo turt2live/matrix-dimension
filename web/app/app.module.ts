@@ -119,6 +119,7 @@ import { AdminNewEditTermsComponent } from "./admin/terms/new-edit/new-edit.comp
 import { AdminTermsNewEditPublishDialogComponent } from "./admin/terms/new-edit/publish/publish.component";
 import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.component";
 import { WhiteboardWidgetComponent } from "./configs/widget/whiteboard/whiteboard.widget.component";
+import { AdminWidgetWhiteboardConfigComponent } from "./admin/widgets/whiteboard/whiteboard.component";
 
 @NgModule({
     imports: [
@@ -216,7 +217,8 @@ import { WhiteboardWidgetComponent } from "./configs/widget/whiteboard/whiteboar
         AdminNewEditTermsComponent,
         AdminTermsNewEditPublishDialogComponent,
         TermsWidgetWrapperComponent,
-        WhiteboardWidgetComponent
+        WhiteboardWidgetComponent,
+        AdminWidgetWhiteboardConfigComponent
 
         // Vendor
     ],
@@ -273,6 +275,7 @@ import { WhiteboardWidgetComponent } from "./configs/widget/whiteboard/whiteboar
         AdminSlackBridgeManageSelfhostedComponent,
         AdminLogoutConfirmationDialogComponent,
         AdminTermsNewEditPublishDialogComponent,
+        AdminWidgetWhiteboardConfigComponent
     ]
 })
 export class AppModule {

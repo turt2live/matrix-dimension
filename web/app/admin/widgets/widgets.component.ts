@@ -6,6 +6,7 @@ import { Modal, overlayConfigFactory } from "ngx-modialog";
 import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { AdminWidgetJitsiConfigComponent } from "./jitsi/jitsi.component";
 import { AdminIntegrationsApiService } from "../../shared/services/admin/admin-integrations-api.service";
+import { AdminWidgetWhiteboardConfigComponent } from "./whiteboard/whiteboard.component";
 
 export class WidgetConfigDialogContext extends BSModalContext {
     public widget: FE_Widget;
@@ -50,6 +51,7 @@ export class AdminWidgetsComponent {
 
         if (widget.type === "etherpad") component = AdminWidgetEtherpadConfigComponent;
         if (widget.type === "jitsi") component = AdminWidgetJitsiConfigComponent;
+        if (widget.type === "whiteboard") component = AdminWidgetWhiteboardConfigComponent;
 
         if (!component) {
             console.error("No known dialog component for " + widget.type);
@@ -67,6 +69,6 @@ export class AdminWidgetsComponent {
 
     public hasConfiguration(widget: FE_Widget) {
         // Currently only Jitsi and Etherpad have additional configuration
-        return widget.type === "jitsi" || widget.type === "etherpad";
+        return widget.type === "jitsi" || widget.type === "etherpad" || widget.type === "whiteboard";
     }
 }
