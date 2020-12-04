@@ -33,14 +33,6 @@ export default {
                     optionsJson: '{"defaultUrl":"https://scalar.vector.im/etherpad/p/$roomId_$padName"}',
                 },
                 {
-                    type: "whiteboard",
-                    name: "Whiteboard",
-                    avatarUrl: "/img/avatars/whiteboard.png",
-                    isEnabled: true,
-                    isPublic: true,
-                    description: "A whiteboard app embedded in the room.",
-                },
-                {
                     type: "googlecalendar",
                     name: "Google Calendar",
                     isEnabled: true,
