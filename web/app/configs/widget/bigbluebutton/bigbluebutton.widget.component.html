@@ -1,7 +1,7 @@
 <my-widget-config [widgetComponent]="this">
     <ng-template #widgetParamsTemplate let-widget="widget">
         <label class="label-block">
-            BigBlueButton Meeting URL
+            {{'BigBlueButton Meeting URL' | translate}}
             <input type="text" class="form-control"
                    placeholder="https://bbb.example.com/abc-def-ghi"
                    [(ngModel)]="widget.dimension.newData.conferenceUrl" name="widget-url-{{widget.id}}"
