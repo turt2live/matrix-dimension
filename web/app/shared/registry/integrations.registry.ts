@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import {
     WIDGET_CUSTOM,
+    WIDGET_BIGBLUEBUTTON,
     WIDGET_ETHERPAD,
     WIDGET_GOOGLE_CALENDAR,
     WIDGET_GOOGLE_DOCS,
@@ -34,6 +35,9 @@ export class IntegrationsRegistry {
         "widget": {
             "custom": {
                 types: WIDGET_CUSTOM,
+            },
+            "bigbluebutton": {
+                types: WIDGET_BIGBLUEBUTTON,
             },
             "youtube": {
                 types: WIDGET_YOUTUBE
