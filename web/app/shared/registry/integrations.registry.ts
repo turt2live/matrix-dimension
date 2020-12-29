@@ -30,7 +30,6 @@ export class IntegrationsRegistry {
             "irc": {},
             "telegram": {},
             "webhooks": {},
-            "gitter": {},
             "slack": {},
         },
         "widget": {

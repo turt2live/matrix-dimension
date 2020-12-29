@@ -33,8 +33,6 @@ import { AdminTelegramBridgeComponent } from "./admin/bridges/telegram/telegram.
 import { TelegramBridgeConfigComponent } from "./configs/bridge/telegram/telegram.bridge.component";
 import { AdminWebhooksBridgeComponent } from "./admin/bridges/webhooks/webhooks.component";
 import { WebhooksBridgeConfigComponent } from "./configs/bridge/webhooks/webhooks.bridge.component";
-import { AdminGitterBridgeComponent } from "./admin/bridges/gitter/gitter.component";
-import { GitterBridgeConfigComponent } from "./configs/bridge/gitter/gitter.bridge.component";
 import { GenericFullscreenWidgetWrapperComponent } from "./widget-wrappers/generic-fullscreen/generic-fullscreen.component";
 import { GrafanaWidgetConfigComponent } from "./configs/widget/grafana/grafana.widget.component";
 import { TradingViewWidgetConfigComponent } from "./configs/widget/tradingview/tradingview.widget.component";
@@ -130,11 +128,6 @@ const routes: Routes = [
                                 path: "webhooks",
                                 component: AdminWebhooksBridgeComponent,
                                 data: {breadcrumb: "Webhook Bridge", name: "Webhook Bridge"},
-                            },
-                            {
-                                path: "gitter",
-                                component: AdminGitterBridgeComponent,
-                                data: {breadcrumb: "Gitter Bridge", name: "Gitter Bridge"},
                             },
                             {
                                 path: "slack",
@@ -272,11 +265,6 @@ const routes: Routes = [
                         path: "webhooks",
                         component: WebhooksBridgeConfigComponent,
                         data: {breadcrumb: "Webhook Bridge Configuration", name: "Webhook Bridge Configuration"},
-                    },
-                    {
-                        path: "gitter",
-                        component: GitterBridgeConfigComponent,
-                        data: {breadcrumb: "Gitter Bridge Configuration", name: "Gitter Bridge Configuration"},
                     },
                     {
                         path: "slack",

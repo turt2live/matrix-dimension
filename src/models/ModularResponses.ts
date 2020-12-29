@@ -10,13 +10,6 @@ export interface ModularIrcResponse<T> {
     }[];
 }
 
-export interface ModularGitterResponse<T> {
-    replies: {
-        rid: string;
-        response: T;
-    }[];
-}
-
 export interface ModularSlackResponse<T> {
     replies: {
         rid: string;

@@ -3,10 +3,9 @@ import BridgeRecord from "../db/models/BridgeRecord";
 import { AvailableNetworks, LinkedChannels } from "../bridges/IrcBridge";
 import { PortalInfo, PuppetInfo } from "../bridges/TelegramBridge";
 import { WebhookConfiguration } from "../bridges/models/webhooks";
-import { BridgedRoom } from "../bridges/GitterBridge";
 import { BridgedChannel } from "../bridges/SlackBridge";
 
-const PRIVATE_ACCESS_SUPPORTED_BRIDGES = ["webhooks", "gitter"];
+const PRIVATE_ACCESS_SUPPORTED_BRIDGES = ["webhooks"];
 
 export class Bridge extends Integration {
     constructor(bridge: BridgeRecord, public config: any) {
@@ -39,11 +38,6 @@ export interface TelegramBridgeConfiguration {
 
 export interface WebhookBridgeConfiguration {
     webhooks: WebhookConfiguration[];
-    botUserId: string;
-}
-
-export interface GitterBridgeConfiguration {
-    link: BridgedRoom;
     botUserId: string;
 }
 

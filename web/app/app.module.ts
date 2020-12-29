@@ -90,11 +90,6 @@ import { AdminWebhooksBridgeComponent } from "./admin/bridges/webhooks/webhooks.
 import { AdminWebhooksApiService } from "./shared/services/admin/admin-webhooks-api.service";
 import { WebhooksApiService } from "./shared/services/integrations/webhooks-api.service";
 import { WebhooksBridgeConfigComponent } from "./configs/bridge/webhooks/webhooks.bridge.component";
-import { AdminGitterBridgeComponent } from "./admin/bridges/gitter/gitter.component";
-import { AdminGitterBridgeManageSelfhostedComponent } from "./admin/bridges/gitter/manage-selfhosted/manage-selfhosted.component";
-import { AdminGitterApiService } from "./shared/services/admin/admin-gitter-api.service";
-import { GitterBridgeConfigComponent } from "./configs/bridge/gitter/gitter.bridge.component";
-import { GitterApiService } from "./shared/services/integrations/gitter-api.service";
 import { GenericFullscreenWidgetWrapperComponent } from "./widget-wrappers/generic-fullscreen/generic-fullscreen.component";
 import { GrafanaWidgetConfigComponent } from "./configs/widget/grafana/grafana.widget.component";
 import { TradingViewWidgetConfigComponent } from "./configs/widget/tradingview/tradingview.widget.component";
@@ -215,9 +210,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminWebhooksBridgeManageSelfhostedComponent,
         AdminWebhooksBridgeComponent,
         WebhooksBridgeConfigComponent,
-        AdminGitterBridgeComponent,
-        AdminGitterBridgeManageSelfhostedComponent,
-        GitterBridgeConfigComponent,
         GenericFullscreenWidgetWrapperComponent,
         GrafanaWidgetConfigComponent,
         TradingViewWidgetConfigComponent,
@@ -262,8 +254,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         TelegramApiService,
         AdminWebhooksApiService,
         WebhooksApiService,
-        AdminGitterApiService,
-        GitterApiService,
         AdminCustomSimpleBotsApiService,
         SlackApiService,
         AdminSlackApiService,
@@ -290,7 +280,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         TelegramAskUnbridgeComponent,
         TelegramCannotUnbridgeComponent,
         AdminWebhooksBridgeManageSelfhostedComponent,
-        AdminGitterBridgeManageSelfhostedComponent,
         AdminAddCustomBotComponent,
         AdminSlackBridgeManageSelfhostedComponent,
         AdminLogoutConfirmationDialogComponent,
