@@ -29,6 +29,8 @@ COPY --from=builder /home/node/matrix-dimension/config /home/node/matrix-dimensi
 
 RUN chown -R node /home/node/matrix-dimension
 
+RUN mkdir /data && chown -R node /data
+
 USER node
 
 RUN npm clean-install --production
