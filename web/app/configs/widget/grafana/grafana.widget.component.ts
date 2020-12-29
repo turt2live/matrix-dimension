@@ -9,7 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 })
 export class GrafanaWidgetConfigComponent extends WidgetComponent {
     constructor(public translate: TranslateService) {
-        super(WIDGET_GRAFANA, "Grafana", "generic-fullscreen", translate ,"grafana");
+        super(WIDGET_GRAFANA, "Grafana", "generic-fullscreen", translate, "grafana");
     }
 
     protected OnWidgetsDiscovered(widgets: EditableWidget[]) {

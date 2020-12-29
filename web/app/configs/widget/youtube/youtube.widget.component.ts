@@ -12,7 +12,7 @@ import { TranslateService } from "@ngx-translate/core";
 })
 export class YoutubeWidgetConfigComponent extends WidgetComponent {
     constructor(public translate: TranslateService) {
-        super(WIDGET_YOUTUBE, "Video", "video", translate,"youtube");
+        super(WIDGET_YOUTUBE, "Video", "video", translate, "youtube");
         this.translate = translate;
     }
 

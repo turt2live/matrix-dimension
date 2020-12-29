@@ -43,7 +43,7 @@ export class BigBlueButtonWidgetWrapperComponent extends CapableWidget implement
     /**
      * Whether we are currently in a meeting
      */
-    private inMeeting: boolean = false;
+    private inMeeting = false;
 
     /**
      * The URL to embed into the iframe
@@ -95,7 +95,7 @@ export class BigBlueButtonWidgetWrapperComponent extends CapableWidget implement
         ScalarWidgetApi.sendSetAlwaysOnScreen(true);
     }
 
-    public joinConference(updateStatusMessage: boolean = true) {
+    public joinConference(updateStatusMessage = true) {
         if (updateStatusMessage) {
             // Inform the user that we're loading their meeting
             this.statusMessage = "Joining conference...";
@@ -109,7 +109,7 @@ export class BigBlueButtonWidgetWrapperComponent extends CapableWidget implement
         this.bigBlueButtonApi.joinMeeting(this.conferenceUrl, joinName).then((response) => {
             if ("errorCode" in response) {
                 // This is an instance of ApiError
-                if (response.errorCode == "WAITING_FOR_MEETING_START") {
+                if (response.errorCode === "WAITING_FOR_MEETING_START") {
                     // The meeting hasn't started yet
                     this.statusMessage = "Waiting for conference to start...";
 

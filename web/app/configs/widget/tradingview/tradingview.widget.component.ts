@@ -75,7 +75,7 @@ export class TradingViewWidgetConfigComponent extends WidgetComponent {
     ];
 
     constructor(public translate: TranslateService) {
-        super(WIDGET_TRADINGVIEW, "TradingView Chart", DISABLE_AUTOMATIC_WRAPPING, translate,"tradingView");
+        super(WIDGET_TRADINGVIEW, "TradingView Chart", DISABLE_AUTOMATIC_WRAPPING, translate, "tradingView");
     }
 
     protected OnNewWidgetPrepared(widget: EditableWidget): void {

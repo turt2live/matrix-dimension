@@ -10,7 +10,7 @@ import { TranslateService } from "@ngx-translate/core";
 export class SpotifyWidgetConfigComponent extends WidgetComponent {
 
     constructor(public translate: TranslateService) {
-        super(WIDGET_SPOTIFY, "Spotify", DISABLE_AUTOMATIC_WRAPPING, translate,"spotify");
+        super(WIDGET_SPOTIFY, "Spotify", DISABLE_AUTOMATIC_WRAPPING, translate, "spotify");
     }
 
     protected OnNewWidgetPrepared(widget: EditableWidget): void {

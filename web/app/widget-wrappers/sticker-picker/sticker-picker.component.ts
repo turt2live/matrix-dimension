@@ -5,7 +5,7 @@ import {
     transition,
     trigger
 } from '@angular/animations';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { CapableWidget, WIDGET_API_VERSION_OPENID } from "../capable-widget";
 import { fromEvent } from 'rxjs';
@@ -45,7 +45,7 @@ import { WIDGET_STICKER_PICKER } from "../../shared/models/widget";
     ]
 })
 
-export class StickerPickerWidgetWrapperComponent extends CapableWidget implements OnInit, OnDestroy {
+export class StickerPickerWidgetWrapperComponent extends CapableWidget implements OnInit, OnDestroy, AfterViewInit {
 
     public isLoading = true;
     public isListVisible = true;

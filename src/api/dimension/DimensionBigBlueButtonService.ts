@@ -168,7 +168,7 @@ export class DimensionBigBlueButtonService {
         url: string,
         qs?: any,
         body?: any,
-        followRedirect: boolean = true,
+        followRedirect = true,
     ): Promise<any> {
         // Query a URL, expecting an HTML response in return
         return new Promise((resolve, reject) => {

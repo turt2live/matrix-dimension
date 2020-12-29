@@ -286,7 +286,7 @@ export class RiotHomeComponent {
                 const processPayload = payload => {
                     const response = <any>payload.response;
                     if (response === true) return Promise.resolve();
-                    if (response.error || response.error.message){
+                    if (response.error || response.error.message) {
                         let message: string;
                         this.translate.get('You cannot modify widgets in this room').subscribe((res: string) => {message = res});
                         return Promise.reject(message);

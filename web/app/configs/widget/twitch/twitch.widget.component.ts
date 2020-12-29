@@ -9,7 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 })
 export class TwitchWidgetConfigComponent extends WidgetComponent {
     constructor(public translate: TranslateService) {
-        super(WIDGET_TWITCH, "Twitch Livestream", "video", translate ,"twitch");
+        super(WIDGET_TWITCH, "Twitch Livestream", "video", translate , "twitch");
     }
 
     protected OnNewWidgetPrepared(widget: EditableWidget) {

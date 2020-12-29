@@ -20,7 +20,9 @@ export class PageHeaderComponent {
             while (currentRoute.children.length > 0) {
                 let children = currentRoute.children;
                 children.forEach(route => {
-                    if (route.snapshot.data['breadcrumb']){this.translate.get(route.snapshot.data['breadcrumb']).subscribe((res: string) => {route.snapshot.data['breadcrumb'] = res}); }
+                    if (route.snapshot.data['breadcrumb']) {
+                        this.translate.get(route.snapshot.data['breadcrumb']).subscribe((res: string) => {route.snapshot.data['breadcrumb'] = res});
+                    }
                     currentRoute = route;
                     url += "/" + route.snapshot.url.map(s => s.path).join("/");
                     if (route.outlet !== PRIMARY_OUTLET) return;

@@ -44,7 +44,7 @@ export class AdminSlackBridgeManageSelfhostedComponent implements ModalComponent
             });
         } else {
             this.slackApi.updateSelfhosted(this.bridgeId, this.provisionUrl).then(() => {
-                this.translate.get('Slack bridge updated').subscribe((res: string) => {this.toaster.pop("success", res);});
+                this.translate.get('Slack bridge updated').subscribe((res: string) => this.toaster.pop("success", res));
                 this.dialog.close();
             }).catch(err => {
                 console.error(err);
