@@ -121,6 +121,8 @@ import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.compo
 import { BigBlueButtonConfigComponent } from "./configs/widget/bigbluebutton/bigbluebutton.widget.component";
 import { BigBlueButtonWidgetWrapperComponent } from "./widget-wrappers/bigbluebutton/bigbluebutton.component";
 import { BigBlueButtonApiService } from "./shared/services/integrations/bigbluebutton-api.service";
+import { WhiteboardWidgetComponent } from "./configs/widget/whiteboard/whiteboard.widget.component";
+import { AdminWidgetWhiteboardConfigComponent } from "./admin/widgets/whiteboard/whiteboard.component";
 
 @NgModule({
     imports: [
@@ -220,6 +222,8 @@ import { BigBlueButtonApiService } from "./shared/services/integrations/bigblueb
         AdminNewEditTermsComponent,
         AdminTermsNewEditPublishDialogComponent,
         TermsWidgetWrapperComponent,
+        WhiteboardWidgetComponent,
+        AdminWidgetWhiteboardConfigComponent
 
         // Vendor
     ],
@@ -277,6 +281,7 @@ import { BigBlueButtonApiService } from "./shared/services/integrations/bigblueb
         AdminSlackBridgeManageSelfhostedComponent,
         AdminLogoutConfirmationDialogComponent,
         AdminTermsNewEditPublishDialogComponent,
+        AdminWidgetWhiteboardConfigComponent
     ]
 })
 export class AppModule {

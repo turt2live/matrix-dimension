@@ -11,7 +11,8 @@ import {
     WIDGET_STICKER_PICKER,
     WIDGET_TRADINGVIEW,
     WIDGET_TWITCH,
-    WIDGET_YOUTUBE
+    WIDGET_YOUTUBE,
+    WIDGET_WHITEBOARD
 } from "../models/widget";
 import { FE_Integration } from "../models/integration";
 
@@ -69,6 +70,9 @@ export class IntegrationsRegistry {
             "stickerpicker": {
                 types: WIDGET_STICKER_PICKER,
             },
+            "whiteboard": {
+                type: WIDGET_WHITEBOARD,
+            }
         },
     };
 

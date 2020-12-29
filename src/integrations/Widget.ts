@@ -5,6 +5,10 @@ export interface EtherpadWidgetOptions {
     defaultUrl: string;
 }
 
+export interface WhiteboardWidgetOptions {
+    defaultUrl: string;
+}
+
 export interface JitsiWidgetOptions {
     jitsiDomain: string;
     scriptUrl: string;
