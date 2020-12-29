@@ -4,18 +4,18 @@
 <div *ngIf="!isLoading">
     <my-ibox *ngFor="let code of chosenLanguageCodes">
         <div class="my-ibox-title">
-            <h5>{{languages[code].langName}} version</h5>
+            <h5>{{languages[code].langName}} {{'version' | translate}}</h5>
         </div>
         <div class="my-ibox-content">
             <label class="label-block">
                 Name
-                <span class="text-muted ">The translated name of your policy</span>
+                <span class="text-muted ">{{'The translated name of your policy' | translate}}</span>
                 <input type="text" class="form-control" placeholder="My Policy" [(ngModel)]="languages[code].name"
                        [disabled]="isUpdating"/>
             </label>
             <label class="label-block">
-                Policy text
-                <span class="text-muted">This is where you put your policy's content.</span>
+                {{'Policy text' | translate}}
+                <span class="text-muted">{{'This is where you put your policy\'s content.' | translate}}</span>
             </label>
             <ckeditor [editor]="Editor" [(ngModel)]="languages[code].text" [disabled]="isUpdating"></ckeditor>
         </div>
@@ -33,13 +33,13 @@
     <my-ibox [hasTitle]="false">
         <div class="my-ibox-content buttons">
             <button type="button" (click)="create()" title="save" class="btn btn-primary btn-sm" *ngIf="!isEditing">
-                <i class="far fa-save"></i> Create draft
+                <i class="far fa-save"></i> {{'Create draft' | translate}}
             </button>
             <button type="button" (click)="create()" title="save" class="btn btn-primary btn-sm" *ngIf="isEditing">
-                <i class="far fa-save"></i> Save draft
+                <i class="far fa-save"></i> {{'Save draft' | translate}}
             </button>
             <button type="button" (click)="publish()" title="save" class="btn btn-primary btn-sm" *ngIf="isEditing">
-                <i class="fas fa-upload"></i> Publish
+                <i class="fas fa-upload"></i> {{'Publish' | translate}}
             </button>
         </div>
     </my-ibox>

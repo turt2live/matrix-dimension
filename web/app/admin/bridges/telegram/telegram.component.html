@@ -5,24 +5,19 @@
     <my-ibox boxTitle="Telegram Bridge Configurations">
         <div class="my-ibox-content">
             <p>
-                <a href="https://github.com/tulir/mautrix-telegram" target="_blank">mautrix-telegram</a>
-                is a Telegram bridge that supports bridging channels/supergroups to Matrix. This can be
-                done through a "relay bot" (all Matrix users are represented through a single bot in Telegram)
-                or by making use of a user's real Telegram account (known as "puppeting"). Currently
-                only one Telegram bridge can be configured at a time.
-            </p>
-
+                <a href="https://github.com/tulir/mautrix-telegram" target="_blank">{{'mautrix-telegram' | translate}}</a>
+                {{'is a Telegram bridge that supports bridging channels/supergroups to Matrix. This can be done through a \'relay bot\' (all Matrix users are represented through a single bot in Telegram) or by making use of a user\'s real Telegram account (known as \'puppeting\'). Currently only one Telegram bridge can be configured at a time.' | translate}}
             <table class="table table-striped table-condensed table-bordered">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Enabled Features</th>
-                    <th class="text-center" style="width: 120px;">Actions</th>
+                    <th>{{'Name' | translate}}</th>
+                    <th>{{'Enabled Features' | translate}}</th>
+                    <th class="text-center" style="width: 120px;">{{'Actions' | translate}}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngIf="!configurations || configurations.length === 0">
-                    <td colspan="3"><i>No bridge configurations.</i></td>
+                    <td colspan="3"><i>{{'No bridge configurations.' | translate}}</i></td>
                 </tr>
                 <tr *ngFor="let bridge of configurations trackById">
                     <td>
@@ -43,7 +38,7 @@
             </table>
             <button type="button" class="btn btn-success btn-sm" (click)="addSelfHostedBridge()"
                     [disabled]="configurations && configurations.length > 0">
-                <i class="fa fa-plus"></i> Add self-hosted bridge
+                <i class="fa fa-plus"></i> {{'Add self-hosted bridge' | translate}}
             </button>
         </div>
     </my-ibox>

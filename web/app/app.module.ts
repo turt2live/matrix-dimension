@@ -7,7 +7,7 @@ import { UiSwitchModule } from "angular2-ui-switch";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { routing } from "./app.routing";
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { BrowserModule } from "@angular/platform-browser";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
@@ -123,6 +123,13 @@ import { BigBlueButtonWidgetWrapperComponent } from "./widget-wrappers/bigbluebu
 import { BigBlueButtonApiService } from "./shared/services/integrations/bigbluebutton-api.service";
 import { WhiteboardWidgetComponent } from "./configs/widget/whiteboard/whiteboard.widget.component";
 import { AdminWidgetWhiteboardConfigComponent } from "./admin/widgets/whiteboard/whiteboard.component";
+import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http);
+}
 
 @NgModule({
     imports: [
@@ -138,6 +145,13 @@ import { AdminWidgetWhiteboardConfigComponent } from "./admin/widgets/whiteboard
         BootstrapModalModule,
         BreadcrumbsModule,
         CKEditorModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })
     ],
     declarations: [
         AppComponent,

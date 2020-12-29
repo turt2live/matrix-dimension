@@ -5,6 +5,7 @@ import { FE_EtherpadWidget } from "../../../shared/models/integration";
 import { SessionStorage } from "../../../shared/SessionStorage";
 import { NameService } from "../../../shared/services/name.service";
 import * as url from "url";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "etherpad.widget.component.html",
@@ -14,8 +15,8 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent {
 
     private etherpadWidget: FE_EtherpadWidget = <FE_EtherpadWidget>SessionStorage.editIntegration;
 
-    constructor(private nameService: NameService) {
-        super(WIDGET_ETHERPAD, "Etherpad", "generic", "etherpad", "padName");
+    constructor(private nameService: NameService, public translate: TranslateService) {
+        super(WIDGET_ETHERPAD, "Notes", "generic", translate ,"etherpad", "padName");
     }
 
     protected OnWidgetsDiscovered(widgets: EditableWidget[]): void {

@@ -4,14 +4,13 @@
             <my-spinner></my-spinner>
         </div>
         <div class="auth-error" *ngIf="!isLoading && authError">
-            There was a problem authenticating your use of this sticker picker. Please make sure you're using a client
-            that has Dimension enabled and correctly set up.
+            {{'There was a problem authenticating your use of this sticker picker. Please make sure you\'re using a client that has Dimension enabled and correctly set up.' | translate}}
         </div>
     </div>
     <div class="no-stickers" *ngIf="!isLoading && !authError && (!packs || packs.length === 0)">
         <img src="/img/no_stickers.png"/>
-        <span class="message">You have no sticker packs.</span>
-        <button class="btn btn-link btn-sm" (click)="openIntegrationManager()">Add some stickers</button>
+        <span class="message">{{'You have no sticker packs.' | translate}}</span>
+        <button class="btn btn-link btn-sm" (click)="openIntegrationManager()">{{'Add some stickers' | translate}}</button>
     </div>
     <div class="sticker-picker" *ngIf="!isLoading && !authError">
         <div class="sticker-pack" *ngFor="let pack of packs trackById" [attr.id]="'pack-' + pack.id">

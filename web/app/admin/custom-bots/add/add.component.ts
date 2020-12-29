@@ -4,6 +4,7 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { FE_CustomSimpleBot, FE_UserProfile } from "../../../shared/models/admin-responses";
 import { AdminCustomSimpleBotsApiService } from "../../../shared/services/admin/admin-custom-simple-bots-api.service";
+import { TranslateService } from "@ngx-translate/core";
 
 export class AddCustomBotDialogContext extends BSModalContext {
     bot: FE_CustomSimpleBot;
@@ -23,7 +24,9 @@ export class AdminAddCustomBotComponent implements ModalComponent<AddCustomBotDi
 
     constructor(public dialog: DialogRef<AddCustomBotDialogContext>,
                 private botApi: AdminCustomSimpleBotsApiService,
-                private toaster: ToasterService) {
+                private toaster: ToasterService,
+                public translate: TranslateService) {
+        this.translate = translate;
         this.bot = this.dialog.context.bot || <FE_CustomSimpleBot>{};
         this.isAdding = !this.dialog.context.bot;
     }
@@ -45,23 +48,23 @@ export class AdminAddCustomBotComponent implements ModalComponent<AddCustomBotDi
 
     public add() {
         if (!this.bot.name) {
-            this.toaster.pop("warning", "Please enter a name for the bot");
+            this.translate.get('Please enter a name for the bot').subscribe((res: string) => {this.toaster.pop("warning", res); });
             return;
         }
         if (!this.bot.avatarUrl) {
-            this.toaster.pop("warning", "Please enter an avatar URL for the bot");
+            this.translate.get('Please enter an avatar URL for the bot').subscribe((res: string) => {this.toaster.pop("warning", res); });
             return;
         }
         if (!this.bot.userId) {
-            this.toaster.pop("warning", "Please enter a user ID for the bot");
+            this.translate.get('Please enter a user ID for the bot').subscribe((res: string) => {this.toaster.pop("warning", res); });
             return;
         }
         if (!this.bot.description) {
-            this.toaster.pop("warning", "Please enter a description for the bot");
+            this.translate.get('Please enter a description for the bot').subscribe((res: string) => {this.toaster.pop("warning", res); });
             return;
         }
         if (!this.bot.accessToken) {
-            this.toaster.pop("warning", "Please enter an access token for the bot");
+            this.translate.get('Please enter an access token for the bot').subscribe((res: string) => {this.toaster.pop("warning", res); });
             return;
         }
 
@@ -85,12 +88,12 @@ export class AdminAddCustomBotComponent implements ModalComponent<AddCustomBotDi
         }
 
         promise.then(() => {
-            this.toaster.pop("success", "Bot updated");
+            this.translate.get('Bot updated').subscribe((res: string) => {this.toaster.pop("success", res); });
             this.dialog.close();
         }).catch(error => {
             this.isSaving = false;
             console.error(error);
-            this.toaster.pop("error", "Error updating bot");
+            this.translate.get('Error updating bot').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 }

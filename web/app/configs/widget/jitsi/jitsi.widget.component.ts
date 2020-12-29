@@ -5,6 +5,7 @@ import { FE_JitsiWidget } from "../../../shared/models/integration";
 import { SessionStorage } from "../../../shared/SessionStorage";
 import { NameService } from "../../../shared/services/name.service";
 import * as url from "url";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "jitsi.widget.component.html",
@@ -14,8 +15,8 @@ export class JitsiWidgetConfigComponent extends WidgetComponent {
 
     private jitsiWidget: FE_JitsiWidget = <FE_JitsiWidget>SessionStorage.editIntegration;
 
-    constructor(private nameService: NameService) {
-        super(WIDGET_JITSI, "Jitsi Video Conference", DISABLE_AUTOMATIC_WRAPPING);
+    constructor(private nameService: NameService, public translate: TranslateService) {
+        super(WIDGET_JITSI, "Jitsi Video Conference", DISABLE_AUTOMATIC_WRAPPING, translate);
     }
 
     protected OnWidgetsDiscovered(widgets: EditableWidget[]) {

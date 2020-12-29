@@ -4,7 +4,7 @@
 <div *ngIf="!widgetComponent.isLoading">
     <my-ibox [isCollapsible]="true" [defaultCollapsed]="widgetComponent.defaultExpandedWidgetId">
         <h5 class="my-ibox-title">
-            <i class="far fa-plus-square"></i> Add {{ widgetComponent.defaultName }}
+            <i class="far fa-plus-square"></i>  {{ widgetComponent.defaultName | translate }} {{'Add' | translate}}
         </h5>
         <div class="my-ibox-content">
             <form (submit)="widgetComponent.addWidget()" novalidate name="addForm">
@@ -13,7 +13,7 @@
 
                 <div style="margin-top: 25px">
                     <button type="submit" class="btn btn-sm btn-success" [disabled]="widgetComponent.isUpdating">
-                        <i class="fa fa-plus"></i> Add Widget
+                        <i class="fa fa-plus"></i> {{'Add Widget' | translate}}
                     </button>
                 </div>
             </form>
@@ -32,11 +32,11 @@
 
                 <div style="margin-top: 25px">
                     <button type="submit" class="btn btn-sm btn-primary" [disabled]="widgetComponent.isUpdating">
-                        <i class="far fa-save"></i> Save Widget
+                        <i class="far fa-save"></i>{{'Save Widget' | translate}}
                     </button>
-                    <button type="button" class="btn btn-sm btn-outline-danger" [disabled]="widgetComponent.isUpdating"
+                    <button type="button" class="btn btn-sm ml-1 btn-outline-danger" [disabled]="widgetComponent.isUpdating"
                             (click)="widgetComponent.removeWidget(widget)">
-                        <i class="far fa-trash-alt"></i> Remove Widget
+                        <i class="far fa-trash-alt"></i>{{'Remove Widget' | translate}}
                     </button>
                 </div>
             </form>

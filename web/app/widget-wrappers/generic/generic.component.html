@@ -5,7 +5,7 @@
         </div>
         <div class="embed-failed" *ngIf="!isLoading && !canEmbed">
             <p class="ban"><i class="fa fa-ban"></i></p>
-            <h4>Sorry, this content cannot be embedded</h4>
+            <h4>{{'Sorry, this content cannot be embedded' | translate}}</h4>
         </div>
     </div>
     <iframe [src]="embedUrl" *ngIf="!isLoading && canEmbed" frameborder="0" allowfullscreen></iframe>

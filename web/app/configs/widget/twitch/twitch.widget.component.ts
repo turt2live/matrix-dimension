@@ -1,14 +1,15 @@
 import { WidgetComponent } from "../widget.component";
 import { EditableWidget, WIDGET_TWITCH } from "../../../shared/models/widget";
 import { Component } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "twitch.widget.component.html",
     styleUrls: ["twitch.widget.component.scss"],
 })
 export class TwitchWidgetConfigComponent extends WidgetComponent {
-    constructor() {
-        super(WIDGET_TWITCH, "Twitch Livestream", "video", "twitch");
+    constructor(public translate: TranslateService) {
+        super(WIDGET_TWITCH, "Twitch Livestream", "video", translate ,"twitch");
     }
 
     protected OnNewWidgetPrepared(widget: EditableWidget) {

@@ -1,20 +1,20 @@
 <div class="dialog">
     <div class="dialog-header">
-        <h4>Publish policy</h4>
+        <h4>{{'Publish policy' | translate}}</h4>
     </div>
     <div class="dialog-content">
         <label class="label-block">
-            Version number
-            <span class="text-muted ">The version number of this policy</span>
+            {{'Version number' | translate}}
+            <span class="text-muted ">{{'The version number of this policy' | translate}}</span>
             <input type="text" class="form-control" placeholder="eg: 1.1.0" [(ngModel)]="version"/>
         </label>
     </div>
     <div class="dialog-footer">
         <button type="button" (click)="publish()" title="close" class="btn btn-primary btn-sm">
-            <i class="fas fa-upload"></i> Publish
+            <i class="fas fa-upload"></i> {{'Publish' | translate}}
         </button>
         <button type="button" (click)="dialog.close()" title="save" class="btn btn-secondary btn-sm">
-            <i class="far fa-times-circle"></i> Close
+            <i class="far fa-times-circle"></i> {{'Close' | translate}}
         </button>
     </div>
 </div>

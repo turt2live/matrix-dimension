@@ -4,6 +4,7 @@ import { ToasterService } from "angular2-toaster";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { WidgetConfigDialogContext } from "../widgets.component";
 import { AdminIntegrationsApiService } from "../../../shared/services/admin/admin-integrations-api.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "./etherpad.component.html",
@@ -15,7 +16,11 @@ export class AdminWidgetEtherpadConfigComponent implements ModalComponent<Widget
     public widget: FE_EtherpadWidget;
     private originalWidget: FE_EtherpadWidget;
 
-    constructor(public dialog: DialogRef<WidgetConfigDialogContext>, private adminIntegrationsApi: AdminIntegrationsApiService, private toaster: ToasterService) {
+    constructor(public dialog: DialogRef<WidgetConfigDialogContext>,
+                private adminIntegrationsApi: AdminIntegrationsApiService,
+                private toaster: ToasterService,
+                public translate: TranslateService) {
+        this.translate = translate;
         this.originalWidget = dialog.context.widget;
         this.widget = JSON.parse(JSON.stringify(this.originalWidget));
     }
@@ -24,12 +29,12 @@ export class AdminWidgetEtherpadConfigComponent implements ModalComponent<Widget
         this.isUpdating = true;
         this.adminIntegrationsApi.setIntegrationOptions(this.widget.category, this.widget.type, this.widget.options).then(() => {
             this.originalWidget.options = this.widget.options;
-            this.toaster.pop("success", "Widget updated");
+            this.translate.get('Widget updated').subscribe((res: string) => {this.toaster.pop("success", res); });
             this.dialog.close();
         }).catch(err => {
             this.isUpdating = false;
             console.error(err);
-            this.toaster.pop("error", "Error updating widget");
+            this.translate.get('Error updating widget').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 }

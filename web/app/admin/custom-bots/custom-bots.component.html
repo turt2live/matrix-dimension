@@ -2,25 +2,21 @@
     <my-spinner></my-spinner>
 </div>
 <div *ngIf="!isLoading">
-    <my-ibox boxTitle="Custom bots">
+    <my-ibox boxTitle="{{'Custom bots' | translate}}">
         <div class="my-ibox-content">
-            <p>
-                Custom bots give you the ability to add your own bots to Dimension for users to add
-                to their rooms. These bots can't have any configuration to them and must be able to
-                accept room invites on their own. All Dimension will do when a user wants to add the
-                bot is invite it to the room.
+            <p>{{'Custom bots give you the ability to add your own bots to Dimension for users to add to their rooms. These bots can\'t have any configuration to them and must be able to accept room invites on their own. All Dimension will do when a user wants to add the bot is invite it to the room.' | translate}}
             </p>
 
             <table class="table table-striped table-condensed table-bordered">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th class="text-center" style="width: 120px;">Actions</th>
+                    <th>{{'Name' | translate}}</th>
+                    <th class="text-center" style="width: 120px;">{{'Actions' | translate}}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngIf="!bots || bots.length === 0">
-                    <td colspan="2"><i>No custom bots.</i></td>
+                    <td colspan="2"><i>{{'No custom bots.' | translate}}</i></td>
                 </tr>
                 <tr *ngFor="let bot of bots trackById">
                     <td>
@@ -38,7 +34,7 @@
                 </tbody>
             </table>
             <button type="button" class="btn btn-success btn-sm" (click)="addBot()">
-                <i class="fa fa-plus"></i> Add custom bot
+                <i class="fa fa-plus"></i>{{ 'Add custom bot' | translate}}
             </button>
         </div>
     </my-ibox>

@@ -6,21 +6,20 @@
         <div class="my-ibox-content">
             <p>
                 <a href="https://github.com/matrix-org/matrix-appservice-slack"
-                   target="_blank">matrix-appservice-slack</a>
-                is a Slack bridge that supports bridging Slack channels to Matrix. Users authorize the bridge to access
-                their Slack workspaces and from there they can pick the channels they'd like to bridge.
+                   target="_blank">{{'matrix-appservice-slack' | translate}}</a>
+                {{'is a Slack bridge that supports bridging Slack channels to Matrix. Users authorize the bridge to access their Slack workspaces and from there they can pick the channels they\'d like to bridge.' | translate}}
             </p>
 
             <table class="table table-striped table-condensed table-bordered">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th class="text-center" style="width: 120px;">Actions</th>
+                    <th>{{'Name' | translate}}</th>
+                    <th class="text-center" style="width: 120px;">{{'Actions' | translate}}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngIf="!configurations || configurations.length === 0">
-                    <td colspan="2"><i>No bridge configurations.</i></td>
+                    <td colspan="2"><i>{{'No bridge configurations.' | translate}}</i></td>
                 </tr>
                 <tr *ngFor="let bridge of configurations trackById">
                     <td>
@@ -38,11 +37,11 @@
             </table>
             <button type="button" class="btn btn-success btn-sm" (click)="addModularHostedBridge()"
                     [disabled]="(configurations && configurations.length > 0) || isUpdating">
-                <i class="fa fa-plus"></i> Add matrix.org's bridge
+                <i class="fa fa-plus"></i> {{'Add matrix.org\'s bridge' | translate}}
             </button>
             <button type="button" class="btn btn-success btn-sm" (click)="addSelfHostedBridge()"
                     [disabled]="(configurations && configurations.length > 0) || isUpdating">
-                <i class="fa fa-plus"></i> Add self-hosted bridge
+                <i class="fa fa-plus"></i> {{'Add self-hosted bridge' | translate}}
             </button>
         </div>
     </my-ibox>

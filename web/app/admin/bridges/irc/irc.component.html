@@ -5,22 +5,21 @@
     <my-ibox boxTitle="IRC Bridge Configurations">
         <div class="my-ibox-content">
             <p>
-                <a href="https://github.com/matrix-org/matrix-appservice-irc" target="_blank">matrix-appservice-irc</a>
-                is an IRC bridge that supports multiple IRC networks. Dimension is capable of using multiple IRC
-                bridges to better distribute the load across multiple networks in large deployments.
+                <a href="https://github.com/matrix-org/matrix-appservice-irc" target="_blank">{{'matrix-appservice-irc' | translate}}</a>
+                {{'is an IRC bridge that supports multiple IRC networks. Dimension is capable of using multiple IRC bridges to better distribute the load across multiple networks in large deployments.' | translate}}
             </p>
 
             <table class="table table-striped table-condensed table-bordered">
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Enabled Networks</th>
-                    <th class="text-center" style="width: 120px;">Actions</th>
+                    <th>{{'Enabled Networks' | translate}}</th>
+                    <th class="text-center" style="width: 120px;">{{'Actions' | translate}}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngIf="!configurations || configurations.length === 0">
-                    <td colspan="3"><i>No bridge configurations.</i></td>
+                    <td colspan="3"><i>{{'No bridge configurations.' | translate}}</i></td>
                 </tr>
                 <tr *ngFor="let bridge of configurations trackById">
                     <td>
@@ -33,7 +32,7 @@
                     </td>
                     <td *ngIf="!bridge.isOnline" class="error-text" colspan="2">
                         <i class="fa fa-exclamation-triangle"></i>
-                        This bridge is offline or unavailable.
+                        {{'This bridge is offline or unavailable.' | translate}}
                     </td>
                     <td class="text-center" *ngIf="bridge.isOnline">
                         <span class="editButton" (click)="editNetworks(bridge)">
@@ -45,10 +44,10 @@
             </table>
             <button type="button" class="btn btn-success btn-sm" (click)="addModularHostedBridge()"
                     *ngIf="!hasModularBridge">
-                <i class="fa fa-plus"></i> Add matrix.org's bridge
+                <i class="fa fa-plus"></i> {{'Add matrix.org\'s bridge' | translate}}
             </button>
             <button type="button" class="btn btn-success btn-sm" (click)="addSelfHostedBridge()">
-                <i class="fa fa-plus"></i> Add self-hosted bridge
+                <i class="fa fa-plus"></i> {{'Add self-hosted bridge' | translate}}
             </button>
         </div>
     </my-ibox>

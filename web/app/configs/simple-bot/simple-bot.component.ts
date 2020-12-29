@@ -5,6 +5,7 @@ import { ScalarClientApiService } from "../../shared/services/scalar/scalar-clie
 import { IntegrationsApiService } from "../../shared/services/integrations/integrations-api.service";
 import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { DialogRef } from "ngx-modialog";
+import { TranslateService } from "@ngx-translate/core";
 
 export class SimpleBotConfigDialogContext extends BSModalContext {
     public bot: FE_SimpleBot;
@@ -24,7 +25,9 @@ export class ConfigSimpleBotComponent {
     constructor(public dialog: DialogRef<SimpleBotConfigDialogContext>,
                 private toaster: ToasterService,
                 private scalar: ScalarClientApiService,
-                private integrationsApi: IntegrationsApiService) {
+                private integrationsApi: IntegrationsApiService,
+                public translate: TranslateService) {
+        this.translate = translate;
         this.bot = dialog.context.bot;
         this.roomId = dialog.context.roomId;
 
@@ -41,8 +44,11 @@ export class ConfigSimpleBotComponent {
         this.bot._isUpdating = true;
         promise.then(() => {
             this.bot._isUpdating = false;
-            if (this.bot._inRoom) this.toaster.pop("success", this.bot.displayName + " was invited to the room");
-            else this.toaster.pop("success", this.bot.displayName + " was removed from the room");
+            if (this.bot._inRoom) {
+                this.translate.get('was invited to the room').subscribe((res: string) => {this.toaster.pop("success", this.bot.displayName + res); });
+            } else {
+                this.translate.get('was removed from the room').subscribe((res: string) => {this.toaster.pop("success", this.bot.displayName + res); });
+            }
         }).catch(err => {
             this.bot._inRoom = !this.bot._inRoom; // revert the status change
             this.bot._isUpdating = false;
@@ -51,9 +57,8 @@ export class ConfigSimpleBotComponent {
             let errorMessage = null;
             if (err.json) errorMessage = err.json().error;
             if (err.response && err.response.error) errorMessage = err.response.error.message;
-            if (!errorMessage) errorMessage = "Could not update integration status";
-
-            this.toaster.pop("error", errorMessage);
+            if (!errorMessage) errorMessage = "";
+            this.translate.get('Could not update integration status').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 }

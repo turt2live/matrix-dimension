@@ -4,6 +4,7 @@ import { FE_StickerPack } from "../../shared/models/integration";
 import { AdminStickersApiService } from "../../shared/services/admin/admin-stickers-api-service";
 import { Modal, overlayConfigFactory } from "ngx-modialog";
 import { AdminStickerPackPreviewComponent, StickerPackPreviewDialogContext } from "./preview/preview.component";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "./sticker-packs.component.html",
@@ -19,7 +20,9 @@ export class AdminStickerPacksComponent implements OnInit {
 
     constructor(private adminStickers: AdminStickersApiService,
                 private toaster: ToasterService,
-                private modal: Modal) {
+                private modal: Modal,
+                public translate: TranslateService) {
+        this.translate = translate;
     }
 
     public ngOnInit() {
@@ -28,7 +31,7 @@ export class AdminStickerPacksComponent implements OnInit {
             this.isLoading = false;
         }).catch(err => {
             console.error(err);
-            this.toaster.pop("error", "Failed to load sticker packs");
+            this.translate.get('Failed to load sticker packs').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 
@@ -37,12 +40,12 @@ export class AdminStickerPacksComponent implements OnInit {
         this.isUpdating = true;
         this.adminStickers.togglePack(pack.id, pack.isEnabled).then(() => {
             this.isUpdating = false;
-            this.toaster.pop("success", "Sticker pack updated");
+            this.translate.get('Sticker pack updated').subscribe((res: string) => {this.toaster.pop("success", res); });
         }).catch(err => {
             console.error(err);
             pack.isEnabled = !pack.isEnabled; // revert change
             this.isUpdating = false;
-            this.toaster.pop("error", "Error updating sticker pack");
+            this.translate.get('Error updating sticker pack').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 
@@ -61,11 +64,11 @@ export class AdminStickerPacksComponent implements OnInit {
             this.isImporting = false;
             this.tgUrl = "";
             this.packs.push(pack);
-            this.toaster.pop("success", "Telegram sticker pack imported");
+            this.translate.get('Telegram sticker pack imported').subscribe((res: string) => {this.toaster.pop("success", res); });
         }).catch(err => {
             console.error(err);
             this.isImporting = false;
-            this.toaster.pop("error", "Error importing sticker pack");
+            this.translate.get('Error importing sticker pack').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 

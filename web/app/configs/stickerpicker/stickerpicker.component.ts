@@ -5,6 +5,7 @@ import { ToasterService } from "angular2-toaster";
 import { MediaService } from "../../shared/services/media.service";
 import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
 import { WIDGET_STICKER_PICKER } from "../../shared/models/widget";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "stickerpicker.component.html",
@@ -27,7 +28,9 @@ export class StickerpickerComponent implements OnInit {
                 private media: MediaService,
                 private scalarClient: ScalarClientApiService,
                 private toaster: ToasterService,
-                private window: Window) {
+                private window: Window,
+                public translate?: TranslateService) {
+        this.translate = translate;
         this.isLoading = true;
         this.isUpdating = false;
     }
@@ -38,7 +41,7 @@ export class StickerpickerComponent implements OnInit {
             this.isLoading = false;
         } catch (e) {
             console.error(e);
-            this.toaster.pop("error", "Failed to load sticker packs");
+            this.translate.get('Failed to load sticker packs').subscribe((res: string) => {this.toaster.pop("error", res); });
         }
 
         this.stickerApi.getConfig().then(config => {
@@ -55,12 +58,12 @@ export class StickerpickerComponent implements OnInit {
             this.packs.splice(0, 0, pack);
             this.packUrl = "";
             this.isImporting = false;
-            this.toaster.pop("success", "Stickerpack added");
+            this.translate.get('Stickerpack added').subscribe((res: string) => {this.toaster.pop("success", res); });
             this.addWidget();
         }).catch(err => {
             console.error(err);
             this.isImporting = false;
-            this.toaster.pop("error", "Error adding stickerpack");
+            this.translate.get('Error adding stickerpack').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 
@@ -73,14 +76,13 @@ export class StickerpickerComponent implements OnInit {
         this.isUpdating = true;
         this.stickerApi.togglePackSelection(pack.id, pack.isSelected).then(() => {
             this.isUpdating = false;
-            this.toaster.pop("success", "Stickers updated");
-
+            this.translate.get('Stickers updated').subscribe((res: string) => {this.toaster.pop("success", res); });
             if (this.packs.filter(p => p.isSelected).length > 0) this.addWidget();
         }).catch(err => {
             console.error(err);
             pack.isSelected = !pack.isSelected; // revert change
             this.isUpdating = false;
-            this.toaster.pop("error", "Error updating stickers");
+            this.translate.get('Error updating stickers').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 

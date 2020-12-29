@@ -1,24 +1,24 @@
 <div class="dialog">
     <div class="dialog-header">
-        <h4>Jitsi Widget Configuration</h4>
+        <h4>{{'Jitsi Widget Configuration' | translate}}</h4>
     </div>
     <div class="dialog-content">
         <label class="label-block">
-            Jitsi Domain
-            <span class="text-muted ">This is the domain that is used to host the conference.</span>
+            {{'Jitsi Domain' | translate}}
+            <span class="text-muted ">{{'This is the domain that is used to host the conference.' | translate}}</span>
             <input type="text" class="form-control"
                    placeholder="jitsi.riot.im"
                    [(ngModel)]="widget.options.jitsiDomain" [disabled]="isUpdating"/>
         </label>
         <label class="label-block">
-            Use this domain as the default conference domain
-            <span class="text-muted ">Some clients can create widgets that are not compatible with Dimension, making Dimension use jitsi.riot.im by default. By enabling this option, you'll force Dimension to use your Jitsi domain at risk of having clients not respect it.</span>
+            {{'Use this domain as the default conference domain' | translate}}
+            <span class="text-muted ">{{'Some clients can create widgets that are not compatible with Dimension, making Dimension use jitsi.riot.im by default. By enabling this option, you\'ll force Dimension to use your Jitsi domain at risk of having clients not respect it.' | translate}}</span>
             <ui-switch [checked]="widget.options.useDomainAsDefault" size="medium" [disabled]="isUpdating"
                        (change)="toggleForcedJitsi()"></ui-switch>
         </label>
         <label class="label-block">
-            Jitsi Script URL
-            <span class="text-muted ">This is used to create the Jitsi widget. It is normally at /libs/external_api.min.js from your domain.</span>
+            {{'Jitsi Script URL' | translate}}
+            <span class="text-muted ">{{'This is used to create the Jitsi widget. It is normally at /libs/external_api.min.js from your domain.' | translate}}</span>
             <input type="text" class="form-control"
                    placeholder="https://jitsi.riot.im/libs/external_api.min.js"
                    [(ngModel)]="widget.options.scriptUrl" [disabled]="isUpdating"/>
@@ -26,10 +26,10 @@
     </div>
     <div class="dialog-footer">
         <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm">
-            <i class="far fa-save"></i> Save
+            <i class="far fa-save"></i> {{'Save' | translate}}
         </button>
         <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
-            <i class="far fa-times-circle"></i> Cancel
+            <i class="far fa-times-circle"></i> {{'Cancel' | translate}}
         </button>
     </div>
 </div>

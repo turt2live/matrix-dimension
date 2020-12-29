@@ -1,22 +1,22 @@
 <div class="dialog">
     <div class="dialog-header">
-        <h4>go-neb appservice configuration</h4>
+        <h4>{{'go-neb appservice configuration' | translate}}</h4>
     </div>
     <div class="dialog-content" *ngIf="isLoading">
         <my-spinner></my-spinner>
     </div>
     <div class="dialog-content" *ngIf="!isLoading">
-        Copy and paste this configuration to <code>appservice-{{appservice.id}}.yaml</code> on your homeserver and
-        register it as an application service.
+        {{'Copy and paste this configuration to' | translate}} <code>appservice-{{appservice.id}}.yaml</code>
+        {{'on your homeserver and register it as an application service.' | translate}}
         <br/>
         <pre>{{appserviceConfig}}</pre>
     </div>
     <div class="dialog-footer" *ngIf="!isLoading">
         <button type="button" (click)="dialog.close()" title="save" class="btn btn-primary btn-sm">
-            <i class="far fa-times-circle"></i> Close
+            <i class="far fa-times-circle"></i> {{'Close' | translate}}
         </button>
         <button type="button" (click)="test()" title="close" class="btn btn-secondary btn-sm">
-            <i class="fa fa-exchange-alt"></i> Test Configuration
+            <i class="fa fa-exchange-alt"></i> {{'Test Configuration' | translate}}
         </button>
     </div>
 </div>

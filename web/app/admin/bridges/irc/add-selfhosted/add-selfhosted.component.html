@@ -1,13 +1,13 @@
 <div class="dialog">
     <div class="dialog-header">
-        <h4>Add a new self-hosted IRC Bridge</h4>
+        <h4>{{'Add a new self-hosted IRC Bridge' | translate}}</h4>
     </div>
     <div class="dialog-content">
-        <p>Self-hosted IRC bridges must have <code>provisioning</code> enabled in the configuration.</p>
+        <p>{{'Self-hosted IRC bridges must have' | translate}}<code>{{'provisioning' | translate}}</code> {{'enabled in the configuration.' | translate}}</p>
 
         <label class="label-block">
-            Provisioning URL
-            <span class="text-muted ">The provisioning URL for the bridge. This is usually the same as the URL given in the registration. This API is not authenticated and should be treated with caution.</span>
+            {{'Provisioning URL' | translate}}
+            <span class="text-muted ">{{'The provisioning URL for the bridge. This is usually the same as the URL given in the registration. This API is not authenticated and should be treated with caution.' | translate}}</span>
             <input type="text" class="form-control"
                    placeholder="http://localhost:9999"
                    [(ngModel)]="provisionUrl" [disabled]="isSaving"/>
@@ -15,10 +15,10 @@
     </div>
     <div class="dialog-footer">
         <button type="button" (click)="add()" title="close" class="btn btn-primary btn-sm">
-            <i class="far fa-save"></i> Save
+            <i class="far fa-save"></i> {{'Save' | translate}}
         </button>
         <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
-            <i class="far fa-times-circle"></i> Cancel
+            <i class="far fa-times-circle"></i> {{'Cancel' | translate}}
         </button>
     </div>
 </div>

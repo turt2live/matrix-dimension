@@ -1,11 +1,11 @@
 <ul class="adminNav">
-    <li (click)="goto('')" [ngClass]="[isActive('', true) ? 'active' : '']">Dashboard</li>
-    <li (click)="goto('widgets')" [ngClass]="[isActive('widgets') ? 'active' : '']">Widgets</li>
-    <li (click)="goto('neb')" [ngClass]="[isActive('neb') ? 'active' : '']">go-neb</li>
-    <li (click)="goto('custom-bots')" [ngClass]="[isActive('custom-bots') ? 'active' : '']">Custom Bots</li>
-    <li (click)="goto('bridges')" [ngClass]="[isActive('bridges') ? 'active' : '']">Bridges</li>
-    <li (click)="goto('stickerpacks')" [ngClass]="[isActive('stickerpacks') ? 'active' : '']">Sticker Packs</li>
-    <li (click)="goto('terms')" [ngClass]="[isActive('terms') ? 'active' : '']">Terms of Service</li>
+    <li (click)="goto('')" [ngClass]="[isActive('', true) ? 'active' : '']">{{'Dashboard' | translate}}</li>
+    <li (click)="goto('widgets')" [ngClass]="[isActive('widgets') ? 'active' : '']">{{'Widgets' | translate}}</li>
+    <li (click)="goto('neb')" [ngClass]="[isActive('neb') ? 'active' : '']">{{'go-neb' | translate}}</li>
+    <li (click)="goto('custom-bots')" [ngClass]="[isActive('custom-bots') ? 'active' : '']">{{'Custom Bots' | translate}}</li>
+    <li (click)="goto('bridges')" [ngClass]="[isActive('bridges') ? 'active' : '']">{{'Bridges' | translate}}</li>
+    <li (click)="goto('stickerpacks')" [ngClass]="[isActive('stickerpacks') ? 'active' : '']">{{'Sticker Packs' | translate}}</li>
+    <li (click)="goto('terms')" [ngClass]="[isActive('terms') ? 'active' : '']">{{'Terms of Service' | translate}}</li>
 </ul>
 <span class="version">{{ version }}</span>
 

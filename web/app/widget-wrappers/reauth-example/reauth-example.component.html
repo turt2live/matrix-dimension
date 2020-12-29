@@ -1,14 +1,14 @@
 <div *ngIf="!hasOpenId" class="reauth-container">
     <button type="button" (click)="onReauthStart()" class="btn btn-primary" [disabled]="busy">
-        Click to start OpenID auth
+        {{'Click to start OpenID auth' | translate}}
     </button>
 </div>
 <div *ngIf="hasOpenId" class="reauth-container">
-    <p>User ID: {{userId}}</p>
+    <p>{{'User ID:' | translate}} {{userId}}</p>
 </div>
 <div class="reauth-container">
     <p>{{stateMessage}}</p>
-    <p *ngIf="blocked">You have blocked this widget from receiving credentials.</p>
-    <p *ngIf="error">An error has occurred - see logs for details</p>
+    <p *ngIf="blocked">{{'You have blocked this widget from receiving credentials.' | translate}}</p>
+    <p *ngIf="error">{{'An error has occurred - see logs for details' | translate}}</p>
     <small>Widget ID: {{widgetId}}</small>
 </div>

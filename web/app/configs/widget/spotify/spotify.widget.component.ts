@@ -1,6 +1,7 @@
 import { DISABLE_AUTOMATIC_WRAPPING, WidgetComponent } from "../widget.component";
 import { EditableWidget, WIDGET_SPOTIFY } from "../../../shared/models/widget";
 import { Component } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "spotify.widget.component.html",
@@ -8,8 +9,8 @@ import { Component } from "@angular/core";
 })
 export class SpotifyWidgetConfigComponent extends WidgetComponent {
 
-    constructor() {
-        super(WIDGET_SPOTIFY, "Spotify", DISABLE_AUTOMATIC_WRAPPING, "spotify");
+    constructor(public translate: TranslateService) {
+        super(WIDGET_SPOTIFY, "Spotify", DISABLE_AUTOMATIC_WRAPPING, translate,"spotify");
     }
 
     protected OnNewWidgetPrepared(widget: EditableWidget): void {

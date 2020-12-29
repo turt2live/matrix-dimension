@@ -4,6 +4,7 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { FE_IrcBridge } from "../../../../shared/models/irc";
 import { AdminIrcApiService } from "../../../../shared/services/admin/admin-irc-api.service";
+import { TranslateService } from "@ngx-translate/core";
 
 export class IrcNetworksDialogContext extends BSModalContext {
     public bridge: FE_IrcBridge;
@@ -29,7 +30,9 @@ export class AdminIrcBridgeNetworksComponent implements ModalComponent<IrcNetwor
 
     constructor(public dialog: DialogRef<IrcNetworksDialogContext>,
                 private ircApi: AdminIrcApiService,
-                private toaster: ToasterService) {
+                private toaster: ToasterService,
+                public translate: TranslateService) {
+        this.translate = translate;
         this.bridge = dialog.context.bridge;
 
         const networkIds = Object.keys(this.bridge.availableNetworks);
@@ -51,13 +54,13 @@ export class AdminIrcBridgeNetworksComponent implements ModalComponent<IrcNetwor
         this.isUpdating = true;
         this.ircApi.setNetworkEnabled(this.bridge.id, network.id, network.isEnabled).then(() => {
             this.isUpdating = false;
-            this.toaster.pop("success", "Network " + (network.isEnabled ? "enabled" : "disabled"));
+            this.translate.get(['Enabled', 'disabled']).subscribe((res: string) => {this.toaster.pop("success", "Network " + (network.isEnabled ? res[0] : res[1])); });
         }).catch(err => {
             console.error(err);
             this.isUpdating = false;
             network.isEnabled = !network.isEnabled;
             this.bridge.availableNetworks[network.id].isEnabled = network.isEnabled;
-            this.toaster.pop("error", "Failed to update network");
+            this.translate.get('Failed to update network').subscribe((res: string) => {this.toaster.pop("error", res); });
         });
     }
 }
