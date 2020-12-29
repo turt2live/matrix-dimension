@@ -43,6 +43,7 @@
 
   .sticker-picker {
     margin: 15px 15px 30px;
+    padding-bottom: 40px;
 
     .sticker-pack {
       .header {
@@ -90,6 +91,34 @@
           background-color: themed(stickerPickerStickerBgColor);
           box-shadow: 0 2px 6px themed(stickerPickerShadowColor);
         }
+      }
+    }
+
+    .sticker-pack-list {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: themed(stickerPickerControlBgColor);
+      border-top: 1px solid themed(stickerPickerShadowColor);
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 1px 15px;
+
+      .sticker-pack-list-item {
+        display: inline-block;
+        cursor: pointer;
+        padding: 0 3px;
+      }
+
+      .sticker-pack-list-config {
+        display: inline-block;
+        cursor: pointer;
+        height: 40px;
+        width: 40px;
+        padding: 3px;
+        text-align: center;
+        vertical-align: middle;
       }
     }
   }

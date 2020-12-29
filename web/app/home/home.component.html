@@ -16,8 +16,8 @@
             <div class="info-box try-dimension shadowed">
                 <h3>Try it out or <a href="https://github.com/turt2live/matrix-dimension#running-your-own" target="_blank">run your own</a></h3>
                 <p>
-                    Visit <a href="https://t2bot.io/riot" target="_blank">t2bot.io/riot</a> and log in with your Matrix account
-                    or point your Riot <code>config.json</code> at our servers:
+                    Visit <a href="https://element.t2host.io" target="_blank">element.t2host.io</a> and log in with your Matrix account
+                    or point your Element <code>config.json</code> at our servers:
                 </p>
                 <pre>{{ integrationsConfig }}</pre>
             </div>
@@ -68,6 +68,10 @@
                 <div class="integration">
                     <img src="/img/avatars/googlecalendar.png">
                     <span>Google Calendar</span>
+                </div>
+                <div class="integration">
+                    <img src="/img/avatars/bigbluebutton.png">
+                    <span>BigBlueButton</span>
                 </div>
                 <div class="integration">
                     <img src="/img/avatars/customwidget.png">
@@ -220,19 +224,19 @@
                 for news and updates. Don't forget to star the repository on
                 <a href="https://github.com/turt2live/matrix-dimension" target="_blank">GitHub</a>.
             </p>
-            <p>Here's the configuration options you'll need to update in your Riot <code>config.json</code>:</p>
+            <p>Here's the configuration options you'll need to update in your Element <code>config.json</code>:</p>
             <pre>{{ integrationsConfig }}</pre>
 
             <h4>Configuring integrations</h4>
             <p>
                 If everything is set up correctly, you'll be able to access the admin area of Dimension by clicking
-                the 3x3 grid in the top right of any room in Riot. The gear icon (<i class="fa fa-cog"></i>) in the
+                the 3x3 grid in the top right of any room in Element. The gear icon (<i class="fa fa-cog"></i>) in the
                 top right is where you can configure your bots, bridges, and widgets.
             </p>
 
             <h4>"Could not connect to integrations server" error</h4>
             <p>
-                When Riot cannot reach Dimension or Dimension is unable to reach your homeserver an error saying "Could not
+                When Element cannot reach Dimension or Dimension is unable to reach your homeserver an error saying "Could not
                 contact integrations
                 server" shows up in every room. Before visiting us in <a href="https://matrix.to/#/#dimension:t2bot.io" target="_blank">#dimension:t2bot.io</a>
                 on Matrix, here's a few things to check:

@@ -1,4 +1,4 @@
-import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
+import { Context, GET, Path, PathParam, POST, DELETE, Security, ServiceContext } from "typescript-rest";
 import StickerPack from "../../db/models/StickerPack";
 import { ApiError } from "../ApiError";
 import { DimensionStickerService, MemoryStickerPack } from "../dimension/DimensionStickerService";
@@ -49,6 +49,19 @@ export class AdminStickerService {
         return {}; // 200 OK
     }
 
+    @DELETE
+    @Path("packs/:id")
+    @Security([ROLE_ADMIN])
+    public async removePack(@PathParam("id") packId: number): Promise<any> {
+        const pack = await StickerPack.findByPk(packId);
+        if (!pack) throw new ApiError(404, "Sticker pack not found");
+
+        await pack.destroy();
+        Cache.for(CACHE_STICKERS).clear();
+
+        return {}; // 200 OK
+    }
+
     @POST
     @Path("packs/import/telegram")
     @Security([ROLE_USER, ROLE_ADMIN])
@@ -85,16 +98,18 @@ export class AdminStickerService {
             for (const tgSticker of tgPack.stickers) {
                 LogService.info("AdminStickerService", "Importing sticker from " + tgSticker.url);
                 const buffer = await mx.downloadFromUrl(tgSticker.url);
-                const png = await sharp(buffer).resize({
-                    width: 512,
-                    height: 512,
+                const image = await sharp(buffer);
+                const metadata = await image.metadata();
+                const png = await image.resize({
+                    width: metadata.width,
+                    height: metadata.height,
                     fit: 'contain',
                     background: 'rgba(0,0,0,0)',
                 }).png().toBuffer();
                 const mxc = await mx.upload(png, "image/png");
                 const serverName = mxc.substring("mxc://".length).split("/")[0];
                 const contentId = mxc.substring("mxc://".length).split("/")[1];
-                const thumbMxc = await mx.uploadFromUrl(await mx.getThumbnailUrl(serverName, contentId, 512, 512, "scale", false), "image/png");
+                const thumbMxc = await mx.uploadFromUrl(await mx.getThumbnailUrl(serverName, contentId, metadata.width, metadata.height, "scale", false), "image/png");
 
                 stickers.push(await Sticker.create({
                     packId: pack.id,
@@ -102,8 +117,8 @@ export class AdminStickerService {
                     description: tgSticker.emoji,
                     imageMxc: mxc,
                     thumbnailMxc: thumbMxc,
-                    thumbnailWidth: 512,
-                    thumbnailHeight: 512,
+                    thumbnailWidth: metadata.width,
+                    thumbnailHeight: metadata.height,
                     mimetype: "image/png",
                 }));
 

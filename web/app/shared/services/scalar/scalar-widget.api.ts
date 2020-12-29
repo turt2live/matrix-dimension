@@ -68,7 +68,7 @@ export class ScalarWidgetApi {
 
     public static sendSetAlwaysOnScreen(alwaysVisible: boolean): void {
         ScalarWidgetApi.callAction("set_always_on_screen", {
-            // Send the value here and in data due to a Riot bug.
+            // Send the value here and in data due to a Element bug.
             data: {
                 value: alwaysVisible,
             },

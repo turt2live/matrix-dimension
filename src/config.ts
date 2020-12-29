@@ -17,6 +17,7 @@ export interface DimensionConfig {
     database: {
         file: string;
         botData: string;
+        uri: string;
     };
     admins: string[];
     goneb: {

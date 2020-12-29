@@ -118,6 +118,9 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
 import { AdminNewEditTermsComponent } from "./admin/terms/new-edit/new-edit.component";
 import { AdminTermsNewEditPublishDialogComponent } from "./admin/terms/new-edit/publish/publish.component";
 import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.component";
+import { BigBlueButtonConfigComponent } from "./configs/widget/bigbluebutton/bigbluebutton.widget.component";
+import { BigBlueButtonWidgetWrapperComponent } from "./widget-wrappers/bigbluebutton/bigbluebutton.component";
+import { BigBlueButtonApiService } from "./shared/services/integrations/bigbluebutton-api.service";
 
 @NgModule({
     imports: [
@@ -147,7 +150,9 @@ import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.compo
         FullscreenButtonComponent,
         VideoWidgetWrapperComponent,
         JitsiWidgetWrapperComponent,
+        BigBlueButtonWidgetWrapperComponent,
         GCalWidgetWrapperComponent,
+        BigBlueButtonConfigComponent,
         RiotHomeComponent,
         IboxComponent,
         ConfigScreenWidgetComponent,
@@ -234,6 +239,7 @@ import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.compo
         AdminStickersApiService,
         MediaService,
         StickerApiService,
+        BigBlueButtonApiService,
         AdminTelegramApiService,
         TelegramApiService,
         AdminWebhooksApiService,

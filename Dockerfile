@@ -1,40 +1,37 @@
-FROM node:10.16.0-alpine
+FROM node:12.16.1-alpine AS builder
 
 LABEL maintainer="Andreas Peters <support@aventer.biz>"
 #Upstream URL: https://git.aventer.biz/AVENTER/docker-matrix-dimension
 
-RUN apk add dos2unix --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ --allow-untrusted
+WORKDIR /home/node/matrix-dimension
 
-RUN apk update && \
-    apk add --no-cache bash gcc python make g++ sqlite && \
-    mkdir /home/node/.npm-global && \
-    mkdir -p /home/node/app 
+RUN mkdir -p /home/node/matrix-dimension
 
-COPY ./docker-entrypoint.sh /
 COPY . /home/node/matrix-dimension
 
-
-RUN chown -R node:node /home/node/app && \
-    chown -R node:node /home/node/.npm-global && \
-    chown -R node:node /home/node/matrix-dimension
+RUN chown -R node /home/node/matrix-dimension
 
 USER node
 
-ENV PATH=/home/node/.npm-global/bin:$PATH
-ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
+RUN npm clean-install && \
+    node /home/node/matrix-dimension/scripts/convert-newlines.js /home/node/matrix-dimension/docker-entrypoint.sh  && \
+    NODE_ENV=production npm run-script build
 
-RUN cd /home/node/matrix-dimension && \
-    npm install -D wd rimraf webpack webpack-command sqlite3 && \
-    NODE_ENV=production npm run-script build:web && npm run-script build:app 
+FROM node:12.16.1-alpine
 
-USER root
+WORKDIR /home/node/matrix-dimension
 
-RUN apk del gcc make g++ && \
-    rm /home/node/matrix-dimension/Dockerfile && \
-    rm /home/node/matrix-dimension/docker-entrypoint.sh && \
-    dos2unix /docker-entrypoint.sh
+COPY --from=builder /home/node/matrix-dimension/docker-entrypoint.sh /
+
+COPY --from=builder /home/node/matrix-dimension/build /home/node/matrix-dimension/build
+COPY --from=builder /home/node/matrix-dimension/package* /home/node/matrix-dimension/
+COPY --from=builder /home/node/matrix-dimension/config /home/node/matrix-dimension/config
+
+RUN chown -R node /home/node/matrix-dimension
 
 USER node
+
+RUN npm clean-install --production
 
 VOLUME ["/data"]
 
@@ -42,6 +39,6 @@ VOLUME ["/data"]
 ENV DIMENSION_DB_PATH=/data/dimension.db
 
 EXPOSE 8184
-#CMD ["/bin/sh"]
+# CMD ["/bin/sh"]
 ENTRYPOINT ["/docker-entrypoint.sh"]
- 
+

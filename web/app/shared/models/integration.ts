@@ -64,6 +64,11 @@ export interface FE_Sticker {
     };
 }
 
+export interface FE_BigBlueButtonJoin {
+    // The meeting URL the client should load to join the meeting
+    url: string;
+}
+
 export interface FE_StickerConfig {
     enabled: boolean;
     stickerBot: string;
@@ -85,6 +90,12 @@ export interface FE_JitsiWidget extends FE_Widget {
         jitsiDomain: string;
         scriptUrl: string;
         useDomainAsDefault: boolean;
+    };
+}
+
+export interface FE_BigBlueButtonWidget extends FE_Widget {
+    options: {
+        conferenceUrl: string;
     };
 }
 

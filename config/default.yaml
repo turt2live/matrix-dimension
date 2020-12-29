@@ -30,7 +30,7 @@ homeserver:
   accessToken: "something"
 
 # These users can modify the integrations this Dimension supports.
-# To access the admin interface, open Dimension in Riot and click the settings icon.
+# To access the admin interface, open Dimension in Element and click the settings icon.
 admins:
   - "@someone:domain.com"
 

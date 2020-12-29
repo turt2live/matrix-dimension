@@ -1,6 +1,6 @@
-# Riot Widgets
+# Element Widgets
 
-Riot uses some special interaction with the integration manager to make for a clean user experience. 
+Element uses some special interaction with the integration manager to make for a clean user experience.
 
 
 ### Edit Widget button
