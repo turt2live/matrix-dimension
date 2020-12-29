@@ -7,7 +7,11 @@
             <h3>Jitsi Video Conference</h3>
             <button type="button" (click)="joinConference()" class="btn btn-primary btn-large">
                 Join Conference
-            </button>
+            </button><br>
+            <label>
+                Start camera:
+                <input type="checkbox" name="toggleVideo" [(ngModel)]="toggleVideo" />
+            </label>
         </div>
     </div>
 </div>

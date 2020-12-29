@@ -80,7 +80,6 @@ export class JitsiWidgetConfigComponent extends WidgetComponent {
         const jitsiUrl = url.parse(widget.dimension.newData.conferenceUrl);
         widget.dimension.newData.domain = jitsiUrl.host;
         widget.dimension.newData.conferenceId = jitsiUrl.path.substring(1);
-        widget.dimension.newData.isAudioOnly = false;
 
         let widgetQueryString = url.format({
             query: {
