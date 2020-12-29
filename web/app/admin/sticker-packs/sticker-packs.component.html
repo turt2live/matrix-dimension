@@ -52,9 +52,9 @@
                         </span>
                         <ui-switch [checked]="pack.isEnabled" size="small" [disabled]="isUpdating"
                                    (change)="toggleEnabled(pack)"></ui-switch>
-						<span *ngIf="!pack.isEnabled && !isUpdating" class="removeButton" title="remove stickerpack" (click)="removePack(pack)">
-							<i class="fa fa-trash"></i>
-						</span>
+                        <span *ngIf="!pack.isEnabled && !isUpdating" class="removeButton" title="remove stickerpack" (click)="removePack(pack)">
+                            <i class="fa fa-trash"></i>
+                        </span>
                     </td>
                 </tr>
                 </tbody>

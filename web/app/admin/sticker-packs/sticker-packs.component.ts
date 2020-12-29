@@ -72,11 +72,12 @@ export class AdminStickerPacksComponent implements OnInit {
     public removePack(pack: FE_StickerPack) {
         this.isUpdating = true;
         this.adminStickers.removePack(pack.id).then(() => {
-            for (let i = 0; i < this.packs.length; ++i)
+            for (let i = 0; i < this.packs.length; ++i) {
                 if (this.packs[i].id === pack.id) {
                     this.packs.splice(i, 1);
                     break;
                 }
+            }
             this.isUpdating = false;
             this.toaster.pop("success", "Sticker pack removed");
         }).catch(err => {
