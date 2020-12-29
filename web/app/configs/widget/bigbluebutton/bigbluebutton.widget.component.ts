@@ -4,6 +4,7 @@ import { Component } from "@angular/core";
 import { FE_BigBlueButtonWidget } from "../../../shared/models/integration";
 import { SessionStorage } from "../../../shared/SessionStorage";
 import * as url from "url";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "bigbluebutton.widget.component.html",
@@ -14,8 +15,8 @@ import * as url from "url";
 export class BigBlueButtonConfigComponent extends WidgetComponent {
     private bigBlueButtonWidget: FE_BigBlueButtonWidget = <FE_BigBlueButtonWidget>SessionStorage.editIntegration;
 
-    constructor() {
-        super(WIDGET_BIGBLUEBUTTON, "BigBlueButton Conference", DISABLE_AUTOMATIC_WRAPPING);
+    constructor(public translate: TranslateService) {
+        super(WIDGET_BIGBLUEBUTTON, "BigBlueButton Conference", DISABLE_AUTOMATIC_WRAPPING, translate);
     }
 
     protected OnWidgetsDiscovered(widgets: EditableWidget[]) {

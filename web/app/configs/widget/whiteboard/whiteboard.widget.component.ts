@@ -5,6 +5,7 @@ import * as url from "url";
 import { SessionStorage } from "../../../shared/SessionStorage";
 import { NameService } from "../../../shared/services/name.service";
 import { FE_WhiteBoardWidget } from "../../../shared/models/integration";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     templateUrl: "whiteboard.widget.component.html",
@@ -13,8 +14,8 @@ import { FE_WhiteBoardWidget } from "../../../shared/models/integration";
 export class WhiteboardWidgetComponent extends WidgetComponent {
     private whiteBoardWidget: FE_WhiteBoardWidget = <FE_WhiteBoardWidget>SessionStorage.editIntegration;
 
-    constructor(private nameService: NameService) {
-        super(WIDGET_WHITEBOARD, "Whiteboard", "generic", "whiteboard", "boardName");
+    constructor(private nameService: NameService, public translate: TranslateService) {
+        super(WIDGET_WHITEBOARD, "Whiteboard", "generic", translate, "whiteboard", "boardName");
     }
     protected OnWidgetsDiscovered(widgets: EditableWidget[]): void {
         console.log(widgets);

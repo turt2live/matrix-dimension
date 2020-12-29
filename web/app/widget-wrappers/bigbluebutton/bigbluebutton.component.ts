@@ -7,6 +7,7 @@ import { CapableWidget } from "../capable-widget";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { BigBlueButtonApiService } from "../../shared/services/integrations/bigbluebutton-api.service";
 import { FE_BigBlueButtonJoin } from "../../shared/models/integration";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     selector: "my-bigbluebutton-widget-wrapper",
@@ -52,12 +53,13 @@ export class BigBlueButtonWidgetWrapperComponent extends CapableWidget implement
     constructor(activatedRoute: ActivatedRoute,
                 private bigBlueButtonApi: BigBlueButtonApiService,
                 private widgetApi: WidgetApiService,
-                private sanitizer: DomSanitizer) {
+                private sanitizer: DomSanitizer,
+                public translate: TranslateService) {
         super();
         this.supportsAlwaysOnScreen = true;
 
         let params: any = activatedRoute.snapshot.queryParams;
-        
+
         console.log("BigBlueButton: Given greenlight url: " + params.conferenceUrl);
 
         this.conferenceUrl = params.conferenceUrl;
@@ -71,7 +73,7 @@ export class BigBlueButtonWidgetWrapperComponent extends CapableWidget implement
     public ngOnInit() {
         super.ngOnInit();
     }
-    
+
     public onIframeLoad() {
         if (this.inMeeting) {
             // The meeting has ended and we've come back full circle
