@@ -24,7 +24,7 @@ export class WhiteboardWidgetComponent extends WidgetComponent {
                 const boardName = parsedUrl.query["boardName"];
 
                 // Set the new URL so that it unpacks correctly
-                widget.url = `https://dev-whiteboard.nordeck.net/?whiteboardid=${boardName}`;
+                widget.url = `https://cloud13.de/?whiteboardid=${boardName}`;
             }
         }
     }
@@ -32,7 +32,7 @@ export class WhiteboardWidgetComponent extends WidgetComponent {
     protected OnNewWidgetPrepared(widget: EditableWidget): void {
         const name = this.nameService.getHumanReadableName();
 
-        let template = "https://dev-whiteboard.nordeck.net/?whiteboardid=$roomId_$boardName";
+        let template = "https://cloud13.de/?whiteboardid=$roomId_$boardName";
         if (this.whiteBoardWidget.options && this.whiteBoardWidget.options.defaultUrl) {
             template = this.whiteBoardWidget.options.defaultUrl;
         }
