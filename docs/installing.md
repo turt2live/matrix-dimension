@@ -62,7 +62,7 @@ it yourself.
 If you're using Docker, create a directory at `/etc/dimension` (or wherever you'd like - just remember
 where it is!).
 
-To build Dimension yourself, you'll need Node 10, npm 6, and 2-4gb of RAM. The following steps are enough
+To build Dimension yourself, you'll need Node 10+, npm 6+, and 2-4gb of RAM. The following steps are enough
 to get you started:
 ```bash
 # Download dimension
