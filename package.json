@@ -13,7 +13,9 @@
     "build:app": "rimraf build/app && tsc -p tsconfig-app.json",
     "lint": "npm run-script lint:app && npm run-script lint:web",
     "lint:app": "tslint --project ./tsconfig-app.json -t stylish",
-    "lint:web": "tslint --project ./tsconfig.json -t stylish"
+    "lint:web": "tslint --project ./tsconfig.json -t stylish",
+    "i18n:init": "ngx-translate-extract --input ./web --output ./web/public/assets/i18n/template.json --key-as-default-value --replace --format json",
+    "i18n:extract": "ngx-translate-extract --input ./web --output ./web/public/assets/i18n/en.json --clean --format json"
   },
   "repository": {
     "type": "git",
@@ -72,6 +74,7 @@
     "@angularclass/hmr-loader": "^3.0.4",
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
+    "@biesbjerg/ngx-translate-extract": "^7.0.3",
     "@ckeditor/ckeditor5-angular": "^1.1.0",
     "@ckeditor/ckeditor5-build-classic": "^12.2.0",
     "@fortawesome/fontawesome": "^1.1.8",
