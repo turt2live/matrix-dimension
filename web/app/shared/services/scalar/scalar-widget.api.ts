@@ -41,8 +41,8 @@ export class ScalarWidgetApi {
     public static sendSticker(sticker: FE_Sticker, pack: FE_StickerPack): void {
         ScalarWidgetApi.callAction("m.sticker", {
             data: {
-                description: sticker.description,
                 content: {
+                    body: sticker.description,
                     url: sticker.thumbnail.mxc,
                     info: {
                         mimetype: sticker.image.mimetype,
