@@ -46,13 +46,13 @@ export class ScalarWidgetApi {
                     url: sticker.thumbnail.mxc,
                     info: {
                         mimetype: sticker.image.mimetype,
-                        w: sticker.thumbnail.width / 2,
-                        h: sticker.thumbnail.height / 2,
+                        w: Math.round(sticker.thumbnail.width / 2),
+                        h: Math.round(sticker.thumbnail.height / 2),
                         thumbnail_url: sticker.thumbnail.mxc,
                         thumbnail_info: {
                             mimetype: sticker.image.mimetype,
-                            w: sticker.thumbnail.width / 2,
-                            h: sticker.thumbnail.height / 2,
+                            w: Math.round(sticker.thumbnail.width / 2),
+                            h: Math.round(sticker.thumbnail.height / 2),
                         },
 
                         // This has to be included in the info object so it makes it to the event
