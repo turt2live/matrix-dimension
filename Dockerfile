@@ -7,11 +7,17 @@ WORKDIR /home/node/matrix-dimension
 
 RUN mkdir -p /home/node/matrix-dimension
 
+RUN apk update && \
+    apk add python2 glib-dev make g++ vips-dev libc-dev && \
+    rm -rf /var/lib/apk/* /var/cache/apk/*
+
 COPY . /home/node/matrix-dimension
 
 RUN chown -R node /home/node/matrix-dimension
 
 USER node
+
+ENV CPATH=/usr/include/glib-2.0:/usr/lib/glib-2.0/include/
 
 RUN npm clean-install && \
     node /home/node/matrix-dimension/scripts/convert-newlines.js /home/node/matrix-dimension/docker-entrypoint.sh  && \
@@ -30,6 +36,12 @@ COPY --from=builder /home/node/matrix-dimension/config /home/node/matrix-dimensi
 RUN chown -R node /home/node/matrix-dimension
 
 RUN mkdir /data && chown -R node /data
+
+RUN apk update && \
+    apk add python2 glib-dev make g++ vips-dev libc-dev && \
+    rm -rf /var/lib/apk/* /var/cache/apk/*
+
+ENV CPATH=/usr/include/glib-2.0:/usr/lib/glib-2.0/include/
 
 USER node
 
