@@ -19,6 +19,6 @@ export default class NebIntegrationConfig extends Model<NebIntegrationConfig> {
     @Column
     roomId: string;
 
-    @Column(dataType: DataType.TEXT)
+    @Column(DataType.TEXT)
     jsonContent: string;
 }

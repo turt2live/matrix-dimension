@@ -11,7 +11,7 @@ export default class AppServiceUser extends Model<AppServiceUser> {
     @Column
     id: string;
 
-    @Column(dataType: DataType.TEXT)
+    @Column(DataType.TEXT)
     accessToken: string;
 
     @AllowNull
