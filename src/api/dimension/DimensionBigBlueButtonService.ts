@@ -3,7 +3,7 @@ import * as request from "request";
 import { LogService } from "matrix-js-snippets";
 import { URL } from "url";
 import { BigBlueButtonJoinRequest } from "../../models/Widget";
-import { BigBlueButtonJoinResponse } from "../../models/WidgetResponses";
+import { BigBlueButtonJoinResponse, BigBlueButtonWidgetResponse } from "../../models/WidgetResponses";
 import { AutoWired } from "typescript-ioc/es6";
 import { ApiError } from "../ApiError";
 
@@ -204,4 +204,29 @@ export class DimensionBigBlueButtonService {
         });
     }
 
+    @GET
+    @Path("widget")
+    public async widget(): Promise<BigBlueButtonWidgetResponse|ApiError> {
+        return {
+            "widget_id": "1234",
+            "widget": {
+                "creatorUserId": "@admin:localhost",
+                "id": "1234",
+                "type": "m.custom",
+                "waitForIframeLoad": true,
+                "name": "Livestream / Q&A",
+                "avatar_url": "mxc://fosdem.org/0eea5cb67fbe964399060b10b09a22e45e2226ee",
+                "url": "https://widgets-fosdem.ems.host/widgets/hybrid.html?widgetId=$matrix_widget_id&roomId=$matrix_room_id#displayName=$matrix_display_name&avatarUrl=$matrix_avatar_url&userId=$matrix_user_id&roomId=$matrix_room_id&auth=openidtoken-jwt",
+                "data": {
+                    "title": "Join the conference thingy to ask questions",
+                }
+            },
+            "layout": {
+            "container": "top",
+                "index": 0,
+                "width": 65,
+                "height": 50,
+            }
+        }
+    }
 }
