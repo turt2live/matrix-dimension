@@ -28,6 +28,10 @@ export interface DimensionConfig {
     telegram: {
         botToken: string;
     };
+    bigbluebutton: {
+        apiBaseUrl: string;
+        sharedSecret: string;
+    };
     stickers: {
         enabled: boolean;
         stickerBot: string;

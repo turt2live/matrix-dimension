@@ -5,3 +5,10 @@ export interface BigBlueButtonJoinRequest {
     // The name the user wishes to join the meeting with
     fullName: string;
 }
+
+export interface BigBlueButtonCreateAndJoinMeetingRequest {
+    // The ID of the room that the BBB meeting is a part of
+    roomId: string;
+    // The name the user wishes to join the meeting with
+    fullName: string;
+}

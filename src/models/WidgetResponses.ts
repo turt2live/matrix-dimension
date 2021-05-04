@@ -3,6 +3,11 @@ export interface BigBlueButtonJoinResponse {
     url: string;
 }
 
+export interface BigBlueButtonCreateAndJoinMeetingResponse {
+    // The meeting URL the client should load to join the meeting
+    url: string;
+}
+
 export interface BigBlueButtonWidgetResponse {
     widget_id: string;
     widget: {
@@ -15,6 +20,7 @@ export interface BigBlueButtonWidgetResponse {
         url: string;
         data: {
             title: string;
+            widgetVersion: number;
         }
     };
     layout: {

@@ -30,6 +30,7 @@
     "@types/body-parser": "^1.17.0",
     "@types/node": "^12.0.10",
     "@types/validator": "^10.11.1",
+    "bigbluebutton-api-js": "^2.2.1",
     "body-parser": "^1.19.0",
     "config": "^3.1.0",
     "dns-then": "^0.1.0",
@@ -61,7 +62,8 @@
     "typescript-ioc": "^1.2.5",
     "typescript-rest": "^2.2.0",
     "umzug": "^2.2.0",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "@angular/animations": "^8.0.3",
