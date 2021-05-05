@@ -20,7 +20,6 @@ export interface BigBlueButtonWidgetResponse {
         url: string;
         data: {
             title: string;
-            widgetVersion: number;
         }
     };
     layout: {

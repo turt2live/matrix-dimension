@@ -101,7 +101,7 @@ export interface FE_JitsiWidget extends FE_Widget {
 export interface FE_BigBlueButtonWidget extends FE_Widget {
     options: {
         conferenceUrl: string;
-        widgetVersion: number;
+        createMeeting: boolean;
     };
 }
 

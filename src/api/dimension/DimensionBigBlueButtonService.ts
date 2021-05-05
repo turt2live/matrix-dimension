@@ -2,7 +2,7 @@ import { GET, Path, QueryParam } from "typescript-rest";
 import * as request from "request";
 import { LogService } from "matrix-js-snippets";
 import { URL } from "url";
-import { BigBlueButtonJoinRequest, BigBlueButtonCreateAndJoinMeetingRequest } from "../../models/Widget";
+import { BigBlueButtonJoinRequest } from "../../models/Widget";
 import { BigBlueButtonJoinResponse, BigBlueButtonCreateAndJoinMeetingResponse, BigBlueButtonWidgetResponse } from "../../models/WidgetResponses";
 import { AutoWired } from "typescript-ioc/es6";
 import { ApiError } from "../ApiError";
@@ -173,7 +173,6 @@ export class DimensionBigBlueButtonService {
      * @param {string} qs The query parameters to use with the request.
      * @param {string} body The JSON body of the request
      * @param {boolean} followRedirect Whether to follow redirect responses automatically.
-     * @private
      */
     private async doRequest(
         method: string,
@@ -225,19 +224,17 @@ export class DimensionBigBlueButtonService {
         // Hash the room ID in order to generate a unique widget ID
         const widgetId = sha256(roomId + "bigbluebutton");
 
-        // TODO: Make configurable
-        const widgetTitle = "BigBlueButton Video Conference";
-        const widgetSubTitle = "Join the conference";
-        const widgetAvatarUrl = "mxc://fosdem.org/0eea5cb67fbe964399060b10b09a22e45e2226ee";
+        const widgetName = config.bigbluebutton.widgetName;
+        const widgetTitle = config.bigbluebutton.widgetTitle;
+        const widgetAvatarUrl = config.bigbluebutton.widgetAvatarUrl;
 
         // TODO: What should we put for the creatorUserId? Also make it configurable?
-        const widgetCreatorUserId = "@bobbb:localhost";
-
-        // TODO: Set to configured Dimension publicUrl
-        let widgetUrl = "http://localhost:8082/widgets/bigbluebutton";
+        const widgetCreatorUserId = "@bbb:localhost";
 
         // Add all necessary client variables to the url when loading the widget
-        widgetUrl += "?widgetId=$matrix_widget_id&roomId=$matrix_room_id#displayName=$matrix_display_name&avatarUrl=$matrix_avatar_url&userId=$matrix_user_id&roomId=$matrix_room_id&auth=openidtoken-jwt";
+        const widgetUrl = config.dimension.publicUrl +
+            "/widgets/bigbluebutton" +
+            "?widgetId=$matrix_widget_id&roomId=$matrix_room_id&createMeeting=true&displayName=$matrix_display_name&avatarUrl=$matrix_avatar_url&userId=$matrix_user_id&auth=openidtoken-jwt";
 
         return {
             "widget_id": widgetId,
@@ -246,12 +243,11 @@ export class DimensionBigBlueButtonService {
                 "id": widgetId,
                 "type": "m.custom",
                 "waitForIframeLoad": true,
-                "name": widgetTitle,
+                "name": widgetName,
                 "avatar_url": widgetAvatarUrl,
                 "url": widgetUrl,
                 "data": {
-                    "title": widgetSubTitle,
-                    "widgetVersion": 2,
+                    "title": widgetTitle,
                 }
             },
             "layout": {
@@ -264,9 +260,10 @@ export class DimensionBigBlueButtonService {
     }
 
     @GET
-    @Path("createAndJoinMeeting")
+    @Path("create")
     public async createAndJoinMeeting(
-        @QueryParam("room_id") roomId: string,
+        @QueryParam("roomId") roomId: string,
+        @QueryParam("fullName") fullName: string,
     ): Promise<BigBlueButtonCreateAndJoinMeetingResponse|ApiError> {
         // Check if a meeting already exists for this room...
         LogService.info("BigBlueButton", "Got a meeting create and join request for room: " + roomId);
@@ -275,15 +272,36 @@ export class DimensionBigBlueButtonService {
         LogService.info("BigBlueButton", "Using secret: " + config.bigbluebutton.sharedSecret);
 
         // NOTE: BBB meetings will by default end a minute or two after the last person leaves.
-        const queryParameters = {
+        const createQueryParameters = {
             meetingID: roomId + "bigbluebuttondimension",
+            attendeePW: "a",
+            moderatorPW: "b",
         };
-        const response = await this.makeBBBApiCall("GET", "create", queryParameters, null);
-        LogService.info("BigBlueButton", response);
+
+        // TODO: Contrary to the documentation, one needs to provide a meeting ID, attendee and moderator password in order
+        // for creating meeting to be idempotent. For now we use dummy passwords, though we may want to consider generating
+        // some once we actually start authenticating meetings.
+        const createResponse = await this.makeBBBApiCall("GET", "create", createQueryParameters, null);
+        LogService.info("BigBlueButton", createResponse);
+
+        // Grab the meeting ID and password from the create response
+        const returnedMeetingId = createResponse.meetingID[0];
+        const returnedAttendeePassword = createResponse.attendeePW[0];
+        const joinQueryParameters = {
+            meetingID: returnedMeetingId,
+            password: returnedAttendeePassword,
+            fullName: fullName,
+        }
+
+        // Calculate the checksum for the join URL. We need to do so as a browser would as we're passing this back to a browser
+        const checksum = this.bbbChecksumFromCallNameAndQueryParamaters("join", joinQueryParameters, true);
+
+        // Construct the join URL, which we'll give back to the client, who can then add additional parameters to (or we just do it)
+        const url = `${config.bigbluebutton.apiBaseUrl}/join?${this.queryStringFromObject(joinQueryParameters, true)}&checksum=${checksum}`;
 
         return {
-            url: "https://bla.com",
-        }
+            url: url,
+        };
     }
 
     /**
@@ -292,7 +310,6 @@ export class DimensionBigBlueButtonService {
      * @param {string} apiCallName The name of the API (the last bit of the endpoint) to call. e.g 'create', 'join'.
      * @param {any} queryParameters The query parameters to use in the request.
      * @param {any} body The body of the request.
-     * @private
      * @returns {BigBlueButtonApiResponse} The response to the call.
      */
     private async makeBBBApiCall(
@@ -301,42 +318,69 @@ export class DimensionBigBlueButtonService {
         queryParameters: any,
         body: any,
     ): Promise<any> {
-        // Build the URL path from the api name, query parameter string, shared secret and checksum
-        // Docs: https://docs.bigbluebutton.org/dev/api.html#usage
-
-        LogService.info("BigBlueButton", "given query params: " + queryParameters.meetingID);
-        // Convert the query parameters map into a string
-        // We URL encode each value, as doRequest does so as well. If we don't, our resulting checksum will not match
-        const widgetQueryString = Object.keys(queryParameters).map(k => k + "=" + this.encodeForUrl(queryParameters[k])).join("&");
-        LogService.info("BigBlueButton", "queryString: " + widgetQueryString);
-
-        // SHA1 hash the api name and query parameters to get the checksum, and add it to the set of query parameters
-        queryParameters.checksum = sha1(apiCallName + widgetQueryString + config.bigbluebutton.sharedSecret);
-        LogService.info("BigBlueButton", "hashing: " + apiCallName + widgetQueryString + config.bigbluebutton.sharedSecret);
+        // Compute the checksum needed to authenticate the request (as derived from the configured shared secret)
+        queryParameters.checksum = this.bbbChecksumFromCallNameAndQueryParamaters(apiCallName, queryParameters, false);
 
         // Get the URL host and path using the configured api base and the API call name
         const url = `${config.bigbluebutton.apiBaseUrl}/${apiCallName}`;
-        const qsWithChecksum = Object.keys(queryParameters).map(k => k + "=" + this.encodeForUrl(queryParameters[k])).join("&");
-        LogService.info("BigBlueButton", "final url: " + url + "?" + qsWithChecksum);
 
         // Now make the request!
-        // TODO: Unfortunately doRequest is URLencoding the query parameters which the checksum stuff doesn't take into account.
-        // So we need to disable URL encoding here, or do it when calculating the checksum
         const response = await this.doRequest(method, url, queryParameters, body);
 
         // Parse and return the XML from the response
-        LogService.info("BigBlueButton", response.body);
-        return await parseStringPromise(response.body);
+        // TODO: XML parsing error handling
+        const parsedResponse = await parseStringPromise(response.body);
+
+        // Extract the "response" object
+        return parsedResponse.response;
     }
 
     /**
-     * Encodes a string in the same fashion browsers do (encoding ! and other characters)
-     * @param {string} text The text to encode
+     * Converts an object representing a query string into a checksum suitable for appending to a BBB API call.
+     * Docs: https://docs.bigbluebutton.org/dev/api.html#usage
+     * @param {string} apiCallName The name of the API to call, e.g "create", "join".
+     * @param {any} queryParameters An object representing a set of query parameters represented by keys and values.
+     * @param {boolean} encodeAsBrowser Whether to encode the query string as a browser would.
+     * @returns {string} The checksum for the request.
      */
-    encodeForUrl(text: string) {
-        // use + instead of %20 for space to match what the Java tools do.
-        // encodeURIComponent doesn't escape !'()* but browsers do, so manually escape them.
-        return encodeURIComponent(text).replace(/%20/g, '+').replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
+    private bbbChecksumFromCallNameAndQueryParamaters(apiCallName: string, queryParameters: any, encodeAsBrowser: boolean): string {
+        // Convert the query parameters object into a string
+        // We URL encode each value as a browser would. If we don't, our resulting checksum will not match.
+        const widgetQueryString = this.queryStringFromObject(queryParameters, encodeAsBrowser);
+
+        LogService.info("BigBlueButton", "Built widget string:" + widgetQueryString);
+        LogService.info("BigBlueButton", "Hashing:" + apiCallName + widgetQueryString + config.bigbluebutton.sharedSecret);
+
+        // SHA1 hash the api name and query parameters to get the checksum, and add it to the set of query parameters
+        // TODO: Try Sha256
+        return sha1(apiCallName + widgetQueryString + config.bigbluebutton.sharedSecret);
+    }
+
+    /**
+     * A
+     * @param queryParameters
+     * @param encodeAsBrowser
+     * @private
+     */
+    private queryStringFromObject(queryParameters: any, encodeAsBrowser: boolean): string {
+        return Object.keys(queryParameters).map(k => k + "=" + this.encodeForUrl(queryParameters[k], encodeAsBrowser)).join("&");
+    }
+
+    /**
+     * Encodes a string in the same fashion browsers do (encoding ! and other characters).
+     * @param {string} text The text to encode.
+     * @param {boolean} encodeAsBrowser Whether to encode the query string as a browser would.
+     * @returns {string} The encoded text.
+     */
+    private encodeForUrl(text: string, encodeAsBrowser: boolean): string {
+        let encodedText = encodeURIComponent(text);
+        if (!encodeAsBrowser) {
+            // use + instead of %20 for space to match what the 'request' JavaScript library does do.
+            // encodeURIComponent doesn't escape !'()*, so manually escape them.
+            encodedText = encodedText.replace(/%20/g, '+').replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
+        }
+
+        return encodedText;
     }
 
 }

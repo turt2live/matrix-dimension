@@ -31,6 +31,9 @@ export interface DimensionConfig {
     bigbluebutton: {
         apiBaseUrl: string;
         sharedSecret: string;
+        widgetName: string;
+        widgetTitle: string;
+        widgetAvatarUrl: string;
     };
     stickers: {
         enabled: boolean;
