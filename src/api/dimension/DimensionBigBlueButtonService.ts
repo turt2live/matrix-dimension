@@ -265,18 +265,26 @@ export class DimensionBigBlueButtonService {
         @QueryParam("meetingId") meetingId: string,
         @QueryParam("meetingPassword") password: string,
     ): Promise<BigBlueButtonCreateAndJoinMeetingResponse|ApiError> {
-        // Check if the meeting is actually running. If not, return an error
-        let isMeetingRunningParameters = {
+        // Check if the meeting exists and is running. If not, return an error for each case
+        let getMeetingInfoParameters = {
             meetingID: meetingId,
         }
 
-        const isMeetingRunningResponse = await this.makeBBBApiCall("GET", "isMeetingRunning", isMeetingRunningParameters, null);
-        if (isMeetingRunningResponse.running[0].toLowerCase() !== "true") {
-            // This meeting is not running, inform the user
+        const getMeetingInfoResponse = await this.makeBBBApiCall("GET", "getMeetingInfo", getMeetingInfoParameters, null);
+        LogService.info("BigBlueButton", getMeetingInfoResponse)
+        if (getMeetingInfoResponse.returncode[0] === "FAILED") {
+            // This meeting does not exist, inform the user
             return new ApiError(
                 400,
-                {error: "This meeting does not exist or has ended."},
+                {error: "This meeting does not exist."},
                 "UNKNOWN_MEETING_ID",
+            );
+        } else if (getMeetingInfoResponse.running[0] === "false" && getMeetingInfoResponse.endTime[0] !== "0") {
+            // This meeting did exist, but has ended. Inform the user
+            return new ApiError(
+                400,
+                {error: "This meeting has ended."},
+                "MEETING_HAS_ENDED",
             );
         }
 

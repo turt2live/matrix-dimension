@@ -152,12 +152,18 @@ export class BigBlueButtonWidgetWrapperComponent extends CapableWidget implement
             if ("errorCode" in response) {
                 // This is an instance of ApiError
                 if (response.errorCode === "UNKNOWN_MEETING_ID") {
-                    // It's likely that everyone has left the meeting, and it's been garbage collected.
+                    // This meeting ID is invalid.
                     // Inform the user that they should try and start a new meeting
                     this.statusMessage = "This meeting has ended or otherwise does not exist.<br>Please start a new meeting.";
                     return;
                 }
 
+                if (response.errorCode === "MEETING_HAS_ENDED") {
+                    // It's likely that everyone has left the meeting, and it's been garbage collected.
+                    // Inform the user that they should try and start a new meeting
+                    this.statusMessage = "This meeting has ended.<br>Please start a new meeting.";
+                    return;
+                }
                 // Otherwise this is a generic error
                 this.statusMessage = "An error occurred while loading the meeting";
             }
