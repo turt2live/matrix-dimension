@@ -15,7 +15,7 @@ export class BigBlueButtonApiService extends AuthedApi {
     }
 
     public getJoinUrl(displayName: string, userId: string, avatarUrl: string, meetingId: string, meetingPassword: string): Promise<FE_BigBlueButtonCreateAndJoinMeeting|ApiError> {
-        return this.authedGet<FE_BigBlueButtonCreateAndJoinMeeting|ApiError>(
+        return this.authedPost<FE_BigBlueButtonCreateAndJoinMeeting|ApiError>(
             "/api/v1/dimension/bigbluebutton/getJoinUrl",
             {displayName: displayName, userId: userId, avatarUrl: avatarUrl, meetingId: meetingId, meetingPassword: meetingPassword},
         ).toPromise();

@@ -1,14 +1,15 @@
-export interface BigBlueButtonJoinRequest {
-    // A URL supplied by greenlight, BigBlueButton's nice UI project that is itself
-    // a BigBlueButton client
-    greenlightUrl: string;
-    // The name the user wishes to join the meeting with
-    fullName: string;
-}
-
-export interface BigBlueButtonCreateAndJoinMeetingRequest {
-    // The ID of the room that the BBB meeting is a part of
-    roomId: string;
-    // The name the user wishes to join the meeting with
-    fullName: string;
+export interface BigBlueButtonGetJoinUrlRequest {
+    // The display name of the user attempting to join the meeting.
+    // Will be combined with userId and passed to BigBlueButton.
+    displayName: string;
+    // The user ID of the user attempting to join the meeting.
+    // Will be combined with displayName and passed to BigBlueButton.
+    userId: string;
+    // Optional. The avatar of the user attempting to join the meeting.
+    // Will be passed to BigBlueButton.
+    avatarUrl: string;
+    // The ID of the meeting to join.
+    meetingId: string;
+    // The password to join the meeting with.
+    meetingPassword: string;
 }

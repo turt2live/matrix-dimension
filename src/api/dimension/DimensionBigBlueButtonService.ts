@@ -1,8 +1,8 @@
-import { GET, Path, QueryParam } from "typescript-rest";
+import { GET, POST, Path, QueryParam } from "typescript-rest";
 import * as request from "request";
 import { LogService } from "matrix-js-snippets";
 import { URL } from "url";
-import { BigBlueButtonJoinRequest } from "../../models/Widget";
+import { BigBlueButtonGetJoinUrlRequest } from "../../models/Widget";
 import { BigBlueButtonJoinResponse, BigBlueButtonCreateAndJoinMeetingResponse, BigBlueButtonWidgetResponse } from "../../models/WidgetResponses";
 import { AutoWired } from "typescript-ioc/es6";
 import { ApiError } from "../ApiError";
@@ -112,7 +112,6 @@ export class DimensionBigBlueButtonService {
     @GET
     @Path("join")
     public async join(
-        joinRequest: BigBlueButtonJoinRequest,
         @QueryParam("greenlightUrl") greenlightURL: string,
         @QueryParam("fullName") fullName: string,
     ): Promise<BigBlueButtonJoinResponse|ApiError> {
@@ -122,7 +121,6 @@ export class DimensionBigBlueButtonService {
         LogService.info("BigBlueButton", "URL from client: " + greenlightURL);
         LogService.info("BigBlueButton", "MeetingID: " + greenlightMeetingID);
         LogService.info("BigBlueButton", "Name given from client: " + fullName);
-        LogService.info("BigBlueButton", joinRequest);
 
         // Query the URL the user has given us
         let response = await this.doRequest("GET", greenlightURL);
@@ -254,24 +252,16 @@ export class DimensionBigBlueButtonService {
      * Clients can call this endpoint in order to retrieve a URL that leads to the BigBlueButton API that they can
      * use to join the meeting with. They will need to provide the meeting ID and password which are only available
      * from the widget room state event.
-     * @param {string} displayName The displayname of the user.
-     * @param {string} userId The Matrix User ID of the user.
-     * @param {string} avatarUrl The avatar of the user (mxc://...).
-     * @param {string} meetingId The meeting ID to join.
-     * @param {string} password The password to attempt to join the meeting with.
+     * @param {BigBlueButtonGetJoinUrlRequest} getJoinUrlRequest The body of the request.
      */
-    @GET
+    @POST
     @Path("getJoinUrl")
-    public async createAndJoinMeeting(
-        @QueryParam("displayName") displayName: string,
-        @QueryParam("userId") userId: string,
-        @QueryParam("avatarUrl") avatarUrl: string,
-        @QueryParam("meetingId") meetingId: string,
-        @QueryParam("meetingPassword") password: string,
+    public async getJoinUrl(
+        getJoinUrlRequest: BigBlueButtonGetJoinUrlRequest,
     ): Promise<BigBlueButtonCreateAndJoinMeetingResponse|ApiError> {
         // Check if the meeting exists and is running. If not, return an error for each case
         let getMeetingInfoParameters = {
-            meetingID: meetingId,
+            meetingID: getJoinUrlRequest.meetingId,
         }
 
         const getMeetingInfoResponse = await this.makeBBBApiCall("GET", "getMeetingInfo", getMeetingInfoParameters, null);
@@ -292,16 +282,25 @@ export class DimensionBigBlueButtonService {
             );
         }
 
+        // Construct a fullName parameter from the provided user ID and display name (if provided).
+        // It's important to display the user ID so that users cannot impersonate each other.
+        let fullName: string;
+        if (getJoinUrlRequest.displayName) {
+            fullName = `${getJoinUrlRequest.displayName} (${getJoinUrlRequest.userId})`;
+        } else {
+            fullName = getJoinUrlRequest.userId;
+        }
+
         let joinQueryParameters = {
-            meetingID: meetingId,
-            password: password,
-            fullName: `${displayName} (${userId})`,
-            userID: userId,
+            meetingID: getJoinUrlRequest.meetingId,
+            password: getJoinUrlRequest.meetingPassword,
+            fullName: fullName,
+            userID: getJoinUrlRequest.userId,
         }
 
         // Add an avatar to the join request if the user provided one
-        if (avatarUrl.startsWith("mxc")) {
-            joinQueryParameters["avatarURL"] = this.getHTTPAvatarUrlFromMXCUrl(avatarUrl);
+        if (getJoinUrlRequest.avatarUrl.startsWith("mxc")) {
+            joinQueryParameters["avatarURL"] = this.getHTTPAvatarUrlFromMXCUrl(getJoinUrlRequest.avatarUrl);
         }
 
         // Calculate the checksum for the join URL. We need to do so as a browser would as we're passing this back to a browser
