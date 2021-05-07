@@ -200,11 +200,12 @@ export class DimensionBigBlueButtonService {
         LogService.info("BigBlueButton", createResponse);
 
         // The password users will join with.
-        // TODO: We could give users access to moderate the meeting if we returned createResponse.moderatorPW, but it's
-        // unclear how we pass this to the user without also leaking it to others in the room.
-        // We could have the client request the password and depending on their power level in the room, return either
-        // the attendee or moderator one.
-        const attendeePassword = createResponse.attendeePW[0];
+        // TODO: We currently give users access to moderate the meeting by returning createResponse.moderatorPW instead
+        // of createResponse.attendeePW. The latter lets people join as viewers without any moderator permissions.
+        // Allowing this would likely require saving the moderator password for a meeting in Dimension and authenticating
+        // users by room power level when they call getJoinUrl. Unfortunately, doing would either require us to have a
+        // user in the room or have the user be a Synapse server admin (so that they can see room state).
+        const meetingPassword = createResponse.moderatorPW[0];
 
         // Retrieve the user ID that dimension is running as
         const widgetCreatorUserId = await MatrixStickerBot.getUserId();
@@ -222,7 +223,7 @@ export class DimensionBigBlueButtonService {
             "&userId=$matrix_user_id" +
             // Provide the meeting details in the state event
             `&meetingId=${createResponse.meetingID[0]}` +
-            `&meetingPassword=${attendeePassword}` +
+            `&meetingPassword=${meetingPassword}` +
             "&auth=$openidtoken-jwt";
 
         return {
