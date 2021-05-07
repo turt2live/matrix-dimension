@@ -10,6 +10,7 @@ import { sha256 } from "../../utils/hashing";
 import config from "../../config";
 import { parseStringPromise } from "xml2js";
 import * as randomString from "random-string";
+import { MatrixStickerBot } from "../../matrix/MatrixStickerBot";
 
 /**
  * API for the BigBlueButton widget.
@@ -207,18 +208,21 @@ export class DimensionBigBlueButtonService {
         // the attendee or moderator one.
         const attendeePassword = createResponse.attendeePW[0];
 
-        // TODO: How do we get the user dimension is actually running as?
-        const widgetCreatorUserId = "@dimension:" + config.homeserver.name;
+        // Retrieve the user ID that dimension is running as
+        const widgetCreatorUserId = await MatrixStickerBot.getUserId();
 
         // Add all necessary client variables to the url when loading the widget
         const widgetUrl = config.dimension.publicUrl +
             "/widgets/bigbluebutton" +
             "?widgetId=$matrix_widget_id" +
             "&roomId=$matrix_room_id" +
+            // Indicate that we would like to join a meeting created by Dimension, rather than doing so via
+            // a greenlight URL
             "&createMeeting=true" +
             "&displayName=$matrix_display_name" +
             "&avatarUrl=$matrix_avatar_url" +
             "&userId=$matrix_user_id" +
+            // Provide the meeting details in the state event
             `&meetingId=${createResponse.meetingID[0]}` +
             `&meetingPassword=${attendeePassword}` +
             "&auth=$openidtoken-jwt";
