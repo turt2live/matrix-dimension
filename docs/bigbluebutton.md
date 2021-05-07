@@ -37,15 +37,7 @@ Members in the room will see a BigBlueButton widget appear. They can click "Join
 Fill out the `bigbluebutton` section of Dimension's config file. Both the `apiBaseUrl` and `sharedSecret` fields must be
 set to the values corresponding to your own BigBlueButton server.
 
-Note: Matrix clients can create widgets by sending a widget state event in the room with the appropriate fields. To retrieve
-the necessary content of the state event, clients can
-call `/api/v1/dimension/bigbluebutton/widget_state?roomId=!room:domain`
-on Dimension to retrieve the necessary state. The contents of the `widget` field from the response is what should be
-placed in the `content` of the widget state event. Note that while servicing this call, Dimension will create the
-BigBlueButton meeting. The contents of the state event will then contain all necessary information for clients to join
-the meeting.
-
-Element can be configured to do the above automatically without any client-side changes. Simply add the following
+Element can be configured to ask Dimension to start a meeting without any client-side changes. Simply add the following
 information to the [Client well-known](https://matrix.org/docs/spec/client_server/r0.6.1#get-well-known-matrix-client)
 file of your homeserver:
 
@@ -100,3 +92,127 @@ upstream.
 As mentioned above, BigBlueButton server will automatically remove meetings that everyone has left. Unfortunately we don't
 currently have a way to remove the widget when this happens. Someone will permissions in the room will need to recreate
 the widget and thus create a new meeting.
+
+## Implementation Details
+
+### When using a Greenlight URL
+
+See the explanation [here](https://github.com/turt2live/matrix-dimension/blob/70608c2a96a11953e0bf3bf197bb81d852df801d/src/api/dimension/DimensionBigBlueButtonService.ts#L28-L111).
+
+### When having Dimension create meetings
+
+Matrix clients can create widgets by sending a widget state event in the room with the appropriate fields. To retrieve
+the necessary content of a state event that embeds a BigBlueButton meeting, clients can
+call `GET /api/v1/dimension/bigbluebutton/widget_state?roomId=!room:domain`
+on Dimension to retrieve the necessary json contents for the state event. An example response may look like:
+
+```json
+{
+  "widget_id": "24faa4cfd11d3b915664b7b393866974517014d43e5e682f8c930ec3fbaac337",
+  "widget": {
+    "creatorUserId": "@dimension:localhost",
+    "id": "24faa4cfd11d3b915664b7b393866974517014d43e5e682f8c930ec3fbaac337",
+    "type": "m.custom",
+    "waitForIframeLoad": true,
+    "name": "BigBlueButton Conference",
+    "avatar_url": "mxc://t2bot.io/be1650140620d8bb61a8cf5baeb05f24a734434c",
+    "url": "https://dimension.example.com/widgets/bigbluebutton?widgetId=$matrix_widget_id&roomId=$matrix_room_id&createMeeting=true&displayName=$matrix_display_name&avatarUrl=$matrix_avatar_url&userId=$matrix_user_id&meetingId=GsmiDReG&meetingPassword=dvKIv7EX&auth=$openidtoken-jwt",
+    "data": {
+      "title": "Join the conference"
+    }
+  },
+  "layout": {
+    "container": "top",
+    "index": 0,
+    "width": 65,
+    "height": 50
+  }
+}
+```
+
+The contents of the `widget` dict from the response is what should be placed in the `content` of the widget state
+event. An example widget state event generated from the above looks like:
+
+```json
+{
+  "type": "im.vector.modular.widgets",
+  "sender": "@admin:localhost",
+  "content": {
+    "creatorUserId": "@admin:localhost",
+    "id": "24faa4cfd11d3b915664b7b393866974517014d43e5e682f8c930ec3fbaac337",
+    "type": "m.custom",
+    "waitForIframeLoad": true,
+    "name": "BigBlueButton Conference",
+    "avatar_url": "mxc://t2bot.io/be1650140620d8bb61a8cf5baeb05f24a734434c",
+    "url": "https://dimension.example.com/widgets/bigbluebutton?widgetId=$matrix_widget_id&roomId=$matrix_room_id&createMeeting=true&displayName=$matrix_display_name&avatarUrl=$matrix_avatar_url&userId=$matrix_user_id&meetingId=GsmiDReG&meetingPassword=dvKIv7EX&auth=$openidtoken-jwt",
+    "data": {
+      "title": "Join the conference"
+    },
+    "roomId": "!ZsCMQAoIIHgOlXMzwX:localhost",
+    "eventId": "$2RbnJDUPFIMTDVda_-Z01lyZt30W-bZnw3z7CFIRWKQ"
+  },
+  "state_key": "24faa4cfd11d3b915664b7b393866974517014d43e5e682f8c930ec3fbaac337",
+  "origin_server_ts": 1620386456620,
+  "unsigned": {
+    "age": 96
+  },
+  "event_id": "$2RbnJDUPFIMTDVda_-Z01lyZt30W-bZnw3z7CFIRWKQ",
+  "room_id": "!ZsCMQAoIIHgOlXMzwX:localhost"
+}
+```
+
+While servicing the `/widget_state` call, Dimension will create the BigBlueButton meeting by calling the
+[BigBlueButton `/create` API](https://docs.bigbluebutton.org/dev/api.html#create). We get back a meeting ID and two
+passwords from BigBlueButton: one "attendee" and one "moderator" password. We can pass either of these back to the user,
+and it'll be placed in the widget state event in the room. (For now, we just pass back the moderator password). You'll
+notice that it's included in the `url` field as a query parameter. Those query parameters are passed to the widget when
+it loads, which the widget then uses to populate fields when making subsequent calls to Dimension.
+
+The widget will then use the meetingID, password and some additional user metadata (displayname, userID, avatarURL) to call
+`POST /api/v1/dimension/bigbluebutton/getJoinUrl`. Dimension will craft a URL that the widget can use to call the
+[BigBlueButton `/join` API](https://docs.bigbluebutton.org/dev/api.html#join), and respond with the following:
+
+```json
+{
+  "url": "https://bbb.example.com/bigbluebutton/api/join?meetingID=2QdrCVAl&password=yX2w587M&fullName=bob%20(%40bob%3Aexample.com)&userID=%40bob%3Aexample.com&checksum=fa35ecdf711478423bf5173cb81c5b2e0e9e59bb8779811b614a44645ee94d89"
+}
+```
+
+That URL is embedded and loaded by the widget - joining the meeting.
+
+Note that if everyone in the meeting leaves, the meeting will be garbage-collected automatically server-side by BigBlueButton.
+However the widget will still remain in the room. In this case, if users attempt to join the meeting again, they will be
+informed that a new meeting needs to be created. This works by having Dimension check if a meeting is still running in 
+`/getJoinUrl`. It does so by using the 
+[BigBlueButton `getMeetingInfo` API](https://docs.bigbluebutton.org/dev/api.html#getmeetinginfo) to check that:
+
+* A current or past meeting actually exists with the provided meeting ID - if not, the following will be returned to the
+  widget:
+  
+  ```json
+  {
+    "jsonResponse": {
+      "error": "This meeting does not exist.",
+      "dim_errcode": "UNKNOWN_MEETING_ID",
+      "errcode": "UNKNOWN_MEETING_ID"
+    },
+    "statusCode": 400,
+    "errorCode": "UNKNOWN_MEETING_ID"
+  }
+  ```
+* A meeting exists, but has both `running` as `false` and has an `endTime` other than 0. If both of those are true,
+  then the meeting existed but is no longer running. In that case, the following will be returned to the widget:
+  
+  ```json
+  {
+    "jsonResponse": {
+      "error": "This meeting does not exist.",
+      "dim_errcode": "MEETING_HAS_ENDED",
+      "errcode": "MEETING_HAS_ENDED"
+    },
+    "statusCode": 400,
+    "errorCode": "MEETING_HAS_ENDED"
+  }
+  ```
+  
+Upon receiving either of these, the widget will inform the user with an error message that a new meeting must be created.
