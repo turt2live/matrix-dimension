@@ -11,7 +11,7 @@ Dimension supports embedding BigBlueButton meetings into a Matrix room via widge
   In this instance, Greenlight is acting as a client of BigBlueButton's server-side API, and Dimension is relying on a
   Greenlight URL to allow Matrix users to join a meeting.
 * Alternatively, Dimension can be configured to connect directly to BigBlueButton and create meetings itself. This does
-  require running your own BigBlueButton server which Dimension will have authorization to control. This configuration is
+  require running your own BigBlueButton server which Dimension will need authorization to control. This configuration is
   useful as meetings can be created without needing to leave your Matrix client, as well as sidesteps the need to set up
   Greenlight on your deployment. This method can also be used to allow the 'Video Call' button in Element to start a
   meeting.
