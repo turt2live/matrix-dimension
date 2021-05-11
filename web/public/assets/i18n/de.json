@@ -293,7 +293,7 @@
 	"There are currently no integrations which support encrypted rooms. Sorry about that!": "Derzeit gibt es keine Integrationen, die verschlüsselte Räume unterstützen. Das tut mir leid!",
 	"No integrations available": "Keine Integrationen verfügbar",
 	"This room does not have any compatible integrations. Please contact the server owner if you're seeing this message.": "Dieser Raum hat keine kompatiblen Integrationen. Bitte wenden Sie sich an den Server-Administrator, wenn diese Meldung angezeigt wird.",
-	"BigBlueButton Conference": "",
+	"BigBlueButton Conference": "BigBlueButton Konferenz",
 	"Join Conference": "An der Konferenz teilnehmen",
 	"Sorry, this content cannot be embedded": "Dieser Inhalt kann leider nicht eingebettet werden",
 	"Start camera:": "",

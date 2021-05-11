@@ -27,6 +27,7 @@ export class BigBlueButtonConfigComponent extends WidgetComponent {
 
     protected OnNewWidgetPrepared(widget: EditableWidget): void {
         widget.dimension.newData["conferenceUrl"] = this.bigBlueButtonWidget.options.conferenceUrl;
+        widget.dimension.newData["createMeeting"] = this.bigBlueButtonWidget.options.createMeeting;
     }
 
     protected OnWidgetBeforeAdd(widget: EditableWidget) {
@@ -43,6 +44,7 @@ export class BigBlueButtonConfigComponent extends WidgetComponent {
         let widgetQueryString = url.format({
             query: {
                 "conferenceUrl": "$conferenceUrl",
+                "createMeeting": "$createMeeting",
                 "displayName": "$matrix_display_name",
                 "avatarUrl": "$matrix_avatar_url",
                 "userId": "$matrix_user_id",
@@ -50,5 +52,6 @@ export class BigBlueButtonConfigComponent extends WidgetComponent {
         });
         widgetQueryString = this.decodeParams(widgetQueryString, Object.keys(widget.dimension.newData).map(k => "$" + k));
         widget.dimension.newUrl = window.location.origin + "/widgets/bigbluebutton" + widgetQueryString;
+        console.log("URL ended up as:", widget.dimension.newUrl);
     }
 }

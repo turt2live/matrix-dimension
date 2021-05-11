@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { WidgetApiService } from "../../shared/services/integrations/widget-api.service";
 import { Subscription } from "rxjs/Subscription";
 import { ScalarWidgetApi } from "../../shared/services/scalar/scalar-widget.api";
 import { CapableWidget } from "../capable-widget";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { BigBlueButtonApiService } from "../../shared/services/integrations/bigbluebutton-api.service";
-import { FE_BigBlueButtonJoin } from "../../shared/models/integration";
+import { FE_BigBlueButtonCreateAndJoinMeeting, FE_BigBlueButtonJoin } from "../../shared/models/integration";
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
@@ -24,6 +23,28 @@ export class BigBlueButtonWidgetWrapperComponent extends CapableWidget implement
     private conferenceUrl: string;
     private displayName: string;
     private userId: string;
+    private avatarUrl: string;
+    private meetingId: string;
+    private meetingPassword: string;
+
+    /**
+     *
+     * The name to join the BigBlueButton meeting with. Made up of metadata the client passes to us.
+     */
+    private joinName: string;
+
+    /**
+     * Whether we expect the meeting to be created on command.
+     *
+     * True if we'd like the meeting to be created, false if we have a greenlight URL leading to an existing meeting
+     * and would like Dimension to translate that to a BigBlueButton meeting URL.
+     */
+    private createMeeting: boolean;
+
+    /**
+     * The ID of the room, required if createMeeting is true.
+     */
+    private roomId: string;
 
     /**
      * The poll period in ms while waiting for a meeting to start
@@ -52,7 +73,6 @@ export class BigBlueButtonWidgetWrapperComponent extends CapableWidget implement
 
     constructor(activatedRoute: ActivatedRoute,
                 private bigBlueButtonApi: BigBlueButtonApiService,
-                private widgetApi: WidgetApiService,
                 private sanitizer: DomSanitizer,
                 public translate: TranslateService) {
         super();
@@ -60,11 +80,21 @@ export class BigBlueButtonWidgetWrapperComponent extends CapableWidget implement
 
         let params: any = activatedRoute.snapshot.queryParams;
 
-        console.log("BigBlueButton: Given greenlight url: " + params.conferenceUrl);
-
+        this.roomId = params.roomId;
+        this.createMeeting = params.createMeeting;
         this.conferenceUrl = params.conferenceUrl;
         this.displayName = params.displayName;
+        this.avatarUrl = params.avatarUrl;
+        this.meetingId = params.meetingId;
+        this.meetingPassword = params.meetingPassword;
         this.userId = params.userId || params.email; // Element uses `email` when placing a conference call
+
+        // Create a nick to display in the meeting
+        this.joinName = `${this.displayName} (${this.userId})`;
+
+        console.log("BigBlueButton: should create meeting: " + this.createMeeting);
+        console.log("BigBlueButton: will join as: " + this.joinName);
+        console.log("BigBlueButton: got room ID: " + this.roomId);
 
         // Set the widget ID if we have it
         ScalarWidgetApi.widgetId = params.widgetId;
@@ -101,12 +131,53 @@ export class BigBlueButtonWidgetWrapperComponent extends CapableWidget implement
             this.statusMessage = "Joining conference...";
         }
 
-        // Generate a nick to display in the meeting
-        const joinName = `${this.displayName} (${this.userId})`;
-
         // Make a request to Dimension requesting the join URL
+        if (this.createMeeting) {
+            // Ask Dimension to return a URL for joining a meeting that it created
+            this.joinThroughDimension();
+        } else {
+            // Provide Dimension with a Greenlight URL, which it will transform into
+            // a BBB meeting URL
+            this.joinThroughGreenlightUrl();
+        }
+    }
+
+    // Ask Dimension to create a meeting (or use an existing one) for this room and return the embeddable meeting URL
+    private async joinThroughDimension() {
+        console.log("BigBlueButton: Joining meeting created by Dimension with meeting ID: " + this.meetingId);
+
+        this.bigBlueButtonApi.getJoinUrl(this.displayName, this.userId, this.avatarUrl, this.meetingId, this.meetingPassword).then((response) => {
+            console.log("The response");
+            console.log(response);
+            if ("errorCode" in response) {
+                // This is an instance of ApiError
+                if (response.errorCode === "UNKNOWN_MEETING_ID") {
+                    // This meeting ID is invalid.
+                    // Inform the user that they should try and start a new meeting
+                    this.statusMessage = "This meeting has ended or otherwise does not exist.<br>Please start a new meeting.";
+                    return;
+                }
+
+                if (response.errorCode === "MEETING_HAS_ENDED") {
+                    // It's likely that everyone has left the meeting, and it's been garbage collected.
+                    // Inform the user that they should try and start a new meeting
+                    this.statusMessage = "This meeting has ended.<br>Please start a new meeting.";
+                    return;
+                }
+                // Otherwise this is a generic error
+                this.statusMessage = "An error occurred while loading the meeting";
+            }
+
+            // Retrieve and embed the meeting URL
+            const joinUrl = (response as FE_BigBlueButtonCreateAndJoinMeeting).url;
+            this.embedMeetingWithUrl(joinUrl);
+        });
+    }
+
+    // Hand Dimension a Greenlight URL and receive a translated, embeddable meeting URL in response
+    private joinThroughGreenlightUrl() {
         console.log("BigBlueButton: joining via greenlight url:", this.conferenceUrl);
-        this.bigBlueButtonApi.joinMeeting(this.conferenceUrl, joinName).then((response) => {
+        this.bigBlueButtonApi.joinMeetingWithGreenlightUrl(this.conferenceUrl, this.joinName).then((response) => {
             if ("errorCode" in response) {
                 // This is an instance of ApiError
                 if (response.errorCode === "WAITING_FOR_MEETING_START") {
@@ -122,24 +193,22 @@ export class BigBlueButtonWidgetWrapperComponent extends CapableWidget implement
                 this.statusMessage = "An error occurred while loading the meeting";
             }
 
+            // Retrieve and embed the meeting URL
             const joinUrl = (response as FE_BigBlueButtonJoin).url;
-
-            // Check if the given URL is embeddable
-            this.widgetApi.isEmbeddable(joinUrl).then(result => {
-                this.canEmbed = result.canEmbed;
-                this.statusMessage = null;
-
-                // Embed the return meeting URL, joining the meeting
-                this.embedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(joinUrl);
-
-                // Inform the client that we would like the meeting to remain visible for its duration
-                ScalarWidgetApi.sendSetAlwaysOnScreen(true);
-            }).catch(err => {
-                console.error(err);
-                this.canEmbed = false;
-                this.statusMessage = "Unable to embed meeting";
-            });
+            this.embedMeetingWithUrl(joinUrl);
         });
+    }
+
+    private embedMeetingWithUrl(url: string) {
+        // Hide widget-related UI
+        this.statusMessage = null;
+
+        // Embed the return meeting URL, joining the meeting
+        this.canEmbed = true;
+        this.embedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+
+        // Inform the client that we would like the meeting to remain visible for its duration
+        ScalarWidgetApi.sendSetAlwaysOnScreen(true);
     }
 
     public ngOnDestroy() {
@@ -148,6 +217,8 @@ export class BigBlueButtonWidgetWrapperComponent extends CapableWidget implement
 
     protected onCapabilitiesSent(): void {
         super.onCapabilitiesSent();
+
+        // Don't set alwaysOnScreen until we start a meeting
         ScalarWidgetApi.sendSetAlwaysOnScreen(false);
     }
 

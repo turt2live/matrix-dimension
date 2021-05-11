@@ -1,11 +1,16 @@
-import { GET, Path, QueryParam } from "typescript-rest";
+import { GET, POST, Path, QueryParam } from "typescript-rest";
 import * as request from "request";
 import { LogService } from "matrix-js-snippets";
 import { URL } from "url";
-import { BigBlueButtonJoinRequest } from "../../models/Widget";
-import { BigBlueButtonJoinResponse } from "../../models/WidgetResponses";
+import { BigBlueButtonGetJoinUrlRequest } from "../../models/Widget";
+import { BigBlueButtonJoinResponse, BigBlueButtonCreateAndJoinMeetingResponse, BigBlueButtonWidgetResponse } from "../../models/WidgetResponses";
 import { AutoWired } from "typescript-ioc/es6";
 import { ApiError } from "../ApiError";
+import { sha256 } from "../../utils/hashing";
+import config from "../../config";
+import { parseStringPromise } from "xml2js";
+import * as randomString from "random-string";
+import { MatrixStickerBot } from "../../matrix/MatrixStickerBot";
 
 /**
  * API for the BigBlueButton widget.
@@ -21,6 +26,9 @@ export class DimensionBigBlueButtonService {
     private authenticityTokenRegexp = new RegExp(`name="authenticity_token" value="([^"]+)".*`);
 
     // join handles the request from a client to join a BigBlueButton meeting
+    // via a Greenlight URL. Note that this is no longer the only way to join a
+    // BigBlueButton meeting. See xxx below for the API that bypasses Greenlight
+    // and instead calls the BigBlueButton API directly.
     //
     // The client is expected to send a link created by greenlight, the nice UI
     // that's recommended to be installed on top of BBB, which is itself a BBB
@@ -104,7 +112,6 @@ export class DimensionBigBlueButtonService {
     @GET
     @Path("join")
     public async join(
-        joinRequest: BigBlueButtonJoinRequest,
         @QueryParam("greenlightUrl") greenlightURL: string,
         @QueryParam("fullName") fullName: string,
     ): Promise<BigBlueButtonJoinResponse|ApiError> {
@@ -114,7 +121,6 @@ export class DimensionBigBlueButtonService {
         LogService.info("BigBlueButton", "URL from client: " + greenlightURL);
         LogService.info("BigBlueButton", "MeetingID: " + greenlightMeetingID);
         LogService.info("BigBlueButton", "Name given from client: " + fullName);
-        LogService.info("BigBlueButton", joinRequest);
 
         // Query the URL the user has given us
         let response = await this.doRequest("GET", greenlightURL);
@@ -163,6 +169,238 @@ export class DimensionBigBlueButtonService {
         return {url: joinUrl};
     }
 
+    /**
+     * Clients can call this endpoint in order to retrieve the contents of the widget room state.
+     * This endpoint will create a BigBlueButton meeting and place the returned ID and password in the room state.
+     * @param {string} roomId The ID of the room that the widget will live in.
+     */
+    @GET
+    @Path("widget_state")
+    public async widget(
+        @QueryParam("roomId") roomId: string,
+    ): Promise<BigBlueButtonWidgetResponse|ApiError> {
+        // Hash the room ID in order to generate a unique widget ID
+        const widgetId = sha256(roomId + "bigbluebutton");
+
+        const widgetName = config.bigbluebutton.widgetName;
+        const widgetTitle = config.bigbluebutton.widgetTitle;
+        const widgetAvatarUrl = config.bigbluebutton.widgetAvatarUrl;
+
+        LogService.info("BigBlueButton", "Got a meeting create request for room: " + roomId);
+
+        // NOTE: BBB meetings will by default end a minute or two after the last person leaves.
+        const createQueryParameters = {
+            meetingID: randomString(20),
+            // To help admins link meeting IDs to rooms
+            meta_MatrixRoomID: roomId,
+        };
+
+        // Create a new meeting.
+        const createResponse = await this.makeBBBApiCall("GET", "create", createQueryParameters, null);
+        LogService.info("BigBlueButton", createResponse);
+
+        // The password users will join with.
+        // TODO: We currently give users access to moderate the meeting by returning createResponse.moderatorPW instead
+        // of createResponse.attendeePW. The latter lets people join as viewers without any moderator permissions.
+        // Allowing this would likely require saving the moderator password for a meeting in Dimension and authenticating
+        // users by room power level when they call getJoinUrl. Unfortunately, doing would either require us to have a
+        // user in the room or have the user be a Synapse server admin (so that they can see room state).
+        const meetingPassword = createResponse.moderatorPW[0];
+
+        // Retrieve the user ID that dimension is running as
+        const widgetCreatorUserId = await MatrixStickerBot.getUserId();
+
+        // Add all necessary client variables to the url when loading the widget
+        const widgetUrl = config.dimension.publicUrl +
+            "/widgets/bigbluebutton" +
+            "?widgetId=$matrix_widget_id" +
+            "&roomId=$matrix_room_id" +
+            // Indicate that we would like to join a meeting created by Dimension, rather than doing so via
+            // a greenlight URL
+            "&createMeeting=true" +
+            "&displayName=$matrix_display_name" +
+            "&avatarUrl=$matrix_avatar_url" +
+            "&userId=$matrix_user_id" +
+            // Provide the meeting details in the state event
+            `&meetingId=${createResponse.meetingID[0]}` +
+            `&meetingPassword=${meetingPassword}` +
+            "&auth=$openidtoken-jwt";
+
+        return {
+            "widget_id": widgetId,
+            "widget": {
+                "creatorUserId": widgetCreatorUserId,
+                "id": widgetId,
+                "type": "m.custom",
+                "waitForIframeLoad": true,
+                "name": widgetName,
+                "avatar_url": widgetAvatarUrl,
+                "url": widgetUrl,
+                "data": {
+                    "title": widgetTitle,
+                }
+            },
+            "layout": {
+            "container": "top",
+                "index": 0,
+                "width": 65,
+                "height": 50,
+            }
+        }
+    }
+
+    /**
+     * Clients can call this endpoint in order to retrieve a URL that leads to the BigBlueButton API that they can
+     * use to join the meeting with. They will need to provide the meeting ID and password which are only available
+     * from the widget room state event.
+     * @param {BigBlueButtonGetJoinUrlRequest} getJoinUrlRequest The body of the request.
+     */
+    @POST
+    @Path("getJoinUrl")
+    public async getJoinUrl(
+        getJoinUrlRequest: BigBlueButtonGetJoinUrlRequest,
+    ): Promise<BigBlueButtonCreateAndJoinMeetingResponse|ApiError> {
+        // Check if the meeting exists and is running. If not, return an error for each case
+        let getMeetingInfoParameters = {
+            meetingID: getJoinUrlRequest.meetingId,
+        }
+
+        const getMeetingInfoResponse = await this.makeBBBApiCall("GET", "getMeetingInfo", getMeetingInfoParameters, null);
+        LogService.info("BigBlueButton", getMeetingInfoResponse)
+        if (getMeetingInfoResponse.returncode[0] === "FAILED") {
+            // This meeting does not exist, inform the user
+            return new ApiError(
+                400,
+                {error: "This meeting does not exist."},
+                "UNKNOWN_MEETING_ID",
+            );
+        } else if (getMeetingInfoResponse.running[0] === "false" && getMeetingInfoResponse.endTime[0] !== "0") {
+            // This meeting did exist, but has ended. Inform the user
+            return new ApiError(
+                400,
+                {error: "This meeting has ended."},
+                "MEETING_HAS_ENDED",
+            );
+        }
+
+        // Construct a fullName parameter from the provided user ID and display name (if provided).
+        // It's important to display the user ID so that users cannot impersonate each other.
+        let fullName: string;
+        if (getJoinUrlRequest.displayName) {
+            fullName = `${getJoinUrlRequest.displayName} (${getJoinUrlRequest.userId})`;
+        } else {
+            fullName = getJoinUrlRequest.userId;
+        }
+
+        let joinQueryParameters = {
+            meetingID: getJoinUrlRequest.meetingId,
+            password: getJoinUrlRequest.meetingPassword,
+            fullName: fullName,
+            userID: getJoinUrlRequest.userId,
+        }
+
+        // Add an avatar to the join request if the user provided one
+        if (getJoinUrlRequest.avatarUrl.startsWith("mxc")) {
+            joinQueryParameters["avatarURL"] = this.getHTTPAvatarUrlFromMXCUrl(getJoinUrlRequest.avatarUrl);
+        }
+
+        // Calculate the checksum for the join URL. We need to do so as a browser would as we're passing this back to a browser
+        const checksum = this.bbbChecksumFromCallNameAndQueryParamaters("join", joinQueryParameters, true);
+
+        // Construct the join URL, which we'll give back to the client, who can then add additional parameters to (or we just do it)
+        const url = `${config.bigbluebutton.apiBaseUrl}/join?${this.queryStringFromObject(joinQueryParameters, true)}&checksum=${checksum}`;
+
+        return {
+            url: url,
+        };
+    }
+
+    /**
+     * Make an API call to the configured BBB server instance.
+     * @param {string} method The HTTP method to use for the request.
+     * @param {string} apiCallName The name of the API (the last bit of the endpoint) to call. e.g 'create', 'join'.
+     * @param {any} queryParameters The query parameters to use in the request.
+     * @param {any} body The body of the request.
+     * @returns {any} The response to the call.
+     */
+    private async makeBBBApiCall(
+        method: string,
+        apiCallName: string,
+        queryParameters: any,
+        body: any,
+    ): Promise<any> {
+        // Compute the checksum needed to authenticate the request (as derived from the configured shared secret)
+        queryParameters.checksum = this.bbbChecksumFromCallNameAndQueryParamaters(apiCallName, queryParameters, false);
+
+        // Get the URL host and path using the configured api base and the API call name
+        const url = `${config.bigbluebutton.apiBaseUrl}/${apiCallName}`;
+
+        // Now make the request!
+        const response = await this.doRequest(method, url, queryParameters, body);
+
+        // Parse and return the XML from the response
+        // TODO: XML parsing error handling
+        const parsedResponse = await parseStringPromise(response.body);
+
+        // Extract the "response" object
+        return parsedResponse.response;
+    }
+
+    /**
+     * Converts an object representing a query string into a checksum suitable for appending to a BBB API call.
+     * Docs: https://docs.bigbluebutton.org/dev/api.html#usage
+     * @param {string} apiCallName The name of the API to call, e.g "create", "join".
+     * @param {any} queryParameters An object representing a set of query parameters represented by keys and values.
+     * @param {boolean} encodeAsBrowser Whether to encode the query string as a browser would.
+     * @returns {string} The checksum for the request.
+     */
+    private bbbChecksumFromCallNameAndQueryParamaters(apiCallName: string, queryParameters: any, encodeAsBrowser: boolean): string {
+        // Convert the query parameters object into a string
+        // We URL encode each value as a browser would. If we don't, our resulting checksum will not match.
+        const widgetQueryString = this.queryStringFromObject(queryParameters, encodeAsBrowser);
+
+        LogService.info("BigBlueButton", "Built widget string:" + widgetQueryString);
+        LogService.info("BigBlueButton", "Hashing:" + apiCallName + widgetQueryString + config.bigbluebutton.sharedSecret);
+
+        // Hash the api name and query parameters to get the checksum, and add it to the set of query parameters
+        return sha256(apiCallName + widgetQueryString + config.bigbluebutton.sharedSecret);
+    }
+
+    /**
+     * Converts an object containing keys and values as strings into a string representing URL query parameters.
+     * @param queryParameters
+     * @param encodeAsBrowser
+     * @returns {string} The query parameter object as a string.
+     */
+    private queryStringFromObject(queryParameters: any, encodeAsBrowser: boolean): string {
+        return Object.keys(queryParameters).map(k => k + "=" + this.encodeForUrl(queryParameters[k], encodeAsBrowser)).join("&");
+    }
+
+    /**
+     * Encodes a string in the same fashion browsers do (encoding ! and other characters).
+     * @param {string} text The text to encode.
+     * @param {boolean} encodeAsBrowser Whether to encode the query string as a browser would.
+     * @returns {string} The encoded text.
+     */
+    private encodeForUrl(text: string, encodeAsBrowser: boolean): string {
+        let encodedText = encodeURIComponent(text);
+        if (!encodeAsBrowser) {
+            // use + instead of %20 for space to match what the 'request' JavaScript library does do.
+            // encodeURIComponent doesn't escape !'()*, so manually escape them.
+            encodedText = encodedText.replace(/%20/g, '+').replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
+        }
+
+        return encodedText;
+    }
+
+    /**
+     * Perform an HTTP request.
+     * @param {string} method The HTTP method to use.
+     * @param {string} url The URL (without query parameters) to request.
+     * @param {string} qs The query parameters to use with the request.
+     * @param {string} body The JSON body of the request
+     * @param {boolean} followRedirect Whether to follow redirect responses automatically.
+     */
     private async doRequest(
         method: string,
         url: string,
@@ -180,6 +418,7 @@ export class DimensionBigBlueButtonService {
                 followRedirect: followRedirect,
                 jar: true, // remember cookies between requests
                 json: false, // expect html
+
             }, (err, res, _body) => {
                 try {
                     if (err) {
@@ -202,6 +441,15 @@ export class DimensionBigBlueButtonService {
                 }
             });
         });
+    }
+
+    private getHTTPAvatarUrlFromMXCUrl(mxc: string): string {
+        const width = 64;
+        const height = 64;
+        const method = "scale";
+
+        mxc = mxc.substring("mxc://".length).split('?')[0];
+        return `${config.dimension.publicUrl}/api/v1/dimension/media/thumbnail/${mxc}?width=${width}&height=${height}&method=${method}&animated=false`;
     }
 
 }
