@@ -56,6 +56,7 @@ export interface FE_Sticker {
     image: {
         mxc: string;
         mimetype: string;
+        blurhash?: string;
     };
     thumbnail: {
         mxc: string;

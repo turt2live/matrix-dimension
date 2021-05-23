@@ -10,6 +10,7 @@ import Sticker from "../../db/models/Sticker";
 import { LogService } from "matrix-js-snippets";
 import * as sharp from "sharp";
 import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
+import { sharpToBlurhash } from "../../utils/blurhash";
 
 interface SetEnabledRequest {
     isEnabled: boolean;
@@ -109,9 +110,9 @@ export class AdminStickerService {
                     background: 'rgba(0,0,0,0)',
                 }).png().toBuffer();
                 const mxc = await mx.upload(png, "image/png");
-                const serverName = mxc.substring("mxc://".length).split("/")[0];
-                const contentId = mxc.substring("mxc://".length).split("/")[1];
+                const [serverName, contentId] = mxc.substring("mxc://".length).split("/");
                 const thumbMxc = await mx.uploadFromUrl(await mx.getThumbnailUrl(serverName, contentId, metadata.width, metadata.height, "scale", false), "image/png");
+                const blurhash = await sharpToBlurhash(image);
 
                 stickers.push(await Sticker.create({
                     packId: pack.id,
@@ -122,6 +123,7 @@ export class AdminStickerService {
                     thumbnailWidth: metadata.width,
                     thumbnailHeight: metadata.height,
                     mimetype: "image/png",
+                    blurhash,
                 }));
 
                 if (!avatarUrl) avatarUrl = mxc;

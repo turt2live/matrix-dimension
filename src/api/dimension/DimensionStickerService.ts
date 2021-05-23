@@ -31,6 +31,7 @@ export interface MemoryStickerPack {
         image: {
             mxc: string;
             mimetype: string;
+            blurhash?: string;
         };
         thumbnail: {
             mxc: string;
@@ -198,6 +199,7 @@ export class DimensionStickerService {
                     image: {
                         mxc: s.imageMxc,
                         mimetype: s.mimetype,
+                        blurhash: s.blurhash,
                     },
                     thumbnail: {
                         mxc: s.thumbnailMxc,

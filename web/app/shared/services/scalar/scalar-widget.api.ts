@@ -54,6 +54,7 @@ export class ScalarWidgetApi {
                             w: Math.round(sticker.thumbnail.width / 2),
                             h: Math.round(sticker.thumbnail.height / 2),
                         },
+                        blurhash: sticker.image.blurhash,
 
                         // This has to be included in the info object so it makes it to the event
                         dimension: {
