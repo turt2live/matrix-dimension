@@ -19,6 +19,8 @@ interface ImportTelegramRequest {
     packUrl: string;
 }
 
+const TG_ADD_STICKERS_PREFIXES = ["https://t.me/addstickers/", "https://telegram.me/addstickers/", "tg://addstickers"];
+
 /**
  * Administrative API for configuring stickers
  */
@@ -68,7 +70,7 @@ export class AdminStickerService {
     public async importFromTelegram(request: ImportTelegramRequest): Promise<MemoryStickerPack> {
         const userId = this.context.request.user.userId;
 
-        if (!request.packUrl || (!request.packUrl.startsWith("https://t.me/addstickers/") && !request.packUrl.startsWith("https://telegram.me/addstickers/"))) {
+        if (!request.packUrl || !TG_ADD_STICKERS_PREFIXES.some(p => request.packUrl.startsWith(p))) {
             throw new ApiError(400, "Invalid pack URL");
         }
 
