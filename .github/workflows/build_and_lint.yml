@@ -1,0 +1,38 @@
+name: Build and Lint
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs: 
+  build_and_lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+    
+    env:
+      NODE_ENV: development
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Test using Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install global dependencies
+        run: npm install -g npm typescript
+
+      - name: Install project dependencies
+        run: npm install
+
+      - name: Build the code
+        run: npm run build
+
+      - name: Run the linters
+        run: npm run lint
