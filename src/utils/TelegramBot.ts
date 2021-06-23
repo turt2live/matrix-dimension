@@ -21,7 +21,14 @@ export class TelegramBot {
     }
 
     public async getStickerPack(packUrl: string): Promise<TelegramStickerPack> {
-        const set = await this.bot.getStickerSet(path.basename(packUrl));
+        let setName;
+        if (packUrl.startsWith("tg://")) {
+            setName = new URL(packUrl).searchParams.get("set");
+        } else {
+            setName = path.basename(packUrl);
+        }
+
+        const set = await this.bot.getStickerSet(setName);
         const pack: TelegramStickerPack = {
             name: set.name,
             description: set.title,

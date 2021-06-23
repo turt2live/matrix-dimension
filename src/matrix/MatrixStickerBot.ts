@@ -111,8 +111,7 @@ class _MatrixStickerBot {
                 const mxc = stickerEvent.contentUri;
                 if (!mxc.startsWith("mxc://")) continue;
 
-                const serverName = mxc.substring("mxc://".length).split("/")[0];
-                const contentId = mxc.substring("mxc://".length).split("/")[1];
+                const [serverName, contentId] = mxc.substring("mxc://".length).split("/");
                 stickerEvent.thumbMxc = await mx.uploadFromUrl(await mx.getThumbnailUrl(serverName, contentId, 512, 512, "scale", false), "image/png");
 
                 stickerEvents.push(stickerEvent);
@@ -155,6 +154,7 @@ class _MatrixStickerBot {
                         description: stickerEvent.description,
                         imageMxc: stickerEvent.contentUri,
                         thumbnailMxc: stickerEvent.thumbMxc,
+                        blurhash: stickerEvent.blurhash,
                         thumbnailWidth: 512,
                         thumbnailHeight: 512,
                         mimetype: "image/png",

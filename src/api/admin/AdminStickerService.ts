@@ -10,6 +10,7 @@ import Sticker from "../../db/models/Sticker";
 import { LogService } from "matrix-js-snippets";
 import * as sharp from "sharp";
 import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
+import { sharpToBlurhash } from "../../utils/blurhash";
 
 interface SetEnabledRequest {
     isEnabled: boolean;
@@ -18,6 +19,8 @@ interface SetEnabledRequest {
 interface ImportTelegramRequest {
     packUrl: string;
 }
+
+const TG_ADD_STICKERS_PREFIXES = ["https://t.me/addstickers/", "https://telegram.me/addstickers/", "tg://addstickers"];
 
 /**
  * Administrative API for configuring stickers
@@ -68,7 +71,7 @@ export class AdminStickerService {
     public async importFromTelegram(request: ImportTelegramRequest): Promise<MemoryStickerPack> {
         const userId = this.context.request.user.userId;
 
-        if (!request.packUrl || (!request.packUrl.startsWith("https://t.me/addstickers/") && !request.packUrl.startsWith("https://telegram.me/addstickers/"))) {
+        if (!request.packUrl || !TG_ADD_STICKERS_PREFIXES.some(p => request.packUrl.startsWith(p))) {
             throw new ApiError(400, "Invalid pack URL");
         }
 
@@ -107,9 +110,9 @@ export class AdminStickerService {
                     background: 'rgba(0,0,0,0)',
                 }).png().toBuffer();
                 const mxc = await mx.upload(png, "image/png");
-                const serverName = mxc.substring("mxc://".length).split("/")[0];
-                const contentId = mxc.substring("mxc://".length).split("/")[1];
+                const [serverName, contentId] = mxc.substring("mxc://".length).split("/");
                 const thumbMxc = await mx.uploadFromUrl(await mx.getThumbnailUrl(serverName, contentId, metadata.width, metadata.height, "scale", false), "image/png");
+                const blurhash = await sharpToBlurhash(image);
 
                 stickers.push(await Sticker.create({
                     packId: pack.id,
@@ -120,6 +123,7 @@ export class AdminStickerService {
                     thumbnailWidth: metadata.width,
                     thumbnailHeight: metadata.height,
                     mimetype: "image/png",
+                    blurhash,
                 }));
 
                 if (!avatarUrl) avatarUrl = mxc;

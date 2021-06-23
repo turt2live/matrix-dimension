@@ -34,6 +34,9 @@ export default class Sticker extends Model<Sticker> {
     mimetype: string;
 
     @Column
+    blurhash?: string;
+
+    @Column
     @ForeignKey(() => StickerPack)
     packId: number;
 }
