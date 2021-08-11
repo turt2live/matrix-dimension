@@ -3,8 +3,8 @@ import { ToasterService } from "angular2-toaster";
 import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
 import { ServiceLocator } from "../../shared/registry/locator.service";
 import { SessionStorage } from "../../shared/SessionStorage";
-import { OnInit } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
+import { Inject, Injectable, OnInit } from "@angular/core";
 
 const SCALAR_WIDGET_LINKS = [
     "https://scalar-staging.riot.im/scalar/api/widgets/__TYPE__.html?__PNAME__=",
@@ -16,6 +16,7 @@ const SCALAR_WIDGET_LINKS = [
 
 export const DISABLE_AUTOMATIC_WRAPPING = "";
 
+@Injectable()
 export class WidgetComponent implements OnInit {
 
     public isLoading = true;
@@ -31,13 +32,14 @@ export class WidgetComponent implements OnInit {
     private window = ServiceLocator.injector.get(Window);
     private scalarApi = ServiceLocator.injector.get(ScalarClientApiService);
 
-    constructor(private widgetTypes: string[],
-                public defaultName: string,
-                private wrapperId = "generic",
+    constructor(@Inject(String) private widgetTypes: string[],
+                @Inject(String) public defaultName: string,
+                @Inject(String) private wrapperId = "generic",
                 public translate: TranslateService,
-                private scalarWrapperId = null,
-                private scalarWrapperUrlParamName = "url") {
+                @Inject(String) private scalarWrapperId = null,
+                @Inject(String) private scalarWrapperUrlParamName = "url") {
         this.translate = translate;
+
         this.isLoading = true;
         this.isUpdating = false;
     }

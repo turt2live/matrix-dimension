@@ -1,10 +1,11 @@
 import "reflect-metadata";
 import "ts-helpers";
+import { environment } from './environments/environment';
 
 require("zone.js/dist/zone");
 
 //noinspection TypeScriptUnresolvedVariable
-if (process.env.ENV === "build") {
+if (environment.production) {
     // Production
 
 } else {

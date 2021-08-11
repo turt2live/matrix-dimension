@@ -7,7 +7,7 @@ import AppService from "./AppService";
     underscored: false,
     timestamps: false,
 })
-export default class NebConfiguration extends Model<NebConfiguration> {
+export default class NebConfiguration extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

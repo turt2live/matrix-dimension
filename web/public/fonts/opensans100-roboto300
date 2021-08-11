@@ -1,6 +1,0 @@
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Roboto Light'), local('Roboto-Light'), url('../public/fonts/opensans100-roboto300.ttf') format('truetype');
-}

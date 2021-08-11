@@ -6,7 +6,7 @@ import Upstream from "./Upstream";
     underscored: false,
     timestamps: false,
 })
-export default class TelegramBridgeRecord extends Model<TelegramBridgeRecord> {
+export default class TelegramBridgeRecord extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

@@ -15,7 +15,7 @@ import Upstream from "./Upstream";
     underscored: false,
     timestamps: false,
 })
-export default class TermsUpstreamRecord extends Model<TermsUpstreamRecord> {
+export default class TermsUpstreamRecord extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

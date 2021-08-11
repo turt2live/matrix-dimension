@@ -7,7 +7,7 @@ import NebIntegration from "./NebIntegration";
     underscored: false,
     timestamps: false,
 })
-export default class NebBotUser extends Model<NebBotUser> {
+export default class NebBotUser extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

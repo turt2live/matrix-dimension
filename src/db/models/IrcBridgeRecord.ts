@@ -6,7 +6,7 @@ import Upstream from "./Upstream";
     underscored: false,
     timestamps: false,
 })
-export default class IrcBridgeRecord extends Model<IrcBridgeRecord> {
+export default class IrcBridgeRecord extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

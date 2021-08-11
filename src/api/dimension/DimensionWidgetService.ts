@@ -76,7 +76,7 @@ export class DimensionWidgetService {
         }
 
         // Now we need to verify we can actually make the request
-        await new Promise((resolve, reject) => {
+        await new Promise<ApiError | void>((resolve, reject) => {
             request(checkUrl, (err, response) => {
                 if (err) {
                     LogService.error("DimensionWidgetService", err);

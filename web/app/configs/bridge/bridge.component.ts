@@ -1,4 +1,4 @@
-import { OnDestroy, OnInit } from "@angular/core";
+import { Inject, Injectable, Input, OnDestroy, OnInit } from "@angular/core";
 import { FE_Bridge } from "../../shared/models/integration";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs/Subscription";
@@ -8,6 +8,7 @@ import { ServiceLocator } from "../../shared/registry/locator.service";
 import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
 import { TranslateService } from "@ngx-translate/core";
 
+@Injectable()
 export class BridgeComponent<T> implements OnInit, OnDestroy {
 
     public isLoading = true;
@@ -22,7 +23,7 @@ export class BridgeComponent<T> implements OnInit, OnDestroy {
     protected route = ServiceLocator.injector.get(ActivatedRoute);
     protected scalarClientApi = ServiceLocator.injector.get(ScalarClientApiService);
 
-    constructor(private integrationType: string, public translate: TranslateService) {
+    constructor(@Inject(String) private integrationType: string, public translate: TranslateService) {
         this.translate = translate;
         this.isLoading = true;
         this.isUpdating = false;

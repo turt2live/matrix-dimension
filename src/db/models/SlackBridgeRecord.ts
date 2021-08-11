@@ -6,7 +6,7 @@ import Upstream from "./Upstream";
     underscored: false,
     timestamps: false,
 })
-export default class SlackBridgeRecord extends Model<SlackBridgeRecord> {
+export default class SlackBridgeRecord extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

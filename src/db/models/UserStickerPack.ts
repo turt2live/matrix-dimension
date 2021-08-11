@@ -7,7 +7,7 @@ import User from "./User";
     underscored: false,
     timestamps: false,
 })
-export default class UserStickerPack extends Model<UserStickerPack> {
+export default class UserStickerPack extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

@@ -8,7 +8,6 @@ import { ScalarStore } from "../../db/ScalarStore";
 import UserScalarToken from "../../db/models/UserScalarToken";
 import { ScalarClient } from "../../scalar/ScalarClient";
 import * as randomString from "random-string";
-import { AutoWired } from "typescript-ioc/es6";
 import { Cache, CACHE_SCALAR_ACCOUNTS } from "../../MemoryCache";
 import { ILoggedInUser } from "../security/MatrixSecurity";
 
@@ -23,7 +22,6 @@ export interface IAccountInfoResponse {
 /**
  * API controller for account management
  */
-@AutoWired
 export default class AccountController {
     constructor() {
     }

@@ -2,7 +2,7 @@
     <my-spinner></my-spinner>
 </div>
 <div *ngIf="!widgetComponent.isLoading">
-    <my-ibox [isCollapsible]="true" [defaultCollapsed]="widgetComponent.defaultExpandedWidgetId">
+    <my-ibox [isCollapsible]="true" [defaultCollapsed]="!!widgetComponent.defaultExpandedWidgetId">
         <h5 class="my-ibox-title">
             <i class="far fa-plus-square"></i>  {{ widgetComponent.defaultName | translate }} {{'Add' | translate}}
         </h5>

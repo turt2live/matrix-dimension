@@ -1,9 +1,9 @@
 import { ApplicationRef, Injector, NgModule } from "@angular/core";
 import { ModalModule } from "ngx-modialog";
 import { BootstrapModalModule } from "ngx-modialog/plugins/bootstrap";
-import { BreadcrumbsModule } from "ng2-breadcrumbs";
+import { BreadcrumbModule } from "xng-breadcrumb";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { UiSwitchModule } from "angular2-ui-switch";
+import { UiSwitchModule } from "ngx-ui-switch";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { routing } from "./app.routing";
 import { FormsModule } from "@angular/forms";
@@ -120,10 +120,11 @@ import { WhiteboardWidgetComponent } from "./configs/widget/whiteboard/whiteboar
 import { AdminWidgetWhiteboardConfigComponent } from "./admin/widgets/whiteboard/whiteboard.component";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
-    return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http);
 }
 
 @NgModule({
@@ -140,6 +141,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         BootstrapModalModule,
         BreadcrumbsModule,
         CKEditorModule,
+        FontAwesomeModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -288,25 +290,27 @@ export function HttpLoaderFactory(http: HttpClient) {
     ]
 })
 export class AppModule {
-    constructor(public appRef: ApplicationRef, injector: Injector) {
-        ServiceLocator.injector = injector;
-    }
+  constructor(public appRef: ApplicationRef, injector: Injector) {
+    ServiceLocator.injector = injector;
+  }
 
-    hmrOnInit(store) {
-        console.log("HMR store", store);
-    }
+  hmrOnInit(store) {
+    console.log("HMR store", store);
+  }
 
-    hmrOnDestroy(store) {
-        let cmpLocation = this.appRef.components.map(cmp => cmp.location.nativeElement);
-        // recreate elements
-        store.disposeOldHosts = createNewHosts(cmpLocation);
-        // remove styles
-        removeNgStyles();
-    }
+  hmrOnDestroy(store) {
+    let cmpLocation = this.appRef.components.map(
+      (cmp) => cmp.location.nativeElement
+    );
+    // recreate elements
+    store.disposeOldHosts = createNewHosts(cmpLocation);
+    // remove styles
+    removeNgStyles();
+  }
 
-    hmrAfterDestroy(store) {
-        // display new elements
-        store.disposeOldHosts();
-        delete store.disposeOldHosts;
-    }
+  hmrAfterDestroy(store) {
+    // display new elements
+    store.disposeOldHosts();
+    delete store.disposeOldHosts;
+  }
 }

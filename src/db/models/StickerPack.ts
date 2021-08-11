@@ -6,7 +6,7 @@ import { IntegrationRecord } from "./IntegrationRecord";
     underscored: false,
     timestamps: false,
 })
-export default class StickerPack extends Model<StickerPack> implements IntegrationRecord {
+export default class StickerPack extends Model implements IntegrationRecord {
     @PrimaryKey
     @AutoIncrement
     @Column

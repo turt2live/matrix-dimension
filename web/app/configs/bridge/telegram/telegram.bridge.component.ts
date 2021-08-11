@@ -99,11 +99,12 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
             }
 
             return this.telegram.bridgeRoom(this.roomId, this.bridge.config.portalInfo.chatId, forceUnbridge);
-        }).then((portalInfo: FE_PortalInfo) => {
+        }).then((portalInfo) => {
             if ((<any>portalInfo).aborted) return;
+            const loadedPortalInfo = portalInfo as FE_PortalInfo
 
-            this.bridge.config.portalInfo = portalInfo;
-            this.bridge.config.linked = [portalInfo.chatId];
+            this.bridge.config.portalInfo = loadedPortalInfo;
+            this.bridge.config.linked = [loadedPortalInfo.chatId];
             this.isUpdating = false;
             this.translate.get('Bridge updated').subscribe((res: string) => {this.toaster.pop("success", res); });
         }).catch(error => {

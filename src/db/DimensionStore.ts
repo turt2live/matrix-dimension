@@ -6,7 +6,7 @@ import UserScalarToken from "./models/UserScalarToken";
 import Upstream from "./models/Upstream";
 import WidgetRecord from "./models/WidgetRecord";
 import * as path from "path";
-import * as Umzug from "umzug";
+import { SequelizeStorage, Umzug } from "umzug";
 import AppService from "./models/AppService";
 import AppServiceUser from "./models/AppServiceUser";
 import NebConfiguration from "./models/NebConfiguration";
@@ -79,15 +79,20 @@ class _DimensionStore {
     }
 
     public updateSchema(): Promise<any> {
-        LogService.info("DimensionStore", "Updating schema...");
+        LogService.info("DimensionStore", "Updating schema...",);
 
         const migrator = new Umzug({
-            storage: "sequelize",
-            storageOptions: {sequelize: this.sequelize},
             migrations: {
-                params: [this.sequelize.getQueryInterface()],
-                path: path.join(__dirname, "migrations"),
-            }
+                glob: path.join(__dirname, "migrations/*"),
+                resolve: ({name, path, context}) => {
+                    // Adjust the migration from the new signature to the v2 signature, making easier to upgrade to v3
+                    const migration = require(path)
+                    return { name, up: async () => migration.default.up(context), down: async () => migration.default.down(context) }
+                  }
+            },
+            context: this.sequelize.getQueryInterface(),
+            storage: new SequelizeStorage({ sequelize: this.sequelize }),
+            logger: console
         });
 
         return migrator.up();

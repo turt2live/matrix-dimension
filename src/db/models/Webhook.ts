@@ -6,7 +6,7 @@ import User from "./User";
     underscored: false,
     timestamps: false,
 })
-export default class Webhook extends Model<Webhook> {
+export default class Webhook extends Model {
     // This is really just a holding class to keep foreign keys alive
 
     @PrimaryKey

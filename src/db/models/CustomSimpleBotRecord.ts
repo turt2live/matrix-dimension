@@ -6,7 +6,7 @@ import { IntegrationRecord } from "./IntegrationRecord";
     underscored: false,
     timestamps: false,
 })
-export default class CustomSimpleBotRecord extends Model<CustomSimpleBotRecord> implements IntegrationRecord {
+export default class CustomSimpleBotRecord extends Model implements IntegrationRecord {
     @PrimaryKey
     @AutoIncrement
     @Column

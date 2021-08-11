@@ -1,4 +1,4 @@
-import { OnDestroy, OnInit } from "@angular/core";
+import { Injectable, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs/Subscription";
 import { ScalarWidgetApi } from "../shared/services/scalar/scalar-widget.api";
 import * as semver from "semver";
@@ -14,11 +14,12 @@ export interface OpenIdResponse {
     blocked: boolean;
 }
 
+@Injectable()
 export abstract class CapableWidget implements OnInit, OnDestroy {
 
     private requestSubscription: Subscription;
     private responseSubscription: Subscription;
-    private openIdRequest: { resolve: (a: OpenIdResponse) => void, promise: Promise<OpenIdResponse> } = null;
+    private openIdRequest: { resolve: (a: OpenIdResponse) => void } = null;
 
     // The capabilities we support
     protected supportsScreenshots = false;
@@ -92,9 +93,8 @@ export abstract class CapableWidget implements OnInit, OnDestroy {
     }
 
     protected getOpenIdInfo(): Promise<OpenIdResponse> {
-        if (this.openIdRequest) return this.openIdRequest.promise;
         const promise = new Promise<OpenIdResponse>(((resolve, _reject) => {
-            this.openIdRequest = {resolve: resolve, promise};
+            this.openIdRequest = {resolve: resolve};
             ScalarWidgetApi.requestOpenID();
         }));
         return promise;

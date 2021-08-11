@@ -10,7 +10,7 @@ export class ToggleFullscreenDirective {
     onClick() {
         // HACK: This should be behind a service in the event the library changes
         // @ts-ignore
-        if (screenfull.enabled) {
+        if (screenfull.isEnabled) {
             // @ts-ignore
             screenfull.toggle();
         }

@@ -1,0 +1,18 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "baseUrl": "./src",
+      "outDir": "./build/app",
+      "types": ["bluebird", "body-parser", "jquery", "validator"],
+      "allowSyntheticDefaultImports": true,
+    },
+    "include": [
+      "./src/**/*"
+    ],
+    "ts-node": {
+      "compilerOptions": {
+        "module": "CommonJS"
+      }
+    }
+  }
+  

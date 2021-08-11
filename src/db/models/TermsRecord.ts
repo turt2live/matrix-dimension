@@ -6,7 +6,7 @@ import TermsTextRecord from "./TermsTextRecord";
     underscored: false,
     timestamps: false,
 })
-export default class TermsRecord extends Model<TermsRecord> {
+export default class TermsRecord extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

@@ -6,7 +6,7 @@ import AppService from "./AppService";
     underscored: false,
     timestamps: false,
 })
-export default class AppServiceUser extends Model<AppServiceUser> {
+export default class AppServiceUser extends Model {
     @PrimaryKey
     @Column
     id: string;

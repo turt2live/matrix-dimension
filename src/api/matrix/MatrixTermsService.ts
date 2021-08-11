@@ -1,5 +1,4 @@
 import { Context, GET, Path, POST, Security, ServiceContext } from "typescript-rest";
-import { AutoWired, Inject } from "typescript-ioc/es6";
 import { ROLE_USER } from "../security/MatrixSecurity";
 import TermsController, { ITermsResponse } from "../controllers/TermsController";
 
@@ -11,11 +10,7 @@ export interface SignTermsRequest {
  * API for account management
  */
 @Path("/_matrix/integrations/v1/terms")
-@AutoWired
 export class MatrixTermsService {
-
-    @Inject
-    private termsController: TermsController;
 
     @Context
     private context: ServiceContext;
@@ -23,14 +18,14 @@ export class MatrixTermsService {
     @GET
     @Path("")
     public async getAllTerms(): Promise<ITermsResponse> {
-        return this.termsController.getAvailableTerms();
+        return new TermsController().getAvailableTerms();
     }
 
     @POST
     @Path("")
     @Security(ROLE_USER)
     public async signTerms(request: SignTermsRequest): Promise<any> {
-        await this.termsController.signTermsMatching(this.context.request.user, request.user_accepts);
+        await new TermsController().signTermsMatching(this.context.request.user, request.user_accepts);
         return {};
     }
 }
