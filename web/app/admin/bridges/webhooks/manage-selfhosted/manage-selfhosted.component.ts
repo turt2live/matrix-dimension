@@ -1,39 +1,37 @@
 import { Component } from "@angular/core";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToasterService } from "angular2-toaster";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { AdminWebhooksApiService } from "../../../../shared/services/admin/admin-webhooks-api.service";
 import { TranslateService } from "@ngx-translate/core";
 
-export class ManageSelfhostedWebhooksBridgeDialogContext extends BSModalContext {
-    public provisionUrl: string;
-    public sharedSecret: string;
-    public allowTgPuppets = false;
-    public allowMxPuppets = false;
-    public bridgeId: number;
+export interface ManageSelfhostedWebhooksBridgeDialogContext {
+    provisionUrl: string;
+    sharedSecret: string;
+    allowTgPuppets: boolean;
+    allowMxPuppets: boolean;
+    bridgeId: number;
+    isAdding: boolean;
 }
 
 @Component({
     templateUrl: "./manage-selfhosted.component.html",
     styleUrls: ["./manage-selfhosted.component.scss"],
 })
-export class AdminWebhooksBridgeManageSelfhostedComponent implements ModalComponent<ManageSelfhostedWebhooksBridgeDialogContext> {
+export class AdminWebhooksBridgeManageSelfhostedComponent {
 
     public isSaving = false;
-    public provisionUrl: string;
-    public sharedSecret: string;
+    public provisionUrl: '';
+    public sharedSecret: '';
+    public allowTgPuppets = false;
+    public allowMxPuppets = false;
     public bridgeId: number;
-    public isAdding = false;
+    public isAdding = true;
 
-    constructor(public dialog: DialogRef<ManageSelfhostedWebhooksBridgeDialogContext>,
+    constructor(public modal: NgbActiveModal,
                 private webhooksApi: AdminWebhooksApiService,
                 private toaster: ToasterService,
                 public translate: TranslateService) {
         this.translate = translate;
-        this.provisionUrl = dialog.context.provisionUrl;
-        this.sharedSecret = dialog.context.sharedSecret;
-        this.bridgeId = dialog.context.bridgeId;
-        this.isAdding = !this.bridgeId;
     }
 
     public add() {
@@ -41,7 +39,7 @@ export class AdminWebhooksBridgeManageSelfhostedComponent implements ModalCompon
         if (this.isAdding) {
             this.webhooksApi.newSelfhosted(this.provisionUrl, this.sharedSecret).then(() => {
                 this.translate.get('Webhook bridge added').subscribe((res: string) => {this.toaster.pop("success", res); });
-                this.dialog.close();
+                this.modal.close();
             }).catch(err => {
                 console.error(err);
                 this.isSaving = false;
@@ -50,7 +48,7 @@ export class AdminWebhooksBridgeManageSelfhostedComponent implements ModalCompon
         } else {
             this.webhooksApi.updateSelfhosted(this.bridgeId, this.provisionUrl, this.sharedSecret).then(() => {
                 this.translate.get('Webhook bridge updated').subscribe((res: string) => {this.toaster.pop("success", res); });
-                this.dialog.close();
+                this.modal.close();
             }).catch(err => {
                 console.error(err);
                 this.isSaving = false;

@@ -4,12 +4,11 @@ import { AdminTermsApiService } from "../../../shared/services/admin/admin-terms
 import { ActivatedRoute, Router } from "@angular/router";
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ISO6391 from "iso-639-1";
-import { Modal, overlayConfigFactory } from "ngx-modialog";
 import {
     AdminTermsNewEditPublishDialogComponent,
-    AdminTermsNewEditPublishDialogContext
 } from "./publish/publish.component";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 interface ILanguage {
     name: string,
@@ -67,7 +66,7 @@ export class AdminNewEditTermsComponent implements OnInit {
                 private toaster: ToasterService,
                 private router: Router,
                 private activatedRoute: ActivatedRoute,
-                private modal: Modal,
+                private modal: NgbModal,
                 public translate: TranslateService) {
         this.translate = translate;
     }
@@ -119,11 +118,11 @@ export class AdminNewEditTermsComponent implements OnInit {
             url: `${window.location.origin}/widgets/terms/${this.shortcode}/en/draft`,
         });
 
-
-        this.modal.open(AdminTermsNewEditPublishDialogComponent, overlayConfigFactory({
-            isBlocking: true,
+        const termsEditRef = this.modal.open(AdminTermsNewEditPublishDialogComponent, {
+            backdrop: 'static',
             size: 'sm',
-        }, AdminTermsNewEditPublishDialogContext)).result.then(async (val) => {
+        });
+        termsEditRef.result.then(async (val) => {
             if (!val) return; // closed without publish
 
             try {

@@ -1,11 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { ToasterService } from "angular2-toaster";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { NebBotConfigurationDialogContext } from "../config-context";
 import { AdminNebApiService } from "../../../../shared/services/admin/admin-neb-api.service";
 import { FE_NebConfiguration } from "../../../../shared/models/admin-responses";
 import { FE_Integration } from "../../../../shared/models/integration";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 interface ImgurConfig {
     client_id: string;
@@ -16,7 +15,7 @@ interface ImgurConfig {
     templateUrl: "./imgur.component.html",
     styleUrls: ["./imgur.component.scss", "../config-dialog.scss"],
 })
-export class AdminNebImgurConfigComponent implements ModalComponent<NebBotConfigurationDialogContext>, OnInit {
+export class AdminNebImgurConfigComponent implements OnInit {
 
     public isLoading = true;
     public isUpdating = false;
@@ -24,13 +23,11 @@ export class AdminNebImgurConfigComponent implements ModalComponent<NebBotConfig
     public integration: FE_Integration;
     public neb: FE_NebConfiguration;
 
-    constructor(public dialog: DialogRef<NebBotConfigurationDialogContext>,
+    constructor(public modal: NgbActiveModal,
                 private adminNebApi: AdminNebApiService,
                 private toaster: ToasterService,
                 public translate: TranslateService) {
         this.translate = translate;
-        this.neb = dialog.context.neb;
-        this.integration = dialog.context.integration;
     }
 
     public ngOnInit() {
@@ -47,7 +44,7 @@ export class AdminNebImgurConfigComponent implements ModalComponent<NebBotConfig
         this.isUpdating = true;
         this.adminNebApi.setIntegrationConfiguration(this.neb.id, this.integration.type, this.config).then(() => {
             this.translate.get('Configuration updated').subscribe((res: string) => {this.toaster.pop("success", res); });
-            this.dialog.close();
+            this.modal.close();
         }).catch(err => {
             this.isUpdating = false;
             console.error(err);

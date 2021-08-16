@@ -1,36 +1,35 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FE_SimpleBot } from "../../shared/models/integration";
 import { ToasterService } from "angular2-toaster";
 import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
 import { IntegrationsApiService } from "../../shared/services/integrations/integrations-api.service";
-import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
-import { DialogRef } from "ngx-modialog";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
-export class SimpleBotConfigDialogContext extends BSModalContext {
-    public bot: FE_SimpleBot;
-    public roomId: string;
+export interface SimpleBotConfigDialogContext {
+    bot: FE_SimpleBot;
+    roomId: string;
 }
 
 @Component({
     templateUrl: "simple-bot.component.html",
     styleUrls: ["simple-bot.component.scss"],
 })
-export class ConfigSimpleBotComponent {
+export class ConfigSimpleBotComponent implements OnInit {
 
     public bot: FE_SimpleBot;
 
     private roomId: string;
 
-    constructor(public dialog: DialogRef<SimpleBotConfigDialogContext>,
+    constructor(public modal: NgbActiveModal,
                 private toaster: ToasterService,
                 private scalar: ScalarClientApiService,
                 private integrationsApi: IntegrationsApiService,
                 public translate: TranslateService) {
         this.translate = translate;
-        this.bot = dialog.context.bot;
-        this.roomId = dialog.context.roomId;
+    }
 
+    ngOnInit() {
         this.bot._isUpdating = false;
     }
 

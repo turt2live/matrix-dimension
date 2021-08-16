@@ -1,21 +1,20 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { ToasterService } from "angular2-toaster";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
-export class AdminTermsNewEditPublishDialogContext extends BSModalContext {
+export interface AdminTermsNewEditPublishDialogContext {
 }
 
 @Component({
     templateUrl: "./publish.component.html",
     styleUrls: ["./publish.component.scss"],
 })
-export class AdminTermsNewEditPublishDialogComponent implements ModalComponent<AdminTermsNewEditPublishDialogContext> {
+export class AdminTermsNewEditPublishDialogComponent {
 
     public version: string;
 
-    constructor(public dialog: DialogRef<AdminTermsNewEditPublishDialogContext>, private toaster: ToasterService, public translate: TranslateService) {
+    constructor(public modal: NgbActiveModal, private toaster: ToasterService, public translate: TranslateService) {
     }
 
     public publish() {
@@ -23,6 +22,6 @@ export class AdminTermsNewEditPublishDialogComponent implements ModalComponent<A
             this.translate.get('Please enter a version number').subscribe((res: string) => {this.toaster.pop("warning", res); });
             return;
         }
-        this.dialog.close(this.version);
+        this.modal.close(this.version);
     }
 }

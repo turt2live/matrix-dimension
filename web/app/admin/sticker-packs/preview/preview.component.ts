@@ -1,10 +1,9 @@
 import { Component } from "@angular/core";
 import { FE_StickerPack } from "../../../shared/models/integration";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { MediaService } from "../../../shared/services/media.service";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
-export class StickerPackPreviewDialogContext extends BSModalContext {
+export class StickerPackPreviewMoadlInstance {
     public pack: FE_StickerPack;
 }
 
@@ -12,12 +11,12 @@ export class StickerPackPreviewDialogContext extends BSModalContext {
     templateUrl: "./preview.component.html",
     styleUrls: ["./preview.component.scss"],
 })
-export class AdminStickerPackPreviewComponent implements ModalComponent<StickerPackPreviewDialogContext> {
+export class AdminStickerPackPreviewComponent {
 
-    public pack: FE_StickerPack;
+    pack: FE_StickerPack;
 
-    constructor(public dialog: DialogRef<StickerPackPreviewDialogContext>, private media: MediaService) {
-        this.pack = dialog.context.pack;
+    constructor(public modal: NgbActiveModal, private media: MediaService) {
+
     }
 
     public getThumbnailUrl(mxc: string, width: number, height: number, method: "crop" | "scale" = "scale"): string {

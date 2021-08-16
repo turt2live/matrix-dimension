@@ -1,33 +1,32 @@
-<div class="dialog">
-    <div class="dialog-header">
-        <h4>{{'Giphy Configuration' | translate}}</h4>
-    </div>
-    <div class="dialog-content" *ngIf="isLoading">
-        <my-spinner></my-spinner>
-    </div>
-    <div class="dialog-content" *ngIf="!isLoading">
-        <label class="label-block">
-            {{'Api Key' | translate}}
-            <span class="text-muted ">{{'The API key from' | translate}} <a href="https://developers.giphy.com/" target="_blank">developers.giphy.com</a>.</span>
-            <input type="text" class="form-control"
-                   placeholder="your_api_key_here"
-                   [(ngModel)]="config.api_key" [disabled]="isUpdating"/>
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{'Giphy Configuration' | translate}}</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+</div>
+<div class="modal-body" *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div class="modal-body" *ngIf="!isLoading">
+    <label class="label-block">
+        {{'Api Key' | translate}}
+        <span class="text-muted ">{{'The API key from' | translate}} <a href="https://developers.giphy.com/" target="_blank">developers.giphy.com</a>.</span>
+        <input type="text" class="form-control"
+               placeholder="your_api_key_here"
+               [(ngModel)]="config.api_key" [disabled]="isUpdating"/>
+    </label>
+    <label class="label-block">
+        {{'Image Size' | translate}}
+        <span class="text-muted ">{{'GIFs can be large, and sometimes it is more desirable to have them downsized.' | translate}}</span>
+        <label class="checkbox">
+            <input type="checkbox" [(ngModel)]="config.use_downsized" [disabled]="isUpdating"/>
+            {{'Use downsized images' | translate}}
         </label>
-        <label class="label-block">
-            {{'Image Size' | translate}}
-            <span class="text-muted ">{{'GIFs can be large, and sometimes it is more desirable to have them downsized.' | translate}}</span>
-            <label class="checkbox">
-                <input type="checkbox" [(ngModel)]="config.use_downsized" [disabled]="isUpdating"/>
-                {{'Use downsized images' | translate}}
-            </label>
-        </label>
-    </div>
-    <div class="dialog-footer" *ngIf="!isLoading">
-        <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm">
-            <i class="far fa-save"></i> {{'Save' | translate}}
-        </button>
-        <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
-            <i class="far fa-times-circle"></i> {{'Cancel' | translate}}
-        </button>
-    </div>
+    </label>
+</div>
+<div class="modal-footer">
+    <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm">
+        <i class="far fa-save"></i> {{'Save' | translate}}
+    </button>
+    <button type="button" (click)="modal.close()" title="close" class="btn btn-secondary btn-sm">
+        <i class="far fa-times-circle"></i> {{'Cancel' | translate}}
+    </button>
 </div>

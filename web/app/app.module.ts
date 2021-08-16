@@ -1,6 +1,4 @@
 import { ApplicationRef, Injector, NgModule } from "@angular/core";
-import { ModalModule } from "ngx-modialog";
-import { BootstrapModalModule } from "ngx-modialog/plugins/bootstrap";
 import { BreadcrumbModule } from "xng-breadcrumb";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { UiSwitchModule } from "ngx-ui-switch";
@@ -137,9 +135,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         UiSwitchModule,
         ToasterModule,
         BrowserAnimationsModule,
-        ModalModule.forRoot(),
-        BootstrapModalModule,
-        BreadcrumbsModule,
+        BreadcrumbModule,
         CKEditorModule,
         FontAwesomeModule,
         TranslateModule.forRoot({

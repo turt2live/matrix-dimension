@@ -1,17 +1,15 @@
-<div class="dialog">
-    <div class="dialog-header">
-        <h4>{{'Telegram chat is already bridged' | translate}}</h4>
-    </div>
-    <div class="dialog-content">
-        {{'You have the appropriate permissions to be able to unbridge the chat, however. Would you like to unbridge the other room and instead bridge it here?' | translate}}
-    </div>
-    <div class="dialog-footer">
-        <button type="button" (click)="unbridgeAndContinue()" title="unbridge and continue"
-                class="btn btn-danger btn-sm">
-            {{'Unbridge and continue' | translate}}
-        </button>
-        <button type="button" (click)="cancel()" title="cancel" class="btn btn-primary btn-sm">
-            <i class="far fa-times-circle"></i> {{'No, don\'t bridge' | translate}}
-        </button>
-    </div>
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{'Telegram chat is already bridged' | translate}}</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+</div>
+<div class="modal-body">
+    {{'You have the appropriate permissions to be able to unbridge the chat, however. Would you like to unbridge the other room and instead bridge it here?' | translate}}
+</div>
+<div class="modal-footer">
+    <button type="button" (click)="unbridgeAndContinue()" title="unbridge and continue" class="btn btn-danger btn-sm">
+        {{'Unbridge and continue' | translate}}
+    </button>
+    <button type="button" (click)="cancel()" title="cancel" class="btn btn-primary btn-sm">
+        <i class="far fa-times-circle"></i> {{'No, don\'t bridge' | translate}}
+    </button>
 </div>

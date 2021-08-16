@@ -9,8 +9,8 @@ import {
     AdminNebAppserviceConfigComponent,
     AppserviceConfigDialogContext
 } from "./appservice-config/appservice-config.component";
-import { Modal, overlayConfigFactory } from "ngx-modialog";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
     templateUrl: "./neb.component.html",
@@ -31,7 +31,7 @@ export class AdminNebComponent {
                 private toaster: ToasterService,
                 private router: Router,
                 private activatedRoute: ActivatedRoute,
-                private modal: Modal,
+                private modal: NgbModal,
                 public translate: TranslateService) {
         this.translate = translate;
 
@@ -77,12 +77,12 @@ export class AdminNebComponent {
     }
 
     public showAppserviceConfig(neb: FE_NebConfiguration) {
-        this.modal.open(AdminNebAppserviceConfigComponent, overlayConfigFactory({
-            neb: neb,
-
-            isBlocking: true,
+        const selfhostedRef = this.modal.open(AdminNebAppserviceConfigComponent, {
+            backdrop: 'static',
             size: 'lg',
-        }, AppserviceConfigDialogContext));
+        });
+        const selfhostedInstance = selfhostedRef.componentInstance as AppserviceConfigDialogContext;
+        selfhostedInstance.neb = neb;
     }
 
     public getEnabledBotsString(neb: FE_NebConfiguration): string {

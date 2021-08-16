@@ -1,24 +1,23 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
-export class AskUnbridgeDialogContext extends BSModalContext {
+export interface AskUnbridgeDialogContext {
 }
 
 @Component({
     templateUrl: "./ask-unbridge.component.html",
     styleUrls: ["./ask-unbridge.component.scss"],
 })
-export class TelegramAskUnbridgeComponent implements ModalComponent<AskUnbridgeDialogContext> {
+export class TelegramAskUnbridgeComponent {
 
-    constructor(public dialog: DialogRef<AskUnbridgeDialogContext>) {
+    constructor(public modal: NgbActiveModal) {
     }
 
     public unbridgeAndContinue(): void {
-        this.dialog.close({unbridge: true});
+        this.modal.close({unbridge: true});
     }
 
     public cancel(): void {
-        this.dialog.close({unbridge: false});
+        this.modal.close({unbridge: false});
     }
 }

@@ -1,32 +1,31 @@
-<div class="dialog">
-    <div class="dialog-header">
-        <h4>{{'Imgur Configuration' | translate}}</h4>
-    </div>
-    <div class="dialog-content" *ngIf="isLoading">
-        <my-spinner></my-spinner>
-    </div>
-    <div class="dialog-content" *ngIf="!isLoading">
-        <label class="label-block">
-            {{'Client ID' | translate}}
-            <span class="text-muted ">{{'The client ID of your' | translate}} <a href="https://apidocs.imgur.com/" target="_blank">{{'Imgur Application' | translate}}</a>.</span>
-            <input type="text" class="form-control"
-                   placeholder="your_client_id"
-                   [(ngModel)]="config.client_id" [disabled]="isUpdating"/>
-        </label>
-        <label class="label-block">
-            {{'Client Secret' | translate}}
-            <span class="text-muted ">{{'The client secret of your' | translate}} <a href="https://apidocs.imgur.com/" target="_blank">{{'Imgur Application' | translate}}</a>.</span>
-            <input type="text" class="form-control"
-                   placeholder="your_client_secret"
-                   [(ngModel)]="config.client_secret" [disabled]="isUpdating"/>
-        </label>
-    </div>
-    <div class="dialog-footer" *ngIf="!isLoading">
-        <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm">
-            <i class="far fa-save"></i> {{'Save' | translate}}
-        </button>
-        <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
-            <i class="far fa-times-circle"></i> {{'Cancel' | translate}}
-        </button>
-    </div>
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{'Imgur Configuration' | translate}}</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+</div>
+<div class="modal-body" *ngIf="isLoading">
+    <my-spinner></my-spinner>
+</div>
+<div class="modal-body" *ngIf="!isLoading">
+    <label class="label-block">
+        {{'Client ID' | translate}}
+        <span class="text-muted ">{{'The client ID of your' | translate}} <a href="https://apidocs.imgur.com/" target="_blank">{{'Imgur Application' | translate}}</a>.</span>
+        <input type="text" class="form-control"
+               placeholder="your_client_id"
+               [(ngModel)]="config.client_id" [disabled]="isUpdating"/>
+    </label>
+    <label class="label-block">
+        {{'Client Secret' | translate}}
+        <span class="text-muted ">{{'The client secret of your' | translate}} <a href="https://apidocs.imgur.com/" target="_blank">{{'Imgur Application' | translate}}</a>.</span>
+        <input type="text" class="form-control"
+               placeholder="your_client_secret"
+               [(ngModel)]="config.client_secret" [disabled]="isUpdating"/>
+    </label>
+</div>
+<div class="modal-footer">
+    <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm">
+        <i class="far fa-save"></i> {{'Save' | translate}}
+    </button>
+    <button type="button" (click)="modal.close()" title="close" class="btn btn-secondary btn-sm">
+        <i class="far fa-times-circle"></i> {{'Cancel' | translate}}
+    </button>
 </div>

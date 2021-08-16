@@ -1,19 +1,16 @@
-<div class="dialog">
-    <div class="dialog-header">
-        <h4>Sticker Pack: {{ pack.displayName }}</h4>
-    </div>
-    <div class="dialog-content">
-        <div class="sticker" *ngFor="let sticker of pack.stickers trackById">
-            <img [src]="getThumbnailUrl(sticker.thumbnail.mxc, 120, 120)" width="120" height="120"/>
-            <div class="caption">
-                <span class="name">{{ sticker.name }}</span>
-                <span class="description">{{ sticker.description }}</span>
-            </div>
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Sticker Pack: {{ pack.displayName }}</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+</div>
+<div class="modal-body">
+    <div class="sticker" *ngFor="let sticker of pack.stickers trackById">
+        <img [src]="getThumbnailUrl(sticker.thumbnail.mxc, 120, 120)" width="120" height="120"/>
+        <div class="caption">
+            <span class="name">{{ sticker.name }}</span>
+            <span class="description">{{ sticker.description }}</span>
         </div>
     </div>
-    <div class="dialog-footer">
-        <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
-            <i class="far fa-times-circle"></i> {{'Close' | translate}}
-        </button>
-    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.close()"><i class="far fa-times-circle"></i> {{'Close' | translate}}</button>
 </div>

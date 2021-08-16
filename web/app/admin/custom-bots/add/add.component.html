@@ -1,56 +1,55 @@
-<div class="dialog">
-    <div class="dialog-header">
-        <h4>{{ isAdding ? "Add a new" : "Edit" }} {{ 'custom bot' | translate}}</h4>
-    </div>
-    <div class="dialog-content">
-        <label class="label-block">
-            User ID
-            <span class="text-muted">{{'The user ID that Dimension will invite to rooms.' | translate}}</span>
-            <input type="text" class="form-control"
-                   placeholder="@yourbot:example.org"
-                   [(ngModel)]="bot.userId" [disabled]="isSaving" (blur)="loadProfile()"/>
-        </label>
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ isAdding ? "Add a new" : "Edit" }} {{ 'custom bot' | translate}}</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+</div>
+<div class="modal-body">
+    <label class="label-block">
+        User ID
+        <span class="text-muted">{{'The user ID that Dimension will invite to rooms.' | translate}}</span>
+        <input type="text" class="form-control"
+               placeholder="@yourbot:example.org"
+               [(ngModel)]="bot.userId" [disabled]="isSaving" (blur)="loadProfile()"/>
+    </label>
 
-        <label class="label-block">
-            Description
-            <span class="text-muted ">{{'A few words here will help people understand what the bot does.' | translate}}</span>
-            <input type="text" class="form-control"
-                   placeholder="Does awesome things"
-                   [(ngModel)]="bot.description" [disabled]="isSaving"/>
-        </label>
+    <label class="label-block">
+        Description
+        <span class="text-muted ">{{'A few words here will help people understand what the bot does.' | translate}}</span>
+        <input type="text" class="form-control"
+               placeholder="Does awesome things"
+               [(ngModel)]="bot.description" [disabled]="isSaving"/>
+    </label>
 
-        <label class="label-block">
-            {{'Display Name' | translate}}
-            <span class="text-muted ">{{'This is the name Dimension will use to tell users which bot this is.' | translate}}</span>
-            <input type="text" class="form-control"
-                   placeholder="Cool Bot"
-                   [(ngModel)]="bot.name" [disabled]="isSaving"/>
-        </label>
+    <label class="label-block">
+        {{'Display Name' | translate}}
+        <span class="text-muted ">{{'This is the name Dimension will use to tell users which bot this is.' | translate}}</span>
+        <input type="text" class="form-control"
+               placeholder="Cool Bot"
+               [(ngModel)]="bot.name" [disabled]="isSaving"/>
+    </label>
 
-        <label class="label-block">
-            Avatar URL
-            <span class="text-muted ">{{'This can either be an MXC URI or a plain URL.' | translate}}</span>
-            <input type="text" class="form-control"
-                   placeholder="mxc://example.org/C00lAvat4r"
-                   [(ngModel)]="bot.avatarUrl" [disabled]="isSaving"/>
-        </label>
+    <label class="label-block">
+        Avatar URL
+        <span class="text-muted ">{{'This can either be an MXC URI or a plain URL.' | translate}}</span>
+        <input type="text" class="form-control"
+               placeholder="mxc://example.org/C00lAvat4r"
+               [(ngModel)]="bot.avatarUrl" [disabled]="isSaving"/>
+    </label>
 
-        <label class="label-block">
-            Access Token
-            <span class="text-muted ">{{'This is used by Dimension to force the bot to leave the room when the user removes the bot.' | translate}}
-                <a href="https://t2bot.io/docs/access_tokens/" target="_blank">{{'Learn more about access tokens.' | translate}}</a>.
-            </span>
-            <input type="text" class="form-control"
-                   placeholder="MDaX..."
-                   [(ngModel)]="bot.accessToken" [disabled]="isSaving"/>
-        </label>
-    </div>
-    <div class="dialog-footer">
-        <button type="button" (click)="add()" title="close" class="btn btn-primary btn-sm">
-            <i class="far fa-save"></i> {{'Save' | translate}}
-        </button>
-        <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
-            <i class="far fa-times-circle"></i>{{'Cancel' | translate}}
-        </button>
-    </div>
+    <label class="label-block">
+        Access Token
+        <span class="text-muted ">{{'This is used by Dimension to force the bot to leave the room when the user removes the bot.' | translate}}
+            <a href="https://t2bot.io/docs/access_tokens/" target="_blank">{{'Learn more about access tokens.' | translate}}</a>.
+        </span>
+        <input type="text" class="form-control"
+               placeholder="MDaX..."
+               [(ngModel)]="bot.accessToken" [disabled]="isSaving"/>
+    </label>
+</div>
+<div class="modal-footer">
+    <button type="button" (click)="add()" title="save" class="btn btn-primary btn-sm">
+        <i class="far fa-save"></i> {{'Save' | translate}}
+    </button>
+    <button type="button" (click)="modal.close()" title="close" class="btn btn-secondary btn-sm">
+        <i class="far fa-times-circle"></i> {{'Cancel' | translate}}
+    </button>
 </div>

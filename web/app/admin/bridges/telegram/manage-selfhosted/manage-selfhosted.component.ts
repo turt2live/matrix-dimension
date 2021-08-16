@@ -1,43 +1,37 @@
 import { Component } from "@angular/core";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToasterService } from "angular2-toaster";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { AdminTelegramApiService } from "../../../../shared/services/admin/admin-telegram-api.service";
 import { TranslateService } from "@ngx-translate/core";
 
-export class ManageSelfhostedTelegramBridgeDialogContext extends BSModalContext {
-    public provisionUrl: string;
-    public sharedSecret: string;
-    public allowTgPuppets = false;
-    public allowMxPuppets = false;
-    public bridgeId: number;
+export interface ManageSelfhostedTelegramBridgeDialogContext {
+    provisionUrl: string;
+    sharedSecret: string;
+    allowTgPuppets: boolean;
+    allowMxPuppets: boolean;
+    bridgeId: number;
+    isAdding: boolean;
 }
 
 @Component({
     templateUrl: "./manage-selfhosted.component.html",
     styleUrls: ["./manage-selfhosted.component.scss"],
 })
-export class AdminTelegramBridgeManageSelfhostedComponent implements ModalComponent<ManageSelfhostedTelegramBridgeDialogContext> {
+export class AdminTelegramBridgeManageSelfhostedComponent {
 
-    public isSaving = false;
-    public provisionUrl: string;
-    public sharedSecret: string;
-    public allowTgPuppets = false;
-    public allowMxPuppets = false;
-    public bridgeId: number;
-    public isAdding = false;
+    isSaving = false;
+    provisionUrl: string;
+    sharedSecret: string;
+    allowTgPuppets = false;
+    allowMxPuppets = false;
+    bridgeId: number;
+    isAdding = true;
 
-    constructor(public dialog: DialogRef<ManageSelfhostedTelegramBridgeDialogContext>,
+    constructor(public modal: NgbActiveModal,
                 private telegramApi: AdminTelegramApiService,
                 private toaster: ToasterService,
                 public translate: TranslateService) {
         this.translate = translate;
-        this.provisionUrl = dialog.context.provisionUrl;
-        this.sharedSecret = dialog.context.sharedSecret;
-        this.allowTgPuppets = dialog.context.allowTgPuppets;
-        this.allowMxPuppets = dialog.context.allowMxPuppets;
-        this.bridgeId = dialog.context.bridgeId;
-        this.isAdding = !this.bridgeId;
     }
 
     public add() {
@@ -49,7 +43,7 @@ export class AdminTelegramBridgeManageSelfhostedComponent implements ModalCompon
         if (this.isAdding) {
             this.telegramApi.newSelfhosted(this.provisionUrl, this.sharedSecret, options).then(() => {
                 this.translate.get('Telegram bridge added').subscribe((res: string) => {this.toaster.pop("success", res); });
-                this.dialog.close();
+                this.modal.close();
             }).catch(err => {
                 console.error(err);
                 this.isSaving = false;
@@ -58,7 +52,7 @@ export class AdminTelegramBridgeManageSelfhostedComponent implements ModalCompon
         } else {
             this.telegramApi.updateSelfhosted(this.bridgeId, this.provisionUrl, this.sharedSecret, options).then(() => {
                 this.translate.get('Telegram bridge updated').subscribe((res: string) => {this.toaster.pop("success", res); });
-                this.dialog.close();
+                this.modal.close();
             }).catch(err => {
                 console.error(err);
                 this.isSaving = false;

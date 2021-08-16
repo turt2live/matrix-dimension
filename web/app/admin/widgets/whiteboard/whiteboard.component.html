@@ -1,22 +1,20 @@
-<div class="dialog">
-    <div class="dialog-header">
-        <h4>Whiteboard Widget Configuration</h4>
-    </div>
-    <div class="dialog-content">
-        <label class="label-block">
-            Default Board URL Template
-            <span class="text-muted ">$boardName and $roomId will be replaced during creation to help create a unique pad URL.</span>
-            <input type="text" class="form-control"
-                   placeholder="https://cloud13.de/testwhiteboard/?whiteboardid=$roomId_$boardName"
-                   [(ngModel)]="widget.options.defaultUrl" [disabled]="isUpdating"/>
-        </label>
-    </div>
-    <div class="dialog-footer">
-        <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm">
-            <i class="far fa-save"></i> Save
-        </button>
-        <button type="button" (click)="dialog.close()" title="close" class="btn btn-secondary btn-sm">
-            <i class="far fa-times-circle"></i> Cancel
-        </button>
-    </div>
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Whiteboard Widget Configuration</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+</div>
+<div class="modal-body">
+    Default Board URL Template
+    <span class="text-muted ">$boardName and $roomId will be replaced during creation to help create a unique pad URL.</span>
+    <input type="text" class="form-control"
+           placeholder="https://cloud13.de/testwhiteboard/?whiteboardid=$roomId_$boardName"
+           [(ngModel)]="widget.options.defaultUrl" [disabled]="isUpdating"/>
+</label>
+</div>
+<div class="modal-footer">
+    <button type="button" (click)="save()" title="save" class="btn btn-primary btn-sm">
+        <i class="far fa-save"></i> {{'Save' | translate}}
+    </button>
+    <button type="button" (click)="modal.close()" title="close" class="btn btn-secondary btn-sm">
+        <i class="far fa-times-circle"></i> {{'Cancel' | translate}}
+    </button>
 </div>

@@ -117,7 +117,6 @@
     "jquery": "^3.6.0",
     "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "^2.1.0",
-    "ngx-modialog": "^5.0.1",
     "postcss-cssnext": "^3.1.0",
     "postcss-import": "^14.0.2",
     "postcss-loader": "^6.1.1",

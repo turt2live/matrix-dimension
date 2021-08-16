@@ -1,22 +1,29 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FE_WhiteBoardWidget } from "../../../shared/models/integration";
 import { ToasterService } from "angular2-toaster";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { WidgetConfigDialogContext } from "../widgets.component";
+import { TranslateService } from "@ngx-translate/core";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { AdminIntegrationsApiService } from "../../../shared/services/admin/admin-integrations-api.service";
 
 @Component({
     templateUrl: "./whiteboard.component.html",
     styleUrls: ["./whiteboard.component.scss", "../config-dialog.scss"],
 })
-export class AdminWidgetWhiteboardConfigComponent implements ModalComponent<WidgetConfigDialogContext> {
+export class AdminWidgetWhiteboardConfigComponent implements OnInit {
 
     public isUpdating = false;
     public widget: FE_WhiteBoardWidget;
     private originalWidget: FE_WhiteBoardWidget;
 
-    constructor(public dialog: DialogRef<WidgetConfigDialogContext>, private adminIntegrationsApi: AdminIntegrationsApiService, private toaster: ToasterService) {
-        this.originalWidget = dialog.context.widget;
+    constructor(public modal: NgbActiveModal,
+                private adminIntegrationsApi: AdminIntegrationsApiService,
+                private toaster: ToasterService,
+                public translate: TranslateService) {
+        this.translate = translate;
+    }
+
+    ngOnInit() {
+        this.originalWidget = this.widget;
         this.widget = JSON.parse(JSON.stringify(this.originalWidget));
     }
 
@@ -25,7 +32,7 @@ export class AdminWidgetWhiteboardConfigComponent implements ModalComponent<Widg
         this.adminIntegrationsApi.setIntegrationOptions(this.widget.category, this.widget.type, this.widget.options).then(() => {
             this.originalWidget.options = this.widget.options;
             this.toaster.pop("success", "Widget updated");
-            this.dialog.close();
+            this.modal.close();
         }).catch(err => {
             this.isUpdating = false;
             console.error(err);

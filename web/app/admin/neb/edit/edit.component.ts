@@ -5,14 +5,13 @@ import { ActivatedRoute } from "@angular/router";
 import { ToasterService } from "angular2-toaster";
 import { FE_Integration } from "../../../shared/models/integration";
 import { NEB_HAS_CONFIG, NEB_IS_COMPLEX } from "../../../shared/models/neb";
-import { ContainerContent, Modal, overlayConfigFactory } from "ngx-modialog";
 import { AdminNebGiphyConfigComponent } from "../config/giphy/giphy.component";
 import { NebBotConfigurationDialogContext } from "../config/config-context";
 import { AdminNebGuggyConfigComponent } from "../config/guggy/guggy.component";
 import { AdminNebGoogleConfigComponent } from "../config/google/google.component";
 import { AdminNebImgurConfigComponent } from "../config/imgur/imgur.component";
 import { TranslateService } from "@ngx-translate/core";
-
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
     templateUrl: "./edit.component.html",
@@ -30,7 +29,7 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
 
     constructor(private nebApi: AdminNebApiService,
                 private route: ActivatedRoute,
-                private modal: Modal,
+                private modal: NgbModal,
                 private toaster: ToasterService,
                 public translate: TranslateService) {
         this.translate = translate;
@@ -87,7 +86,7 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
     }
 
     public editBot(bot: FE_Integration) {
-        let component: ContainerContent;
+        let component;
 
         if (bot.type === "giphy") component = AdminNebGiphyConfigComponent;
         if (bot.type === "guggy") component = AdminNebGuggyConfigComponent;
@@ -95,13 +94,13 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
         if (bot.type === "imgur") component = AdminNebImgurConfigComponent;
 
         if (!component) throw new Error("No config component for " + bot.type);
-        this.modal.open(component, overlayConfigFactory({
-            neb: this.nebConfig,
-            integration: bot,
-
-            isBlocking: true,
+        const nebBotRef = this.modal.open(component, {
+            backdrop: 'static',
             size: 'lg',
-        }, NebBotConfigurationDialogContext));
+        });
+        const nebBotInstance = nebBotRef.componentInstance as NebBotConfigurationDialogContext;
+        nebBotInstance.neb = this.nebConfig;
+        nebBotInstance.integration = bot;
     }
 
     private loadNeb(nebId: number) {

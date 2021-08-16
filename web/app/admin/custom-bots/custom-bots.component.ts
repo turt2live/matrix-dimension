@@ -2,9 +2,9 @@ import { Component } from "@angular/core";
 import { ToasterService } from "angular2-toaster";
 import { FE_CustomSimpleBot } from "../../shared/models/admin-responses";
 import { AdminCustomSimpleBotsApiService } from "../../shared/services/admin/admin-custom-simple-bots-api.service";
-import { Modal, overlayConfigFactory } from "ngx-modialog";
 import { AddCustomBotDialogContext, AdminAddCustomBotComponent } from "./add/add.component";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
     templateUrl: "./custom-bots.component.html",
@@ -18,7 +18,7 @@ export class AdminCustomBotsComponent {
 
     constructor(private botApi: AdminCustomSimpleBotsApiService,
                 private toaster: ToasterService,
-                private modal: Modal,
+                private modal: NgbModal,
                 public translate: TranslateService) {
         this.translate = translate;
 
@@ -36,29 +36,36 @@ export class AdminCustomBotsComponent {
     }
 
     public addBot() {
-        this.modal.open(AdminAddCustomBotComponent, overlayConfigFactory({
-            isBlocking: true,
+        const selfhostedRef = this.modal.open(AdminAddCustomBotComponent, {
+            backdrop: 'static',
             size: 'lg',
-        }, AddCustomBotDialogContext)).result.then(() => {
-            this.reload().catch(err => {
+        });
+        selfhostedRef.result.then(() => {
+            try {
+                this.reload()
+            } catch (err) {
                 console.error(err);
                 this.translate.get('Failed to get an updated bot list').subscribe((res: string) => {this.toaster.pop("error", res); });
-            });
+            }
         });
     }
 
     public editBot(bot: FE_CustomSimpleBot) {
-        this.modal.open(AdminAddCustomBotComponent, overlayConfigFactory({
-            isBlocking: true,
+        const selfhostedRef = this.modal.open(AdminAddCustomBotComponent, {
+            backdrop: 'static',
             size: 'lg',
-
-            bot: bot,
-        }, AddCustomBotDialogContext)).result.then(() => {
-            this.reload().catch(err => {
+        });
+        selfhostedRef.result.then(() => {
+            try {
+                this.reload()
+            } catch (err) {
                 console.error(err);
                 this.translate.get('Failed to get an updated bot list').subscribe((res: string) => {this.toaster.pop("error", res); });
-            });
+            }
         });
+        const selfhostedInstance = selfhostedRef.componentInstance as AddCustomBotDialogContext;
+        selfhostedInstance.bot = bot;
+        selfhostedInstance.isAdding = !bot;
     }
 
     public toggleBot(bot: FE_CustomSimpleBot) {

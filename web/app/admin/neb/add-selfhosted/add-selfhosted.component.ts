@@ -3,12 +3,12 @@ import { AdminAppserviceApiService } from "../../../shared/services/admin/admin-
 import { AdminNebApiService } from "../../../shared/services/admin/admin-neb-api.service";
 import { ToasterService } from "angular2-toaster";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Modal, overlayConfigFactory } from "ngx-modialog";
 import {
     AdminNebAppserviceConfigComponent,
     AppserviceConfigDialogContext
 } from "../appservice-config/appservice-config.component";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 
 @Component({
@@ -26,9 +26,9 @@ export class AdminAddSelfhostedNebComponent {
                 private toaster: ToasterService,
                 private router: Router,
                 private activatedRoute: ActivatedRoute,
-                private modal: Modal,
+                private modal: NgbModal,
                 public translate: TranslateService) {
-        this.translate = translate;
+        this.translate = translate;{
     }
 
     public save(): void {
@@ -37,12 +37,14 @@ export class AdminAddSelfhostedNebComponent {
             return this.nebApi.newAppserviceConfiguration(this.adminUrl, appservice);
         }).then(neb => {
             this.translate.get('New go-neb created').subscribe((res: string) => {this.toaster.pop("success", res); });
-            this.modal.open(AdminNebAppserviceConfigComponent, overlayConfigFactory({
-                neb: neb,
 
-                isBlocking: true,
+            const selfhostedRef = this.modal.open(AdminNebAppserviceConfigComponent, {
+                backdrop: 'static',
                 size: 'lg',
-            }, AppserviceConfigDialogContext)).result.then(() => this.router.navigate(["../.."], {relativeTo: this.activatedRoute}));
+            });
+            selfhostedRef.result.then(() => this.router.navigate(["../.."], {relativeTo: this.activatedRoute}));
+            const selfhostedInstance = selfhostedRef.componentInstance as AppserviceConfigDialogContext;
+            selfhostedInstance.neb = neb;
         }).catch(err => {
             console.error(err);
             this.isSaving = false;

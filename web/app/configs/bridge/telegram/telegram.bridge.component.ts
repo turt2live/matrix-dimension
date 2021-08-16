@@ -2,13 +2,12 @@ import { Component } from "@angular/core";
 import { BridgeComponent } from "../bridge.component";
 import { TelegramApiService } from "../../../shared/services/integrations/telegram-api.service";
 import { FE_PortalInfo } from "../../../shared/models/telegram";
-import { Modal, overlayConfigFactory } from "ngx-modialog";
-import { AskUnbridgeDialogContext, TelegramAskUnbridgeComponent } from "./ask-unbridge/ask-unbridge.component";
+import { TelegramAskUnbridgeComponent } from "./ask-unbridge/ask-unbridge.component";
 import {
-    CannotUnbridgeDialogContext,
     TelegramCannotUnbridgeComponent
 } from "./cannot-unbridge/cannot-unbridge.component";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 interface TelegramConfig {
     puppet: {
@@ -40,7 +39,7 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
 
     public isUpdating: boolean;
 
-    constructor(private telegram: TelegramApiService, private modal: Modal, public translate: TranslateService) {
+    constructor(private telegram: TelegramApiService, private modal: NgbModal, public translate: TranslateService) {
         super("telegram", translate);
         this.translate = translate;
     }
@@ -80,21 +79,22 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
         this.telegram.getPortalInfo(this.bridge.config.portalInfo.chatId, this.roomId).then(async (chatInfo) => {
             let forceUnbridge = false;
             if (chatInfo.bridged && chatInfo.canUnbridge) {
-                const response = await this.modal.open(TelegramAskUnbridgeComponent, overlayConfigFactory({
-                    isBlocking: true,
+                const askUnbridgeRef = this.modal.open(TelegramAskUnbridgeComponent, {
+                    backdrop: 'static',
                     size: 'lg',
-                }, AskUnbridgeDialogContext)).result;
-
-                if (response.unbridge) {
-                    forceUnbridge = true;
-                } else {
-                    return {aborted: true};
-                }
+                });
+                askUnbridgeRef.result.then((response) => {
+                    if (response.unbridge) {
+                        forceUnbridge = true;
+                    } else {
+                        return {aborted: true};
+                    }
+                });
             } else if (chatInfo.bridged) {
-                this.modal.open(TelegramCannotUnbridgeComponent, overlayConfigFactory({
-                    isBlocking: true,
+                this.modal.open(TelegramCannotUnbridgeComponent, {
+                    backdrop: 'static',
                     size: 'lg',
-                }, CannotUnbridgeDialogContext));
+                });
                 return {aborted: true};
             }
 

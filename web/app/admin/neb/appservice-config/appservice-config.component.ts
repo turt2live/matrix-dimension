@@ -1,32 +1,29 @@
 import { Component } from "@angular/core";
 import { ToasterService } from "angular2-toaster";
-import { DialogRef, ModalComponent } from "ngx-modialog";
 import { FE_Appservice, FE_NebConfiguration } from "../../../shared/models/admin-responses";
 import { AdminAppserviceApiService } from "../../../shared/services/admin/admin-appservice-api.service";
-import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
-export class AppserviceConfigDialogContext extends BSModalContext {
-    public neb: FE_NebConfiguration;
+export interface AppserviceConfigDialogContext {
+    neb: FE_NebConfiguration;
 }
 
 @Component({
     templateUrl: "./appservice-config.component.html",
     styleUrls: ["./appservice-config.component.scss"],
 })
-export class AdminNebAppserviceConfigComponent implements ModalComponent<AppserviceConfigDialogContext> {
+export class AdminNebAppserviceConfigComponent {
 
     public isLoading = true;
     public neb: FE_NebConfiguration;
     public appservice: FE_Appservice;
 
-    constructor(public dialog: DialogRef<AppserviceConfigDialogContext>,
+    constructor(public modal: NgbActiveModal,
                 private adminAppserviceApi: AdminAppserviceApiService,
                 private toaster: ToasterService,
                 public translate: TranslateService) {
         this.translate = translate;
-        this.neb = dialog.context.neb;
-
         this.adminAppserviceApi.getAppservice(this.neb.appserviceId).then(appservice => {
             this.appservice = appservice;
             this.isLoading = false;
