@@ -170,6 +170,7 @@ const routes: Routes = [
             },
             {
                 path: "widget",
+                data: {breadcrumb: {skip: true}},
                 children: [
                     {
                         path: "custom",
