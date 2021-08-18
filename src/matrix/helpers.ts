@@ -4,8 +4,8 @@ import { Cache, CACHE_FEDERATION } from "../MemoryCache";
 import * as request from "request";
 import config from "../config";
 import splitHost from 'split-host';
-import * as isIP from "isipaddress";
 import * as requestPromise from "request-promise";
+import { isIP } from "net";
 
 export interface IFederationConnectionInfo {
     hostname: string;
@@ -46,7 +46,7 @@ export async function getFederationConnInfo(serverName: string): Promise<IFedera
     }
 
     // Step 1 of the discovery process: if the hostname is an IP, use that with explicit or default port
-    if (isIP.test(hp.host)) {
+    if (isIP(hp.host) != 0) {
         const fedUrl = `https://${hp.host}:${hp.port}`;
         const fedObj = {url: fedUrl, hostname: serverName};
         Cache.for(CACHE_FEDERATION).put(serverName, fedObj, expirationMs);
@@ -81,7 +81,7 @@ export async function getFederationConnInfo(serverName: string): Promise<IFedera
             }
 
             // Step 3a: if the delegated host is an IP address, use that (regardless of port)
-            if (isIP.test(wkHp.host)) {
+            if (isIP(wkHp.host) != 0) {
                 const fedUrl = `https://${wkHp.host}:${wkHp.port}`;
                 const fedObj = {url: fedUrl, hostname: wkServerAddr};
                 Cache.for(CACHE_FEDERATION).put(serverName, fedObj, expirationMs);
