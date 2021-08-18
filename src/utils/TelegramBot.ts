@@ -1,6 +1,6 @@
-import Telegraf, { Telegram } from "telegraf";
 import config from "../config";
 import * as path from "path";
+import { Telegraf, Telegram } from "telegraf";
 
 export interface TelegramStickerPack {
     name: string;
@@ -30,7 +30,7 @@ export class TelegramBot {
 
         for (const tgSticker of set.stickers) {
             pack.stickers.push({
-                url: await this.bot.getFileLink(tgSticker.file_id),
+                url: await (await this.bot.getFileLink(tgSticker.file_id)).toString(),
                 emoji: tgSticker.emoji,
             });
         }
