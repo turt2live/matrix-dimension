@@ -53,7 +53,6 @@
     "sequelize": "6.6.2",
     "sequelize-typescript": "^2.1.0",
     "sharp": "^0.28.3",
-    "split-host": "^0.1.1",
     "spotify-uri": "^2.2.0",
     "sqlite3": "^5.0.2",
     "telegraf": "^3.30.1",
