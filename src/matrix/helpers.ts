@@ -1,4 +1,4 @@
-import * as dns from "dns-then";
+import { promises as dnsPromises } from 'dns';
 import { LogService } from "matrix-js-snippets";
 import { Cache, CACHE_FEDERATION } from "../MemoryCache";
 import * as request from "request";
@@ -100,7 +100,7 @@ export async function getFederationConnInfo(serverName: string): Promise<IFedera
 
             // Step 3c: if the delegated host is not an IP and doesn't have a port, start a SRV lookup and use that
             try {
-                const records = await dns.resolveSrv("_matrix._tcp." + hp.host);
+                const records = await dnsPromises.resolveSrv("_matrix._tcp." + hp.host);
                 if (records && records.length > 0) {
                     const fedUrl = `https://${records[0].name}:${records[0].port}`;
                     const fedObj = {url: fedUrl, hostname: wkHp.host};
@@ -127,7 +127,7 @@ export async function getFederationConnInfo(serverName: string): Promise<IFedera
 
     // Step 4: try resolving a hostname using SRV records and use that
     try {
-        const records = await dns.resolveSrv("_matrix._tcp." + hp.host);
+        const records = await dnsPromises.resolveSrv("_matrix._tcp." + hp.host);
         if (records && records.length > 0) {
             const fedUrl = `https://${records[0].name}:${records[0].port}`;
             const fedObj = {url: fedUrl, hostname: hp.host};

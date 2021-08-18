@@ -1,8 +1,8 @@
 import { GET, Path, PathParam, QueryParam } from "typescript-rest";
 import { LogService } from "matrix-js-snippets";
 import * as url from "url";
+import { promises as dnsPromises } from 'dns';
 import { ApiError } from "../ApiError";
-import * as dns from "dns-then";
 import config from "../../config";
 import { Netmask } from "netmask";
 import * as request from "request";
@@ -59,7 +59,7 @@ export class DimensionWidgetService {
         const hostname = parsed.hostname.split(":")[0];
         let addresses = [];
         try {
-            addresses = await dns.resolve(hostname);
+            addresses = await dnsPromises.resolve(hostname);
         } catch (err) {
             LogService.error("DimensionWidgetService", err);
         }
