@@ -139,7 +139,7 @@ intended - double check that all the configuration is set up and visit [#dimensi
 for further help.
 
 After configuring Element, click the the "Add widgets, bridges & bots" link in the Room Info of any room and
-then click the gear icon. If you don't see a gear icon, you're not an admin in the config. Alternatively, open `https://dimension.<your-domain>.eu/riot-app/admin`. This is
+then click the gear icon. If you don't see a gear icon, you're not an admin in the config. Alternatively, open `https://dimension.<your-domain>/riot-app/admin`. This is
 where you'll configure different integrations as Dimension doesn't ship with anything enabled by
 default - click around and start enabling things.
 
