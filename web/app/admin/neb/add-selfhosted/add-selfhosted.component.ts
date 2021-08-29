@@ -28,7 +28,7 @@ export class AdminAddSelfhostedNebComponent {
                 private activatedRoute: ActivatedRoute,
                 private modal: NgbModal,
                 public translate: TranslateService) {
-        this.translate = translate;{
+        this.translate = translate;
     }
 
     public save(): void {

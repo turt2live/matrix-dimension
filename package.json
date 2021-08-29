@@ -15,7 +15,10 @@
     "build:app": "rimraf build/app && tsc -p tsconfig.backend.json",
     "lint": "npm run-script lint:app && npm run-script lint:web",
     "lint:app": "tslint --project ./tsconfig.app.json",
-    "lint:web": "tslint --project ./tsconfig.json"
+    "lint:web": "tslint --project ./tsconfig.json",
+    "i18n": "npm run-script i18n:init && npm run-script i18n:extract",
+    "i18n:init": "ngx-translate-extract --input ./web --output ./web/public/assets/i18n/template.json --key-as-default-value --replace --format json",
+    "i18n:extract": "ngx-translate-extract --input ./web --output ./web/public/assets/i18n/en.json --clean --format json"
   },
   "repository": {
     "type": "git",
@@ -29,6 +32,8 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@ngx-translate/core": "^13.0.0",
+    "@ngx-translate/http-loader": "^6.0.0",
     "@popperjs/core": "^2.9.3",
     "body-parser": "^1.19.0",
     "config": "^3.3.6",
@@ -60,6 +65,7 @@
     "typescript-rest": "^3.0.4",
     "umzug": "^3.0.0-beta.16",
     "url": "^0.11.0",
+    "xml2js": "^0.4.23",
     "xng-breadcrumb": "^6.7.0"
   },
   "devDependencies": {
@@ -84,6 +90,7 @@
     "@angularclass/hmr-loader": "^3.0.4",
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
+    "@biesbjerg/ngx-translate-extract": "^7.0.4",
     "@ckeditor/ckeditor5-angular": "^2.0.2",
     "@ckeditor/ckeditor5-build-classic": "^29.1.0",
     "@fortawesome/fontawesome": "^1.1.8",

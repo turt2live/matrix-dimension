@@ -4,7 +4,6 @@ import { LogService } from "matrix-js-snippets";
 import { URL } from "url";
 import { BigBlueButtonGetJoinUrlRequest } from "../../models/Widget";
 import { BigBlueButtonJoinResponse, BigBlueButtonCreateAndJoinMeetingResponse, BigBlueButtonWidgetResponse } from "../../models/WidgetResponses";
-import { AutoWired } from "typescript-ioc/es6";
 import { ApiError } from "../ApiError";
 import { sha256 } from "../../utils/hashing";
 import config from "../../config";
@@ -16,7 +15,6 @@ import { MatrixStickerBot } from "../../matrix/MatrixStickerBot";
  * API for the BigBlueButton widget.
  */
 @Path("/api/v1/dimension/bigbluebutton")
-@AutoWired
 export class DimensionBigBlueButtonService {
 
     /**
