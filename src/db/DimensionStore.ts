@@ -83,7 +83,7 @@ class _DimensionStore {
 
         const migrator = new Umzug({
             migrations: {
-                glob: path.join(__dirname, "migrations/*"),
+                glob: path.join(__dirname, "migrations/*.{js,ts}"),
                 resolve: ({name, path, context}) => {
                     // Adjust the migration from the new signature to the v2 signature, making easier to upgrade to v3
                     const migration = require(path)

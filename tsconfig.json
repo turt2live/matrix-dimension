@@ -31,5 +31,8 @@
     "strictPropertyInitialization": false,
     "strictTemplates": true,
     "types" : ["node"]
-  }
+  },
+  "exclude":[
+    "./node_modules"
+  ]
 }

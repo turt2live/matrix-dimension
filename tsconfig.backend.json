@@ -3,16 +3,17 @@
     "compilerOptions": {
       "baseUrl": "./src",
       "outDir": "./build/app",
+      "module": "CommonJS",
       "types": ["bluebird", "body-parser", "jquery", "validator"],
       "allowSyntheticDefaultImports": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "moduleResolution": "node",
+      "sourceMap": false,
+      "target": "es2015",
     },
     "include": [
       "./src/**/*"
     ],
-    "ts-node": {
-      "compilerOptions": {
-        "module": "CommonJS"
-      }
-    }
   }
   

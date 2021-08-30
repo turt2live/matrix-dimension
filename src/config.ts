@@ -46,4 +46,5 @@ export interface DimensionConfig {
     logging: LogConfig;
 }
 
-export default <DimensionConfig>config;
+//TODO: We should better use the .get function from node config
+export default config as unknown as DimensionConfig;

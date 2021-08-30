@@ -1,4 +1,4 @@
-FROM node:12.16.1-alpine AS builder
+FROM node:14.17.5-alpine AS builder
 
 LABEL maintainer="Andreas Peters <support@aventer.biz>"
 #Upstream URL: https://git.aventer.biz/AVENTER/docker-matrix-dimension
@@ -17,7 +17,7 @@ RUN npm clean-install && \
     node /home/node/matrix-dimension/scripts/convert-newlines.js /home/node/matrix-dimension/docker-entrypoint.sh  && \
     NODE_ENV=production npm run-script build
 
-FROM node:12.16.1-alpine
+FROM node:14.17.5-alpine
 
 WORKDIR /home/node/matrix-dimension
 

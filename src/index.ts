@@ -22,6 +22,7 @@ LogService.info("index", "Starting dimension " + CURRENT_VERSION);
 
 // Redirect the bot-sdk logger to our logger
 BotSdk.LogService.setLogger({
+    trace: (module: string, ...args: any[]) => args.map(a => LogService.info("BotSdk-" + module, a)),
     debug: (module: string, ...args: any[]) => args.map(a => LogService.info("BotSdk-" + module, a)),
     info: (module: string, ...args: any[]) => args.map(a => LogService.info("BotSdk-" + module, a)),
     warn: (module: string, ...args: any[]) => args.map(a => LogService.warn("BotSdk-" + module, a)),
