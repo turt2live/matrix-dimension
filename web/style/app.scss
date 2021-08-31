@@ -25,12 +25,6 @@ body {
   }
 }
 
-// HACK: Work around dialog not showing up
-// ref: https://github.com/shlomiassaf/angular2-modal/issues/280
-.fade.in {
-  opacity: 1;
-}
-
 .modal.in .modal-dialog {
   -webkit-transform: translate(0, 0);
   -o-transform: translate(0, 0);
