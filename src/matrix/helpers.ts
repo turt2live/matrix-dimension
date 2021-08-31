@@ -3,6 +3,7 @@ import { LogService } from "matrix-js-snippets";
 import { Cache, CACHE_FEDERATION } from "../MemoryCache";
 import * as request from "request";
 import config from "../config";
+import splitHost from 'split-host';
 import * as requestPromise from "request-promise";
 import { isIP } from "net";
 
@@ -36,12 +37,12 @@ export async function getFederationConnInfo(serverName: string): Promise<IFedera
 
     // Dev note: The remainder of this is largely transcribed from matrix-media-repo
 
-    const hp = new URL(serverName);
+    const hp = splitHost(serverName);
     if (!hp.host) throw new Error("No hostname provided");
     let defaultPort = false;
     if (!hp.port) {
         defaultPort = true;
-        hp.port = '8448';
+        hp.port = 8448;
     }
 
     // Step 1 of the discovery process: if the hostname is an IP, use that with explicit or default port
@@ -68,7 +69,7 @@ export async function getFederationConnInfo(serverName: string): Promise<IFedera
         if (typeof (result) === 'string') result = JSON.parse(result);
         const wkServerAddr = result['m.server'];
         if (wkServerAddr) {
-            const wkHp = new URL(wkServerAddr);
+            const wkHp = splitHost(wkServerAddr);
             if (!wkHp.host) {
                 // noinspection ExceptionCaughtLocallyJS
                 throw new Error("No hostname provided for m.server");
@@ -76,7 +77,7 @@ export async function getFederationConnInfo(serverName: string): Promise<IFedera
             let wkDefaultPort = false;
             if (!wkHp.port) {
                 wkDefaultPort = true;
-                wkHp.port = '8448';
+                wkHp.port = 8448;
             }
 
             // Step 3a: if the delegated host is an IP address, use that (regardless of port)
