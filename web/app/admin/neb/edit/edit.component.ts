@@ -28,10 +28,10 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
     private overlappingTypes: string[] = [];
 
     constructor(private nebApi: AdminNebApiService,
-                private route: ActivatedRoute,
-                private modal: NgbModal,
-                private toaster: ToasterService,
-                public translate: TranslateService) {
+        private route: ActivatedRoute,
+        private modal: NgbModal,
+        private toaster: ToasterService,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -60,12 +60,16 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
         try {
             await this.nebApi.toggleIntegration(this.nebConfig.id, bot.type, bot.isEnabled);
             this.isUpdating = false;
-            this.translate.get('Integration updated').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Integration updated').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
         } catch (err) {
             console.error(err);
             bot.isEnabled = !bot.isEnabled; // revert change
             this.isUpdating = false;
-            this.translate.get('Error updating integration').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error updating integration').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
             return;
         }
 
@@ -78,7 +82,9 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
                     await this.nebApi.setIntegrationConfiguration(this.nebConfig.id, bot.type, {});
                 } catch (err) {
                     console.error(err);
-                    this.translate.get(['Failed to configure the integration', 'Manual troubleshooting may be requred' ]).subscribe((res: string) => {this.toaster.pop("warning", res[0], res[1]); });
+                    this.translate.get(['Failed to configure the integration', 'Manual troubleshooting may be requred' ]).subscribe((res: string) => {
+                        this.toaster.pop("warning", res[0], res[1]);
+                    });
                     return;
                 }
             }
@@ -122,7 +128,9 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
             this.isLoading = false;
         }).catch(err => {
             console.error(err);
-            this.translate.get('Could not get go-neb configuration').subscribe((res: string) => {this.toaster.pop('error', res); });
+            this.translate.get('Could not get go-neb configuration').subscribe((res: string) => {
+                this.toaster.pop('error', res);
+            });
         });
     }
 }

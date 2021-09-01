@@ -8,12 +8,13 @@ import { FE_ScalarOpenIdRequestBody } from "../../shared/models/scalar-server-re
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
-    selector: "my-reauth-example-widget-wrapper",
+    selector: "app-reauth-example-widget-wrapper",
     templateUrl: "reauth-example.component.html",
     styleUrls: ["reauth-example.component.scss"],
 })
-export class ReauthExampleWidgetWrapperComponent extends CapableWidget implements OnInit, OnDestroy {
-
+export class ReauthExampleWidgetWrapperComponent
+    extends CapableWidget
+    implements OnInit, OnDestroy {
     public busy = true; // busy until we load supported versions
     public hasOpenId = false;
     public userId: string;
@@ -21,13 +22,19 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
     public error = false;
     public stateMessage: string;
 
-    constructor(activatedRoute: ActivatedRoute,
-                private scalarApi: ScalarServerApiService,
-                private changeDetector: ChangeDetectorRef,
-                public translate: TranslateService) {
+    constructor(
+        activatedRoute: ActivatedRoute,
+        private scalarApi: ScalarServerApiService,
+        private changeDetector: ChangeDetectorRef,
+        public translate: TranslateService
+    ) {
         super();
         this.translate = translate;
-        this.translate.get('Checking client version...').subscribe((res: string) => {this.stateMessage = res});
+        this.translate
+            .get("Checking client version...")
+            .subscribe((res: string) => {
+                this.stateMessage = res;
+            });
 
         const params: any = activatedRoute.snapshot.queryParams;
         ScalarWidgetApi.widgetId = params.widgetId;
@@ -44,7 +51,11 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
             this.error = true;
             this.hasOpenId = false;
             this.blocked = false;
-            this.translate.get('Your client is too old to use this widget, sorry').subscribe((res: string) => {this.stateMessage = res});
+            this.translate
+                .get("Your client is too old to use this widget, sorry")
+                .subscribe((res: string) => {
+                    this.stateMessage = res;
+                });
         } else {
             this.busy = false;
             this.error = false;
@@ -60,7 +71,11 @@ export class ReauthExampleWidgetWrapperComponent extends CapableWidget implement
         this.error = false;
         this.blocked = false;
         this.hasOpenId = false;
-        this.translate.get('Please accept the prompt to verify your identity').subscribe((res: string) => {this.stateMessage = res});
+        this.translate
+            .get("Please accept the prompt to verify your identity")
+            .subscribe((res: string) => {
+                this.stateMessage = res;
+            });
 
         const response = await this.getOpenIdInfo();
         if (response.blocked) {

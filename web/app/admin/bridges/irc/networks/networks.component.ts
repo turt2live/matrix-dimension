@@ -28,9 +28,9 @@ export class AdminIrcBridgeNetworksComponent {
     public networks: LocalNetwork[];
 
     constructor(public modal: NgbActiveModal,
-                private ircApi: AdminIrcApiService,
-                private toaster: ToasterService,
-                public translate: TranslateService) {
+        private ircApi: AdminIrcApiService,
+        private toaster: ToasterService,
+        public translate: TranslateService) {
         this.translate = translate;
         const networkIds = Object.keys(this.bridge.availableNetworks);
         this.networks = networkIds.map(i => {
@@ -51,13 +51,17 @@ export class AdminIrcBridgeNetworksComponent {
         this.isUpdating = true;
         this.ircApi.setNetworkEnabled(this.bridge.id, network.id, network.isEnabled).then(() => {
             this.isUpdating = false;
-            this.translate.get(['Enabled', 'disabled']).subscribe((res: string) => {this.toaster.pop("success", "Network " + (network.isEnabled ? res[0] : res[1])); });
+            this.translate.get(['Enabled', 'disabled']).subscribe((res: string) => {
+                this.toaster.pop("success", "Network " + (network.isEnabled ? res[0] : res[1]));
+            });
         }).catch(err => {
             console.error(err);
             this.isUpdating = false;
             network.isEnabled = !network.isEnabled;
             this.bridge.availableNetworks[network.id].isEnabled = network.isEnabled;
-            this.translate.get('Failed to update network').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Failed to update network').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 }

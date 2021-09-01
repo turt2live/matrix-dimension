@@ -18,9 +18,9 @@ export class AdminHomeComponent {
     public config: FE_DimensionConfig;
 
     constructor(private adminApi: AdminApiService,
-                private toaster: ToasterService,
-                private modal: NgbModal,
-                public translate: TranslateService) {
+        private toaster: ToasterService,
+        private modal: NgbModal,
+        public translate: TranslateService) {
         this.translate = translate;
         adminApi.getConfig().then(config => {
             this.config = config;
@@ -35,11 +35,15 @@ export class AdminHomeComponent {
         selfhostedRef.result.then(async () => {
             try {
                 await this.adminApi.logoutAll();
-                this.translate.get('Everyone has been logged out').subscribe((res: string) => {this.toaster.pop("success", res); });
+                this.translate.get('Everyone has been logged out').subscribe((res: string) => {
+                    this.toaster.pop("success", res);
+                });
                 this.config.sessionInfo.numTokens = 0;
             } catch (err) {
                 console.error(err);
-                this.translate.get('Error logging everyone out').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Error logging everyone out').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             }
         });
     }

@@ -17,14 +17,16 @@ export class AdminCustomBotsComponent {
     public isUpdating = false;
 
     constructor(private botApi: AdminCustomSimpleBotsApiService,
-                private toaster: ToasterService,
-                private modal: NgbModal,
-                public translate: TranslateService) {
+        private toaster: ToasterService,
+        private modal: NgbModal,
+        public translate: TranslateService) {
         this.translate = translate;
 
         this.reload().then(() => this.isLoading = false).catch(error => {
             console.error(error);
-            this.translate.get('Error loading go-neb configuration').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error loading go-neb configuration').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -45,7 +47,9 @@ export class AdminCustomBotsComponent {
                 this.reload()
             } catch (err) {
                 console.error(err);
-                this.translate.get('Failed to get an updated bot list').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Failed to get an updated bot list').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             }
         });
     }
@@ -60,7 +64,9 @@ export class AdminCustomBotsComponent {
                 this.reload()
             } catch (err) {
                 console.error(err);
-                this.translate.get('Failed to get an updated bot list').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Failed to get an updated bot list').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             }
         });
         const selfhostedInstance = selfhostedRef.componentInstance as AddCustomBotDialogContext;
@@ -73,11 +79,15 @@ export class AdminCustomBotsComponent {
         bot.isEnabled = !bot.isEnabled;
         this.botApi.updateBot(bot.id, bot).then(() => {
             this.isUpdating = false;
-            this.translate.get(['Enabled', 'disabled']).subscribe((res: string) => {this.toaster.pop("success", "Bot " + (bot.isEnabled ? res[0] : res[1])); });
+            this.translate.get(['Enabled', 'disabled']).subscribe((res: string) => {
+                this.toaster.pop("success", "Bot " + (bot.isEnabled ? res[0] : res[1]));
+            });
         }).catch(error => {
             console.error(error);
             bot.isEnabled = !bot.isEnabled;
-            this.translate.get('Error updating bot').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error updating bot').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         })
     }
 }

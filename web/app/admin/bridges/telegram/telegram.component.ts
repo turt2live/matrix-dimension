@@ -20,9 +20,9 @@ export class AdminTelegramBridgeComponent implements OnInit {
     public configurations: FE_TelegramBridge[] = [];
 
     constructor(private telegramApi: AdminTelegramApiService,
-                private toaster: ToasterService,
-                private modal: NgbModal,
-                public translate: TranslateService) {
+        private toaster: ToasterService,
+        private modal: NgbModal,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -35,7 +35,9 @@ export class AdminTelegramBridgeComponent implements OnInit {
             this.configurations = await this.telegramApi.getBridges();
         } catch (err) {
             console.error(err);
-            this.translate.get('Error loading bridges').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error loading bridges').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         }
     }
 
@@ -49,7 +51,9 @@ export class AdminTelegramBridgeComponent implements OnInit {
                 this.reload()
             } catch (err) {
                 console.error(err);
-                this.translate.get('Failed to get an update Telegram bridge list').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Failed to get an update Telegram bridge list').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             }
         })
         const selfhostedInstance = selfhostedRef.componentInstance as ManageSelfhostedTelegramBridgeDialogContext;
@@ -76,7 +80,9 @@ export class AdminTelegramBridgeComponent implements OnInit {
                 this.reload()
             } catch (err) {
                 console.error(err);
-                this.translate.get('Failed to get an update Telegram bridge list').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Failed to get an update Telegram bridge list').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             }
         })
         const selfhostedInstance = selfhostedRef.componentInstance as ManageSelfhostedTelegramBridgeDialogContext;

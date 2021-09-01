@@ -52,7 +52,9 @@ export class TravisCiComplexBotConfigComponent extends ComplexBotComponent<Travi
 
     public addRepo(): void {
         if (!this.newRepoKey.trim()) {
-            this.translate.get('Please enter a repository').subscribe((res: string) => {this.toaster.pop('warning', res); });
+            this.translate.get('Please enter a repository').subscribe((res: string) => {
+                this.toaster.pop('warning', res);
+            });
             return;
         }
 

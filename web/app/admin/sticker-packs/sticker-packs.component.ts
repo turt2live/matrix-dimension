@@ -19,9 +19,9 @@ export class AdminStickerPacksComponent implements OnInit {
     public isImporting = false;
 
     constructor(private adminStickers: AdminStickersApiService,
-                private toaster: ToasterService,
-                private modal: NgbModal,
-                public translate: TranslateService) {
+        private toaster: ToasterService,
+        private modal: NgbModal,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -31,7 +31,9 @@ export class AdminStickerPacksComponent implements OnInit {
             this.isLoading = false;
         }).catch(err => {
             console.error(err);
-            this.translate.get('Failed to load sticker packs').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Failed to load sticker packs').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -40,12 +42,16 @@ export class AdminStickerPacksComponent implements OnInit {
         this.isUpdating = true;
         this.adminStickers.togglePack(pack.id, pack.isEnabled).then(() => {
             this.isUpdating = false;
-            this.translate.get('Sticker pack updated').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Sticker pack updated').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
         }).catch(err => {
             console.error(err);
             pack.isEnabled = !pack.isEnabled; // revert change
             this.isUpdating = false;
-            this.translate.get('Error updating sticker pack').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error updating sticker pack').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -62,11 +68,15 @@ export class AdminStickerPacksComponent implements OnInit {
             this.isImporting = false;
             this.tgUrl = "";
             this.packs.push(pack);
-            this.translate.get('Telegram sticker pack imported').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Telegram sticker pack imported').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
         }).catch(err => {
             console.error(err);
             this.isImporting = false;
-            this.translate.get('Error importing sticker pack').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error importing sticker pack').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 

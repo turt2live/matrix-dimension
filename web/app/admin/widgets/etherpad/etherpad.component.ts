@@ -16,9 +16,9 @@ export class AdminWidgetEtherpadConfigComponent implements OnInit {
     private originalWidget = <FE_EtherpadWidget>{};
 
     constructor(public modal: NgbActiveModal,
-                private adminIntegrationsApi: AdminIntegrationsApiService,
-                private toaster: ToasterService,
-                public translate: TranslateService) {
+        private adminIntegrationsApi: AdminIntegrationsApiService,
+        private toaster: ToasterService,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -31,12 +31,16 @@ export class AdminWidgetEtherpadConfigComponent implements OnInit {
         this.isUpdating = true;
         this.adminIntegrationsApi.setIntegrationOptions(this.widget.category, this.widget.type, this.widget.options).then(() => {
             this.originalWidget.options = this.widget.options;
-            this.translate.get('Widget updated').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Widget updated').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
             this.modal.close();
         }).catch(err => {
             this.isUpdating = false;
             console.error(err);
-            this.translate.get('Error updating widget').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error updating widget').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 }

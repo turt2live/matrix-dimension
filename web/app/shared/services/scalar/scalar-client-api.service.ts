@@ -18,7 +18,7 @@ export class ScalarClientApiService {
     private static actionMap: { [key: string]: { resolve: (obj: any) => void, reject: (obj: any) => void } } = {};
 
     public static getAndRemoveActionHandler(requestKey: string): { resolve: (obj: any) => void, reject: (obj: any) => void } {
-        let handler = ScalarClientApiService.actionMap[requestKey];
+        const handler = ScalarClientApiService.actionMap[requestKey];
         ScalarClientApiService.actionMap[requestKey] = null;
         return handler;
     }
@@ -121,7 +121,7 @@ export class ScalarClientApiService {
     }
 
     private callAction(action, payload): Promise<any> {
-        let requestKey = randomString({length: 20});
+        const requestKey = randomString({length: 20});
         return new Promise((resolve, reject) => {
             if (!window.opener) {
                 // Mimic an error response from scalar
@@ -134,7 +134,7 @@ export class ScalarClientApiService {
                 reject: reject
             };
 
-            let request = JSON.parse(JSON.stringify(payload));
+            const request = JSON.parse(JSON.stringify(payload));
             request["request_id"] = requestKey;
             request["action"] = action;
 
@@ -147,10 +147,10 @@ export class ScalarClientApiService {
 window.addEventListener("message", event => {
     if (!event.data) return;
 
-    let requestKey = event.data["request_id"];
+    const requestKey = event.data["request_id"];
     if (!requestKey) return;
 
-    let action = ScalarClientApiService.getAndRemoveActionHandler(requestKey);
+    const action = ScalarClientApiService.getAndRemoveActionHandler(requestKey);
     if (!action) return;
 
     if (event.data.response && event.data.response.error) action.reject(event.data);

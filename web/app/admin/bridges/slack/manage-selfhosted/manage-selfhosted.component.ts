@@ -22,9 +22,9 @@ export class AdminSlackBridgeManageSelfhostedComponent {
     public isAdding = true;
 
     constructor(public modal: NgbActiveModal,
-                private slackApi: AdminSlackApiService,
-                private toaster: ToasterService,
-                public translate: TranslateService) {
+        private slackApi: AdminSlackApiService,
+        private toaster: ToasterService,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -32,12 +32,16 @@ export class AdminSlackBridgeManageSelfhostedComponent {
         this.isSaving = true;
         if (this.isAdding) {
             this.slackApi.newSelfhosted(this.provisionUrl).then(() => {
-                this.translate.get('Slack bridge added').subscribe((res: string) => {this.toaster.pop("success", res); });
+                this.translate.get('Slack bridge added').subscribe((res: string) => {
+                    this.toaster.pop("success", res);
+                });
                 this.modal.close();
             }).catch(err => {
                 console.error(err);
                 this.isSaving = false;
-                this.translate.get('Failed to create Slack bridge').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Failed to create Slack bridge').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             });
         } else {
             this.slackApi.updateSelfhosted(this.bridgeId, this.provisionUrl).then(() => {
@@ -46,7 +50,9 @@ export class AdminSlackBridgeManageSelfhostedComponent {
             }).catch(err => {
                 console.error(err);
                 this.isSaving = false;
-                this.translate.get('Failed to update Slack bridge').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Failed to update Slack bridge').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             });
         }
     }

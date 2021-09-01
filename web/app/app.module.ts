@@ -122,7 +122,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
+    return new TranslateHttpLoader(http);
 }
 
 @NgModule({
@@ -286,27 +286,27 @@ export function HttpLoaderFactory(http: HttpClient) {
     ]
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, injector: Injector) {
-    ServiceLocator.injector = injector;
-  }
+    constructor(public appRef: ApplicationRef, injector: Injector) {
+        ServiceLocator.injector = injector;
+    }
 
-  hmrOnInit(store) {
-    console.log("HMR store", store);
-  }
+    hmrOnInit(store) {
+        console.log("HMR store", store);
+    }
 
-  hmrOnDestroy(store) {
-    let cmpLocation = this.appRef.components.map(
-      (cmp) => cmp.location.nativeElement
-    );
-    // recreate elements
-    store.disposeOldHosts = createNewHosts(cmpLocation);
-    // remove styles
-    removeNgStyles();
-  }
+    hmrOnDestroy(store) {
+        const cmpLocation = this.appRef.components.map(
+            (cmp) => cmp.location.nativeElement
+        );
+        // recreate elements
+        store.disposeOldHosts = createNewHosts(cmpLocation);
+        // remove styles
+        removeNgStyles();
+    }
 
-  hmrAfterDestroy(store) {
+    hmrAfterDestroy(store) {
     // display new elements
-    store.disposeOldHosts();
-    delete store.disposeOldHosts;
-  }
+        store.disposeOldHosts();
+        delete store.disposeOldHosts;
+    }
 }

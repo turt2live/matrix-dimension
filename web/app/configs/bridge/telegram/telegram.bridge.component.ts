@@ -106,7 +106,9 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
             this.bridge.config.portalInfo = loadedPortalInfo;
             this.bridge.config.linked = [loadedPortalInfo.chatId];
             this.isUpdating = false;
-            this.translate.get('Bridge updated').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Bridge updated').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
         }).catch(error => {
             this.isUpdating = false;
             console.error(error);
@@ -118,8 +120,10 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
                 if (body["dim_errcode"] === "ROOM_ALREADY_BRIDGED") message = 'This room is already bridged to a Telegram chat';
                 if (body["dim_errcode"] === "BOT_NOT_IN_CHAT") message = 'The Telegram bot has not been invited to the chat';
                 if (body["dim_errcode"] === "NOT_ENOUGH_PERMISSIONS") message = 'You do not have permission to bridge that chat';
-                }
-            this.translate.get(message).subscribe((res: string) => {this.toaster.pop("error", res); });
+            }
+            this.translate.get(message).subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -129,7 +133,9 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
             this.bridge.config.portalInfo = portalInfo;
             this.bridge.config.linked = [];
             this.isUpdating = false;
-            this.translate.get('Bridge removed').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Bridge removed').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
         }).catch(error => {
             this.isUpdating = false;
             console.error(error);
@@ -139,7 +145,9 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
                 if (body["dim_errcode"] === "BOT_NOT_IN_CHAT") message = 'The Telegram bot has not been invited to the chat';
                 if (body["dim_errcode"] === "NOT_ENOUGH_PERMISSIONS")  message = 'You do not have permission to unbridge that chat';
             }
-            this.translate.get(message).subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get(message).subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 }

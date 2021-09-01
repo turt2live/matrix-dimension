@@ -23,9 +23,9 @@ export class ScalarWidgetApi {
     }
 
     public static replyCapabilities(request: ScalarToWidgetRequest,
-                                    capabilities: (
-                                        "m.text" | "m.image" | "m.sticker" | "m.capability.screenshot" | "m.capability.request_data" |
-                                        "m.capability.request_messages" | "m.capability.room_membership" | string)[]
+        capabilities: (
+            "m.text" | "m.image" | "m.sticker" | "m.capability.screenshot" | "m.capability.request_data" |
+            "m.capability.request_messages" | "m.capability.room_membership" | string)[]
     ): void {
         ScalarWidgetApi.replyEvent(request, {capabilities: capabilities});
     }
@@ -97,7 +97,7 @@ export class ScalarWidgetApi {
             return;
         }
 
-        let request = JSON.parse(JSON.stringify(payload));
+        const request = JSON.parse(JSON.stringify(payload));
         request["api"] = "fromWidget";
         request["widgetId"] = ScalarWidgetApi.widgetId;
         request["action"] = action;
@@ -114,7 +114,7 @@ export class ScalarWidgetApi {
             return;
         }
 
-        let requestClone = JSON.parse(JSON.stringify(request));
+        const requestClone = JSON.parse(JSON.stringify(request));
         requestClone["response"] = payload;
 
         console.log("[Dimension] Sending postMessage response: ", request);

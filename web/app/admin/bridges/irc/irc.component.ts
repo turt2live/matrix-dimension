@@ -25,10 +25,10 @@ export class AdminIrcBridgeComponent implements OnInit {
     private upstreams: FE_Upstream[];
 
     constructor(private upstreamApi: AdminUpstreamApiService,
-                private ircApi: AdminIrcApiService,
-                private toaster: ToasterService,
-                private modal: NgbModal,
-                public translate: TranslateService) {
+        private ircApi: AdminIrcApiService,
+        private toaster: ToasterService,
+        private modal: NgbModal,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -50,7 +50,9 @@ export class AdminIrcBridgeComponent implements OnInit {
             }
         } catch (err) {
             console.error(err);
-            this.translate.get('Error loading bridges').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error loading bridges').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         }
     }
 
@@ -69,13 +71,17 @@ export class AdminIrcBridgeComponent implements OnInit {
         const createBridge = (upstream: FE_Upstream) => {
             return this.ircApi.newFromUpstream(upstream).then(bridge => {
                 this.configurations.push(bridge);
-                this.translate.get(['Click the pencil icon to enable networks.', 'matrix.org\'s IRC bridge added']).subscribe((res: string) => {this.toaster.pop("success", res[0], res[1]); });
+                this.translate.get(['Click the pencil icon to enable networks.', 'matrix.org\'s IRC bridge added']).subscribe((res: string) => {
+                    this.toaster.pop("success", res[0], res[1]);
+                });
                 this.isUpdating = false;
                 this.hasModularBridge = true;
             }).catch(err => {
                 console.error(err);
                 this.isUpdating = false;
-                this.translate.get('Error adding matrix.org\'s IRC Bridge').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Error adding matrix.org\'s IRC Bridge').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             });
         };
         const vectorUpstreams = this.upstreams.filter(u => u.type === "vector");
@@ -87,7 +93,9 @@ export class AdminIrcBridgeComponent implements OnInit {
                 createBridge(upstream);
             }).catch(err => {
                 console.error(err);
-                this.translate.get('Error creating matrix.org\'s IRC Bridge').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Error creating matrix.org\'s IRC Bridge').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             });
         } else createBridge(vectorUpstreams[0]);
     }
@@ -102,7 +110,9 @@ export class AdminIrcBridgeComponent implements OnInit {
                 this.reload()
             } catch (err) {
                 console.error(err);
-                this.translate.get('Failed to get an update IRC bridge list').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Failed to get an update IRC bridge list').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             }
         })
     }
@@ -117,7 +127,9 @@ export class AdminIrcBridgeComponent implements OnInit {
                 this.reload()
             } catch (err) {
                 console.error(err);
-                this.translate.get('Failed to get an update IRC bridge list').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Failed to get an update IRC bridge list').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             }
         })
         const selfhostedInstance = selfhostedRef.componentInstance as IrcNetworksDialogContext;

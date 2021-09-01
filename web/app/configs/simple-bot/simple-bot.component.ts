@@ -22,10 +22,10 @@ export class ConfigSimpleBotComponent implements OnInit {
     private roomId: string;
 
     constructor(public modal: NgbActiveModal,
-                private toaster: ToasterService,
-                private scalar: ScalarClientApiService,
-                private integrationsApi: IntegrationsApiService,
-                public translate: TranslateService) {
+        private toaster: ToasterService,
+        private scalar: ScalarClientApiService,
+        private integrationsApi: IntegrationsApiService,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -44,9 +44,13 @@ export class ConfigSimpleBotComponent implements OnInit {
         promise.then(() => {
             this.bot._isUpdating = false;
             if (this.bot._inRoom) {
-                this.translate.get('was invited to the room').subscribe((res: string) => {this.toaster.pop("success", this.bot.displayName + res); });
+                this.translate.get('was invited to the room').subscribe((res: string) => {
+                    this.toaster.pop("success", this.bot.displayName + res);
+                });
             } else {
-                this.translate.get('was removed from the room').subscribe((res: string) => {this.toaster.pop("success", this.bot.displayName + res); });
+                this.translate.get('was removed from the room').subscribe((res: string) => {
+                    this.toaster.pop("success", this.bot.displayName + res);
+                });
             }
         }).catch(err => {
             this.bot._inRoom = !this.bot._inRoom; // revert the status change
@@ -57,7 +61,9 @@ export class ConfigSimpleBotComponent implements OnInit {
             if (err.json) errorMessage = err.json().error;
             if (err.response && err.response.error) errorMessage = err.response.error.message;
             if (!errorMessage) errorMessage = "";
-            this.translate.get('Could not update integration status').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Could not update integration status').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 }

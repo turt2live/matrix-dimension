@@ -9,12 +9,12 @@ import User from "./db/models/User";
 import { ILoggedInUser } from "./api/security/MatrixSecurity";
 
 declare global {
-  namespace Express {
-    interface User extends ILoggedInUser {
-      userId: string;
-      token: string;
+    namespace Express {
+        interface User extends ILoggedInUser {
+            userId: string;
+            token: string;
+        }
     }
-  }
 }
 
 LogService.configure(config.logging);
@@ -30,8 +30,8 @@ BotSdk.LogService.setLogger({
 });
 
 async function startup() {
-  const schemas = await DimensionStore.updateSchema();
-  LogService.info("DimensionStore", schemas);
+    const schemas = await DimensionStore.updateSchema();
+    LogService.info("DimensionStore", schemas);
 
     const webserver = new Webserver();
     await webserver.start();

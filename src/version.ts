@@ -12,8 +12,8 @@ try {
 
 try {
     gitHash = child_process
-    .execSync('git rev-parse --short HEAD')
-    .toString().trim()
+        .execSync('git rev-parse --short HEAD')
+        .toString().trim()
 } catch (error) {
     // The log service isn't set up by the time we require this file
     console.error("version", error);

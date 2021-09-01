@@ -24,9 +24,9 @@ export class AdminNebGiphyConfigComponent implements OnInit {
     public neb: FE_NebConfiguration;
 
     constructor(public modal: NgbActiveModal,
-                private adminNebApi: AdminNebApiService,
-                private toaster: ToasterService,
-                public translate: TranslateService) {
+        private adminNebApi: AdminNebApiService,
+        private toaster: ToasterService,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -36,19 +36,25 @@ export class AdminNebGiphyConfigComponent implements OnInit {
             this.isLoading = false;
         }).catch(err => {
             console.error(err);
-            this.translate.get('Error loading configuration').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error loading configuration').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
     public save() {
         this.isUpdating = true;
         this.adminNebApi.setIntegrationConfiguration(this.neb.id, this.integration.type, this.config).then(() => {
-            this.translate.get('Configuration updated').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Configuration updated').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
             this.modal.close();
         }).catch(err => {
             this.isUpdating = false;
             console.error(err);
-            this.translate.get('Error updating integration').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error updating integration').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 }

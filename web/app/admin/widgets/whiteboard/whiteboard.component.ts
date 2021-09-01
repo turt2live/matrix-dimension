@@ -16,9 +16,9 @@ export class AdminWidgetWhiteboardConfigComponent implements OnInit {
     private originalWidget: FE_WhiteBoardWidget;
 
     constructor(public modal: NgbActiveModal,
-                private adminIntegrationsApi: AdminIntegrationsApiService,
-                private toaster: ToasterService,
-                public translate: TranslateService) {
+        private adminIntegrationsApi: AdminIntegrationsApiService,
+        private toaster: ToasterService,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 

@@ -29,7 +29,9 @@ export class AdminWidgetsComponent {
             this.widgets = widgets;
         }).catch(err => {
             console.error(err);
-            this.translate.get('Failed to load widgets').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Failed to load widgets').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -38,12 +40,16 @@ export class AdminWidgetsComponent {
         this.isUpdating = true;
         this.adminIntegrationsApi.toggleIntegration(widget.category, widget.type, widget.isEnabled).then(() => {
             this.isUpdating = false;
-            this.translate.get('Widget updated').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Widget updated').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
         }).catch(err => {
             console.error(err);
             widget.isEnabled = !widget.isEnabled; // revert change
             this.isUpdating = false;
-            this.translate.get('Error updating widget').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error updating widget').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -56,7 +62,9 @@ export class AdminWidgetsComponent {
 
         if (!component) {
             console.error("No known dialog component for " + widget.type);
-            this.translate.get('Error opening configuration page').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error opening configuration page').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
             return;
         }
 

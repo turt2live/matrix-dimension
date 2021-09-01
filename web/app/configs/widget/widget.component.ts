@@ -33,11 +33,11 @@ export class WidgetComponent implements OnInit {
     private scalarApi = ServiceLocator.injector.get(ScalarClientApiService);
 
     constructor(@Inject(String) private widgetTypes: string[],
-                @Inject(String) public defaultName: string,
-                @Inject(String) private wrapperId = "generic",
-                public translate: TranslateService,
-                @Inject(String) private scalarWrapperId = null,
-                @Inject(String) private scalarWrapperUrlParamName = "url") {
+        @Inject(String) public defaultName: string,
+        @Inject(String) private wrapperId = "generic",
+        public translate: TranslateService,
+        @Inject(String) private scalarWrapperId = null,
+        @Inject(String) private scalarWrapperUrlParamName = "url") {
         this.translate = translate;
 
         this.isLoading = true;
@@ -49,7 +49,7 @@ export class WidgetComponent implements OnInit {
             this.wrapperUrl = this.window.location.origin + "/widgets/" + this.wrapperId + "?url=";
 
             if (!this.scalarWrapperId) this.scalarWrapperId = this.wrapperId;
-            for (let widgetLink of SCALAR_WIDGET_LINKS) {
+            for (const widgetLink of SCALAR_WIDGET_LINKS) {
                 const wrapperLink = widgetLink
                     .replace("__TYPE__", this.scalarWrapperId)
                     .replace("__PNAME__", this.scalarWrapperUrlParamName);
@@ -60,7 +60,7 @@ export class WidgetComponent implements OnInit {
         this.prepareNewWidget();
         this.getWidgetsOfType(this.widgetTypes).then(widgets => {
             this.widgets = widgets;
-            for (let widget of this.widgets) {
+            for (const widget of this.widgets) {
                 this.unpackWidget(widget);
             }
 
@@ -70,15 +70,15 @@ export class WidgetComponent implements OnInit {
 
             // We reset after discovering to ensure that the widget component can correctly
             // set the state of the widget prior to us unpacking it (again)
-            for (let widget of this.widgets) {
+            for (const widget of this.widgets) {
                 this.resetWidget(widget);
             }
 
             // See if we should request editing a particular widget
             if (SessionStorage.editIntegrationId && SessionStorage.editsRequested === 1) {
                 let editWidget: EditableWidget = null;
-                let otherWidgets: EditableWidget[] = [];
-                for (let widget of this.widgets) {
+                const otherWidgets: EditableWidget[] = [];
+                for (const widget of this.widgets) {
                     if (widget.id === SessionStorage.editIntegrationId) {
                         editWidget = widget;
                     } else otherWidgets.push(widget);
@@ -186,7 +186,7 @@ export class WidgetComponent implements OnInit {
         if (!this.wrapperUrl) return url;
 
         const urls = [this.wrapperUrl].concat(this.scalarWrapperUrls);
-        for (let scalarUrl of urls) {
+        for (const scalarUrl of urls) {
             if (url.startsWith(scalarUrl)) {
                 return decodeURIComponent(url.substring(scalarUrl.length));
             }
@@ -263,12 +263,16 @@ export class WidgetComponent implements OnInit {
         try {
             this.OnWidgetBeforeAdd(this.newWidget);
         } catch (error) {
-            this.translate.get(error.message).subscribe((res: string) => {this.toaster.pop("warning", res); });
+            this.translate.get(error.message).subscribe((res: string) => {
+                this.toaster.pop("warning", res);
+            });
             return;
         }
 
         if (!this.newWidget.dimension.newUrl || this.newWidget.dimension.newUrl.trim().length === 0) {
-           this.translate.get("Please enter a URL for the widget").subscribe((res: string) => {this.toaster.pop("warning", res ); });
+            this.translate.get("Please enter a URL for the widget").subscribe((res: string) => {
+                this.toaster.pop("warning", res );
+            });
             return;
         }
 
@@ -281,7 +285,9 @@ export class WidgetComponent implements OnInit {
                 this.isUpdating = false;
                 this.OnWidgetAfterAdd(this.newWidget);
                 this.prepareNewWidget();
-                this.translate.get("Widget added!").subscribe((res: string) => {this.toaster.pop("success", res); });
+                this.translate.get("Widget added!").subscribe((res: string) => {
+                    this.toaster.pop("success", res);
+                });
             })
             .catch(err => {
                 this.isUpdating = false;
@@ -305,7 +311,9 @@ export class WidgetComponent implements OnInit {
         }
 
         if (!widget.dimension.newUrl || widget.dimension.newUrl.trim().length === 0) {
-            this.translate.get("Please enter a URL for the widget").subscribe((res: string) => {this.toaster.pop("warning", res); });
+            this.translate.get("Please enter a URL for the widget").subscribe((res: string) => {
+                this.toaster.pop("warning", res);
+            });
             return;
         }
 
@@ -316,7 +324,9 @@ export class WidgetComponent implements OnInit {
             .then(() => {
                 this.isUpdating = false;
                 this.OnWidgetAfterEdit(widget);
-                this.translate.get("Widget updated!").subscribe((res: string) => {this.toaster.pop("success", res); });
+                this.translate.get("Widget updated!").subscribe((res: string) => {
+                    this.toaster.pop("success", res);
+                });
             })
             .catch(err => {
                 this.isUpdating = false;
@@ -338,7 +348,9 @@ export class WidgetComponent implements OnInit {
             .then(() => {
                 this.isUpdating = false;
                 this.OnWidgetAfterDelete(widget);
-                this.translate.get("Widget deleted!").subscribe((res: string) => {this.toaster.pop("success", res); });
+                this.translate.get("Widget deleted!").subscribe((res: string) => {
+                    this.toaster.pop("success", res);
+                });
             })
             .catch(err => {
                 this.isUpdating = false;

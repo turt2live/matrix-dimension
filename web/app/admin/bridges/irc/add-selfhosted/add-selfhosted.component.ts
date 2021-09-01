@@ -19,21 +19,25 @@ export class AdminIrcBridgeAddSelfhostedComponent {
     public provisionUrl: string;
 
     constructor(public modal: NgbActiveModal,
-                private ircApi: AdminIrcApiService,
-                private toaster: ToasterService,
-                public translate: TranslateService) {
+        private ircApi: AdminIrcApiService,
+        private toaster: ToasterService,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
     public add() {
         this.isSaving = true;
         this.ircApi.newSelfhosted(this.provisionUrl).then(() => {
-            this.translate.get('IRC Bridge added').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('IRC Bridge added').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
             this.modal.close();
         }).catch(err => {
             console.error(err);
             this.isSaving = false;
-            this.translate.get('Failed to create IRC bridge').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Failed to create IRC bridge').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 }

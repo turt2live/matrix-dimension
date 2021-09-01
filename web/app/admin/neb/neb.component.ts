@@ -26,18 +26,20 @@ export class AdminNebComponent {
     public configurations: FE_NebConfiguration[];
 
     constructor(private nebApi: AdminNebApiService,
-                private upstreamApi: AdminUpstreamApiService,
-                private appserviceApi: AdminAppserviceApiService,
-                private toaster: ToasterService,
-                private router: Router,
-                private activatedRoute: ActivatedRoute,
-                private modal: NgbModal,
-                public translate: TranslateService) {
+        private upstreamApi: AdminUpstreamApiService,
+        private appserviceApi: AdminAppserviceApiService,
+        private toaster: ToasterService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private modal: NgbModal,
+        public translate: TranslateService) {
         this.translate = translate;
 
         this.reload().then(() => this.isLoading = false).catch(error => {
             console.error(error);
-            this.translate.get('Error loading go-neb configuration').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error loading go-neb configuration').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -100,13 +102,17 @@ export class AdminNebComponent {
         const createNeb = (upstream: FE_Upstream) => {
             return this.nebApi.newUpstreamConfiguration(upstream).then(neb => {
                 this.configurations.push(neb);
-                this.translate.get(['matrix.org\'s go-neb added', 'Click the pencil icon to enable the bots.']).subscribe((res: string) => {this.toaster.pop("success", res[0], res[1]); });
+                this.translate.get(['matrix.org\'s go-neb added', 'Click the pencil icon to enable the bots.']).subscribe((res: string) => {
+                    this.toaster.pop("success", res[0], res[1]);
+                });
                 this.isAddingModularNeb = false;
                 this.hasModularNeb = true;
             }).catch(error => {
                 console.error(error);
                 this.isAddingModularNeb = false;
-                this.translate.get('Error adding matrix.org\'s go-neb').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Error adding matrix.org\'s go-neb').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             });
         };
 
@@ -119,7 +125,9 @@ export class AdminNebComponent {
                 createNeb(upstream);
             }).catch(err => {
                 console.error(err);
-                this.translate.get('Error creating matrix.org go-neb').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Error creating matrix.org go-neb').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             });
         } else createNeb(vectorUpstreams[0]);
     }

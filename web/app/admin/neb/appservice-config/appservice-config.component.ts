@@ -20,16 +20,18 @@ export class AdminNebAppserviceConfigComponent {
     public appservice: FE_Appservice;
 
     constructor(public modal: NgbActiveModal,
-                private adminAppserviceApi: AdminAppserviceApiService,
-                private toaster: ToasterService,
-                public translate: TranslateService) {
+        private adminAppserviceApi: AdminAppserviceApiService,
+        private toaster: ToasterService,
+        public translate: TranslateService) {
         this.translate = translate;
         this.adminAppserviceApi.getAppservice(this.neb.appserviceId).then(appservice => {
             this.appservice = appservice;
             this.isLoading = false;
         }).catch(err => {
             console.error(err);
-            this.translate.get('Could not load appservice configuration').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Could not load appservice configuration').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -50,10 +52,14 @@ export class AdminNebAppserviceConfigComponent {
 
     public test() {
         this.adminAppserviceApi.test(this.neb.appserviceId).then(() => {
-            this.translate.get('The appservice appears to be correctly set up').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('The appservice appears to be correctly set up').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
         }).catch(err => {
             console.error(err);
-            this.translate.get('The appservice is not correctly set up').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('The appservice is not correctly set up').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 }

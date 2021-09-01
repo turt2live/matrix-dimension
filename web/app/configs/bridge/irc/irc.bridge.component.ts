@@ -57,7 +57,9 @@ export class IrcBridgeConfigComponent extends BridgeComponent<IrcConfig> {
 
     public loadOps() {
         if (!this.channel.trim()) {
-            this.translate.get('Please enter a channel name').subscribe((res: string) => {this.toaster.pop("warning", res); });
+            this.translate.get('Please enter a channel name').subscribe((res: string) => {
+                this.toaster.pop("warning", res);
+            });
             return;
         }
 
@@ -70,7 +72,9 @@ export class IrcBridgeConfigComponent extends BridgeComponent<IrcConfig> {
         }).catch(err => {
             console.error(err);
             this.loadingOps = false;
-            this.translate.get('Error loading channel operators').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error loading channel operators').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -88,7 +92,9 @@ export class IrcBridgeConfigComponent extends BridgeComponent<IrcConfig> {
         } catch (err) {
             console.error(err);
             this.requestingBridge = false;
-            this.translate.get(['Failed to make the bridge an administrator', 'Please ensure you are an \'Admin\' for the room']).subscribe((res: string) => {this.toaster.pop("error", res[0], res[1]); });
+            this.translate.get(['Failed to make the bridge an administrator', 'Please ensure you are an \'Admin\' for the room']).subscribe((res: string) => {
+                this.toaster.pop("error", res[0], res[1]);
+            });
             return;
         }
 
@@ -101,11 +107,15 @@ export class IrcBridgeConfigComponent extends BridgeComponent<IrcConfig> {
                 pending: true,
             });
             this.resetForm();
-            this.translate.get(['Link requested!', 'The operator selected will have to approve the bridge for it to work']).subscribe((res: string) => {this.toaster.pop("success", res[0], res[1]); });
+            this.translate.get(['Link requested!', 'The operator selected will have to approve the bridge for it to work']).subscribe((res: string) => {
+                this.toaster.pop("success", res[0], res[1]);
+            });
         }).catch(err => {
             console.error(err);
             this.requestingBridge = false;
-            this.translate.get('Failed to request a link').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Failed to request a link').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -135,10 +145,14 @@ export class IrcBridgeConfigComponent extends BridgeComponent<IrcConfig> {
             this.isUpdating = false;
             const idx = this.bridge.config.links[channel.networkId].findIndex(c => c.channelName === channel.name);
             if (idx !== -1) this.bridge.config.links[channel.networkId].splice(idx, 1);
-            this.translate.get('Link removed').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Link removed').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
         }).catch(err => {
             console.error(err);
-            this.translate.get('Failed to remove link').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Failed to remove link').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 }

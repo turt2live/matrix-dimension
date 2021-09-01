@@ -88,7 +88,7 @@ class _DimensionStore {
                     // Adjust the migration from the new signature to the v2 signature, making easier to upgrade to v3
                     const migration = require(path)
                     return { name, up: async () => migration.default.up(context), down: async () => migration.default.down(context) }
-                  }
+                }
             },
             context: this.sequelize.getQueryInterface(),
             storage: new SequelizeStorage({ sequelize: this.sequelize }),

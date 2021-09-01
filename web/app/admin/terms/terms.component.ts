@@ -18,10 +18,10 @@ export class AdminTermsComponent implements OnInit {
     public policies: FE_TermsEditable[];
 
     constructor(private adminTerms: AdminTermsApiService,
-                private toaster: ToasterService,
-                private router: Router,
-                private activatedRoute: ActivatedRoute,
-                public translate: TranslateService) {
+        private toaster: ToasterService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -34,7 +34,9 @@ export class AdminTermsComponent implements OnInit {
             this.isLoading = false;
         }).catch(err => {
             console.error(err);
-            this.translate.get('Failed to load policies').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Failed to load policies').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 

@@ -23,9 +23,9 @@ export class AdminAddCustomBotComponent {
     private lastProfile: FE_UserProfile;
 
     constructor(public modal: NgbActiveModal,
-                private botApi: AdminCustomSimpleBotsApiService,
-                private toaster: ToasterService,
-                public translate: TranslateService) {
+        private botApi: AdminCustomSimpleBotsApiService,
+        private toaster: ToasterService,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -46,23 +46,33 @@ export class AdminAddCustomBotComponent {
 
     public add() {
         if (!this.bot.name) {
-            this.translate.get('Please enter a name for the bot').subscribe((res: string) => {this.toaster.pop("warning", res); });
+            this.translate.get('Please enter a name for the bot').subscribe((res: string) => {
+                this.toaster.pop("warning", res);
+            });
             return;
         }
         if (!this.bot.avatarUrl) {
-            this.translate.get('Please enter an avatar URL for the bot').subscribe((res: string) => {this.toaster.pop("warning", res); });
+            this.translate.get('Please enter an avatar URL for the bot').subscribe((res: string) => {
+                this.toaster.pop("warning", res);
+            });
             return;
         }
         if (!this.bot.userId) {
-            this.translate.get('Please enter a user ID for the bot').subscribe((res: string) => {this.toaster.pop("warning", res); });
+            this.translate.get('Please enter a user ID for the bot').subscribe((res: string) => {
+                this.toaster.pop("warning", res);
+            });
             return;
         }
         if (!this.bot.description) {
-            this.translate.get('Please enter a description for the bot').subscribe((res: string) => {this.toaster.pop("warning", res); });
+            this.translate.get('Please enter a description for the bot').subscribe((res: string) => {
+                this.toaster.pop("warning", res);
+            });
             return;
         }
         if (!this.bot.accessToken) {
-            this.translate.get('Please enter an access token for the bot').subscribe((res: string) => {this.toaster.pop("warning", res); });
+            this.translate.get('Please enter an access token for the bot').subscribe((res: string) => {
+                this.toaster.pop("warning", res);
+            });
             return;
         }
 
@@ -86,12 +96,16 @@ export class AdminAddCustomBotComponent {
         }
 
         promise.then(() => {
-            this.translate.get('Bot updated').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Bot updated').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
             this.modal.close();
         }).catch(error => {
             this.isSaving = false;
             console.error(error);
-            this.translate.get('Error updating bot').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error updating bot').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 }

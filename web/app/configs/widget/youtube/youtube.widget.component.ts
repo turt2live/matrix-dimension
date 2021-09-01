@@ -47,12 +47,16 @@ export class YoutubeWidgetConfigComponent extends WidgetComponent {
 
     private setVideoUrl(widget: EditableWidget) {
         if (!widget.dimension.newData.videoUrl || widget.dimension.newData.videoUrl.trim().length === 0) {
-            this.translate.get('Please enter a video URL').subscribe((res: string) => {throw new Error(res); });
+            this.translate.get('Please enter a video URL').subscribe((res: string) => {
+                throw new Error(res);
+            });
         }
 
         const videoUrl = this.getRealVideoUrl(widget.dimension.newData.videoUrl);
         if (!videoUrl) {
-            this.translate.get('Please enter a YouTube, Vimeo, or DailyMotion video URL').subscribe((res: string) => {throw new Error(res); });
+            this.translate.get('Please enter a YouTube, Vimeo, or DailyMotion video URL').subscribe((res: string) => {
+                throw new Error(res);
+            });
         }
 
         widget.dimension.newUrl = videoUrl;

@@ -19,7 +19,9 @@ export class AdminTermsNewEditPublishDialogComponent {
 
     public publish() {
         if (!this.version || !this.version.trim()) {
-            this.translate.get('Please enter a version number').subscribe((res: string) => {this.toaster.pop("warning", res); });
+            this.translate.get('Please enter a version number').subscribe((res: string) => {
+                this.toaster.pop("warning", res);
+            });
             return;
         }
         this.modal.close(this.version);

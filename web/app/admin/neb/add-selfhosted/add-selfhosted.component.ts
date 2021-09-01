@@ -22,12 +22,12 @@ export class AdminAddSelfhostedNebComponent {
     public adminUrl = "http://localhost:4050";
 
     constructor(private asApi: AdminAppserviceApiService,
-                private nebApi: AdminNebApiService,
-                private toaster: ToasterService,
-                private router: Router,
-                private activatedRoute: ActivatedRoute,
-                private modal: NgbModal,
-                public translate: TranslateService) {
+        private nebApi: AdminNebApiService,
+        private toaster: ToasterService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private modal: NgbModal,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -36,7 +36,9 @@ export class AdminAddSelfhostedNebComponent {
         this.asApi.createAppservice(this.userPrefix).then(appservice => {
             return this.nebApi.newAppserviceConfiguration(this.adminUrl, appservice);
         }).then(neb => {
-            this.translate.get('New go-neb created').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('New go-neb created').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
 
             const selfhostedRef = this.modal.open(AdminNebAppserviceConfigComponent, {
                 backdrop: 'static',
@@ -48,7 +50,9 @@ export class AdminAddSelfhostedNebComponent {
         }).catch(err => {
             console.error(err);
             this.isSaving = false;
-            this.translate.get('Error creating appservice').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error creating appservice').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 }
