@@ -2,7 +2,7 @@ import { Component, ContentChild, Input, TemplateRef } from "@angular/core";
 import { BridgeComponent } from "../bridge.component";
 
 @Component({
-    selector: "app-bridge-config",
+    selector: "my-bridge-config",
     templateUrl: "config-screen.bridge.component.html",
     styleUrls: ["config-screen.bridge.component.scss"],
 })

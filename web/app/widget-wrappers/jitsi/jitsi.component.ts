@@ -10,7 +10,7 @@ import { CapableWidget } from "../capable-widget";
 declare let JitsiMeetExternalAPI: any;
 
 @Component({
-    selector: "app-jitsi-widget-wrapper",
+    selector: "my-jitsi-widget-wrapper",
     templateUrl: "jitsi.component.html",
     styleUrls: ["jitsi.component.scss"],
 })

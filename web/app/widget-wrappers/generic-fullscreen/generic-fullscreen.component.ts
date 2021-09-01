@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 
 @Component({
-    selector: "app-generic-fullscreen-widget-wrapper",
+    selector: "my-generic-fullscreen-widget-wrapper",
     templateUrl: "../fullpage-iframe/fullpage-iframe.component.html",
     styleUrls: ["../fullpage-iframe/fullpage-iframe.component.scss"],
 })

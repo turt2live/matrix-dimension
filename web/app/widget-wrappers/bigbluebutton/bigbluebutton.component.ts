@@ -12,7 +12,7 @@ import {
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
-    selector: "app-bigbluebutton-widget-wrapper",
+    selector: "my-bigbluebutton-widget-wrapper",
     templateUrl: "bigbluebutton.component.html",
     styleUrls: ["bigbluebutton.component.scss"],
 })

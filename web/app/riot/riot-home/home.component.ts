@@ -28,7 +28,7 @@ const CATEGORY_MAP = {
 };
 
 @Component({
-    selector: "app-riot-home",
+    selector: "my-riot-home",
     templateUrl: "./home.component.html",
     styleUrls: ["./home.component.scss"],
 })

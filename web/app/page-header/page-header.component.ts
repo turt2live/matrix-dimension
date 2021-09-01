@@ -9,7 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { filter } from "rxjs/operators";
 
 @Component({
-    selector: "app-page-header",
+    selector: "my-page-header",
     templateUrl: "./page-header.component.html",
     styleUrls: ["./page-header.component.scss"],
 })

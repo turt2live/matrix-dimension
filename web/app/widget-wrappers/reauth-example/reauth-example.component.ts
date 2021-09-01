@@ -8,7 +8,7 @@ import { FE_ScalarOpenIdRequestBody } from "../../shared/models/scalar-server-re
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
-    selector: "app-reauth-example-widget-wrapper",
+    selector: "my-reauth-example-widget-wrapper",
     templateUrl: "reauth-example.component.html",
     styleUrls: ["reauth-example.component.scss"],
 })

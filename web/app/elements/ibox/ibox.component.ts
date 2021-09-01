@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { ANIMATION_FADE_IN_NOT_OUT } from "../../app.animations";
 
 @Component({
-    selector: "app-ibox",
+    selector: "my-ibox",
     templateUrl: "./ibox.component.html",
     styleUrls: ["./ibox.component.scss"],
     animations: [ANIMATION_FADE_IN_NOT_OUT],

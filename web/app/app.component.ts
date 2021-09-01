@@ -4,7 +4,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { HttpClient } from "@angular/common/http";
 
 @Component({
-    selector: "app-app", // <my-app></my-app>
+    selector: "my-app", // <my-app></my-app>
     templateUrl: "./app.component.html",
     styleUrls: ["./app.component.scss"],
 })

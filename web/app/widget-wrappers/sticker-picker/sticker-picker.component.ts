@@ -36,7 +36,7 @@ import { MediaService } from "../../shared/services/media.service";
 import { WIDGET_STICKER_PICKER } from "../../shared/models/widget";
 
 @Component({
-    selector: "app-generic-widget-wrapper",
+    selector: "my-generic-widget-wrapper",
     templateUrl: "sticker-picker.component.html",
     styleUrls: ["sticker-picker.component.scss"],
     animations: [

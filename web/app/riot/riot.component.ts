@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { SessionStorage } from "../shared/SessionStorage";
 
 @Component({
-    selector: "app-riot",
+    selector: "my-riot",
     templateUrl: "./riot.component.html",
     styleUrls: ["./riot.component.scss"],
 })

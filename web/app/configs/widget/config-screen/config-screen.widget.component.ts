@@ -2,7 +2,7 @@ import { WidgetComponent } from "../widget.component";
 import { Component, ContentChild, Input, TemplateRef } from "@angular/core";
 
 @Component({
-    selector: "app-widget-config",
+    selector: "my-widget-config",
     templateUrl: "config-screen.widget.component.html",
     styleUrls: ["config-screen.widget.component.scss"],
 })

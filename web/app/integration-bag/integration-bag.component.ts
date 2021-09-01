@@ -12,7 +12,7 @@ import { FE_Integration } from "../shared/models/integration";
 import { MediaService } from "../shared/services/media.service";
 
 @Component({
-    selector: "app-integration-bag",
+    selector: "my-integration-bag",
     templateUrl: "./integration-bag.component.html",
     styleUrls: ["./integration-bag.component.scss"],
 })

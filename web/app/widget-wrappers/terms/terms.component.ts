@@ -6,7 +6,7 @@ import { ToasterService } from "angular2-toaster";
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
-    selector: "app-terms-widget-wrapper",
+    selector: "my-terms-widget-wrapper",
     templateUrl: "terms.component.html",
     styleUrls: ["terms.component.scss"],
 })

@@ -4,7 +4,7 @@ import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { WidgetApiService } from "../../shared/services/integrations/widget-api.service";
 
 @Component({
-    selector: "app-generic-widget-wrapper",
+    selector: "my-generic-widget-wrapper",
     templateUrl: "generic.component.html",
     styleUrls: ["generic.component.scss"],
 })

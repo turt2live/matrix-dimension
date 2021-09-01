@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
 
 @Component({
-    selector: "app-scalar-close",
+    selector: "my-scalar-close",
     templateUrl: "./scalar-close.component.html",
     styleUrls: ["./scalar-close.component.scss"],
 })

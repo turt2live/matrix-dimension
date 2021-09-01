@@ -4,7 +4,7 @@ import * as spotifyUri from "spotify-uri";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 
 @Component({
-    selector: "app-spotify-widget-wrapper",
+    selector: "my-spotify-widget-wrapper",
     templateUrl: "../fullpage-iframe/fullpage-iframe.component.html",
     styleUrls: ["../fullpage-iframe/fullpage-iframe.component.scss"],
 })

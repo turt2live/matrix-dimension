@@ -5,7 +5,7 @@ import * as $ from "jquery";
 declare let TradingView: any;
 
 @Component({
-    selector: "app-tradingview-widget-wrapper",
+    selector: "my-tradingview-widget-wrapper",
     templateUrl: "tradingview.component.html",
     styleUrls: ["tradingview.component.scss"],
 })

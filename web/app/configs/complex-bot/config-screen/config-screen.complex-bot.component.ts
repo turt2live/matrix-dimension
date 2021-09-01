@@ -2,7 +2,7 @@ import { ComplexBotComponent } from "../complex-bot.component";
 import { Component, ContentChild, Input, TemplateRef } from "@angular/core";
 
 @Component({
-    selector: "app-complex-bot-config",
+    selector: "my-complex-bot-config",
     templateUrl: "config-screen.complex-bot.component.html",
     styleUrls: ["config-screen.complex-bot.component.scss"],
 })

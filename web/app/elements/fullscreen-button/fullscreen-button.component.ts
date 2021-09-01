@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import * as screenfull from "screenfull";
 
 @Component({
-    selector: "app-fullscreen-button",
+    selector: "my-fullscreen-button",
     templateUrl: "fullscreen-button.component.html",
     styleUrls: ["fullscreen-button.component.scss"],
 })

@@ -6,7 +6,7 @@ import { ScalarServerApiService } from "../../shared/services/scalar/scalar-serv
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
-    selector: "app-reauth-example-widget-wrapper",
+    selector: "my-reauth-example-widget-wrapper",
     templateUrl: "manager-test.component.html",
     styleUrls: ["manager-test.component.scss"],
 })
