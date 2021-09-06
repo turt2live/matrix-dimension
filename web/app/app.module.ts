@@ -133,7 +133,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         routing,
         NgbModule,
         UiSwitchModule,
-        ToasterModule,
+        ToasterModule.forRoot(),
         BrowserAnimationsModule,
         BreadcrumbModule,
         CKEditorModule,
