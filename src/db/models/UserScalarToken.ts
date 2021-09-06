@@ -16,7 +16,7 @@ import Upstream from "./Upstream";
     underscored: false,
     timestamps: false,
 })
-export default class UserScalarToken extends Model<UserScalarToken> {
+export default class UserScalarToken extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

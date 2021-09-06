@@ -7,17 +7,16 @@ import * as screenfull from "screenfull";
     styleUrls: ["fullscreen-button.component.scss"],
 })
 export class FullscreenButtonComponent implements OnDestroy, OnInit {
-
     public isFullscreen = false;
 
     private listener = null;
 
     constructor() {
-        // Do stuff
+    // Do stuff
     }
 
     public ngOnInit(): void {
-        // @ts-ignore
+    // @ts-ignore
         this.listener = screenfull.on("change", () => {
             // @ts-ignore
             this.isFullscreen = screenfull.isFullscreen;

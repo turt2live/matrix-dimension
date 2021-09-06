@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { ToasterService } from "angular2-toaster";
-import { Modal, overlayConfigFactory } from "ngx-modialog";
 import {
     AdminTelegramBridgeManageSelfhostedComponent,
     ManageSelfhostedTelegramBridgeDialogContext
@@ -8,6 +7,7 @@ import {
 import { FE_TelegramBridge } from "../../../shared/models/telegram";
 import { AdminTelegramApiService } from "../../../shared/services/admin/admin-telegram-api.service";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
     templateUrl: "./telegram.component.html",
@@ -20,9 +20,9 @@ export class AdminTelegramBridgeComponent implements OnInit {
     public configurations: FE_TelegramBridge[] = [];
 
     constructor(private telegramApi: AdminTelegramApiService,
-                private toaster: ToasterService,
-                private modal: Modal,
-                public translate: TranslateService) {
+        private toaster: ToasterService,
+        private modal: NgbModal,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -35,24 +35,32 @@ export class AdminTelegramBridgeComponent implements OnInit {
             this.configurations = await this.telegramApi.getBridges();
         } catch (err) {
             console.error(err);
-            this.translate.get('Error loading bridges').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error loading bridges').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         }
     }
 
     public addSelfHostedBridge() {
-        this.modal.open(AdminTelegramBridgeManageSelfhostedComponent, overlayConfigFactory({
-            isBlocking: true,
+        const selfhostedRef = this.modal.open(AdminTelegramBridgeManageSelfhostedComponent, {
+            backdrop: 'static',
             size: 'lg',
-
-            provisionUrl: '',
-            sharedSecret: '',
-            allowPuppets: false,
-        }, ManageSelfhostedTelegramBridgeDialogContext)).result.then(() => {
-            this.reload().catch(err => {
-                console.error(err);
-                this.translate.get('Failed to get an update Telegram bridge list').subscribe((res: string) => {this.toaster.pop("error", res); });
-            });
         });
+        selfhostedRef.result.then(() => {
+            try {
+                this.reload()
+            } catch (err) {
+                console.error(err);
+                this.translate.get('Failed to get an update Telegram bridge list').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
+            }
+        })
+        const selfhostedInstance = selfhostedRef.componentInstance as ManageSelfhostedTelegramBridgeDialogContext;
+        selfhostedInstance.provisionUrl = '';
+        selfhostedInstance.sharedSecret = '';
+        selfhostedInstance.allowMxPuppets = false;
+        selfhostedInstance.allowTgPuppets = false;
     }
 
     public getEnabledFeaturesString(bridge: FE_TelegramBridge): string {
@@ -63,20 +71,26 @@ export class AdminTelegramBridgeComponent implements OnInit {
     }
 
     public editBridge(bridge: FE_TelegramBridge) {
-        this.modal.open(AdminTelegramBridgeManageSelfhostedComponent, overlayConfigFactory({
-            isBlocking: true,
+        const selfhostedRef = this.modal.open(AdminTelegramBridgeManageSelfhostedComponent, {
+            backdrop: 'static',
             size: 'lg',
-
-            provisionUrl: bridge.provisionUrl,
-            sharedSecret: bridge.sharedSecret,
-            allowTgPuppets: bridge.options ? bridge.options.allowTgPuppets : false,
-            allowMxPuppets: bridge.options ? bridge.options.allowMxPuppets : false,
-            bridgeId: bridge.id,
-        }, ManageSelfhostedTelegramBridgeDialogContext)).result.then(() => {
-            this.reload().catch(err => {
-                console.error(err);
-                this.translate.get('Failed to get an update Telegram bridge list').subscribe((res: string) => {this.toaster.pop("error", res); });
-            });
         });
+        selfhostedRef.result.then(() => {
+            try {
+                this.reload()
+            } catch (err) {
+                console.error(err);
+                this.translate.get('Failed to get an update Telegram bridge list').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
+            }
+        })
+        const selfhostedInstance = selfhostedRef.componentInstance as ManageSelfhostedTelegramBridgeDialogContext;
+        selfhostedInstance.provisionUrl = bridge.provisionUrl;
+        selfhostedInstance.sharedSecret = bridge.sharedSecret;
+        selfhostedInstance.allowMxPuppets = bridge.options?.allowTgPuppets || false;
+        selfhostedInstance.allowTgPuppets = bridge.options?.allowMxPuppets || false;
+        selfhostedInstance.bridgeId = bridge.id;
+        selfhostedInstance.isAdding = !bridge.id;
     }
 }

@@ -5,36 +5,17 @@
 
 .main-app {
   @include themify() {
-    .dimension-breadcrumb {
-      .fluid-bread {
-        padding: 0;
-        background: transparent;
-      }
+    .xng-breadcrumb-link {
+      text-decoration: none;
+    }
 
-      .fluid-bread .container {
-        padding: 0;
-        margin: 0;
-        background: transparent;
-      }
+    .xng-breadcrumb-root {
+      color: inherit;
+    }
 
-      .fluid-bread .container .breadcrumb {
-        padding: 0;
-        margin: 0;
-        background: transparent;
-      }
-
-      .fluid-bread .breadcrumb-item a:hover {
-        text-decoration: none;
-      }
-
-      .fluid-bread .breadcrumb-item.active {
-        color: themed(activeBreadcrumbColor);
-      }
-
-      font-size: 13px;
-      display: block;
-      padding-top: 4px;
-      background: transparent;
+    .xng-breadcrumb-seperator,
+    .xng-breadcrumb-trail {
+      color: themed(activeBreadcrumbColor);
     }
 
     .header .quickAction .closeButton .scalarClose {

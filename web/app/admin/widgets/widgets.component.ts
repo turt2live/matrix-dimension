@@ -2,15 +2,14 @@ import { Component } from "@angular/core";
 import { FE_Widget } from "../../shared/models/integration";
 import { ToasterService } from "angular2-toaster";
 import { AdminWidgetEtherpadConfigComponent } from "./etherpad/etherpad.component";
-import { Modal, overlayConfigFactory } from "ngx-modialog";
-import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
 import { AdminWidgetJitsiConfigComponent } from "./jitsi/jitsi.component";
 import { AdminIntegrationsApiService } from "../../shared/services/admin/admin-integrations-api.service";
 import { AdminWidgetWhiteboardConfigComponent } from "./whiteboard/whiteboard.component";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
-export class WidgetConfigDialogContext extends BSModalContext {
-    public widget: FE_Widget;
+export interface WidgetConfigDialogContext {
+    widget: FE_Widget;
 }
 
 @Component({
@@ -23,14 +22,16 @@ export class AdminWidgetsComponent {
     public isUpdating = false;
     public widgets: FE_Widget[];
 
-    constructor(private adminIntegrationsApi: AdminIntegrationsApiService, private toaster: ToasterService, private modal: Modal, public translate: TranslateService) {
+    constructor(private adminIntegrationsApi: AdminIntegrationsApiService, private toaster: ToasterService, private modal: NgbModal, public translate: TranslateService) {
         this.translate = translate;
         this.adminIntegrationsApi.getAllWidgets().then(widgets => {
             this.isLoading = false;
             this.widgets = widgets;
         }).catch(err => {
             console.error(err);
-            this.translate.get('Failed to load widgets').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Failed to load widgets').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -39,12 +40,16 @@ export class AdminWidgetsComponent {
         this.isUpdating = true;
         this.adminIntegrationsApi.toggleIntegration(widget.category, widget.type, widget.isEnabled).then(() => {
             this.isUpdating = false;
-            this.translate.get('Widget updated').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Widget updated').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
         }).catch(err => {
             console.error(err);
             widget.isEnabled = !widget.isEnabled; // revert change
             this.isUpdating = false;
-            this.translate.get('Error updating widget').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error updating widget').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -57,16 +62,17 @@ export class AdminWidgetsComponent {
 
         if (!component) {
             console.error("No known dialog component for " + widget.type);
-            this.translate.get('Error opening configuration page').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error opening configuration page').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
             return;
         }
 
-        this.modal.open(component, overlayConfigFactory({
-            widget: widget,
-
-            isBlocking: true,
-            size: 'lg',
-        }, WidgetConfigDialogContext));
+        const widgetConfigRef = this.modal.open(component, {
+            backdrop: 'static'
+        });
+        const widgetConfigInterface = widgetConfigRef.componentInstance as WidgetConfigDialogContext;
+        widgetConfigInterface.widget = widget;
     }
 
     public hasConfiguration(widget: FE_Widget) {

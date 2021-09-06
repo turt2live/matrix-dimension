@@ -7,9 +7,7 @@ import { SessionStorage } from "../shared/SessionStorage";
     styleUrls: ["./riot.component.scss"],
 })
 export class RiotComponent {
-
-    constructor() {
-    }
+    constructor() {}
 
     public isAdmin(): boolean {
         return SessionStorage.isAdmin;

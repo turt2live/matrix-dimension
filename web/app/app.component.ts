@@ -9,14 +9,13 @@ import { HttpClient } from "@angular/common/http";
     styleUrls: ["./app.component.scss"],
 })
 export class AppComponent {
-
     constructor(public translate: TranslateService, public http: HttpClient) {
-        translate.addLangs(['en', 'de']);
-        translate.setDefaultLang('de');
-        if (navigator.language === 'de') {
-            translate.use('de');
-        } else  {
-            translate.use('en');
+        translate.addLangs(["en", "de"]);
+        translate.setDefaultLang("de");
+        if (navigator.language === "de") {
+            translate.use("de");
+        } else {
+            translate.use("en");
         }
     }
 }

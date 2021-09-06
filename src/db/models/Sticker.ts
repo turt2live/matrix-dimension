@@ -6,7 +6,7 @@ import StickerPack from "./StickerPack";
     underscored: false,
     timestamps: false,
 })
-export default class Sticker extends Model<Sticker> {
+export default class Sticker extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

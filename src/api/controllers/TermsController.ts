@@ -1,4 +1,3 @@
-import { AutoWired } from "typescript-ioc/es6";
 import { ILoggedInUser } from "../security/MatrixSecurity";
 import TermsRecord from "../../db/models/TermsRecord";
 import TermsTextRecord from "../../db/models/TermsTextRecord";
@@ -50,11 +49,7 @@ export const VERSION_DRAFT = "draft";
 /**
  * API controller for terms of service management
  */
-@AutoWired
 export default class TermsController {
-    constructor() {
-    }
-
     private async getPublishedTerms(): Promise<ICachedTerms[]> {
         const cache = Cache.for(CACHE_TERMS);
 

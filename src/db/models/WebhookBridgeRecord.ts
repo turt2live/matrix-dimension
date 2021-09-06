@@ -6,7 +6,7 @@ import Upstream from "./Upstream";
     underscored: false,
     timestamps: false,
 })
-export default class WebhookBridgeRecord extends Model<WebhookBridgeRecord> {
+export default class WebhookBridgeRecord extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

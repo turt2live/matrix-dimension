@@ -1,4 +1,4 @@
-import { OnDestroy, OnInit } from "@angular/core";
+import { Inject, Injectable, OnDestroy, OnInit } from "@angular/core";
 import { FE_ComplexBot } from "../../shared/models/integration";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs/Subscription";
@@ -8,6 +8,7 @@ import { ServiceLocator } from "../../shared/registry/locator.service";
 import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
 import { TranslateService } from "@ngx-translate/core";
 
+@Injectable()
 export class ComplexBotComponent<T> implements OnInit, OnDestroy {
 
     public isLoading = true;
@@ -23,7 +24,8 @@ export class ComplexBotComponent<T> implements OnInit, OnDestroy {
     protected route = ServiceLocator.injector.get(ActivatedRoute);
     protected scalarClientApi = ServiceLocator.injector.get(ScalarClientApiService);
 
-    constructor(private integrationType: string, public translate: TranslateService) {
+    constructor(@Inject(String) private integrationType: string, public translate: TranslateService) {
+        this.translate = translate;
         this.isLoading = true;
         this.isUpdating = false;
     }
@@ -51,20 +53,26 @@ export class ComplexBotComponent<T> implements OnInit, OnDestroy {
             this.isLoading = false;
         }).catch(err => {
             console.error(err);
-            this.translate.get("Failed to load configuration").subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get("Failed to load configuration").subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
     public save(): void {
         this.isUpdating = true;
         this.integrationsApi.setIntegrationConfiguration("complex-bot", this.integrationType, this.roomId, this.newConfig).then(() => {
-            this.translate.get("Configuration updated").subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get("Configuration updated").subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
             this.bot.config = this.newConfig;
             this.newConfig = JSON.parse(JSON.stringify(this.bot.config));
             this.isUpdating = false;
         }).catch(err => {
             console.error(err);
-            this.translate.get("Error updating configuration").subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get("Error updating configuration").subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
             this.isUpdating = false;
         });
     }

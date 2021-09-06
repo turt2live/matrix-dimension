@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { ToasterService } from "angular2-toaster";
-import { Modal, overlayConfigFactory } from "ngx-modialog";
 import {
     AdminWebhooksBridgeManageSelfhostedComponent,
     ManageSelfhostedWebhooksBridgeDialogContext
@@ -8,6 +7,7 @@ import {
 import { FE_WebhooksBridge } from "../../../shared/models/webhooks";
 import { AdminWebhooksApiService } from "../../../shared/services/admin/admin-webhooks-api.service";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
     templateUrl: "./webhooks.component.html",
@@ -20,9 +20,9 @@ export class AdminWebhooksBridgeComponent implements OnInit {
     public configurations: FE_WebhooksBridge[] = [];
 
     constructor(private webhooksApi: AdminWebhooksApiService,
-                private toaster: ToasterService,
-                private modal: Modal,
-                public translate: TranslateService) {
+        private toaster: ToasterService,
+        private modal: NgbModal,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -35,39 +35,53 @@ export class AdminWebhooksBridgeComponent implements OnInit {
             this.configurations = await this.webhooksApi.getBridges();
         } catch (err) {
             console.error(err);
-            this.translate.get('Error loading bridges').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error loading bridges').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         }
     }
 
     public addSelfHostedBridge() {
-        this.modal.open(AdminWebhooksBridgeManageSelfhostedComponent, overlayConfigFactory({
-            isBlocking: true,
+        const selfhostedRef = this.modal.open(AdminWebhooksBridgeManageSelfhostedComponent, {
+            backdrop: 'static',
             size: 'lg',
-
-            provisionUrl: '',
-            sharedSecret: '',
-            allowPuppets: false,
-        }, ManageSelfhostedWebhooksBridgeDialogContext)).result.then(() => {
-            this.reload().catch(err => {
-                console.error(err);
-                this.translate.get('Failed to get an update Webhooks bridge list').subscribe((res: string) => {this.toaster.pop("error", res); });
-            });
         });
+        selfhostedRef.result.then(() => {
+            try {
+                this.reload()
+            } catch (err) {
+                console.error(err);
+                this.translate.get('Failed to get an update Webhooks bridge list').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
+            }
+        });
+        const selfhostedInstance = selfhostedRef.componentInstance as ManageSelfhostedWebhooksBridgeDialogContext;
+        selfhostedInstance.provisionUrl = '';
+        selfhostedInstance.sharedSecret = '';
+        selfhostedInstance.allowMxPuppets = false;
+        selfhostedInstance.allowTgPuppets = false;
     }
 
     public editBridge(bridge: FE_WebhooksBridge) {
-        this.modal.open(AdminWebhooksBridgeManageSelfhostedComponent, overlayConfigFactory({
-            isBlocking: true,
+        const selfhostedRef = this.modal.open(AdminWebhooksBridgeManageSelfhostedComponent, {
+            backdrop: 'static',
             size: 'lg',
-
-            provisionUrl: bridge.provisionUrl,
-            sharedSecret: bridge.sharedSecret,
-            bridgeId: bridge.id,
-        }, ManageSelfhostedWebhooksBridgeDialogContext)).result.then(() => {
-            this.reload().catch(err => {
-                console.error(err);
-                this.translate.get('Failed to get an update Webhooks bridge list').subscribe((res: string) => {this.toaster.pop("error", res); });
-            });
         });
+        selfhostedRef.result.then(() => {
+            try {
+                this.reload()
+            } catch (err) {
+                console.error(err);
+                this.translate.get('Failed to get an update Webhooks bridge list').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
+            }
+        });
+        const selfhostedInstance = selfhostedRef.componentInstance as ManageSelfhostedWebhooksBridgeDialogContext;
+        selfhostedInstance.provisionUrl = bridge.provisionUrl;
+        selfhostedInstance.sharedSecret = bridge.sharedSecret
+        selfhostedInstance.bridgeId = bridge.id;
+        selfhostedInstance.isAdding = !bridge.id;
     }
 }

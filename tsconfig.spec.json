@@ -1,0 +1,16 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "outDir": "./out-tsc/spec",
+      "types": ["jasmine", "bluebird", "body-parser", "jquery", "validator"]
+    },
+    "files": [
+      "web/test.ts",
+      "web/polyfills.ts"
+    ],
+    "include": [
+      "web/**/*.spec.ts",
+      "web/**/*.d.ts"
+    ]
+  }
+  

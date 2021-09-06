@@ -28,69 +28,69 @@ export class NebStore {
         // TODO: Support Circle CI
         // "circleci": {
         //     name: "Circle CI",
-        //     avatarUrl: "/img/avatars/circleci.png",
+        //     avatarUrl: "/assets/img/avatars/circleci.png",
         //     description: "Announces build results from Circle CI to the room.",
         //     simple: false,
         // },
         "echo": {
             name: "Echo",
-            avatarUrl: "/img/avatars/echo.png", // TODO: Make this image
+            avatarUrl: "/assets/img/avatars/echo.png", // TODO: Make this image
             description: "Repeats text given to it from !echo",
             simple: true,
         },
         "giphy": {
             name: "Giphy",
-            avatarUrl: "/img/avatars/giphy.png",
+            avatarUrl: "/assets/img/avatars/giphy.png",
             description: "Posts a GIF from Giphy using !giphy <query>",
             simple: true,
         },
         "guggy": {
             name: "Guggy",
-            avatarUrl: "/img/avatars/guggy.png",
+            avatarUrl: "/assets/img/avatars/guggy.png",
             description: "Send a reaction GIF using !guggy <query>",
             simple: true,
         },
         // TODO: Support Github
         // "github": {
         //     name: "Github",
-        //     avatarUrl: "/img/avatars/github.png",
+        //     avatarUrl: "/assets/img/avatars/github.png",
         //     description: "Github issue management and announcements for a repository",
         //     simple: false,
         // },
         "google": {
             name: "Google",
-            avatarUrl: "/img/avatars/google.png",
+            avatarUrl: "/assets/img/avatars/google.png",
             description: "Searches Google Images using !google image <query>",
             simple: true,
         },
         "imgur": {
             name: "Imgur",
-            avatarUrl: "/img/avatars/imgur.png",
+            avatarUrl: "/assets/img/avatars/imgur.png",
             description: "Searches and posts images from Imgur using !imgur <query>",
             simple: true,
         },
         // TODO: Support JIRA
         // "jira": {
         //     name: "Jira",
-        //     avatarUrl: "/img/avatars/jira.png",
+        //     avatarUrl: "/assets/img/avatars/jira.png",
         //     description: "Jira issue management and announcements for a project",
         //     simple: false,
         // },
         "rss": {
             name: "RSS",
-            avatarUrl: "/img/avatars/rssbot.png",
+            avatarUrl: "/assets/img/avatars/rssbot.png",
             description: "Announces changes to RSS feeds in the room",
             simple: false,
         },
         "travisci": {
             name: "Travis CI",
-            avatarUrl: "/img/avatars/travisci.png",
+            avatarUrl: "/assets/img/avatars/travisci.png",
             description: "Announces build results from Travis CI to the room",
             simple: false,
         },
         "wikipedia": {
             name: "Wikipedia",
-            avatarUrl: "/img/avatars/wikipedia.png",
+            avatarUrl: "/assets/img/avatars/wikipedia.png",
             description: "Searches wikipedia using !wikipedia <query>",
             simple: true,
         },

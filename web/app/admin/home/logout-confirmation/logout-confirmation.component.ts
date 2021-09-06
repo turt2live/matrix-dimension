@@ -1,16 +1,15 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from "ngx-modialog/plugins/bootstrap";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
-export class LogoutConfirmationDialogContext extends BSModalContext {
+export interface LogoutConfirmationDialogContext {
 }
 
 @Component({
     templateUrl: "./logout-confirmation.component.html",
     styleUrls: ["./logout-confirmation.component.scss"],
 })
-export class AdminLogoutConfirmationDialogComponent implements ModalComponent<LogoutConfirmationDialogContext> {
+export class AdminLogoutConfirmationDialogComponent {
 
-    constructor(public dialog: DialogRef<LogoutConfirmationDialogContext>) {
+    constructor(public modal: NgbActiveModal) {
     }
 }

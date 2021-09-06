@@ -14,7 +14,7 @@ export class AdminBridgesComponent implements OnInit {
     public bridges: FE_Bridge<any>[];
 
     constructor(private adminIntegrations: AdminIntegrationsApiService,
-                private toaster: ToasterService, public translate: TranslateService) {
+        private toaster: ToasterService, public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -24,7 +24,9 @@ export class AdminBridgesComponent implements OnInit {
             this.isLoading = false;
         }).catch(err => {
             console.error(err);
-            this.translate.get('Failed to load bridges').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Failed to load bridges').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 }

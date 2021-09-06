@@ -6,12 +6,23 @@ import { CURRENT_VERSION } from "./version";
 import { MatrixStickerBot } from "./matrix/MatrixStickerBot";
 import * as BotSdk from "matrix-bot-sdk";
 import User from "./db/models/User";
+import { ILoggedInUser } from "./api/security/MatrixSecurity";
+
+declare global {
+    namespace Express {
+        interface User extends ILoggedInUser {
+            userId: string;
+            token: string;
+        }
+    }
+}
 
 LogService.configure(config.logging);
 LogService.info("index", "Starting dimension " + CURRENT_VERSION);
 
 // Redirect the bot-sdk logger to our logger
 BotSdk.LogService.setLogger({
+    trace: (module: string, ...args: any[]) => args.map(a => LogService.info("BotSdk-" + module, a)),
     debug: (module: string, ...args: any[]) => args.map(a => LogService.info("BotSdk-" + module, a)),
     info: (module: string, ...args: any[]) => args.map(a => LogService.info("BotSdk-" + module, a)),
     warn: (module: string, ...args: any[]) => args.map(a => LogService.warn("BotSdk-" + module, a)),
@@ -19,7 +30,8 @@ BotSdk.LogService.setLogger({
 });
 
 async function startup() {
-    await DimensionStore.updateSchema();
+    const schemas = await DimensionStore.updateSchema();
+    LogService.info("DimensionStore", schemas);
 
     const webserver = new Webserver();
     await webserver.start();

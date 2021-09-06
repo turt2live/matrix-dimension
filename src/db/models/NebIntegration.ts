@@ -7,7 +7,7 @@ import NebConfiguration from "./NebConfiguration";
     underscored: false,
     timestamps: false,
 })
-export default class NebIntegration extends Model<NebIntegration> implements IntegrationRecord {
+export default class NebIntegration extends Model implements IntegrationRecord {
     @PrimaryKey
     @AutoIncrement
     @Column

@@ -5,14 +5,13 @@ import { ActivatedRoute } from "@angular/router";
 import { ToasterService } from "angular2-toaster";
 import { FE_Integration } from "../../../shared/models/integration";
 import { NEB_HAS_CONFIG, NEB_IS_COMPLEX } from "../../../shared/models/neb";
-import { ContainerContent, Modal, overlayConfigFactory } from "ngx-modialog";
 import { AdminNebGiphyConfigComponent } from "../config/giphy/giphy.component";
 import { NebBotConfigurationDialogContext } from "../config/config-context";
 import { AdminNebGuggyConfigComponent } from "../config/guggy/guggy.component";
 import { AdminNebGoogleConfigComponent } from "../config/google/google.component";
 import { AdminNebImgurConfigComponent } from "../config/imgur/imgur.component";
 import { TranslateService } from "@ngx-translate/core";
-
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
     templateUrl: "./edit.component.html",
@@ -29,10 +28,10 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
     private overlappingTypes: string[] = [];
 
     constructor(private nebApi: AdminNebApiService,
-                private route: ActivatedRoute,
-                private modal: Modal,
-                private toaster: ToasterService,
-                public translate: TranslateService) {
+        private route: ActivatedRoute,
+        private modal: NgbModal,
+        private toaster: ToasterService,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -61,12 +60,16 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
         try {
             await this.nebApi.toggleIntegration(this.nebConfig.id, bot.type, bot.isEnabled);
             this.isUpdating = false;
-            this.translate.get('Integration updated').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Integration updated').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
         } catch (err) {
             console.error(err);
             bot.isEnabled = !bot.isEnabled; // revert change
             this.isUpdating = false;
-            this.translate.get('Error updating integration').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error updating integration').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
             return;
         }
 
@@ -79,7 +82,9 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
                     await this.nebApi.setIntegrationConfiguration(this.nebConfig.id, bot.type, {});
                 } catch (err) {
                     console.error(err);
-                    this.translate.get(['Failed to configure the integration', 'Manual troubleshooting may be requred' ]).subscribe((res: string) => {this.toaster.pop("warning", res[0], res[1]); });
+                    this.translate.get(['Failed to configure the integration', 'Manual troubleshooting may be requred' ]).subscribe((res: string) => {
+                        this.toaster.pop("warning", res[0], res[1]);
+                    });
                     return;
                 }
             }
@@ -87,7 +92,7 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
     }
 
     public editBot(bot: FE_Integration) {
-        let component: ContainerContent;
+        let component;
 
         if (bot.type === "giphy") component = AdminNebGiphyConfigComponent;
         if (bot.type === "guggy") component = AdminNebGuggyConfigComponent;
@@ -95,13 +100,13 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
         if (bot.type === "imgur") component = AdminNebImgurConfigComponent;
 
         if (!component) throw new Error("No config component for " + bot.type);
-        this.modal.open(component, overlayConfigFactory({
-            neb: this.nebConfig,
-            integration: bot,
-
-            isBlocking: true,
+        const nebBotRef = this.modal.open(component, {
+            backdrop: 'static',
             size: 'lg',
-        }, NebBotConfigurationDialogContext));
+        });
+        const nebBotInstance = nebBotRef.componentInstance as NebBotConfigurationDialogContext;
+        nebBotInstance.neb = this.nebConfig;
+        nebBotInstance.integration = bot;
     }
 
     private loadNeb(nebId: number) {
@@ -123,7 +128,9 @@ export class AdminEditNebComponent implements OnInit, OnDestroy {
             this.isLoading = false;
         }).catch(err => {
             console.error(err);
-            this.translate.get('Could not get go-neb configuration').subscribe((res: string) => {this.toaster.pop('error', res); });
+            this.translate.get('Could not get go-neb configuration').subscribe((res: string) => {
+                this.toaster.pop('error', res);
+            });
         });
     }
 }

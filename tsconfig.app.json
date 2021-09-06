@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./web",
+    "outDir": "./build/web",
+    "types": ["bluebird", "body-parser", "jquery", "validator"]
+  },
+  "files": [
+    "web/main.ts",
+    "web/polyfills.ts"
+  ],
+  "include": [
+    "web/**/*.d.ts"
+  ]
+}

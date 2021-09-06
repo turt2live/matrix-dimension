@@ -6,7 +6,7 @@ import IrcBridgeRecord from "./IrcBridgeRecord";
     underscored: false,
     timestamps: false,
 })
-export default class IrcBridgeNetwork extends Model<IrcBridgeNetwork> {
+export default class IrcBridgeNetwork extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

@@ -1,25 +1,16 @@
 @import "../themes/themes";
 
 @include themifyRoot() {
-  .dialog {
+  .modal-content {
     background-color: themed(dialogBgColor);
     color: themed(dialogFgColor);
 
-    .dialog-header {
+    .modal-header {
       padding: 20px;
       border-bottom: 1px solid themed(dialogBorderColor);
-
-      h4 {
-        margin: 0;
-      }
-    }
-
-    .dialog-content {
-      padding: 20px;
     }
 
     .dialog-footer {
-      padding: 20px;
       border-top: 1px solid themed(dialogFooterBorderColor);
       background-color: themed(dialogFooterBackgroundColor);
     }

@@ -5,7 +5,7 @@ import { AutoIncrement, Column, Model, PrimaryKey, Table } from "sequelize-types
     underscored: false,
     timestamps: false,
 })
-export default class Upstream extends Model<Upstream> {
+export default class Upstream extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

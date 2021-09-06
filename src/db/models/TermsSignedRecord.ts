@@ -7,7 +7,7 @@ import TermsRecord from "./TermsRecord";
     underscored: false,
     timestamps: false,
 })
-export default class TermsSignedRecord extends Model<TermsSignedRecord> {
+export default class TermsSignedRecord extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

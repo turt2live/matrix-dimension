@@ -1,0 +1,14 @@
+{
+    "/api": {
+        "target": "http://localhost:8184",
+        "secure": false
+    },
+    "/_matrix": {
+        "target": "http://localhost:8184",
+        "secure": false
+    },
+    "/.well-known": {
+        "target": "http://localhost:8184",
+        "secure": false
+    }
+}

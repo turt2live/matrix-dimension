@@ -25,11 +25,11 @@ export class StickerpickerComponent implements OnInit {
     public stickerBot: string;
 
     constructor(private stickerApi: StickerApiService,
-                private media: MediaService,
-                private scalarClient: ScalarClientApiService,
-                private toaster: ToasterService,
-                private window: Window,
-                public translate?: TranslateService) {
+        private media: MediaService,
+        private scalarClient: ScalarClientApiService,
+        private toaster: ToasterService,
+        private window: Window,
+        public translate?: TranslateService) {
         this.translate = translate;
         this.isLoading = true;
         this.isUpdating = false;
@@ -41,7 +41,9 @@ export class StickerpickerComponent implements OnInit {
             this.isLoading = false;
         } catch (e) {
             console.error(e);
-            this.translate.get('Failed to load sticker packs').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Failed to load sticker packs').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         }
 
         this.stickerApi.getConfig().then(config => {
@@ -58,12 +60,16 @@ export class StickerpickerComponent implements OnInit {
             this.packs.splice(0, 0, pack);
             this.packUrl = "";
             this.isImporting = false;
-            this.translate.get('Stickerpack added').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Stickerpack added').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
             this.addWidget();
         }).catch(err => {
             console.error(err);
             this.isImporting = false;
-            this.translate.get('Error adding stickerpack').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error adding stickerpack').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -76,13 +82,17 @@ export class StickerpickerComponent implements OnInit {
         this.isUpdating = true;
         this.stickerApi.togglePackSelection(pack.id, pack.isSelected).then(() => {
             this.isUpdating = false;
-            this.translate.get('Stickers updated').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Stickers updated').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
             if (this.packs.filter(p => p.isSelected).length > 0) this.addWidget();
         }).catch(err => {
             console.error(err);
             pack.isSelected = !pack.isSelected; // revert change
             this.isUpdating = false;
-            this.translate.get('Error updating stickers').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error updating stickers').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 

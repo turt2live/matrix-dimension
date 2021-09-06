@@ -29,7 +29,7 @@ export class DimensionWebhooksService {
 
     @POST
     @Path("/travisci/:webhookId")
-    public async postTravisCiWebhook(@PathParam("webhookId") webhookId: string, @FormParam("payload") payload: string, @HeaderParam("Signature") signature: string): Promise<any> {
+    public async postTravisCiWebhook(@PathParam("webhookId") webhookId: string, @FormParam("payload") payload: string, @HeaderParam("Signature") signature: string): Promise<void> {
         const webhook = await Webhook.findByPk(webhookId).catch(() => null);
         if (!webhook) throw new ApiError(404, "Webhook not found");
         if (!webhook.targetUrl) throw new ApiError(400, "Webhook not configured");

@@ -84,9 +84,9 @@ export interface EditableWidget {
  * @return {EditableWidget[]} The Dimension widgets
  */
 export function convertScalarWidgetsToDtos(scalarResponse: WidgetsResponse): EditableWidget[] {
-    let widgets = [];
+    const widgets = [];
 
-    for (let event of scalarResponse.response) {
+    for (const event of scalarResponse.response) {
         widgets.push({
             id: event.state_key,
             type: event.content.type,

@@ -2,13 +2,12 @@ import { Component } from "@angular/core";
 import { BridgeComponent } from "../bridge.component";
 import { TelegramApiService } from "../../../shared/services/integrations/telegram-api.service";
 import { FE_PortalInfo } from "../../../shared/models/telegram";
-import { Modal, overlayConfigFactory } from "ngx-modialog";
-import { AskUnbridgeDialogContext, TelegramAskUnbridgeComponent } from "./ask-unbridge/ask-unbridge.component";
+import { TelegramAskUnbridgeComponent } from "./ask-unbridge/ask-unbridge.component";
 import {
-    CannotUnbridgeDialogContext,
     TelegramCannotUnbridgeComponent
 } from "./cannot-unbridge/cannot-unbridge.component";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 interface TelegramConfig {
     puppet: {
@@ -40,7 +39,7 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
 
     public isUpdating: boolean;
 
-    constructor(private telegram: TelegramApiService, private modal: Modal, public translate: TranslateService) {
+    constructor(private telegram: TelegramApiService, private modal: NgbModal, public translate: TranslateService) {
         super("telegram", translate);
         this.translate = translate;
     }
@@ -80,32 +79,36 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
         this.telegram.getPortalInfo(this.bridge.config.portalInfo.chatId, this.roomId).then(async (chatInfo) => {
             let forceUnbridge = false;
             if (chatInfo.bridged && chatInfo.canUnbridge) {
-                const response = await this.modal.open(TelegramAskUnbridgeComponent, overlayConfigFactory({
-                    isBlocking: true,
+                const askUnbridgeRef = this.modal.open(TelegramAskUnbridgeComponent, {
+                    backdrop: 'static',
                     size: 'lg',
-                }, AskUnbridgeDialogContext)).result;
-
-                if (response.unbridge) {
-                    forceUnbridge = true;
-                } else {
-                    return {aborted: true};
-                }
+                });
+                askUnbridgeRef.result.then((response) => {
+                    if (response.unbridge) {
+                        forceUnbridge = true;
+                    } else {
+                        return {aborted: true};
+                    }
+                });
             } else if (chatInfo.bridged) {
-                this.modal.open(TelegramCannotUnbridgeComponent, overlayConfigFactory({
-                    isBlocking: true,
+                this.modal.open(TelegramCannotUnbridgeComponent, {
+                    backdrop: 'static',
                     size: 'lg',
-                }, CannotUnbridgeDialogContext));
+                });
                 return {aborted: true};
             }
 
             return this.telegram.bridgeRoom(this.roomId, this.bridge.config.portalInfo.chatId, forceUnbridge);
-        }).then((portalInfo: FE_PortalInfo) => {
+        }).then((portalInfo) => {
             if ((<any>portalInfo).aborted) return;
+            const loadedPortalInfo = portalInfo as FE_PortalInfo
 
-            this.bridge.config.portalInfo = portalInfo;
-            this.bridge.config.linked = [portalInfo.chatId];
+            this.bridge.config.portalInfo = loadedPortalInfo;
+            this.bridge.config.linked = [loadedPortalInfo.chatId];
             this.isUpdating = false;
-            this.translate.get('Bridge updated').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Bridge updated').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
         }).catch(error => {
             this.isUpdating = false;
             console.error(error);
@@ -117,8 +120,10 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
                 if (body["dim_errcode"] === "ROOM_ALREADY_BRIDGED") message = 'This room is already bridged to a Telegram chat';
                 if (body["dim_errcode"] === "BOT_NOT_IN_CHAT") message = 'The Telegram bot has not been invited to the chat';
                 if (body["dim_errcode"] === "NOT_ENOUGH_PERMISSIONS") message = 'You do not have permission to bridge that chat';
-                }
-            this.translate.get(message).subscribe((res: string) => {this.toaster.pop("error", res); });
+            }
+            this.translate.get(message).subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 
@@ -128,7 +133,9 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
             this.bridge.config.portalInfo = portalInfo;
             this.bridge.config.linked = [];
             this.isUpdating = false;
-            this.translate.get('Bridge removed').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Bridge removed').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
         }).catch(error => {
             this.isUpdating = false;
             console.error(error);
@@ -138,7 +145,9 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
                 if (body["dim_errcode"] === "BOT_NOT_IN_CHAT") message = 'The Telegram bot has not been invited to the chat';
                 if (body["dim_errcode"] === "NOT_ENOUGH_PERMISSIONS")  message = 'You do not have permission to unbridge that chat';
             }
-            this.translate.get(message).subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get(message).subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         });
     }
 }

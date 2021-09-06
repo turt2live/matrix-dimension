@@ -4,13 +4,12 @@ import { AdminIrcApiService } from "../../../shared/services/admin/admin-irc-api
 import { FE_Upstream } from "../../../shared/models/admin-responses";
 import { AdminUpstreamApiService } from "../../../shared/services/admin/admin-upstream-api.service";
 import { FE_IrcBridge } from "../../../shared/models/irc";
-import { Modal, overlayConfigFactory } from "ngx-modialog";
 import { AdminIrcBridgeNetworksComponent, IrcNetworksDialogContext } from "./networks/networks.component";
 import {
-    AddSelfhostedIrcBridgeDialogContext,
     AdminIrcBridgeAddSelfhostedComponent
 } from "./add-selfhosted/add-selfhosted.component";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
     templateUrl: "./irc.component.html",
@@ -26,10 +25,10 @@ export class AdminIrcBridgeComponent implements OnInit {
     private upstreams: FE_Upstream[];
 
     constructor(private upstreamApi: AdminUpstreamApiService,
-                private ircApi: AdminIrcApiService,
-                private toaster: ToasterService,
-                private modal: Modal,
-                public translate: TranslateService) {
+        private ircApi: AdminIrcApiService,
+        private toaster: ToasterService,
+        private modal: NgbModal,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
@@ -51,7 +50,9 @@ export class AdminIrcBridgeComponent implements OnInit {
             }
         } catch (err) {
             console.error(err);
-            this.translate.get('Error loading bridges').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error loading bridges').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
         }
     }
 
@@ -70,13 +71,17 @@ export class AdminIrcBridgeComponent implements OnInit {
         const createBridge = (upstream: FE_Upstream) => {
             return this.ircApi.newFromUpstream(upstream).then(bridge => {
                 this.configurations.push(bridge);
-                this.translate.get(['Click the pencil icon to enable networks.', 'matrix.org\'s IRC bridge added']).subscribe((res: string) => {this.toaster.pop("success", res[0], res[1]); });
+                this.translate.get(['Click the pencil icon to enable networks.', 'matrix.org\'s IRC bridge added']).subscribe((res: string) => {
+                    this.toaster.pop("success", res[0], res[1]);
+                });
                 this.isUpdating = false;
                 this.hasModularBridge = true;
             }).catch(err => {
                 console.error(err);
                 this.isUpdating = false;
-                this.translate.get('Error adding matrix.org\'s IRC Bridge').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Error adding matrix.org\'s IRC Bridge').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             });
         };
         const vectorUpstreams = this.upstreams.filter(u => u.type === "vector");
@@ -88,29 +93,46 @@ export class AdminIrcBridgeComponent implements OnInit {
                 createBridge(upstream);
             }).catch(err => {
                 console.error(err);
-                this.translate.get('Error creating matrix.org\'s IRC Bridge').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Error creating matrix.org\'s IRC Bridge').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             });
         } else createBridge(vectorUpstreams[0]);
     }
 
     public addSelfHostedBridge() {
-        this.modal.open(AdminIrcBridgeAddSelfhostedComponent, overlayConfigFactory({
-            isBlocking: true,
+        const selfhostedRef = this.modal.open(AdminIrcBridgeAddSelfhostedComponent, {
+            backdrop: 'static',
             size: 'lg',
-        }, AddSelfhostedIrcBridgeDialogContext)).result.then(() => {
-            this.reload().catch(err => {
-                console.error(err);
-                this.translate.get('Failed to get an update IRC bridge list').subscribe((res: string) => {this.toaster.pop("error", res); });
-            });
         });
+        selfhostedRef.result.then(() => {
+            try {
+                this.reload()
+            } catch (err) {
+                console.error(err);
+                this.translate.get('Failed to get an update IRC bridge list').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
+            }
+        })
     }
 
     public editNetworks(bridge: FE_IrcBridge) {
-        this.modal.open(AdminIrcBridgeNetworksComponent, overlayConfigFactory({
-            bridge: bridge,
-
-            isBlocking: true,
+        const selfhostedRef = this.modal.open(AdminIrcBridgeNetworksComponent, {
+            backdrop: 'static',
             size: 'lg',
-        }, IrcNetworksDialogContext));
+        });
+        selfhostedRef.result.then(() => {
+            try {
+                this.reload()
+            } catch (err) {
+                console.error(err);
+                this.translate.get('Failed to get an update IRC bridge list').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
+            }
+        })
+        const selfhostedInstance = selfhostedRef.componentInstance as IrcNetworksDialogContext;
+        selfhostedInstance.bridge = bridge;
     }
 }

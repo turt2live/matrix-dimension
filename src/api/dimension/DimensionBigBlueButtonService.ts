@@ -4,7 +4,6 @@ import { LogService } from "matrix-js-snippets";
 import { URL } from "url";
 import { BigBlueButtonGetJoinUrlRequest } from "../../models/Widget";
 import { BigBlueButtonJoinResponse, BigBlueButtonCreateAndJoinMeetingResponse, BigBlueButtonWidgetResponse } from "../../models/WidgetResponses";
-import { AutoWired } from "typescript-ioc/es6";
 import { ApiError } from "../ApiError";
 import { sha256 } from "../../utils/hashing";
 import config from "../../config";
@@ -16,7 +15,6 @@ import { MatrixStickerBot } from "../../matrix/MatrixStickerBot";
  * API for the BigBlueButton widget.
  */
 @Path("/api/v1/dimension/bigbluebutton")
-@AutoWired
 export class DimensionBigBlueButtonService {
 
     /**
@@ -113,7 +111,7 @@ export class DimensionBigBlueButtonService {
     @Path("join")
     public async join(
         @QueryParam("greenlightUrl") greenlightURL: string,
-        @QueryParam("fullName") fullName: string,
+            @QueryParam("fullName") fullName: string,
     ): Promise<BigBlueButtonJoinResponse|ApiError> {
         // Parse the greenlight url and retrieve the path
         const greenlightMeetingID = new URL(greenlightURL).pathname;
@@ -141,7 +139,7 @@ export class DimensionBigBlueButtonService {
         // than following it ourselves
 
         // Add authenticity token and full name to the query parameters
-        let queryParams = {authenticity_token: authenticityToken};
+        const queryParams = {authenticity_token: authenticityToken};
         queryParams[`${greenlightMeetingID}[join_name]`] = fullName;
 
         // Request the updated URL
@@ -241,7 +239,7 @@ export class DimensionBigBlueButtonService {
                 }
             },
             "layout": {
-            "container": "top",
+                "container": "top",
                 "index": 0,
                 "width": 65,
                 "height": 50,
@@ -261,7 +259,7 @@ export class DimensionBigBlueButtonService {
         getJoinUrlRequest: BigBlueButtonGetJoinUrlRequest,
     ): Promise<BigBlueButtonCreateAndJoinMeetingResponse|ApiError> {
         // Check if the meeting exists and is running. If not, return an error for each case
-        let getMeetingInfoParameters = {
+        const getMeetingInfoParameters = {
             meetingID: getJoinUrlRequest.meetingId,
         }
 
@@ -292,7 +290,7 @@ export class DimensionBigBlueButtonService {
             fullName = getJoinUrlRequest.userId;
         }
 
-        let joinQueryParameters = {
+        const joinQueryParameters = {
             meetingID: getJoinUrlRequest.meetingId,
             password: getJoinUrlRequest.meetingPassword,
             fullName: fullName,

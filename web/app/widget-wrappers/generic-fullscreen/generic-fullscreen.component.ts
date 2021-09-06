@@ -8,11 +8,10 @@ import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
     styleUrls: ["../fullpage-iframe/fullpage-iframe.component.scss"],
 })
 export class GenericFullscreenWidgetWrapperComponent {
-
     public embedUrl: SafeUrl = null;
 
     constructor(activatedRoute: ActivatedRoute, sanitizer: DomSanitizer) {
-        let params: any = activatedRoute.snapshot.queryParams;
+        const params: any = activatedRoute.snapshot.queryParams;
         // Note: we don't do an embeddable check (as we would in a generic wrapper)
         // because the Grafana dashboard might be private.
         this.embedUrl = sanitizer.bypassSecurityTrustResourceUrl(params.url);

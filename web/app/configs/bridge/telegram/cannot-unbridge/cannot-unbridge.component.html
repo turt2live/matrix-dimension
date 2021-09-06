@@ -1,13 +1,12 @@
-<div class="dialog">
-    <div class="dialog-header">
-        <h4>{{'Telegram chat is already bridged' | translate}}</h4>
-    </div>
-    <div class="dialog-content">
-        {{'That Telegram chat is bridged to another Matrix room and cannot be bridged here. Unfortunately, you do not have the required permissions to be able to unbridge the other room.' | translate}}
-    </div>
-    <div class="dialog-footer">
-        <button type="button" (click)="dialog.close()" title="cancel" class="btn btn-primary btn-sm">
-            <i class="far fa-times-circle"></i> {{'Close' | translate}}
-        </button>
-    </div>
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{'Telegram chat is already bridged' | translate}}</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+</div>
+<div class="modal-body">
+    {{'That Telegram chat is bridged to another Matrix room and cannot be bridged here. Unfortunately, you do not have the required permissions to be able to unbridge the other room.' | translate}}
+</div>
+<div class="modal-footer">
+    <button type="button" (click)="modal.close()" title="close" class="btn btn-primary btn-sm">
+        <i class="far fa-times-circle"></i> {{'Close' | translate}}
+    </button>
 </div>

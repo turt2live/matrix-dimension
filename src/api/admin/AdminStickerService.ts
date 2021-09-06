@@ -89,7 +89,7 @@ export class AdminStickerService {
             authorName: "Telegram",
             authorReference: request.packUrl,
             license: "Telegram",
-            licensePath: "/licenses/telegram-imported.txt",
+            licensePath: "/assets/licenses/telegram-imported.txt",
         });
 
         const stickers = [];

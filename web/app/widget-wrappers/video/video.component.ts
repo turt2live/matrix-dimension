@@ -8,12 +8,10 @@ import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
     styleUrls: ["../fullpage-iframe/fullpage-iframe.component.scss"],
 })
 export class VideoWidgetWrapperComponent {
-
     public embedUrl: SafeUrl = null;
 
     constructor(activatedRoute: ActivatedRoute, sanitizer: DomSanitizer) {
-        let params: any = activatedRoute.snapshot.queryParams;
+        const params: any = activatedRoute.snapshot.queryParams;
         this.embedUrl = sanitizer.bypassSecurityTrustResourceUrl(params.url);
     }
-
 }

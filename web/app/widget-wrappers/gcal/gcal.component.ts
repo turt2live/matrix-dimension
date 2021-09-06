@@ -8,12 +8,12 @@ import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
     styleUrls: ["../fullpage-iframe/fullpage-iframe.component.scss"],
 })
 export class GCalWidgetWrapperComponent {
-
     public embedUrl: SafeUrl = null;
 
     constructor(activatedRoute: ActivatedRoute, sanitizer: DomSanitizer) {
-        let params: any = activatedRoute.snapshot.queryParams;
-        const embedUrl = "https://calendar.google.com/calendar/embed?src=" + params.calendarId;
+        const params: any = activatedRoute.snapshot.queryParams;
+        const embedUrl =
+      "https://calendar.google.com/calendar/embed?src=" + params.calendarId;
         this.embedUrl = sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
     }
 }

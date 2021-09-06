@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="no-stickers" *ngIf="!isLoading && !authError && (!packs || packs.length === 0)">
-        <img src="/img/no_stickers.png"/>
+        <img src="/assets/img/no_stickers.png"/>
         <span class="message">{{'You have no sticker packs.' | translate}}</span>
         <button class="btn btn-link btn-sm" (click)="openIntegrationManager()">{{'Add some stickers' | translate}}</button>
     </div>

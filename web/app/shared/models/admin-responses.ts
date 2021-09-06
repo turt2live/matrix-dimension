@@ -3,7 +3,7 @@ import { FE_Integration } from "./integration";
 export interface FE_DimensionConfig {
     admins: string[];
     widgetBlacklist: string[];
-    homesever: {
+    homeserver: {
         name: string;
         userId: string;
         federationUrl: string;

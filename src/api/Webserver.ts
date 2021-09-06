@@ -26,9 +26,8 @@ export default class Webserver {
     private loadRoutes() {
         // TODO: Rename services to controllers, and controllers to services. They're backwards.
 
-        const apis = ["scalar", "dimension", "admin", "matrix"].map(a => path.join(__dirname, a, "*.js"));
+        const apis = ["scalar", "dimension", "admin", "matrix"].map(a => path.join(__dirname, a, "*"));
         const router = express.Router();
-        Server.useIoC();
         Server.registerAuthenticator(new MatrixSecurity());
         apis.forEach(a => Server.loadServices(router, [a]));
         const routes = _.uniq(router.stack.map(r => r.route.path));

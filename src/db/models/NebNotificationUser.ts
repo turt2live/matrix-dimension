@@ -8,7 +8,7 @@ import User from "./User";
     underscored: false,
     timestamps: false,
 })
-export default class NebNotificationUser extends Model<NebNotificationUser> {
+export default class NebNotificationUser extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column

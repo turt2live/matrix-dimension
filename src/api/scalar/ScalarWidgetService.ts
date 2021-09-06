@@ -4,7 +4,7 @@ import { Cache, CACHE_WIDGET_TITLES } from "../../MemoryCache";
 import { MatrixLiteClient } from "../../matrix/MatrixLiteClient";
 import config from "../../config";
 import { ROLE_USER } from "../security/MatrixSecurity";
-import moment = require("moment");
+import moment from 'moment';
 
 interface UrlPreviewResponse {
     cached_response: boolean;

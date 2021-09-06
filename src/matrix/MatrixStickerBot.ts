@@ -71,7 +71,7 @@ class _MatrixStickerBot {
                     authorName: await this.getUserId(),
                     authorReference: "https://matrix.to/#/" + (await this.getUserId()),
                     license: "Imported",
-                    licensePath: "/licenses/general-imported.txt",
+                    licensePath: "/assets/licenses/general-imported.txt",
                     trackingRoomAlias: alias,
                 });
                 return this.updateStickersInPacks([pack], roomId);

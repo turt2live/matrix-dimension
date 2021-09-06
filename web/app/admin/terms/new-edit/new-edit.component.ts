@@ -4,12 +4,11 @@ import { AdminTermsApiService } from "../../../shared/services/admin/admin-terms
 import { ActivatedRoute, Router } from "@angular/router";
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ISO6391 from "iso-639-1";
-import { Modal, overlayConfigFactory } from "ngx-modialog";
 import {
     AdminTermsNewEditPublishDialogComponent,
-    AdminTermsNewEditPublishDialogContext
 } from "./publish/publish.component";
 import { TranslateService } from "@ngx-translate/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 interface ILanguage {
     name: string,
@@ -64,16 +63,16 @@ export class AdminNewEditTermsComponent implements OnInit {
     }
 
     constructor(private adminTerms: AdminTermsApiService,
-                private toaster: ToasterService,
-                private router: Router,
-                private activatedRoute: ActivatedRoute,
-                private modal: Modal,
-                public translate: TranslateService) {
+        private toaster: ToasterService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private modal: NgbModal,
+        public translate: TranslateService) {
         this.translate = translate;
     }
 
     public ngOnInit() {
-        let params = this.activatedRoute.snapshot.params;
+        const params = this.activatedRoute.snapshot.params;
         this.shortcode = params.shortcode;
         this.isEditing = !!this.shortcode;
 
@@ -97,7 +96,9 @@ export class AdminNewEditTermsComponent implements OnInit {
                 this.isLoading = false;
             }).catch(err => {
                 console.error(err);
-                this.translate.get('Failed to load policy').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Failed to load policy').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             });
         } else {
             this.adminTerms.getAllPolicies().then(policies => {
@@ -105,7 +106,9 @@ export class AdminNewEditTermsComponent implements OnInit {
                 this.isLoading = false;
             }).catch(err => {
                 console.error(err);
-                this.translate.get('Failed to load policies').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Failed to load policies').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
             });
         }
     }
@@ -119,11 +122,11 @@ export class AdminNewEditTermsComponent implements OnInit {
             url: `${window.location.origin}/widgets/terms/${this.shortcode}/en/draft`,
         });
 
-
-        this.modal.open(AdminTermsNewEditPublishDialogComponent, overlayConfigFactory({
-            isBlocking: true,
+        const termsEditRef = this.modal.open(AdminTermsNewEditPublishDialogComponent, {
+            backdrop: 'static',
             size: 'sm',
-        }, AdminTermsNewEditPublishDialogContext)).result.then(async (val) => {
+        });
+        termsEditRef.result.then(async (val) => {
             if (!val) return; // closed without publish
 
             try {
@@ -136,11 +139,15 @@ export class AdminNewEditTermsComponent implements OnInit {
                 });
 
                 await this.adminTerms.publishDraft(this.shortcode, val);
-                this.translate.get('Policy published').subscribe((res: string) => {this.toaster.pop("success", res); });
+                this.translate.get('Policy published').subscribe((res: string) => {
+                    this.toaster.pop("success", res);
+                });
                 this.router.navigate(["../.."], {relativeTo: this.activatedRoute});
             } catch (e) {
                 console.error(e);
-                this.translate.get('Error publishing policy').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Error publishing policy').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
                 this.isUpdating = false;
             }
         });
@@ -149,11 +156,15 @@ export class AdminNewEditTermsComponent implements OnInit {
     public async create() {
         for (const languageCode in this.languages) {
             if (this.languages[languageCode].name.trim().length <= 0) {
-                this.translate.get('Please enter a name for all policies').subscribe((res: string) => {this.toaster.pop("warning", res); });
+                this.translate.get('Please enter a name for all policies').subscribe((res: string) => {
+                    this.toaster.pop("warning", res);
+                });
                 return;
             }
             if (this.languages[languageCode].text.trim().length <= 0) {
-                this.translate.get('Please enter text for all policies').subscribe((res: string) => {this.toaster.pop("warning", res); });
+                this.translate.get('Please enter text for all policies').subscribe((res: string) => {
+                    this.toaster.pop("warning", res);
+                });
                 return;
             }
         }
@@ -167,11 +178,15 @@ export class AdminNewEditTermsComponent implements OnInit {
                     text: this.languages['en'].text,
                     url: `${window.location.origin}/widgets/terms/${this.shortcode}/en/draft`,
                 });
-                this.translate.get('Draft saved').subscribe((res: string) => {this.toaster.pop("success", res); });
+                this.translate.get('Draft saved').subscribe((res: string) => {
+                    this.toaster.pop("success", res);
+                });
                 this.router.navigate(["../.."], {relativeTo: this.activatedRoute});
             } catch (e) {
                 console.error(e);
-                this.translate.get('Error saving policy').subscribe((res: string) => {this.toaster.pop("error", res); });
+                this.translate.get('Error saving policy').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
                 this.isUpdating = false;
             }
             return;
@@ -190,11 +205,15 @@ export class AdminNewEditTermsComponent implements OnInit {
                 text: this.languages['en'].text,
                 url: `${window.location.origin}/widgets/terms/${shortcode}/en/draft`,
             });
-            this.translate.get('Draft created').subscribe((res: string) => {this.toaster.pop("success", res); });
+            this.translate.get('Draft created').subscribe((res: string) => {
+                this.toaster.pop("success", res);
+            });
             this.router.navigate([".."], {relativeTo: this.activatedRoute});
         } catch (e) {
             console.error(e);
-            this.translate.get('Error creating document').subscribe((res: string) => {this.toaster.pop("error", res); });
+            this.translate.get('Error creating document').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
             this.isUpdating = false;
         }
     }

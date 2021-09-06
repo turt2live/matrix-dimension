@@ -1,9 +1,7 @@
 import { ApplicationRef, Injector, NgModule } from "@angular/core";
-import { ModalModule } from "ngx-modialog";
-import { BootstrapModalModule } from "ngx-modialog/plugins/bootstrap";
-import { BreadcrumbsModule } from "ng2-breadcrumbs";
+import { BreadcrumbModule } from "xng-breadcrumb";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { UiSwitchModule } from "angular2-ui-switch";
+import { UiSwitchModule } from "ngx-ui-switch";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { routing } from "./app.routing";
 import { FormsModule } from "@angular/forms";
@@ -120,6 +118,7 @@ import { WhiteboardWidgetComponent } from "./configs/widget/whiteboard/whiteboar
 import { AdminWidgetWhiteboardConfigComponent } from "./admin/widgets/whiteboard/whiteboard.component";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -136,10 +135,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         UiSwitchModule,
         ToasterModule,
         BrowserAnimationsModule,
-        ModalModule.forRoot(),
-        BootstrapModalModule,
-        BreadcrumbsModule,
+        BreadcrumbModule,
         CKEditorModule,
+        FontAwesomeModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -297,7 +295,9 @@ export class AppModule {
     }
 
     hmrOnDestroy(store) {
-        let cmpLocation = this.appRef.components.map(cmp => cmp.location.nativeElement);
+        const cmpLocation = this.appRef.components.map(
+            (cmp) => cmp.location.nativeElement
+        );
         // recreate elements
         store.disposeOldHosts = createNewHosts(cmpLocation);
         // remove styles
@@ -305,7 +305,7 @@ export class AppModule {
     }
 
     hmrAfterDestroy(store) {
-        // display new elements
+    // display new elements
         store.disposeOldHosts();
         delete store.disposeOldHosts;
     }

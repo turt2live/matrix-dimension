@@ -7,10 +7,9 @@ import { Component, ContentChild, Input, TemplateRef } from "@angular/core";
     styleUrls: ["config-screen.widget.component.scss"],
 })
 export class ConfigScreenWidgetComponent {
-
     @Input() widgetComponent: WidgetComponent;
-    @ContentChild(TemplateRef, {static: false}) widgetParamsTemplate: TemplateRef<any>;
+    @ContentChild(TemplateRef, { static: false })
+    widgetParamsTemplate: TemplateRef<any>;
 
-    constructor() {
-    }
+    constructor() {}
 }

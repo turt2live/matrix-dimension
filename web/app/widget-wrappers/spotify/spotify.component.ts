@@ -9,14 +9,12 @@ import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
     styleUrls: ["../fullpage-iframe/fullpage-iframe.component.scss"],
 })
 export class SpotifyWidgetWrapperComponent {
-
     public embedUrl: SafeUrl = null;
 
     constructor(activatedRoute: ActivatedRoute, sanitizer: DomSanitizer) {
-        let params: any = activatedRoute.snapshot.queryParams;
+        const params: any = activatedRoute.snapshot.queryParams;
         const spotifyUrl = spotifyUri.parse(params.uri);
         const spotifyEmbedUrl = spotifyUri.formatEmbedURL(spotifyUrl);
         this.embedUrl = sanitizer.bypassSecurityTrustResourceUrl(spotifyEmbedUrl);
     }
-
 }

@@ -7,10 +7,9 @@ import { BridgeComponent } from "../bridge.component";
     styleUrls: ["config-screen.bridge.component.scss"],
 })
 export class ConfigScreenBridgeComponent {
-
     @Input() bridgeComponent: BridgeComponent<any>;
-    @ContentChild(TemplateRef, {static: false}) bridgeParamsTemplate: TemplateRef<any>;
+    @ContentChild(TemplateRef, { static: false })
+    bridgeParamsTemplate: TemplateRef<any>;
 
-    constructor() {
-    }
+    constructor() {}
 }

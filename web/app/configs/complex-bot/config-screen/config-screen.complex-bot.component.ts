@@ -7,10 +7,9 @@ import { Component, ContentChild, Input, TemplateRef } from "@angular/core";
     styleUrls: ["config-screen.complex-bot.component.scss"],
 })
 export class ConfigScreenComplexBotComponent {
-
     @Input() botComponent: ComplexBotComponent<any>;
-    @ContentChild(TemplateRef, {static: false}) botParamsTemplate: TemplateRef<any>;
+    @ContentChild(TemplateRef, { static: false })
+    botParamsTemplate: TemplateRef<any>;
 
-    constructor() {
-    }
+    constructor() {}
 }

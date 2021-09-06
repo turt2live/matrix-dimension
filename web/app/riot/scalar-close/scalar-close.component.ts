@@ -7,9 +7,7 @@ import { ScalarClientApiService } from "../../shared/services/scalar/scalar-clie
     styleUrls: ["./scalar-close.component.scss"],
 })
 export class ScalarCloseComponent {
-
-    constructor(private scalar: ScalarClientApiService) {
-    }
+    constructor(private scalar: ScalarClientApiService) {}
 
     public closeScalar() {
         console.log("Closing scalar...");
