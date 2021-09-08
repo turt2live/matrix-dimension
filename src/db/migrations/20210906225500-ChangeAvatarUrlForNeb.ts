@@ -5,12 +5,12 @@ export default {
         return Promise.resolve()
             .then(() =>
                 queryInterface.sequelize.query(
-                    "UPDATE dimension_appservice_users SET avatarUrl = REPLACE(avatarUrl, '/img/', '/assets/img/')"
+                    `UPDATE dimension_appservice_users SET "avatarUrl" = REPLACE("avatarUrl", '/img/', '/assets/img/')`
                 )
             )
             .then(() =>
                 queryInterface.sequelize.query(
-                    "UPDATE dimension_neb_integrations SET avatarUrl = REPLACE(avatarUrl, '/img/', '/assets/img/')"
+                    `UPDATE dimension_neb_integrations SET "avatarUrl" = REPLACE("avatarUrl", '/img/', '/assets/img/')`
                 )
             );
     },
@@ -18,12 +18,12 @@ export default {
         return Promise.resolve()
             .then(() =>
                 queryInterface.sequelize.query(
-                    "UPDATE dimension_appservice_users SET avatarUrl = REPLACE(avatarUrl, '/assets/img/', '/img/')"
+                    `UPDATE dimension_appservice_users SET "avatarUrl" = REPLACE("avatarUrl", '/assets/img/', '/img/')`
                 )
             )
             .then(() =>
                 queryInterface.sequelize.query(
-                    "UPDATE dimension_neb_integrations SET avatarUrl = REPLACE(avatarUrl, '/assets/img/', '/img/')"
+                    `UPDATE dimension_neb_integrations SET "avatarUrl" = REPLACE("avatarUrl", '/assets/img/', '/img/')`
                 )
             );
     },
