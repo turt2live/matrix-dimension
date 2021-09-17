@@ -87,11 +87,17 @@ as an example, create a file at `/etc/dimension/config.yaml`.
 After creating the file, open it in an editor like `nano` and start filling in the details. Don't forget
 to add your user ID as an admin in the configuration - this is important later!
 
-If you're using Docker, leave the `web` `port` and `address` as-is. Additionally, make sure to configure
-the `database` section to look like this:
+If you're using Docker, leave the `web` `port` and `address` as-is. Dimension supports SQLite and PostgreSQL as the database. Make sure to configure the `database` section to look like this for SQLite:
 ```yaml
 database:
     file: "/data/dimension.db"
+    botData: "/data/bot.json"
+```
+
+or for PostgreSQL:
+```yaml
+database:
+    uri: "postgres://admin:password@localhost:5432/matrix-dimension"
     botData: "/data/bot.json"
 ```
 
