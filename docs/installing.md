@@ -105,7 +105,7 @@ database:
 
 **Docker**:
 ```bash
-docker run -d --name dimension -p 127.0.0.1:8184:8184 -v /etc/dimension:/data turt2live/matrix-dimension
+docker run -d --name dimension -p 127.0.0.1:8184:8184 -v ./data:/data turt2live/matrix-dimension
 ```
 
 **Building**:
