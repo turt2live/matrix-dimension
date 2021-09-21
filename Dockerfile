@@ -7,9 +7,7 @@ WORKDIR /home/node/matrix-dimension
 
 RUN mkdir -p /home/node/matrix-dimension
 
-RUN apk update && \
-    apk add python2 glib-dev make g++ vips-dev libc-dev && \
-    rm -rf /var/lib/apk/* /var/cache/apk/*
+RUN apk --no-cache add python2 glib-dev make g++ vips-dev libc-dev
 
 COPY . /home/node/matrix-dimension
 
@@ -37,9 +35,7 @@ RUN chown -R node /home/node/matrix-dimension
 
 RUN mkdir /data && chown -R node /data
 
-RUN apk update && \
-    apk add python2 glib-dev make g++ vips-dev libc-dev && \
-    rm -rf /var/lib/apk/* /var/cache/apk/*
+RUN apk --no-cache add python2 glib-dev make g++ vips-dev libc-dev
 
 ENV CPATH=/usr/include/glib-2.0:/usr/lib/glib-2.0/include/
 
