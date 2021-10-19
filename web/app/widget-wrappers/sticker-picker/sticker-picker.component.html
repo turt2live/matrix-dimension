@@ -26,14 +26,14 @@
             <div class="stickers">
                 <div class="sticker" *ngFor="let sticker of pack.stickers trackById"
                      (click)="sendSticker(sticker, pack)">
-                    <img [src]="getThumbnailUrl(sticker.thumbnail.mxc, 48, 48)" width="48" height="48" class="image"
+                    <img [src]="getThumbnailUrl(sticker.thumbnail.mxc, 48, 48)" width="48" height="48" class="image" loading="lazy"
                          [alt]="sticker.name" [ngbTooltip]="sticker.name" placement="bottom"/>
                 </div>
             </div>
         </div>
         <div class="sticker-pack-list" [@hideList]="isListVisible ? 'visible' : 'hidden'" (wheel)="scrollHorizontal($event)" >
             <div class="sticker-pack-list-item" *ngFor="let pack of packs trackById" (click)="scrollToPack('pack-' + pack.id)">
-                <img [src]="getThumbnailUrl(pack.stickers[0].thumbnail.mxc, 48, 48)" width="40" height="40" class="image"
+                <img [src]="getThumbnailUrl(pack.stickers[0].thumbnail.mxc, 48, 48)" width="40" height="40" class="image" loading="lazy"
                          [alt]="pack.displayName" [ngbTooltip]="pack.displayName" placement="top" container="body"/>
             </div>
             <div class="sticker-pack-list-config" (click)="openIntegrationManager()"
