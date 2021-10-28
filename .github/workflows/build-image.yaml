@@ -1,6 +1,8 @@
 name: Build and publish container
 on:
   push:
+    branches:
+      - master
 
 env:
   REGISTRY: ghcr.io
