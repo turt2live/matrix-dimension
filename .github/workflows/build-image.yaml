@@ -5,7 +5,7 @@ on:
       - master
 
 env:
-  REGISTRY: ghcr.io
+  REGISTRY: docker.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
