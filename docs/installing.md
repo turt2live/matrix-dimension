@@ -162,6 +162,7 @@ docker restart dimension
 # Kill the running Dimension process, then...
 
 git pull
+npm install
 npm run build
 NODE_ENV=production npm run start:app
 ```
