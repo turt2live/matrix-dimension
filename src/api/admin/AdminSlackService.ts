@@ -49,14 +49,14 @@ export class AdminSlackService {
     @Path(":bridgeId")
     @Security([ROLE_USER, ROLE_ADMIN])
     public async getBridge(@PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
-        const telegramBridge = await SlackBridgeRecord.findByPk(bridgeId);
-        if (!telegramBridge) throw new ApiError(404, "Slack Bridge not found");
+        const slackBridge = await SlackBridgeRecord.findByPk(bridgeId);
+        if (!slackBridge) throw new ApiError(404, "Slack Bridge not found");
 
         return {
-            id: telegramBridge.id,
-            upstreamId: telegramBridge.upstreamId,
-            provisionUrl: telegramBridge.provisionUrl,
-            isEnabled: telegramBridge.isEnabled,
+            id: slackBridge.id,
+            upstreamId: slackBridge.upstreamId,
+            provisionUrl: slackBridge.provisionUrl,
+            isEnabled: slackBridge.isEnabled,
         };
     }
 
