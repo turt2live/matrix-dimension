@@ -93,7 +93,7 @@ export class DimensionWidgetService {
 
                     resolve();
                 } else {
-                    LogService.verbose("DimensionWidgetService", response.body);
+                    LogService.debug("DimensionWidgetService", response.body);
                     return reject(new ApiError(400, "Non-success status code returned"));
                 }
             });

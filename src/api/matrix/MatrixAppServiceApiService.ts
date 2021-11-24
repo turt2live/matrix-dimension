@@ -22,7 +22,7 @@ export class MatrixAppServiceApiService {
             const appservice = await AppserviceStore.getByHomeserverToken(homeserverToken);
 
             // We don't handle the transaction at all - we just don't want the homeserver to consider us down
-            LogService.verbose("MatrixAppServiceApiService", "Accepting transaction " + txnId + " for appservice " + appservice.id + " blindly");
+            LogService.debug("MatrixAppServiceApiService", "Accepting transaction " + txnId + " for appservice " + appservice.id + " blindly");
             return {}; // 200 OK
         } catch (err) {
             LogService.error("MatrixAppServiceApiService", err);
@@ -37,7 +37,7 @@ export class MatrixAppServiceApiService {
             const appservice = await AppserviceStore.getByHomeserverToken(homeserverToken);
 
             // We don't support room lookups
-            LogService.verbose("MatrixAppServiceApiService", "404ing request for room " + roomAlias + " at appservice " + appservice.id);
+            LogService.debug("MatrixAppServiceApiService", "404ing request for room " + roomAlias + " at appservice " + appservice.id);
             throw new ApiError(404, {errcode: "IO.T2BOT.DIMENSION.ROOMS_NOT_SUPPORTED"});
         } catch (err) {
             if (err instanceof ApiError) throw err;

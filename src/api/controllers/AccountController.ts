@@ -69,7 +69,7 @@ export default class AccountController {
         if (!user) {
             // There's a small chance we'll get a validation error because of:
             // https://github.com/vector-im/riot-web/issues/5846
-            LogService.verbose("AccountController", "User " + mxUserId + " never seen before - creating");
+            LogService.debug("AccountController", "User " + mxUserId + " never seen before - creating");
             await User.create({userId: mxUserId});
         }
 

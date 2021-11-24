@@ -18,7 +18,7 @@ export async function getFederationConnInfo(serverName: string): Promise<IFedera
     // Check to see if we've cached the hostname at all already
     const cachedUrl = Cache.for(CACHE_FEDERATION).get(serverName);
     if (cachedUrl) {
-        LogService.verbose("matrix", "Cached federation URL for " + serverName + " is " + cachedUrl.url);
+        LogService.debug("matrix", "Cached federation URL for " + serverName + " is " + cachedUrl.url);
         return cachedUrl;
     }
 

@@ -36,7 +36,7 @@ class _DimensionStore {
     constructor() {
         if (process.env.DATABASE_URI || config.database.uri ) {
             this.sequelize = new Sequelize(process.env.DATABASE_URI || config.database.uri , {
-                logging: i => LogService.verbose("DimensionStore [SQL]", i)
+                logging: i => LogService.debug("DimensionStore [SQL]", i)
             });
         } else {
             this.sequelize = new Sequelize({
@@ -45,7 +45,7 @@ class _DimensionStore {
                 storage: process.env['DIMENSION_DB_PATH'] || config.database.file,
                 username: "",
                 password: "",
-                logging: i => LogService.verbose("DimensionStore [SQL]", i)
+                logging: i => LogService.debug("DimensionStore [SQL]", i)
             });
         }
         this.sequelize.addModels([
