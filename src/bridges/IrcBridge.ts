@@ -3,7 +3,7 @@ import { Cache, CACHE_IRC_BRIDGE } from "../MemoryCache";
 import IrcBridgeRecord from "../db/models/IrcBridgeRecord";
 import Upstream from "../db/models/Upstream";
 import UserScalarToken from "../db/models/UserScalarToken";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import * as request from "request";
 import { ListLinksResponseItem, ListOpsResponse, QueryNetworksResponse } from "./models/irc";
 import IrcBridgeNetwork from "../db/models/IrcBridgeNetwork";

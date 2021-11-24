@@ -110,13 +110,3 @@ bigbluebutton:
   # Usually this doen't need to be changed, however if your homeserver
   # is not able to reach t2bot.io then you should specify your own here.
   widgetAvatarUrl: "mxc://t2bot.io/be1650140620d8bb61a8cf5baeb05f24a734434c"
-
-# Settings for controlling how logging works
-logging:
-  file: logs/dimension.log
-  console: true
-  consoleLevel: info
-  fileLevel: verbose
-  rotate:
-    size: 52428800 # bytes, default is 50mb
-    count: 5

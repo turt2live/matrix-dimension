@@ -13,7 +13,7 @@ import { SuccessResponse, WebhookConfiguration, WebhookOptions } from "../../bri
 import { WebhooksBridge } from "../../bridges/WebhooksBridge";
 import Webhook from "../../db/models/Webhook";
 import { ApiError } from "../ApiError";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import * as request from "request";
 import { ROLE_USER } from "../security/MatrixSecurity";
 

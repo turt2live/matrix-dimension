@@ -2,7 +2,7 @@ import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "t
 import { Cache, CACHE_INTEGRATIONS, CACHE_NEB } from "../../MemoryCache";
 import { NebStore } from "../../db/NebStore";
 import { NebConfig } from "../../models/neb";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { ApiError } from "../ApiError";
 import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 

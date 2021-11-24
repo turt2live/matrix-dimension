@@ -3,7 +3,7 @@ import AppService from "../../db/models/AppService";
 import { AppserviceStore } from "../../db/AppserviceStore";
 import { ApiError } from "../ApiError";
 import { MatrixAppserviceClient } from "../../matrix/MatrixAppserviceClient";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 
 interface AppserviceResponse {

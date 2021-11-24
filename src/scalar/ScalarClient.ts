@@ -1,7 +1,7 @@
 import { OpenId } from "../models/OpenId";
 import { ScalarAccountResponse, ScalarLogoutResponse, ScalarRegisterResponse } from "../models/ScalarResponses";
 import * as request from "request";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import Upstream from "../db/models/Upstream";
 import { SCALAR_API_VERSION } from "../utils/common-constants";
 import { ITermsResponse } from "../api/controllers/TermsController";

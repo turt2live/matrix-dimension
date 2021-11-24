@@ -1,6 +1,6 @@
 import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { Cache, CACHE_INTEGRATIONS, CACHE_IRC_BRIDGE } from "../../MemoryCache";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { ApiError } from "../ApiError";
 import IrcBridgeRecord from "../../db/models/IrcBridgeRecord";
 import { AvailableNetworks, IrcBridge } from "../../bridges/IrcBridge";

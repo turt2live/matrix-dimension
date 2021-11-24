@@ -1,6 +1,6 @@
 import { Context, DELETE, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { ApiError } from "../ApiError";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { BotStore } from "../../db/BotStore";
 import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
 import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";

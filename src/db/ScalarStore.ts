@@ -1,5 +1,5 @@
 import UserScalarToken from "./models/UserScalarToken";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import Upstream from "./models/Upstream";
 import User from "./models/User";
 import { MatrixStickerBot } from "../matrix/MatrixStickerBot";

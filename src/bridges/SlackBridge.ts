@@ -1,7 +1,7 @@
 import IrcBridgeRecord from "../db/models/IrcBridgeRecord";
 import Upstream from "../db/models/Upstream";
 import UserScalarToken from "../db/models/UserScalarToken";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import * as request from "request";
 import { ModularSlackResponse } from "../models/ModularResponses";
 import SlackBridgeRecord from "../db/models/SlackBridgeRecord";

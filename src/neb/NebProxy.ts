@@ -1,7 +1,7 @@
 import { NebConfig } from "../models/neb";
 import NebIntegration from "../db/models/NebIntegration";
 import { NebStore } from "../db/NebStore";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import * as request from "request";
 import Upstream from "../db/models/Upstream";
 import UserScalarToken from "../db/models/UserScalarToken";

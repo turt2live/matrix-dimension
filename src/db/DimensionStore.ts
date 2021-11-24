@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
 import config from "../config";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import User from "./models/User";
 import UserScalarToken from "./models/UserScalarToken";
 import Upstream from "./models/Upstream";

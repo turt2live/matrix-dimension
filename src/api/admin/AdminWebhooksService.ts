@@ -1,6 +1,6 @@
 import { Context, GET, Path, PathParam, POST, QueryParam, Security, ServiceContext } from "typescript-rest";
 import { Cache, CACHE_INTEGRATIONS, CACHE_WEBHOOKS_BRIDGE } from "../../MemoryCache";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { ApiError } from "../ApiError";
 import WebhookBridgeRecord from "../../db/models/WebhookBridgeRecord";
 import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";

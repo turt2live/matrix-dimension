@@ -1,5 +1,5 @@
 import { Context, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { IrcBridge } from "../../bridges/IrcBridge";
 import IrcBridgeRecord from "../../db/models/IrcBridgeRecord";
 import { ApiError } from "../ApiError";

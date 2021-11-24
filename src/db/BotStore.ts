@@ -3,7 +3,7 @@ import { Cache, CACHE_SIMPLE_BOTS } from "../MemoryCache";
 import { MatrixLiteClient } from "../matrix/MatrixLiteClient";
 import config from "../config";
 import * as randomString from "random-string";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 
 export interface CachedSimpleBot extends SimpleBotTemplate {
     id: number;

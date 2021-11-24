@@ -2,7 +2,7 @@ import * as express from "express";
 import * as path from "path";
 import * as bodyParser from "body-parser";
 import * as URL from "url";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { Server } from "typescript-rest";
 import * as _ from "lodash";
 import config from "../config";

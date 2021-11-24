@@ -2,7 +2,7 @@ import AppService from "./models/AppService";
 import AppServiceUser from "./models/AppServiceUser";
 import * as randomString from "random-string";
 import { MatrixAppserviceClient } from "../matrix/MatrixAppserviceClient";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 
 export class AppserviceStore {
 

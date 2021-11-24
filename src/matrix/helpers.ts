@@ -1,5 +1,5 @@
 import { promises as dnsPromises } from 'dns';
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { Cache, CACHE_FEDERATION } from "../MemoryCache";
 import * as request from "request";
 import config from "../config";

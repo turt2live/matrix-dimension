@@ -1,5 +1,5 @@
 import { GET, Path } from "typescript-rest";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 
 /**
  * API for the health of Dimension

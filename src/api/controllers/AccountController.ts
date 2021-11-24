@@ -1,6 +1,6 @@
 import { OpenId } from "../../models/OpenId";
 import { MatrixOpenIdClient } from "../../matrix/MatrixOpenIdClient";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { ApiError } from "../ApiError";
 import User from "../../db/models/User";
 import Upstream from "../../db/models/Upstream";

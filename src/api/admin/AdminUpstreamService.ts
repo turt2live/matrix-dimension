@@ -1,7 +1,7 @@
 import { Context, GET, Path, POST, Security, ServiceContext } from "typescript-rest";
 import { Cache, CACHE_SCALAR_ACCOUNTS, CACHE_UPSTREAM } from "../../MemoryCache";
 import Upstream from "../../db/models/Upstream";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 
 interface UpstreamRepsonse {

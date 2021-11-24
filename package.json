@@ -52,7 +52,6 @@
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "matrix-bot-sdk": "^0.5.19",
-    "matrix-js-snippets": "^0.2.8",
     "memory-cache": "^0.2.0",
     "mime": "^2.5.2",
     "moment": "^2.29.1",
@@ -84,13 +83,13 @@
     "zone.js": "^0.11.4"
   },
   "devDependencies": {
-    "@angular/cli": "^12.2.1",
-    "@angular/compiler-cli": "^12.2.2",
     "@angular-eslint/builder": "12.3.1",
     "@angular-eslint/eslint-plugin": "12.3.1",
     "@angular-eslint/eslint-plugin-template": "12.3.1",
     "@angular-eslint/schematics": "12.3.1",
     "@angular-eslint/template-parser": "12.3.1",
+    "@angular/cli": "^12.2.1",
+    "@angular/compiler-cli": "^12.2.2",
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@biesbjerg/ngx-translate-extract": "^7.0.4",

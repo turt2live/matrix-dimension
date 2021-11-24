@@ -1,6 +1,6 @@
 import { Context, GET, Path, PathParam, POST, QueryParam, Security, ServiceContext } from "typescript-rest";
 import { Cache, CACHE_INTEGRATIONS, CACHE_TELEGRAM_BRIDGE } from "../../MemoryCache";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { ApiError } from "../ApiError";
 import TelegramBridgeRecord from "../../db/models/TelegramBridgeRecord";
 import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";

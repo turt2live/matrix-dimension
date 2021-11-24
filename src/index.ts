@@ -1,10 +1,8 @@
-import { LogService } from "matrix-js-snippets";
-import config from "./config";
+import { LogLevel, LogService } from "matrix-bot-sdk";
 import { DimensionStore } from "./db/DimensionStore";
 import Webserver from "./api/Webserver";
 import { CURRENT_VERSION } from "./version";
 import { MatrixStickerBot } from "./matrix/MatrixStickerBot";
-import * as BotSdk from "matrix-bot-sdk";
 import User from "./db/models/User";
 import { ILoggedInUser } from "./api/security/MatrixSecurity";
 
@@ -17,17 +15,8 @@ declare global {
     }
 }
 
-LogService.configure(config.logging);
+LogService.setLevel(LogLevel.DEBUG);
 LogService.info("index", "Starting dimension " + CURRENT_VERSION);
-
-// Redirect the bot-sdk logger to our logger
-BotSdk.LogService.setLogger({
-    trace: (module: string, ...args: any[]) => args.map(a => LogService.info("BotSdk-" + module, a)),
-    debug: (module: string, ...args: any[]) => args.map(a => LogService.info("BotSdk-" + module, a)),
-    info: (module: string, ...args: any[]) => args.map(a => LogService.info("BotSdk-" + module, a)),
-    warn: (module: string, ...args: any[]) => args.map(a => LogService.warn("BotSdk-" + module, a)),
-    error: (module: string, ...args: any[]) => args.map(a => LogService.error("BotSdk-" + module, a)),
-});
 
 async function startup() {
     const schemas = await DimensionStore.updateSchema();

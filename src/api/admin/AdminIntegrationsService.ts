@@ -4,7 +4,7 @@ import { DimensionIntegrationsService } from "../dimension/DimensionIntegrations
 import { WidgetStore } from "../../db/WidgetStore";
 import { Cache, CACHE_INTEGRATIONS } from "../../MemoryCache";
 import { Integration } from "../../integrations/Integration";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { BridgeStore } from "../../db/BridgeStore";
 import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 

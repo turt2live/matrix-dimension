@@ -6,7 +6,7 @@ import { Op } from "sequelize";
 import { Cache, CACHE_TERMS } from "../../MemoryCache";
 import UserScalarToken from "../../db/models/UserScalarToken";
 import Upstream from "../../db/models/Upstream";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { ScalarClient } from "../../scalar/ScalarClient";
 import { md5 } from "../../utils/hashing";
 import TermsUpstreamRecord from "../../db/models/TermsUpstreamRecord";

@@ -1,5 +1,5 @@
 import * as config from "config";
-import { LogConfig } from "matrix-js-snippets";
+import { LogConfig } from "matrix-bot-sdk";
 
 export interface DimensionConfig {
     web: {

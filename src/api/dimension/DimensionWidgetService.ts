@@ -1,5 +1,5 @@
 import { GET, Path, PathParam, QueryParam } from "typescript-rest";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import * as url from "url";
 import { promises as dnsPromises } from 'dns';
 import { ApiError } from "../ApiError";

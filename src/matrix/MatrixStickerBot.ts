@@ -1,11 +1,11 @@
 import {
     AutojoinUpgradedRoomsMixin,
+    LogService,
     MatrixClient,
     SimpleFsStorageProvider,
     SimpleRetryJoinStrategy
 } from "matrix-bot-sdk";
 import config from "../config";
-import { LogService } from "matrix-js-snippets";
 import StickerPack from "../db/models/StickerPack";
 import Sticker from "../db/models/Sticker";
 import { MatrixLiteClient } from "./MatrixLiteClient";

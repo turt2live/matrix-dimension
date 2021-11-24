@@ -1,5 +1,5 @@
 import { GET, Path, QueryParam, Security } from "typescript-rest";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { Cache, CACHE_WIDGET_TITLES } from "../../MemoryCache";
 import { MatrixLiteClient } from "../../matrix/MatrixLiteClient";
 import config from "../../config";

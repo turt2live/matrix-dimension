@@ -1,5 +1,5 @@
 import * as memoryCache from "memory-cache";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 
 export class MemoryCache {
 

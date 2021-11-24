@@ -2,7 +2,7 @@ import { NebConfig } from "../models/neb";
 import { AppserviceStore } from "../db/AppserviceStore";
 import { Client } from "./models/client";
 import config from "../config";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { Service } from "./models/service";
 import * as request from "request";
 import { MatrixLiteClient } from "../matrix/MatrixLiteClient";

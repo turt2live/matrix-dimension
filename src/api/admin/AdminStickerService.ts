@@ -1,4 +1,4 @@
-import { Context, GET, Path, PathParam, POST, DELETE, Security, ServiceContext } from "typescript-rest";
+import { Context, DELETE, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import StickerPack from "../../db/models/StickerPack";
 import { ApiError } from "../ApiError";
 import { DimensionStickerService, MemoryStickerPack } from "../dimension/DimensionStickerService";
@@ -7,7 +7,7 @@ import { TelegramBot } from "../../utils/TelegramBot";
 import { MatrixLiteClient } from "../../matrix/MatrixLiteClient";
 import config from "../../config";
 import Sticker from "../../db/models/Sticker";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import * as sharp from "sharp";
 import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
 

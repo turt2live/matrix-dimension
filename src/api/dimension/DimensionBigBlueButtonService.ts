@@ -1,9 +1,13 @@
-import { GET, POST, Path, QueryParam } from "typescript-rest";
+import { GET, Path, POST, QueryParam } from "typescript-rest";
 import * as request from "request";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { URL } from "url";
 import { BigBlueButtonGetJoinUrlRequest } from "../../models/Widget";
-import { BigBlueButtonJoinResponse, BigBlueButtonCreateAndJoinMeetingResponse, BigBlueButtonWidgetResponse } from "../../models/WidgetResponses";
+import {
+    BigBlueButtonCreateAndJoinMeetingResponse,
+    BigBlueButtonJoinResponse,
+    BigBlueButtonWidgetResponse
+} from "../../models/WidgetResponses";
 import { ApiError } from "../ApiError";
 import { sha256 } from "../../utils/hashing";
 import config from "../../config";

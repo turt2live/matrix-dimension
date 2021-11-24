@@ -1,5 +1,5 @@
 import TelegramBridgeRecord from "../db/models/TelegramBridgeRecord";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import * as request from "request";
 import {
     BridgeInfoResponse,

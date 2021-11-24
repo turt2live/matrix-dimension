@@ -3,7 +3,7 @@ import NebConfiguration from "./models/NebConfiguration";
 import NebIntegration from "./models/NebIntegration";
 import Upstream from "./models/Upstream";
 import AppService from "./models/AppService";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { NebClient } from "../neb/NebClient";
 import NebBotUser from "./models/NebBotUser";
 import NebNotificationUser from "./models/NebNotificationUser";

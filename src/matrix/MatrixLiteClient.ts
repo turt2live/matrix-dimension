@@ -1,7 +1,7 @@
 import { doClientApiCall } from "./helpers";
 import config from "../config";
 import * as request from "request";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { OpenId } from "../models/OpenId";
 
 export interface MatrixUrlPreview {

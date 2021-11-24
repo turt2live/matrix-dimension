@@ -1,7 +1,7 @@
 import { ServiceAuthenticator } from "typescript-rest";
 import { Request, RequestHandler, Response, Router } from "express";
 import { ApiError } from "../ApiError";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import AccountController from "../controllers/AccountController";
 import TermsController from "../controllers/TermsController";
 import config from "../../config";

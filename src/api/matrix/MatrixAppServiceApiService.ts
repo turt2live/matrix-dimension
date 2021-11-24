@@ -1,6 +1,6 @@
 import { GET, Path, PathParam, PUT, QueryParam } from "typescript-rest";
 import { ApiError } from "../ApiError";
-import { LogService } from "matrix-js-snippets";
+import { LogService } from "matrix-bot-sdk";
 import { SimplifiedMatrixEvent } from "../../models/MatrixEvent";
 import { AppserviceStore } from "../../db/AppserviceStore";
 
