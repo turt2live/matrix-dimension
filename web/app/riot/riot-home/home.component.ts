@@ -387,27 +387,22 @@ export class RiotHomeComponent {
             case "publicRoom":
                 return this.scalar.getJoinRule(this.roomId).then((payload) => {
                     if (!payload.response) {
-                        let message: string;
-                        this.translate
-                            .get("Could not communicate with Element")
-                            .subscribe((res: string) => {
-                                message = res;
-                            });
-                        return Promise.reject(message);
+                        return new Promise((resolve, reject) => {
+                            this.translate
+                                .get("Could not communicate with Element")
+                                .subscribe((res: string) => reject(res));
+                        });
                     }
                     const isPublic = payload.response.join_rule === "public";
                     if (isPublic !== requirement.expectedValue) {
-                        let message: string;
-                        let message1: string;
-                        this.translate
-                            .get(["The room must be", "to use this integration"])
-                            .subscribe((res: string) => {
-                                message = res[0];
-                                message1 = res[1];
-                            });
-                        return Promise.reject(
-                            message + (isPublic ? "non-public" : "public") + message1
-                        );
+                        return new Promise((resolve, reject) => {
+                            const keys = ["The room must be", "to use this integration"];
+                            this.translate
+                                .get(keys)
+                                .subscribe((res: any) => {
+                                    reject(res[keys[0]] + ' ' + (isPublic ? "non-public" : "public") + ' ' + res[keys[1]]);
+                                });
+                        });
                     } else return Promise.resolve();
                 });
             case "canSendEventTypes":
