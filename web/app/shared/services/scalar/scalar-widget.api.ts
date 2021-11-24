@@ -43,6 +43,9 @@ export class ScalarWidgetApi {
             data: {
                 description: sticker.description,
                 content: {
+                    // Element Android requires content.body to contain the sticker description, otherwise
+                    // you will not be able to send any stickers
+                    body: sticker.description,
                     url: sticker.thumbnail.mxc,
                     info: {
                         mimetype: sticker.image.mimetype,
