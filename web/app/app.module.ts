@@ -119,6 +119,11 @@ import { AdminWidgetWhiteboardConfigComponent } from "./admin/widgets/whiteboard
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AdminHookshotGithubBridgeComponent } from "./admin/bridges/hookshot-github/hookshot-github.component";
+import { AdminHookshotGithubBridgeManageSelfhostedComponent } from "./admin/bridges/hookshot-github/manage-selfhosted/manage-selfhosted.component";
+import { AdminHookshotGithubApiService } from "./shared/services/admin/admin-hookshot-github-api.service";
+import { HookshotGithubApiService } from "./shared/services/integrations/hookshot-github-api.service";
+import { HookshotGithubBridgeConfigComponent } from "./configs/bridge/hookshot-github/hookshot-github.bridge.component";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -227,7 +232,10 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminTermsNewEditPublishDialogComponent,
         TermsWidgetWrapperComponent,
         WhiteboardWidgetComponent,
-        AdminWidgetWhiteboardConfigComponent
+        AdminWidgetWhiteboardConfigComponent,
+        AdminHookshotGithubBridgeComponent,
+        AdminHookshotGithubBridgeManageSelfhostedComponent,
+        HookshotGithubBridgeConfigComponent,
 
         // Vendor
     ],
@@ -257,6 +265,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminSlackApiService,
         ToasterService,
         AdminTermsApiService,
+        AdminHookshotGithubApiService,
+        HookshotGithubApiService,
         {provide: Window, useValue: window},
 
         // Vendor

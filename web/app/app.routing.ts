@@ -48,6 +48,8 @@ import { AdminTermsComponent } from "./admin/terms/terms.component";
 import { AdminNewEditTermsComponent } from "./admin/terms/new-edit/new-edit.component";
 import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.component";
 import { WhiteboardWidgetComponent } from "./configs/widget/whiteboard/whiteboard.widget.component";
+import { AdminHookshotGithubBridgeComponent } from "./admin/bridges/hookshot-github/hookshot-github.component";
+import { HookshotGithubBridgeConfigComponent } from "./configs/bridge/hookshot-github/hookshot-github.bridge.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -133,6 +135,11 @@ const routes: Routes = [
                                 path: "slack",
                                 component: AdminSlackBridgeComponent,
                                 data: {breadcrumb: "Slack Bridge", name: "Slack Bridge"},
+                            },
+                            {
+                                path: "hookshot_github",
+                                component: AdminHookshotGithubBridgeComponent,
+                                data: {breadcrumb: "Github Bridge", name: "Github Bridge"},
                             },
                         ],
                     },
@@ -271,6 +278,11 @@ const routes: Routes = [
                         path: "slack",
                         component: SlackBridgeConfigComponent,
                         data: {breadcrumb: "Slack Bridge Configuration", name: "Slack Bridge Configuration"},
+                    },
+                    {
+                        path: "hookshot_github",
+                        component: HookshotGithubBridgeConfigComponent,
+                        data: {breadcrumb: "Github Bridge Configuration", name: "Github Bridge Configuration"},
                     },
                 ],
             },
