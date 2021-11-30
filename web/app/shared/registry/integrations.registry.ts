@@ -31,6 +31,7 @@ export class IntegrationsRegistry {
             "telegram": {},
             "webhooks": {},
             "slack": {},
+            "hookshot_github": {},
         },
         "widget": {
             "custom": {
