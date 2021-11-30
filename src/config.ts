@@ -1,5 +1,4 @@
 import * as config from "config";
-import { LogConfig } from "matrix-bot-sdk";
 
 export interface DimensionConfig {
     web: {
@@ -43,7 +42,6 @@ export interface DimensionConfig {
     dimension: {
         publicUrl: string;
     };
-    logging: LogConfig;
 }
 
 //TODO: We should better use the .get function from node config
