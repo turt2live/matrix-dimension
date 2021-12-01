@@ -61,6 +61,7 @@
     "pg-hstore": "^2.3.4",
     "postcss": "^8.3.6",
     "random-string": "^0.2.0",
+    "read-pkg-up": "^7.0.1",
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
