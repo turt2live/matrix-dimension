@@ -161,9 +161,12 @@ export class BridgeStore {
             const hookshot = new HookshotJiraBridge(requestingUserId);
             const botUserId = await hookshot.getBotUserId();
             const connections = await hookshot.getRoomConfigurations(inRoomId);
+            const userInfo = await hookshot.getLoggedInUserInfo();
             return <HookshotJiraBridgeConfiguration>{
                 botUserId: botUserId,
                 connections: connections,
+                loggedIn: userInfo.loggedIn,
+                instances: userInfo.instances,
             };
         } else return {};
     }

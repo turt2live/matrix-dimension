@@ -24,14 +24,31 @@ export enum SupportedJiraEventType {
     IssueCreated = "issue.created",
 }
 
-export interface HookshotJiraRoomConfig {
-    id: string;
-    url: string;
-    events: SupportedJiraEventType[];
-    commandPrefix: string;
+export interface HookshotJiraRoomConfig extends HookshotConnection {
+    config: {
+        url: string;
+        events: SupportedJiraEventType[];
+        commandPrefix: string;
+    };
 }
 
 export enum HookshotTypes {
     Github = "uk.half-shot.matrix-hookshot.github.repository",
     Jira = "uk.half-shot.matrix-hookshot.jira.project",
+}
+
+export interface HookshotJiraUserInfo {
+    loggedIn: boolean;
+    instances?: HookshotJiraInstance[];
+}
+
+export interface HookshotJiraInstance {
+    name: string;
+    url: string;
+}
+
+export interface HookshotJiraProject {
+    key: string;
+    name: string;
+    url: string;
 }

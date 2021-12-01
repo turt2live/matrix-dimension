@@ -1,14 +1,20 @@
 import { Component, OnInit } from "@angular/core";
 import { BridgeComponent } from "../bridge.component";
 import { ScalarClientApiService } from "../../../shared/services/scalar/scalar-client-api.service";
-import { SafeUrl } from "@angular/platform-browser";
+import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { TranslateService } from "@ngx-translate/core";
 import { HookshotJiraApiService } from "../../../shared/services/integrations/hookshot-jira-api.service";
-import { FE_HookshotJiraConnection } from "../../../shared/models/hookshot_jira";
+import {
+    FE_HookshotJiraConnection,
+    FE_HookshotJiraInstance,
+    FE_HookshotJiraProject
+} from "../../../shared/models/hookshot_jira";
 
 interface HookshotConfig {
     botUserId: string;
     connections: FE_HookshotJiraConnection[];
+    loggedIn: boolean;
+    instances?: FE_HookshotJiraInstance[];
 }
 
 @Component({
@@ -18,31 +24,76 @@ interface HookshotConfig {
 export class HookshotJiraBridgeConfigComponent extends BridgeComponent<HookshotConfig> implements OnInit {
 
     public isBusy: boolean;
-    public needsAuth = false;
     public authUrl: SafeUrl;
-    public loadingConnections = false;
-    public orgs: string[] = [];
-    public repos: string[] = []; // for org
-    public orgId: string;
-    public repoId: string;
+    public loadingConnections = true;
+    public bridgedProjectUrl: SafeUrl;
+    public bridgedProjectUrlUnsafe: string;
 
-    constructor(private hookshot: HookshotJiraApiService, private scalar: ScalarClientApiService, public translate: TranslateService) {
+    public instances: FE_HookshotJiraInstance[] = [];
+    public instance: FE_HookshotJiraInstance;
+
+    public projects: FE_HookshotJiraProject[] = [];
+    public project: FE_HookshotJiraProject;
+
+    private timerId: any;
+
+    constructor(private hookshot: HookshotJiraApiService, private scalar: ScalarClientApiService, private sanitizer: DomSanitizer, public translate: TranslateService) {
         super("hookshot_jira", translate);
-        this.translate = translate;
     }
 
     public ngOnInit() {
         super.ngOnInit();
-
-        this.prepare();
+        this.tryLoadInstances();
     }
 
-    private prepare() {
+    private tryLoadInstances() {
+        this.loadingConnections = true;
+        this.hookshot.getInstances().then(r => {
+            this.instances = r;
+            this.instance = this.instances[0];
+            this.loadProjects();
 
+            if (this.timerId) {
+                clearInterval(this.timerId);
+            }
+        }).catch(e => {
+            if (e.status === 403 && e.error.dim_errcode === "T2B_NOT_LOGGED_IN") {
+                this.hookshot.getAuthUrl().then(url => {
+                    this.authUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+                    this.loadingConnections = false;
+                    this.timerId = setInterval(() => {
+                        this.tryLoadInstances();
+                    }, 1000);
+                });
+            } else {
+                console.error(e);
+                this.translate.get('Error getting Jira information').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
+            }
+        });
     }
 
-    public loadRepos() {
-        // TODO
+    public loadProjects() {
+        this.isBusy = true;
+        this.hookshot.getProjects(this.instance.name).then(projects => {
+            this.projects = projects;
+            this.project = this.projects[0];
+
+            if (this.isBridged) {
+                this.bridgedProjectUrlUnsafe = this.bridge.config.connections[0].config.url;
+                this.bridgedProjectUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.bridgedProjectUrlUnsafe);
+            }
+
+            this.isBusy = false;
+            this.loadingConnections = false;
+        }).catch(e => {
+            console.error(e);
+            this.isBusy = false;
+            this.translate.get('Error getting Jira information').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
+        });
     }
 
     public get isBridged(): boolean {
@@ -65,7 +116,9 @@ export class HookshotJiraBridgeConfigComponent extends BridgeComponent<HookshotC
             }
         }
 
-        this.hookshot.bridgeRoom(this.roomId).then(conn => {
+        await this.scalar.setUserPowerLevel(this.roomId, this.bridge.config.botUserId, 50);
+
+        this.hookshot.bridgeRoom(this.roomId, this.instance.name, this.project.key).then(conn => {
             this.bridge.config.connections.push(conn);
             this.isBusy = false;
             this.translate.get('Bridge requested').subscribe((res: string) => {

@@ -8,29 +8,35 @@
                 <my-spinner></my-spinner>
             </div>
             <div class="my-ibox-content" *ngIf="!loadingConnections">
-                <div *ngIf="!isBridged && needsAuth">
+                <div *ngIf="isBridged">
+                    <p>{{'This room is bridged to' | translate}} <a [href]="bridgedProjectUrl" rel="noopener" target="_blank">{{bridgedProjectUrlUnsafe}}</a></p>
+                    <button type="button" class="btn btn-sm btn-danger" [disabled]="isBusy" (click)="unbridgeRoom()">
+                        {{'Unbridge' | translate}}
+                    </button>
+                </div>
+                <div *ngIf="!isBridged && authUrl">
                     <p>
                         {{'In order to bridge to Jira, you\'ll need to authorize the bridge to access your organization(s). Please click the button below to do so.' | translate}}
                     </p>
-                    <a [href]="authUrl" rel="noopener" target="_blank">
-                        <img src="/assets/img/slack_auth_button.png" alt="sign in with slack"/>
+                    <a [href]="authUrl" rel="noopener" target="_blank" class="btn btn-lg btn-link">
+                        <img src="/assets/img/avatars/jira.png" width="35" /> {{'Sign in with Jira' | translate}}
                     </a>
                 </div>
-                <div *ngIf="!isBridged && !needsAuth">
+                <div *ngIf="!isBridged && !authUrl">
                     <label class="label-block">
-                        {{'Organization' | translate}}
-                        <select class="form-control form-control-sm" [(ngModel)]="orgId"
-                                (change)="loadRepos()" [disabled]="isBusy">
-                            <option *ngFor="let org of orgs" [ngValue]="org">
-                                {{ org }}
+                        {{'Instance / Organization' | translate}}
+                        <select class="form-control form-control-sm" [(ngModel)]="instance"
+                                (change)="loadProjects()" [disabled]="isBusy">
+                            <option *ngFor="let instance of instances" [ngValue]="instance">
+                                {{ instance.name }} ({{ instance.url }})
                             </option>
                         </select>
                     </label>
                     <label class="label-block">
-                        {{'Repository' | translate}}
-                        <select class="form-control form-control-sm" [(ngModel)]="repoId" [disabled]="isBusy">
-                            <option *ngFor="let repo of repos" [ngValue]="repo">
-                                {{ repo }}
+                        {{'Project' | translate}}
+                        <select class="form-control form-control-sm" [(ngModel)]="project" [disabled]="isBusy">
+                            <option *ngFor="let project of projects" [ngValue]="project">
+                                {{ project.key }} ({{ project.name }})
                             </option>
                         </select>
                     </label>
