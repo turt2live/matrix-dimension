@@ -51,3 +51,8 @@ export interface HookshotGithubBridgeConfiguration {
     botUserId: string;
     connections: HookshotConnection[];
 }
+
+export interface HookshotJiraBridgeConfiguration {
+    botUserId: string;
+    connections: HookshotConnection[];
+}

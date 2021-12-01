@@ -124,6 +124,13 @@ import { AdminHookshotGithubBridgeManageSelfhostedComponent } from "./admin/brid
 import { AdminHookshotGithubApiService } from "./shared/services/admin/admin-hookshot-github-api.service";
 import { HookshotGithubApiService } from "./shared/services/integrations/hookshot-github-api.service";
 import { HookshotGithubBridgeConfigComponent } from "./configs/bridge/hookshot-github/hookshot-github.bridge.component";
+import { AdminHookshotJiraBridgeComponent } from "./admin/bridges/hookshot-jira/hookshot-jira.component";
+import {
+    AdminHookshotJiraBridgeManageSelfhostedComponent
+} from "./admin/bridges/hookshot-jira/manage-selfhosted/manage-selfhosted.component";
+import { AdminHookshotJiraApiService } from "./shared/services/admin/admin-hookshot-jira-api.service";
+import { HookshotJiraApiService } from "./shared/services/integrations/hookshot-jira-api.service";
+import { HookshotJiraBridgeConfigComponent } from "./configs/bridge/hookshot-jira/hookshot-jira.bridge.component";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -236,6 +243,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminHookshotGithubBridgeComponent,
         AdminHookshotGithubBridgeManageSelfhostedComponent,
         HookshotGithubBridgeConfigComponent,
+        AdminHookshotJiraBridgeComponent,
+        AdminHookshotJiraBridgeManageSelfhostedComponent,
+        HookshotJiraBridgeConfigComponent,
 
         // Vendor
     ],
@@ -267,6 +277,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminTermsApiService,
         AdminHookshotGithubApiService,
         HookshotGithubApiService,
+        AdminHookshotJiraApiService,
+        HookshotJiraApiService,
         {provide: Window, useValue: window},
 
         // Vendor
@@ -292,7 +304,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminSlackBridgeManageSelfhostedComponent,
         AdminLogoutConfirmationDialogComponent,
         AdminTermsNewEditPublishDialogComponent,
-        AdminWidgetWhiteboardConfigComponent
+        AdminWidgetWhiteboardConfigComponent,
     ]
 })
 export class AppModule {

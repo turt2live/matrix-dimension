@@ -50,11 +50,13 @@ import { TermsWidgetWrapperComponent } from "./widget-wrappers/terms/terms.compo
 import { WhiteboardWidgetComponent } from "./configs/widget/whiteboard/whiteboard.widget.component";
 import { AdminHookshotGithubBridgeComponent } from "./admin/bridges/hookshot-github/hookshot-github.component";
 import { HookshotGithubBridgeConfigComponent } from "./configs/bridge/hookshot-github/hookshot-github.bridge.component";
+import { AdminHookshotJiraBridgeComponent } from "./admin/bridges/hookshot-jira/hookshot-jira.component";
+import { HookshotJiraBridgeConfigComponent } from "./configs/bridge/hookshot-jira/hookshot-jira.bridge.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
-    {path: "riot", pathMatch: "full", redirectTo: "riot-app"},
-    {path: "element", pathMatch: "full", redirectTo: "riot-app"},
+    {path: "riot", pathMatch: "full", redirectTo: "riot-app", data: {breadcrumb: "Home", name: "Dimension"}},
+    {path: "element", pathMatch: "full", redirectTo: "riot-app", data: {breadcrumb: "Home", name: "Dimension"}},
     {
         path: "riot-app",
         component: RiotComponent,
@@ -140,6 +142,11 @@ const routes: Routes = [
                                 path: "hookshot_github",
                                 component: AdminHookshotGithubBridgeComponent,
                                 data: {breadcrumb: "Github Bridge", name: "Github Bridge"},
+                            },
+                            {
+                                path: "hookshot_jira",
+                                component: AdminHookshotJiraBridgeComponent,
+                                data: {breadcrumb: "Jira Bridge", name: "Jira Bridge"},
                             },
                         ],
                     },
@@ -243,6 +250,7 @@ const routes: Routes = [
             },
             {
                 path: "complex-bot",
+                data: {breadcrumb: {skip: true}},
                 children: [
                     {
                         path: "rss",
@@ -258,6 +266,7 @@ const routes: Routes = [
             },
             {
                 path: "bridge",
+                data: {breadcrumb: {skip: true}},
                 children: [
                     {
                         path: "irc",
@@ -284,6 +293,11 @@ const routes: Routes = [
                         component: HookshotGithubBridgeConfigComponent,
                         data: {breadcrumb: "Github Bridge Configuration", name: "Github Bridge Configuration"},
                     },
+                    {
+                        path: "hookshot_jira",
+                        component: HookshotJiraBridgeConfigComponent,
+                        data: {breadcrumb: "Jira Bridge Configuration", name: "Jira Bridge Configuration"},
+                    },
                 ],
             },
             {
@@ -295,6 +309,7 @@ const routes: Routes = [
     },
     {
         path: "widgets",
+        data: {breadcrumb: {skip: true}},
         children: [
             {path: "terms/:shortcode/:lang/:version", component: TermsWidgetWrapperComponent},
             {path: "generic", component: GenericWidgetWrapperComponent},

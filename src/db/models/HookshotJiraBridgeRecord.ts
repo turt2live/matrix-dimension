@@ -3,11 +3,11 @@ import Upstream from "./Upstream";
 import { IHookshotBridgeRecord } from "./IHookshotBridgeRecord";
 
 @Table({
-    tableName: "dimension_hookshot_github_bridges",
+    tableName: "dimension_hookshot_jira_bridges",
     underscored: false,
     timestamps: false,
 })
-export default class HookshotGithubBridgeRecord extends Model implements IHookshotBridgeRecord {
+export default class HookshotJiraBridgeRecord extends Model implements IHookshotBridgeRecord {
     @PrimaryKey
     @AutoIncrement
     @Column

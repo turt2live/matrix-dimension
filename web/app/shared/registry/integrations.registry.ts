@@ -32,6 +32,7 @@ export class IntegrationsRegistry {
             "webhooks": {},
             "slack": {},
             "hookshot_github": {},
+            "hookshot_jira": {},
         },
         "widget": {
             "custom": {
