@@ -1,6 +1,8 @@
 import * as child_process from 'child_process';
+import * as readPkgUp from 'read-pkg-up';
 
-let version = process.env.npm_package_version ? "v" + process.env.npm_package_version : "Unknown";
+const packageVersion = readPkgUp.sync().packageJson.version;
+let version = packageVersion ? "v" + packageVersion : "Unknown";
 let gitHash = null;
 
 if (
