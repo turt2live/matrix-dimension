@@ -1,4 +1,4 @@
-import { Inject, Injectable, Input, OnDestroy, OnInit } from "@angular/core";
+import { Inject, Injectable, OnDestroy, OnInit } from "@angular/core";
 import { FE_Bridge } from "../../shared/models/integration";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs/Subscription";

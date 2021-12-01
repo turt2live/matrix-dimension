@@ -2,9 +2,7 @@ import { Component } from "@angular/core";
 import { AdminApiService } from "../../shared/services/admin/admin-api.service";
 import { FE_DimensionConfig } from "../../shared/models/admin-responses";
 import { ToasterService } from "angular2-toaster";
-import {
-    AdminLogoutConfirmationDialogComponent,
-} from "./logout-confirmation/logout-confirmation.component";
+import { AdminLogoutConfirmationDialogComponent, } from "./logout-confirmation/logout-confirmation.component";
 import { TranslateService } from "@ngx-translate/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 

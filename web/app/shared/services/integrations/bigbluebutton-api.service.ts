@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AuthedApi } from "../authed-api";
-import { FE_BigBlueButtonJoin, FE_BigBlueButtonCreateAndJoinMeeting } from "../../models/integration"
+import { FE_BigBlueButtonCreateAndJoinMeeting, FE_BigBlueButtonJoin } from "../../models/integration"
 import { HttpClient } from "@angular/common/http";
 import { ApiError } from "../../../../../src/api/ApiError";
 

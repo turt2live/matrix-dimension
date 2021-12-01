@@ -5,9 +5,7 @@ import { FE_Upstream } from "../../../shared/models/admin-responses";
 import { AdminUpstreamApiService } from "../../../shared/services/admin/admin-upstream-api.service";
 import { FE_IrcBridge } from "../../../shared/models/irc";
 import { AdminIrcBridgeNetworksComponent, IrcNetworksDialogContext } from "./networks/networks.component";
-import {
-    AdminIrcBridgeAddSelfhostedComponent
-} from "./add-selfhosted/add-selfhosted.component";
+import { AdminIrcBridgeAddSelfhostedComponent } from "./add-selfhosted/add-selfhosted.component";
 import { TranslateService } from "@ngx-translate/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 

@@ -1,37 +1,15 @@
-import {
-    animate,
-    state,
-    style,
-    transition,
-    trigger,
-} from "@angular/animations";
-import {
-    AfterViewInit,
-    ChangeDetectorRef,
-    Component,
-    OnDestroy,
-    OnInit,
-} from "@angular/core";
+import { animate, state, style, transition, trigger, } from "@angular/animations";
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { CapableWidget, WIDGET_API_VERSION_OPENID } from "../capable-widget";
 import { fromEvent } from "rxjs";
-import {
-    distinctUntilChanged,
-    filter,
-    map,
-    pairwise,
-    share,
-    throttleTime,
-} from "rxjs/operators";
+import { distinctUntilChanged, filter, map, pairwise, share, throttleTime, } from "rxjs/operators";
 import { Subscription } from "rxjs/Subscription";
 import { ScalarWidgetApi } from "../../shared/services/scalar/scalar-widget.api";
 import { StickerApiService } from "../../shared/services/integrations/sticker-api.service";
 import { SessionStorage } from "../../shared/SessionStorage";
 import { ScalarServerApiService } from "../../shared/services/scalar/scalar-server-api.service";
-import {
-    FE_Sticker,
-    FE_UserStickerPack,
-} from "../../shared/models/integration";
+import { FE_Sticker, FE_UserStickerPack, } from "../../shared/models/integration";
 import { MediaService } from "../../shared/services/media.service";
 import { WIDGET_STICKER_PICKER } from "../../shared/models/widget";
 
