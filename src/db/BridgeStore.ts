@@ -1,5 +1,5 @@
 import {
-    Bridge,
+    Bridge, HookshotGithubBridgeConfiguration, HookshotJiraBridgeConfiguration,
     SlackBridgeConfiguration,
     TelegramBridgeConfiguration,
     WebhookBridgeConfiguration
@@ -10,6 +10,8 @@ import { LogService } from "matrix-bot-sdk";
 import { TelegramBridge } from "../bridges/TelegramBridge";
 import { WebhooksBridge } from "../bridges/WebhooksBridge";
 import { SlackBridge } from "../bridges/SlackBridge";
+import { HookshotGithubBridge } from "../bridges/HookshotGithubBridge";
+import { HookshotJiraBridge } from "../bridges/HookshotJiraBridge";
 
 export class BridgeStore {
 
@@ -59,7 +61,7 @@ export class BridgeStore {
         const record = await BridgeRecord.findOne({where: {type: integrationType}});
         if (!record) throw new Error("Bridge not found");
 
-        const hasDedicatedApi = ["irc", "telegram", "webhooks", "slack"];
+        const hasDedicatedApi = ["irc", "telegram", "webhooks", "slack", "hookshot_github", "hookshot_jira"];
         if (hasDedicatedApi.indexOf(integrationType) !== -1) {
             throw new Error("This bridge should be modified with the dedicated API");
         } else throw new Error("Unsupported bridge");
@@ -78,6 +80,12 @@ export class BridgeStore {
         } else if (record.type === "slack") {
             const slack = new SlackBridge(requestingUserId);
             return slack.isBridgingEnabled();
+        } else if (record.type === "hookshot_github") {
+            const hookshot = new HookshotGithubBridge(requestingUserId);
+            return hookshot.isBridgingEnabled();
+        } else if (record.type === "hookshot_jira") {
+            const hookshot = new HookshotJiraBridge(requestingUserId);
+            return hookshot.isBridgingEnabled();
         } else return true;
     }
 
@@ -94,6 +102,12 @@ export class BridgeStore {
         } else if (record.type === "slack") {
             const slack = new SlackBridge(requestingUserId);
             return slack.isBridgingEnabled();
+        } else if (record.type === "hookshot_github") {
+            const hookshot = new HookshotGithubBridge(requestingUserId);
+            return hookshot.isBridgingEnabled();
+        } else if (record.type === "hookshot_jira") {
+            const hookshot = new HookshotJiraBridge(requestingUserId);
+            return hookshot.isBridgingEnabled();
         } else return false;
     }
 
@@ -130,6 +144,24 @@ export class BridgeStore {
             return <SlackBridgeConfiguration>{
                 link: link,
                 botUserId: info.botUserId,
+            };
+        } else if (record.type === "hookshot_github") {
+            if (!inRoomId) return {}; // The bridge's admin config is handled by other APIs
+            const hookshot = new HookshotGithubBridge(requestingUserId);
+            const botUserId = await hookshot.getBotUserId();
+            const connections = await hookshot.getRoomConfigurations(inRoomId);
+            return <HookshotGithubBridgeConfiguration>{
+                botUserId: botUserId,
+                connections: connections,
+            };
+        } else if (record.type === "hookshot_jira") {
+            if (!inRoomId) return {}; // The bridge's admin config is handled by other APIs
+            const hookshot = new HookshotJiraBridge(requestingUserId);
+            const botUserId = await hookshot.getBotUserId();
+            const connections = await hookshot.getRoomConfigurations(inRoomId);
+            return <HookshotJiraBridgeConfiguration>{
+                botUserId: botUserId,
+                connections: connections,
             };
         } else return {};
     }

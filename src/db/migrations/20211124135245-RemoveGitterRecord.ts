@@ -13,7 +13,7 @@ export default {
                 {
                     type: "gitter",
                     name: "Gitter Bridge",
-                    avatarUrl: "/img/avatars/gitter.png",
+                    avatarUrl: "/assets/img/avatars/gitter.png",
                     isEnabled: true,
                     isPublic: true,
                     description: "Bridges Gitter rooms to Matrix",

@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{'self-hosted Github bridge' | translate}} ({{ isAdding ? "Add a new" : "Edit" }})</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+</div>
+<div class="modal-body">
+    <p>{{'Self-hosted Jira bridges must have' | translate}} <code>{{'provisioning' | translate}}</code> {{'enabled in the configuration.' | translate}}</p>
+
+    <label class="label-block">
+        {{'Provisioning URL' | translate}}
+        <span class="text-muted ">{{'The provisioning URL for the bridge. This is the specific address for the bridge given in the configuration.' | translate}}</span>
+        <input type="text" class="form-control"
+               placeholder="http://localhost:9000"
+               [(ngModel)]="provisionUrl" [disabled]="isSaving"/>
+    </label>
+
+    <label class="label-block">
+        {{'Shared Secret' | translate}}
+        <span class="text-muted ">{{'The shared secret defined in the configuration for provisioning.' | translate}}</span>
+        <input type="text" class="form-control"
+               placeholder="some_secret_value"
+               [(ngModel)]="sharedSecret" [disabled]="isSaving"/>
+    </label>
+</div>
+<div class="modal-footer">
+    <button type="button" (click)="add()" title="save" class="btn btn-primary btn-sm">
+        <i class="far fa-save"></i> {{'Save' | translate}}
+    </button>
+    <button type="button" (click)="modal.close()" title="close" class="btn btn-secondary btn-sm">
+        <i class="far fa-times-circle"></i> {{'Cancel' | translate}}
+    </button>
+</div>
