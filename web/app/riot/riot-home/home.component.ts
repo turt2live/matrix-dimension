@@ -3,19 +3,12 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
 import * as _ from "lodash";
 import { ScalarServerApiService } from "../../shared/services/scalar/scalar-server-api.service";
-import {
-    FE_Integration,
-    FE_IntegrationRequirement,
-    FE_SimpleBot,
-} from "../../shared/models/integration";
+import { FE_Integration, FE_IntegrationRequirement, FE_SimpleBot, } from "../../shared/models/integration";
 import { IntegrationsRegistry } from "../../shared/registry/integrations.registry";
 import { SessionStorage } from "../../shared/SessionStorage";
 import { AdminApiService } from "../../shared/services/admin/admin-api.service";
 import { IntegrationsApiService } from "../../shared/services/integrations/integrations-api.service";
-import {
-    ConfigSimpleBotComponent,
-    SimpleBotConfigDialogContext,
-} from "../../configs/simple-bot/simple-bot.component";
+import { ConfigSimpleBotComponent, SimpleBotConfigDialogContext, } from "../../configs/simple-bot/simple-bot.component";
 import { ToasterService } from "angular2-toaster";
 import { StickerApiService } from "../../shared/services/integrations/sticker-api.service";
 import { TranslateService } from "@ngx-translate/core";

@@ -1,5 +1,5 @@
 import { Context, GET, Path, PathParam, POST, QueryParam, Security, ServiceContext } from "typescript-rest";
-import { Cache, CACHE_HOOKSHOT_GITHUB_BRIDGE, CACHE_INTEGRATIONS, CACHE_TELEGRAM_BRIDGE } from "../../MemoryCache";
+import { Cache, CACHE_HOOKSHOT_GITHUB_BRIDGE, CACHE_INTEGRATIONS } from "../../MemoryCache";
 import { LogService } from "matrix-bot-sdk";
 import { ApiError } from "../ApiError";
 import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";

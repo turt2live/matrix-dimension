@@ -1,10 +1,5 @@
 import HookshotJiraBridgeRecord from "../db/models/HookshotJiraBridgeRecord";
-import {
-    HookshotConnection,
-    HookshotGithubRoomConfig,
-    HookshotJiraRoomConfig,
-    HookshotTypes
-} from "./models/hookshot";
+import { HookshotConnection, HookshotGithubRoomConfig, HookshotJiraRoomConfig, HookshotTypes } from "./models/hookshot";
 import { HookshotBridge } from "./HookshotBridge";
 
 export class HookshotJiraBridge extends HookshotBridge {

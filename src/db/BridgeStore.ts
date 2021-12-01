@@ -1,5 +1,7 @@
 import {
-    Bridge, HookshotGithubBridgeConfiguration, HookshotJiraBridgeConfiguration,
+    Bridge,
+    HookshotGithubBridgeConfiguration,
+    HookshotJiraBridgeConfiguration,
     SlackBridgeConfiguration,
     TelegramBridgeConfiguration,
     WebhookBridgeConfiguration

@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToasterService } from "angular2-toaster";
-import { AdminTelegramApiService } from "../../../../shared/services/admin/admin-telegram-api.service";
 import { TranslateService } from "@ngx-translate/core";
 import { AdminHookshotGithubApiService } from "../../../../shared/services/admin/admin-hookshot-github-api.service";
 

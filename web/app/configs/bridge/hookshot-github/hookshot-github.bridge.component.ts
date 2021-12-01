@@ -1,11 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { BridgeComponent } from "../bridge.component";
-import { FE_SlackChannel, FE_SlackLink, FE_SlackTeam } from "../../../shared/models/slack";
-import { SlackApiService } from "../../../shared/services/integrations/slack-api.service";
 import { ScalarClientApiService } from "../../../shared/services/scalar/scalar-client-api.service";
-import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
+import { SafeUrl } from "@angular/platform-browser";
 import { TranslateService } from "@ngx-translate/core";
-import { FE_HookshotGithubBridge, FE_HookshotGithubConnection } from "../../../shared/models/hookshot_github";
+import { FE_HookshotGithubConnection } from "../../../shared/models/hookshot_github";
 import { HookshotGithubApiService } from "../../../shared/services/integrations/hookshot-github-api.service";
 
 interface HookshotConfig {

@@ -1,8 +1,6 @@
 import { LogService } from "matrix-bot-sdk";
 import * as request from "request";
-import {
-    HookshotConnectionsResponse, HookshotConnectionTypeDefinition
-} from "./models/hookshot";
+import { HookshotConnectionsResponse, HookshotConnectionTypeDefinition } from "./models/hookshot";
 import { IHookshotBridgeRecord } from "../db/models/IHookshotBridgeRecord";
 
 export abstract class HookshotBridge {
