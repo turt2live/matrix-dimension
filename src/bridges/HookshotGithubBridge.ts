@@ -35,7 +35,7 @@ export class HookshotGithubBridge extends HookshotBridge {
         const bridge = await this.getDefaultBridge();
 
         const body = {};
-        return await this.doProvisionRequest<HookshotConnection>(bridge, "PUT", `/v1/${roomId}/connections/${HookshotTypes.Github}`, null, body);
+        return await this.doProvisionRequest<HookshotGithubRoomConfig>(bridge, "PUT", `/v1/${roomId}/connections/${HookshotTypes.Github}`, null, body);
     }
 
     public async unbridgeRoom(roomId: string, connectionId: string): Promise<void> {

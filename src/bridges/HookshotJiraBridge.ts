@@ -35,7 +35,7 @@ export class HookshotJiraBridge extends HookshotBridge {
         const bridge = await this.getDefaultBridge();
 
         const body = {};
-        return await this.doProvisionRequest<HookshotConnection>(bridge, "PUT", `/v1/${roomId}/connections/${HookshotTypes.Jira}`, null, body);
+        return await this.doProvisionRequest<HookshotJiraRoomConfig>(bridge, "PUT", `/v1/${roomId}/connections/${HookshotTypes.Jira}`, null, body);
     }
 
     public async unbridgeRoom(roomId: string, connectionId: string): Promise<void> {
