@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AuthedApi } from "../authed-api";
 import { FE_Upstream } from "../../models/admin-responses";
-import { FE_TelegramBridge, FE_TelegramBridgeOptions } from "../../models/telegram";
 import { HttpClient } from "@angular/common/http";
 import { FE_HookshotGithubBridge } from "../../models/hookshot_github";
 
@@ -31,7 +30,7 @@ export class AdminHookshotGithubApiService extends AuthedApi {
     }
 
     public updateSelfhosted(bridgeId: number, provisionUrl: string, sharedSecret: string): Promise<FE_HookshotGithubBridge> {
-        return this.authedPost<FE_TelegramBridge>("/api/v1/dimension/admin/hookshot/github/" + bridgeId, {
+        return this.authedPost<FE_HookshotGithubBridge>("/api/v1/dimension/admin/hookshot/github/" + bridgeId, {
             provisionUrl: provisionUrl,
             sharedSecret: sharedSecret,
         }).toPromise();

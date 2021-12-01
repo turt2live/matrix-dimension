@@ -26,7 +26,7 @@ interface BridgeResponse {
  * Administrative API for configuring Hookshot Github bridge instances.
  */
 @Path("/api/v1/dimension/admin/hookshot/github")
-export class AdminTelegramService {
+export class AdminHookshotGithubService {
 
     @Context
     private context: ServiceContext;
@@ -51,15 +51,15 @@ export class AdminTelegramService {
     @Path(":bridgeId")
     @Security([ROLE_USER, ROLE_ADMIN])
     public async getBridge(@PathParam("bridgeId") bridgeId: number): Promise<BridgeResponse> {
-        const telegramBridge = await HookshotGithubBridgeRecord.findByPk(bridgeId);
-        if (!telegramBridge) throw new ApiError(404, "Github Bridge not found");
+        const githubBridge = await HookshotGithubBridgeRecord.findByPk(bridgeId);
+        if (!githubBridge) throw new ApiError(404, "Github Bridge not found");
 
         return {
-            id: telegramBridge.id,
-            upstreamId: telegramBridge.upstreamId,
-            provisionUrl: telegramBridge.provisionUrl,
-            sharedSecret: telegramBridge.sharedSecret,
-            isEnabled: telegramBridge.isEnabled,
+            id: githubBridge.id,
+            upstreamId: githubBridge.upstreamId,
+            provisionUrl: githubBridge.provisionUrl,
+            sharedSecret: githubBridge.sharedSecret,
+            isEnabled: githubBridge.isEnabled,
         };
     }
 
@@ -101,7 +101,7 @@ export class AdminTelegramService {
             sharedSecret: request.sharedSecret,
             isEnabled: true,
         });
-        LogService.info("AdminTelegramService", userId + " created a new Hookshot Github Bridge with provisioning URL " + request.provisionUrl);
+        LogService.info("AdminHookshotGithubService", userId + " created a new Hookshot Github Bridge with provisioning URL " + request.provisionUrl);
 
         Cache.for(CACHE_HOOKSHOT_GITHUB_BRIDGE).clear();
         Cache.for(CACHE_INTEGRATIONS).clear();

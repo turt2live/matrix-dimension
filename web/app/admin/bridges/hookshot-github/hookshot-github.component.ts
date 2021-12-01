@@ -4,7 +4,6 @@ import {
     AdminHookshotGithubBridgeManageSelfhostedComponent,
     ManageSelfhostedHookshotGithubBridgeDialogContext
 } from "./manage-selfhosted/manage-selfhosted.component";
-import { FE_TelegramBridge } from "../../../shared/models/telegram";
 import { TranslateService } from "@ngx-translate/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AdminHookshotGithubApiService } from "../../../shared/services/admin/admin-hookshot-github-api.service";
@@ -18,7 +17,7 @@ export class AdminHookshotGithubBridgeComponent implements OnInit {
 
     public isLoading = true;
     public isUpdating = false;
-    public configurations: FE_TelegramBridge[] = [];
+    public configurations: FE_HookshotGithubBridge[] = [];
 
     constructor(private hookshotApi: AdminHookshotGithubApiService,
         private toaster: ToasterService,
