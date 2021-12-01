@@ -1,13 +1,13 @@
 import { RouterModule, Routes } from "@angular/router";
 import { HomeComponent } from "./home/home.component";
-import { RiotComponent } from "./riot/riot.component";
+import { ElementComponent } from "./element/element.component";
 import { GenericWidgetWrapperComponent } from "./widget-wrappers/generic/generic.component";
 import { BigBlueButtonWidgetWrapperComponent } from "./widget-wrappers/bigbluebutton/bigbluebutton.component";
 import { BigBlueButtonConfigComponent } from "./configs/widget/bigbluebutton/bigbluebutton.widget.component";
 import { VideoWidgetWrapperComponent } from "./widget-wrappers/video/video.component";
 import { JitsiWidgetWrapperComponent } from "./widget-wrappers/jitsi/jitsi.component";
 import { GCalWidgetWrapperComponent } from "./widget-wrappers/gcal/gcal.component";
-import { RiotHomeComponent } from "./riot/riot-home/home.component";
+import { ElementHomeComponent } from "./element/element-home/home.component";
 import { CustomWidgetConfigComponent } from "./configs/widget/custom/custom.widget.component";
 import { EtherpadWidgetConfigComponent } from "./configs/widget/etherpad/etherpad.widget.component";
 import { GoogleCalendarWidgetConfigComponent } from "./configs/widget/google-calendar/gcal.widget.component";
@@ -61,12 +61,12 @@ const routes: Routes = [
     {path: "element", pathMatch: "full", redirectTo: "riot-app", data: {breadcrumb: "Home", name: "Dimension"}},
     {
         path: "riot-app",
-        component: RiotComponent,
+        component: ElementComponent,
         data: {breadcrumb: "Home", name: "Dimension"},
         children: [
             {
                 path: "",
-                component: RiotHomeComponent,
+                component: ElementHomeComponent,
             },
             {
                 path: "admin",

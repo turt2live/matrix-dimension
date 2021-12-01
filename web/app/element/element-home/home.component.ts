@@ -21,11 +21,11 @@ const CATEGORY_MAP = {
 };
 
 @Component({
-    selector: "my-riot-home",
+    selector: "my-element-home",
     templateUrl: "./home.component.html",
     styleUrls: ["./home.component.scss"],
 })
-export class RiotHomeComponent {
+export class ElementHomeComponent {
     public isLoading = true;
     public isError = false;
     public errorMessage: string;

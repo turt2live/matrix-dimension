@@ -10,10 +10,10 @@ import { BrowserModule } from "@angular/platform-browser";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
 import { createNewHosts, removeNgStyles } from "@angularclass/hmr";
-import { RiotComponent } from "./riot/riot.component";
+import { ElementComponent } from "./element/element.component";
 import { ScalarClientApiService } from "./shared/services/scalar/scalar-client-api.service";
 import { ToasterModule, ToasterService } from "angular2-toaster";
-import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component";
+import { ScalarCloseComponent } from "./element/scalar-close/scalar-close.component";
 import { GenericWidgetWrapperComponent } from "./widget-wrappers/generic/generic.component";
 import { ToggleFullscreenDirective } from "./shared/directives/toggle-fullscreen.directive";
 import { FullscreenButtonComponent } from "./elements/fullscreen-button/fullscreen-button.component";
@@ -22,7 +22,7 @@ import { JitsiWidgetWrapperComponent } from "./widget-wrappers/jitsi/jitsi.compo
 import { GCalWidgetWrapperComponent } from "./widget-wrappers/gcal/gcal.component";
 import { PageHeaderComponent } from "./page-header/page-header.component";
 import { SpinnerComponent } from "./elements/spinner/spinner.component";
-import { RiotHomeComponent } from "./riot/riot-home/home.component";
+import { ElementHomeComponent } from "./element/element-home/home.component";
 import { IntegrationBagComponent } from "./integration-bag/integration-bag.component";
 import { ScalarServerApiService } from "./shared/services/scalar/scalar-server-api.service";
 import { AdminApiService } from "./shared/services/admin/admin-api.service";
@@ -173,7 +173,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     declarations: [
         AppComponent,
         HomeComponent,
-        RiotComponent,
+        ElementComponent,
         IntegrationBagComponent,
         PageHeaderComponent,
         SpinnerComponent,
@@ -186,7 +186,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         BigBlueButtonWidgetWrapperComponent,
         GCalWidgetWrapperComponent,
         BigBlueButtonConfigComponent,
-        RiotHomeComponent,
+        ElementHomeComponent,
         IboxComponent,
         ConfigScreenWidgetComponent,
         CustomWidgetConfigComponent,

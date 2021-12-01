@@ -2,11 +2,11 @@ import { Component } from "@angular/core";
 import { SessionStorage } from "../shared/SessionStorage";
 
 @Component({
-    selector: "my-riot",
-    templateUrl: "./riot.component.html",
-    styleUrls: ["./riot.component.scss"],
+    selector: "my-element",
+    templateUrl: "./element.component.html",
+    styleUrls: ["./element.component.scss"],
 })
-export class RiotComponent {
+export class ElementComponent {
     constructor() {}
 
     public isAdmin(): boolean {
