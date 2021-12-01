@@ -3,9 +3,7 @@ import { BridgeComponent } from "../bridge.component";
 import { TelegramApiService } from "../../../shared/services/integrations/telegram-api.service";
 import { FE_PortalInfo } from "../../../shared/models/telegram";
 import { TelegramAskUnbridgeComponent } from "./ask-unbridge/ask-unbridge.component";
-import {
-    TelegramCannotUnbridgeComponent
-} from "./cannot-unbridge/cannot-unbridge.component";
+import { TelegramCannotUnbridgeComponent } from "./cannot-unbridge/cannot-unbridge.component";
 import { TranslateService } from "@ngx-translate/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 

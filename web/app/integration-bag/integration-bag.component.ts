@@ -1,12 +1,4 @@
-import {
-    Component,
-    EventEmitter,
-    Input,
-    OnChanges,
-    Output,
-    SimpleChange,
-    SimpleChanges,
-} from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange, SimpleChanges, } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { FE_Integration } from "../shared/models/integration";
 import { MediaService } from "../shared/services/media.service";

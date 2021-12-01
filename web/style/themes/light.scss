@@ -1,13 +1,13 @@
 $theme_light: (
-        bodyBgColor: rgba(176, 187, 191, 0.12),
-        defaultFgColor: #333,
-        headerColor: #333,
-        mutedColor: #999,
-        altMutedColor: #636c72,
-        anchorColor: #0275d8,
+        bodyBgColor: #ffffff,
+        defaultFgColor: #17191C,
+        headerColor: #17191C,
+        mutedColor: #737D8C,
+        altMutedColor: #737D8C,
+        anchorColor: #0DBD8B,
         tableBorderColor: #eceeef,
         codeBgColor: #f7f7f9,
-        spinnerColor: #333,
+        spinnerColor: #17191C,
         formControlBgColor: #fff,
         formControlFgColor: #464a4c,
         formControlPlaceholderColor: #7d8487,
@@ -22,9 +22,6 @@ $theme_light: (
         stickerPreviewFgColor: #7d7d7d,
 
         headerBgColor: #fff,
-        headerBorderColor: #e7eaec,
-        headerGradientStartColor: rgba(201, 80, 54, 0.7),
-        headerGradientEndColor: rgba(143, 45, 86, 0.7),
 
         containerBgColor: #fff,
         containerShadowColor: hsla(0, 0%, 0%, 0.2),
@@ -59,9 +56,8 @@ $theme_light: (
         genericControlFgColor: #222,
         widgetBannedSymbolColor: #bd362f,
 
-        integrationBorderColor: rgba(143, 45, 86, 0.2),
-        integrationShadowColor: rgba(206, 222, 235, 0.34),
-        integrationDescriptionColor: #999,
+        integrationBorderColor: #E3E8F0,
+        integrationDescriptionColor: #737D8C,
 
         promoSpacerColor: rgba(206, 222, 235, 0.85),
         promoShadowColor: rgba(206, 222, 235, 0.34),

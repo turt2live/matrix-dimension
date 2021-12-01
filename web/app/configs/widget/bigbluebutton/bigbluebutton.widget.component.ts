@@ -1,5 +1,5 @@
-import { WidgetComponent, DISABLE_AUTOMATIC_WRAPPING } from "../widget.component";
-import { WIDGET_BIGBLUEBUTTON, EditableWidget } from "../../../shared/models/widget";
+import { DISABLE_AUTOMATIC_WRAPPING, WidgetComponent } from "../widget.component";
+import { EditableWidget, WIDGET_BIGBLUEBUTTON } from "../../../shared/models/widget";
 import { Component } from "@angular/core";
 import { FE_BigBlueButtonWidget } from "../../../shared/models/integration";
 import { SessionStorage } from "../../../shared/SessionStorage";

@@ -1,0 +1,44 @@
+<my-bridge-config [bridgeComponent]="this">
+    <ng-template #bridgeParamsTemplate>
+        <my-ibox [isCollapsible]="false">
+            <h5 class="my-ibox-title">
+                {{'Bridge to Github' | translate}}
+            </h5>
+            <div class="my-ibox-content" *ngIf="loadingConnections">
+                <my-spinner></my-spinner>
+            </div>
+            <div class="my-ibox-content" *ngIf="!loadingConnections">
+                <div *ngIf="!isBridged && needsAuth">
+                    <p>
+                        {{'In order to bridge to Github, you\'ll need to authorize the bridge to access your organization(s). Please click the button below to do so.' | translate}}
+                    </p>
+                    <a [href]="authUrl" rel="noopener" target="_blank">
+                        <img src="/assets/img/slack_auth_button.png" alt="sign in with slack"/>
+                    </a>
+                </div>
+                <div *ngIf="!isBridged && !needsAuth">
+                    <label class="label-block">
+                        {{'Organization' | translate}}
+                        <select class="form-control form-control-sm" [(ngModel)]="orgId"
+                                (change)="loadRepos()" [disabled]="isBusy">
+                            <option *ngFor="let org of orgs" [ngValue]="org">
+                                {{ org }}
+                            </option>
+                        </select>
+                    </label>
+                    <label class="label-block">
+                        {{'Repository' | translate}}
+                        <select class="form-control form-control-sm" [(ngModel)]="repoId" [disabled]="isBusy">
+                            <option *ngFor="let repo of repos" [ngValue]="repo">
+                                {{ repo }}
+                            </option>
+                        </select>
+                    </label>
+                    <button type="button" class="btn btn-sm btn-primary" [disabled]="isBusy" (click)="bridgeRoom()">
+                        Bridge
+                    </button>
+                </div>
+            </div>
+        </my-ibox>
+    </ng-template>
+</my-bridge-config>

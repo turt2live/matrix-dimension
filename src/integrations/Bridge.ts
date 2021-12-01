@@ -4,6 +4,7 @@ import { AvailableNetworks, LinkedChannels } from "../bridges/IrcBridge";
 import { PortalInfo, PuppetInfo } from "../bridges/TelegramBridge";
 import { WebhookConfiguration } from "../bridges/models/webhooks";
 import { BridgedChannel } from "../bridges/SlackBridge";
+import { HookshotConnection } from "../bridges/models/hookshot";
 
 const PRIVATE_ACCESS_SUPPORTED_BRIDGES = ["webhooks"];
 
@@ -44,4 +45,14 @@ export interface WebhookBridgeConfiguration {
 export interface SlackBridgeConfiguration {
     link: BridgedChannel;
     botUserId: string;
+}
+
+export interface HookshotGithubBridgeConfiguration {
+    botUserId: string;
+    connections: HookshotConnection[];
+}
+
+export interface HookshotJiraBridgeConfiguration {
+    botUserId: string;
+    connections: HookshotConnection[];
 }
