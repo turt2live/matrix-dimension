@@ -17,6 +17,7 @@
     width: calc(325px - 14px);
     position: relative;
     cursor: pointer;
+    border-radius: 8px;
   }
 
   .integration .integration-arrow {
@@ -25,10 +26,6 @@
     top: calc(50% - 12px); // icon happens to be 24px tall
     right: 1px;
     color: #bbb;
-  }
-
-  .integration:hover {
-    box-shadow: 0 0 5px 5px themed(integrationShadowColor);
   }
 
   .integration:hover .integration-arrow {
@@ -43,8 +40,7 @@
 
   .integration .integration-name {
     display: inline-block;
-    font-size: 1.1em;
-    font-weight: 100;
+    font-weight: 600;
     padding-left: 10px;
   }
 

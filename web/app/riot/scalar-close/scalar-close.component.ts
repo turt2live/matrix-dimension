@@ -10,7 +10,7 @@ export class ScalarCloseComponent {
     constructor(private scalar: ScalarClientApiService) {}
 
     public closeScalar() {
-        console.log("Closing scalar...");
+        console.log("Closing Dimension...");
         this.scalar.close();
     }
 }

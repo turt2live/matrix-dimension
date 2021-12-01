@@ -4,14 +4,10 @@
 @include themifyComponent() {
   .wrapper {
     width: 100%;
-    padding-top: 10px;
-    background: linear-gradient(to right, themed(headerGradientStartColor), themed(headerGradientEndColor));
   }
 
   .header {
     width: 100%;
-    border-top: 1px solid themed(headerBorderColor);
-    border-bottom: 1px solid themed(headerBorderColor);
     background-color: themed(headerBgColor);
   }
 
@@ -23,7 +19,7 @@
   }
 
   .header .title .pageName {
-    font-weight: 100;
+    font-weight: 600;
     padding: 0;
     margin: 0;
   }

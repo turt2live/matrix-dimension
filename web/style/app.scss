@@ -1,5 +1,5 @@
 // styles in src/style directory are applied to the whole page
-@import "../assets//fonts/opensans100-roboto300";
+@import "../assets/fonts/inter.scss";
 @import "~bootstrap/scss/bootstrap";
 @import "~ngx-ui-switch/ui-switch.component.scss";
 @import "themes/themes";
@@ -12,7 +12,6 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Roboto", "Open Sans", Arial, sans-serif;
 }
 
 @include themifyRoot() {
