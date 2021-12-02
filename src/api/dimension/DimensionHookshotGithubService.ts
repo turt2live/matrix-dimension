@@ -1,15 +1,8 @@
 import { Context, DELETE, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { ApiError } from "../ApiError";
 import { LogService } from "matrix-bot-sdk";
-import { BridgedChannel, SlackBridge } from "../../bridges/SlackBridge";
-import { SlackChannel, SlackTeam } from "../../bridges/models/slack";
 import { ROLE_USER } from "../security/MatrixSecurity";
-import {
-    HookshotConnection, HookshotGithubOrg, HookshotGithubRepo,
-    HookshotJiraInstance,
-    HookshotJiraProject,
-    HookshotJiraRoomConfig
-} from "../../bridges/models/hookshot";
+import { HookshotGithubOrg, HookshotGithubRepo, HookshotGithubRoomConfig } from "../../bridges/models/hookshot";
 import { HookshotGithubBridge } from "../../bridges/HookshotGithubBridge";
 
 interface BridgeRoomRequest {
@@ -70,7 +63,7 @@ export class DimensionHookshotGithubService {
     @POST
     @Path("room/:roomId/connect")
     @Security(ROLE_USER)
-    public async bridgeRoom(@PathParam("roomId") roomId: string, request: BridgeRoomRequest): Promise<HookshotJiraRoomConfig> {
+    public async bridgeRoom(@PathParam("roomId") roomId: string, request: BridgeRoomRequest): Promise<HookshotGithubRoomConfig> {
         const userId = this.context.request.user.userId;
 
         try {

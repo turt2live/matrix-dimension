@@ -1,16 +1,9 @@
 import { Context, DELETE, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { ApiError } from "../ApiError";
 import { LogService } from "matrix-bot-sdk";
-import { BridgedChannel, SlackBridge } from "../../bridges/SlackBridge";
-import { SlackChannel, SlackTeam } from "../../bridges/models/slack";
 import { ROLE_USER } from "../security/MatrixSecurity";
 import { HookshotJiraBridge } from "../../bridges/HookshotJiraBridge";
-import {
-    HookshotConnection,
-    HookshotJiraInstance,
-    HookshotJiraProject,
-    HookshotJiraRoomConfig
-} from "../../bridges/models/hookshot";
+import { HookshotJiraInstance, HookshotJiraProject, HookshotJiraRoomConfig } from "../../bridges/models/hookshot";
 
 interface BridgeRoomRequest {
     instanceName: string;
