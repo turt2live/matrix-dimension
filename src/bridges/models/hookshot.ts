@@ -1,3 +1,8 @@
+export enum HookshotTypes {
+    Github = "uk.half-shot.matrix-hookshot.github.repository",
+    Jira = "uk.half-shot.matrix-hookshot.jira.project",
+}
+
 export interface HookshotConnection {
     type: string;
     eventType: string; // state key in the connection
@@ -16,12 +21,46 @@ export interface HookshotConnectionTypeDefinition {
     botUserId: string;
 }
 
-export interface HookshotGithubRoomConfig {
-
+export interface HookshotGithubRoomConfig extends HookshotConnection {
+    config: {
+        org: string;
+        repo: string;
+        ignoreHooks: SupportedGithubRepoEventType[];
+        commandPrefix: string;
+    };
 }
 
-export enum SupportedJiraEventType {
+export interface HookshotGithubOrg {
+    name: string;
+    avatarUrl: string;
+}
+
+export interface HookshotGithubRepo {
+    name: string;
+    owner: string;
+    fullName: string;
+    avatarUrl: string;
+    description: string;
+}
+
+export interface HookshotGithubUserInfo {
+    loggedIn: boolean;
+    organisations?: HookshotGithubOrg[];
+}
+
+export enum SupportedGithubRepoEventType {
     IssueCreated = "issue.created",
+    IssueChanged = "issue.changed",
+    IssueEdited = "issue.edited",
+    Issue = "issue",
+    PROpened = "pull_request.opened",
+    PRClosed = "pull_request.closed",
+    PRMerged = "pull_request.merged",
+    PRReadyForReview = "pull_request.ready_for_review",
+    PRReviewed = "pull_request.reviewed",
+    PR = "pull_request",
+    ReleaseCreated = "release.created",
+    Release = "release",
 }
 
 export interface HookshotJiraRoomConfig extends HookshotConnection {
@@ -32,9 +71,8 @@ export interface HookshotJiraRoomConfig extends HookshotConnection {
     };
 }
 
-export enum HookshotTypes {
-    Github = "uk.half-shot.matrix-hookshot.github.repository",
-    Jira = "uk.half-shot.matrix-hookshot.jira.project",
+export enum SupportedJiraEventType {
+    IssueCreated = "issue.created",
 }
 
 export interface HookshotJiraUserInfo {

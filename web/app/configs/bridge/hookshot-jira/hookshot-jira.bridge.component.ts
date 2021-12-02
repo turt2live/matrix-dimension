@@ -43,25 +43,26 @@ export class HookshotJiraBridgeConfigComponent extends BridgeComponent<HookshotC
 
     public ngOnInit() {
         super.ngOnInit();
+
+        this.loadingConnections = true;
         this.tryLoadInstances();
     }
 
     private tryLoadInstances() {
-        this.loadingConnections = true;
         this.hookshot.getInstances().then(r => {
             this.instances = r;
             this.instance = this.instances[0];
             this.loadProjects();
 
             if (this.timerId) {
-                clearInterval(this.timerId);
+                clearTimeout(this.timerId);
             }
         }).catch(e => {
             if (e.status === 403 && e.error.dim_errcode === "T2B_NOT_LOGGED_IN") {
                 this.hookshot.getAuthUrl().then(url => {
                     this.authUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
                     this.loadingConnections = false;
-                    this.timerId = setInterval(() => {
+                    this.timerId = setTimeout(() => {
                         this.tryLoadInstances();
                     }, 1000);
                 });

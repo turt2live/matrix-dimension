@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { BridgeComponent } from "../bridge.component";
 import { ScalarClientApiService } from "../../../shared/services/scalar/scalar-client-api.service";
-import { SafeUrl } from "@angular/platform-browser";
+import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { TranslateService } from "@ngx-translate/core";
 import { FE_HookshotGithubConnection } from "../../../shared/models/hookshot_github";
 import { HookshotGithubApiService } from "../../../shared/services/integrations/hookshot-github-api.service";
@@ -18,15 +18,19 @@ interface HookshotConfig {
 export class HookshotGithubBridgeConfigComponent extends BridgeComponent<HookshotConfig> implements OnInit {
 
     public isBusy: boolean;
-    public needsAuth = false;
     public authUrl: SafeUrl;
-    public loadingConnections = false;
+    public loadingConnections = true;
+    public bridgedRepoSlug: string;
+
     public orgs: string[] = [];
-    public repos: string[] = []; // for org
     public orgId: string;
+
+    public repos: string[] = []; // for org
     public repoId: string;
 
-    constructor(private hookshot: HookshotGithubApiService, private scalar: ScalarClientApiService, public translate: TranslateService) {
+    private timerId: any;
+
+    constructor(private hookshot: HookshotGithubApiService, private scalar: ScalarClientApiService, private sanitizer: DomSanitizer, public translate: TranslateService) {
         super("hookshot_github", translate);
         this.translate = translate;
     }
@@ -34,15 +38,58 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
     public ngOnInit() {
         super.ngOnInit();
 
-        this.prepare();
+        this.loadingConnections = true;
+        this.tryLoadOrgs();
     }
 
-    private prepare() {
+    private tryLoadOrgs() {
+        this.hookshot.getOrgs().then(r => {
+            console.log(r);
+            this.orgs = r.map(o => o.name);
+            this.orgId = this.orgs[0];
+            this.loadRepos();
 
+            if (this.timerId) {
+                clearTimeout(this.timerId);
+            }
+        }).catch(e => {
+            if (e.status === 403 && e.error.dim_errcode === "T2B_NOT_LOGGED_IN") {
+                this.hookshot.getAuthUrl().then(url => {
+                    this.authUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+                    this.loadingConnections = false;
+                    this.timerId = setTimeout(() => {
+                        this.tryLoadOrgs();
+                    }, 1000);
+                });
+            } else {
+                console.error(e);
+                this.translate.get('Error getting Github information').subscribe((res: string) => {
+                    this.toaster.pop("error", res);
+                });
+            }
+        });
     }
 
     public loadRepos() {
-        // TODO
+        this.isBusy = true;
+        this.hookshot.getRepos(this.orgId).then(repos => {
+            this.repos = repos.map(r => r.name);
+            this.repoId = this.repos[0];
+
+            if (this.isBridged) {
+                const conn = this.bridge.config.connections[0].config;
+                this.bridgedRepoSlug = `${conn.org}/${conn.repo}`;
+            }
+
+            this.isBusy = false;
+            this.loadingConnections = false;
+        }).catch(e => {
+            console.error(e);
+            this.isBusy = false;
+            this.translate.get('Error getting Github information').subscribe((res: string) => {
+                this.toaster.pop("error", res);
+            });
+        });
     }
 
     public get isBridged(): boolean {

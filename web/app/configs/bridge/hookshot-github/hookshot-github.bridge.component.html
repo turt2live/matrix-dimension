@@ -8,15 +8,21 @@
                 <my-spinner></my-spinner>
             </div>
             <div class="my-ibox-content" *ngIf="!loadingConnections">
-                <div *ngIf="!isBridged && needsAuth">
+                <div *ngIf="isBridged">
+                    <p>{{'This room is bridged to' | translate}} {{bridgedRepoSlug}}</p>
+                    <button type="button" class="btn btn-sm btn-danger" [disabled]="isBusy" (click)="unbridgeRoom()">
+                        {{'Unbridge' | translate}}
+                    </button>
+                </div>
+                <div *ngIf="!isBridged && authUrl">
                     <p>
                         {{'In order to bridge to Github, you\'ll need to authorize the bridge to access your organization(s). Please click the button below to do so.' | translate}}
                     </p>
-                    <a [href]="authUrl" rel="noopener" target="_blank">
-                        <img src="/assets/img/slack_auth_button.png" alt="sign in with slack"/>
+                    <a [href]="authUrl" rel="noopener" target="_blank" class="btn btn-lg btn-link">
+                        <img src="/assets/img/avatars/github.png" width="35" /> {{'Sign in with GitHub' | translate}}
                     </a>
                 </div>
-                <div *ngIf="!isBridged && !needsAuth">
+                <div *ngIf="!isBridged && !authUrl">
                     <label class="label-block">
                         {{'Organization' | translate}}
                         <select class="form-control form-control-sm" [(ngModel)]="orgId"

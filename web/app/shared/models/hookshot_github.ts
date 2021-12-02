@@ -7,5 +7,22 @@ export interface FE_HookshotGithubBridge {
 }
 
 export interface FE_HookshotGithubConnection {
+    config: {
+        org: string;
+        repo: string;
+        commandPrefix?: string;
+    };
+}
 
+export interface FE_HookshotGithubOrg {
+    name: string;
+    avatarUrl: string;
+}
+
+export interface FE_HookshotGithubRepo {
+    name: string;
+    owner: string;
+    fullName: string;
+    avatarUrl: string;
+    description: string;
 }
