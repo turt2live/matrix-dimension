@@ -22,7 +22,15 @@
                         <img src="/assets/img/avatars/github.png" width="35" /> {{'Sign in with GitHub' | translate}}
                     </a>
                 </div>
-                <div *ngIf="!isBridged && !authUrl">
+                <div *ngIf="!isBridged && orgAuthUrl">
+                    <p>
+                        {{'Almost there! Just need to add the bot to your organizations now.' | translate}}
+                    </p>
+                    <a [href]="authUrl" rel="noopener" target="_blank" class="btn btn-lg btn-link">
+                        <img src="/assets/img/avatars/github.png" width="35" /> {{'Add to GitHub' | translate}}
+                    </a>
+                </div>
+                <div *ngIf="!isBridged && !authUrl && !orgAuthUrl">
                     <label class="label-block">
                         {{'Organization' | translate}}
                         <select class="form-control form-control-sm" [(ngModel)]="orgId"

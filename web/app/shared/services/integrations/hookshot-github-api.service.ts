@@ -1,7 +1,12 @@
 import { Injectable } from "@angular/core";
 import { AuthedApi } from "../authed-api";
 import { HttpClient } from "@angular/common/http";
-import { FE_HookshotGithubConnection, FE_HookshotGithubOrg, FE_HookshotGithubRepo } from "../../models/hookshot_github";
+import {
+    FE_HookshotGithubAuthUrls,
+    FE_HookshotGithubConnection,
+    FE_HookshotGithubOrg,
+    FE_HookshotGithubRepo
+} from "../../models/hookshot_github";
 
 @Injectable()
 export class HookshotGithubApiService extends AuthedApi {
@@ -19,8 +24,8 @@ export class HookshotGithubApiService extends AuthedApi {
         return this.authedDelete("/api/v1/dimension/hookshot/github/room/" + roomId + "/connections/all").toPromise();
     }
 
-    public getAuthUrl(): Promise<string> {
-        return this.authedGet("/api/v1/dimension/hookshot/github/auth").toPromise().then(r => r['authUrl']);
+    public getAuthUrls(): Promise<FE_HookshotGithubAuthUrls> {
+        return this.authedGet<FE_HookshotGithubAuthUrls>("/api/v1/dimension/hookshot/github/auth").toPromise();
     }
 
     public getOrgs(): Promise<FE_HookshotGithubOrg[]> {

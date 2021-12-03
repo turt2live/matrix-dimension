@@ -49,6 +49,11 @@ export interface HookshotGithubUserInfo {
     organisations?: HookshotGithubOrg[];
 }
 
+export interface HookshotGithubAuthUrls {
+    userUrl: string;
+    orgUrl: string;
+}
+
 export enum SupportedGithubRepoEventType {
     IssueCreated = "issue.created",
     IssueChanged = "issue.changed",

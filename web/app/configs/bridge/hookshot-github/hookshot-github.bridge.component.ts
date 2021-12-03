@@ -19,6 +19,7 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
 
     public isBusy: boolean;
     public authUrl: SafeUrl;
+    public orgAuthUrl: SafeUrl;
     public loadingConnections = true;
     public bridgedRepoSlug: string;
 
@@ -44,9 +45,23 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
 
     private tryLoadOrgs() {
         this.hookshot.getOrgs().then(r => {
-            console.log(r);
+            this.authUrl = null;
+
+            if (r.length <= 0) {
+                this.hookshot.getAuthUrls().then(urls => {
+                    console.log(urls);
+                    this.orgAuthUrl = this.sanitizer.bypassSecurityTrustResourceUrl(urls.orgUrl);
+                    this.loadingConnections = false;
+                    this.timerId = setTimeout(() => {
+                        this.tryLoadOrgs();
+                    }, 1000);
+                });
+                return;
+            }
+
             this.orgs = r.map(o => o.name);
             this.orgId = this.orgs[0];
+            this.orgAuthUrl = null;
             this.loadRepos();
 
             if (this.timerId) {
@@ -54,8 +69,8 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
             }
         }).catch(e => {
             if (e.status === 403 && e.error.dim_errcode === "T2B_NOT_LOGGED_IN") {
-                this.hookshot.getAuthUrl().then(url => {
-                    this.authUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+                this.hookshot.getAuthUrls().then(urls => {
+                    this.authUrl = this.sanitizer.bypassSecurityTrustResourceUrl(urls.userUrl);
                     this.loadingConnections = false;
                     this.timerId = setTimeout(() => {
                         this.tryLoadOrgs();

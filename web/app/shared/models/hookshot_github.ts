@@ -26,3 +26,8 @@ export interface FE_HookshotGithubRepo {
     avatarUrl: string;
     description: string;
 }
+
+export interface FE_HookshotGithubAuthUrls {
+    userUrl: string;
+    orgUrl: string;
+}

@@ -2,7 +2,12 @@ import { Context, DELETE, GET, Path, PathParam, POST, Security, ServiceContext }
 import { ApiError } from "../ApiError";
 import { LogService } from "matrix-bot-sdk";
 import { ROLE_USER } from "../security/MatrixSecurity";
-import { HookshotGithubOrg, HookshotGithubRepo, HookshotGithubRoomConfig } from "../../bridges/models/hookshot";
+import {
+    HookshotGithubAuthUrls,
+    HookshotGithubOrg,
+    HookshotGithubRepo,
+    HookshotGithubRoomConfig
+} from "../../bridges/models/hookshot";
 import { HookshotGithubBridge } from "../../bridges/HookshotGithubBridge";
 
 interface BridgeRoomRequest {
@@ -22,13 +27,13 @@ export class DimensionHookshotGithubService {
     @GET
     @Path("auth")
     @Security(ROLE_USER)
-    public async getAuthUrl(): Promise<{ authUrl: string }> {
+    public async getAuthUrl(): Promise<HookshotGithubAuthUrls> {
         const userId = this.context.request.user.userId;
 
         try {
             const hookshot = new HookshotGithubBridge(userId);
-            const authUrl = await hookshot.getAuthUrl();
-            return {authUrl};
+            const authUrls = await hookshot.getAuthUrls();
+            return authUrls;
         } catch (e) {
             LogService.error("DimensionHookshotGithubService", e);
             throw new ApiError(400, "Error getting auth info");

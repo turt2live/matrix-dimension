@@ -50,6 +50,7 @@ export class HookshotJiraBridgeConfigComponent extends BridgeComponent<HookshotC
 
     private tryLoadInstances() {
         this.hookshot.getInstances().then(r => {
+            this.authUrl = null;
             this.instances = r;
             this.instance = this.instances[0];
             this.loadProjects();

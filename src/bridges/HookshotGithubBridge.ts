@@ -1,5 +1,11 @@
 import HookshotGithubBridgeRecord from "../db/models/HookshotGithubBridgeRecord";
-import { HookshotGithubRepo, HookshotGithubRoomConfig, HookshotGithubUserInfo, HookshotTypes } from "./models/hookshot";
+import {
+    HookshotGithubAuthUrls,
+    HookshotGithubRepo,
+    HookshotGithubRoomConfig,
+    HookshotGithubUserInfo,
+    HookshotTypes
+} from "./models/hookshot";
 import { HookshotBridge } from "./HookshotBridge";
 
 export class HookshotGithubBridge extends HookshotBridge {
@@ -16,9 +22,9 @@ export class HookshotGithubBridge extends HookshotBridge {
         return bridges[0];
     }
 
-    public async getAuthUrl(): Promise<string> {
+    public async getAuthUrls(): Promise<HookshotGithubAuthUrls> {
         const bridge = await this.getDefaultBridge();
-        return this.doProvisionRequest(bridge, "GET", `/v1/github/oauth`).then(r => r['url']);
+        return this.doProvisionRequest(bridge, "GET", `/v1/github/oauth`).then(r => ({userUrl: r['user_url'], orgUrl: r['org_url']}));
     }
 
     public async getBotUserId(): Promise<string> {
