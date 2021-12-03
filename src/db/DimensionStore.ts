@@ -31,6 +31,7 @@ import TermsSignedRecord from "./models/TermsSignedRecord";
 import TermsUpstreamRecord from "./models/TermsUpstreamRecord";
 import HookshotGithubBridgeRecord from "./models/HookshotGithubBridgeRecord";
 import HookshotJiraBridgeRecord from "./models/HookshotJiraBridgeRecord";
+import HookshotWebhookBridgeRecord from "./models/HookshotWebhookBridgeRecord";
 
 class _DimensionStore {
     private sequelize: Sequelize;
@@ -79,6 +80,7 @@ class _DimensionStore {
             TermsUpstreamRecord,
             HookshotGithubBridgeRecord,
             HookshotJiraBridgeRecord,
+            HookshotWebhookBridgeRecord,
         ]);
     }
 

@@ -1,7 +1,7 @@
 import {
     Bridge,
     HookshotGithubBridgeConfiguration,
-    HookshotJiraBridgeConfiguration,
+    HookshotJiraBridgeConfiguration, HookshotWebhookBridgeConfiguration,
     SlackBridgeConfiguration,
     TelegramBridgeConfiguration,
     WebhookBridgeConfiguration
@@ -14,6 +14,8 @@ import { WebhooksBridge } from "../bridges/WebhooksBridge";
 import { SlackBridge } from "../bridges/SlackBridge";
 import { HookshotGithubBridge } from "../bridges/HookshotGithubBridge";
 import { HookshotJiraBridge } from "../bridges/HookshotJiraBridge";
+import { HookshotWebhookBridge } from "../bridges/HookshotWebhookBridge";
+import HookshotWebhookBridgeRecord from "./models/HookshotWebhookBridgeRecord";
 
 export class BridgeStore {
 
@@ -88,6 +90,9 @@ export class BridgeStore {
         } else if (record.type === "hookshot_jira") {
             const hookshot = new HookshotJiraBridge(requestingUserId);
             return hookshot.isBridgingEnabled();
+        } else if (record.type === "hookshot_webhook") {
+            const hookshot = new HookshotWebhookBridge(requestingUserId);
+            return hookshot.isBridgingEnabled();
         } else return true;
     }
 
@@ -109,6 +114,9 @@ export class BridgeStore {
             return hookshot.isBridgingEnabled();
         } else if (record.type === "hookshot_jira") {
             const hookshot = new HookshotJiraBridge(requestingUserId);
+            return hookshot.isBridgingEnabled();
+        } else if (record.type === "hookshot_webhook") {
+            const hookshot = new HookshotWebhookBridge(requestingUserId);
             return hookshot.isBridgingEnabled();
         } else return false;
     }
@@ -167,6 +175,15 @@ export class BridgeStore {
                 connections: connections,
                 loggedIn: userInfo.loggedIn,
                 instances: userInfo.instances,
+            };
+        } else if (record.type === "hookshot_webhook") {
+            if (!inRoomId) return {}; // The bridge's admin config is handled by other APIs
+            const hookshot = new HookshotWebhookBridge(requestingUserId);
+            const botUserId = await hookshot.getBotUserId();
+            const connections = await hookshot.getRoomConfigurations(inRoomId);
+            return <HookshotWebhookBridgeConfiguration>{
+                botUserId: botUserId,
+                connections: connections,
             };
         } else return {};
     }

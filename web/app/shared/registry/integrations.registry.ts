@@ -33,6 +33,7 @@ export class IntegrationsRegistry {
             "slack": {},
             "hookshot_github": {},
             "hookshot_jira": {},
+            "hookshot_webhook": {},
         },
         "widget": {
             "custom": {

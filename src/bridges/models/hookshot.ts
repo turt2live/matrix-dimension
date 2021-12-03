@@ -1,6 +1,7 @@
 export enum HookshotTypes {
     Github = "uk.half-shot.matrix-hookshot.github.repository",
     Jira = "uk.half-shot.matrix-hookshot.jira.project",
+    Webhook = "uk.half-shot.matrix-hookshot.generic.hook",
 }
 
 export interface HookshotConnection {
@@ -89,4 +90,8 @@ export interface HookshotJiraProject {
     key: string;
     name: string;
     url: string;
+}
+
+export interface HookshotWebhookRoomConfig extends HookshotConnection {
+    config: {};
 }

@@ -143,6 +143,15 @@ import {
 import { AdminHookshotJiraApiService } from "./shared/services/admin/admin-hookshot-jira-api.service";
 import { HookshotJiraApiService } from "./shared/services/integrations/hookshot-jira-api.service";
 import { HookshotJiraBridgeConfigComponent } from "./configs/bridge/hookshot-jira/hookshot-jira.bridge.component";
+import { AdminHookshotWebhookBridgeComponent } from "./admin/bridges/hookshot-webhook/hookshot-webhook.component";
+import {
+    AdminHookshotWebhookBridgeManageSelfhostedComponent
+} from "./admin/bridges/hookshot-webhook/manage-selfhosted/manage-selfhosted.component";
+import { AdminHookshotWebhookApiService } from "./shared/services/admin/admin-hookshot-webhook-api.service";
+import { HookshotWebhookApiService } from "./shared/services/integrations/hookshot-webhook-api.service";
+import {
+    HookshotWebhookBridgeConfigComponent
+} from "./configs/bridge/hookshot-webhook/hookshot-webhook.bridge.component";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -258,6 +267,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminHookshotJiraBridgeComponent,
         AdminHookshotJiraBridgeManageSelfhostedComponent,
         HookshotJiraBridgeConfigComponent,
+        AdminHookshotWebhookBridgeComponent,
+        AdminHookshotWebhookBridgeManageSelfhostedComponent,
+        HookshotWebhookBridgeConfigComponent,
 
         // Vendor
     ],
@@ -291,6 +303,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         HookshotGithubApiService,
         AdminHookshotJiraApiService,
         HookshotJiraApiService,
+        AdminHookshotWebhookApiService,
+        HookshotWebhookApiService,
         {provide: Window, useValue: window},
 
         // Vendor

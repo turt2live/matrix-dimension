@@ -4,7 +4,12 @@ import { AvailableNetworks, LinkedChannels } from "../bridges/IrcBridge";
 import { PortalInfo, PuppetInfo } from "../bridges/TelegramBridge";
 import { WebhookConfiguration } from "../bridges/models/webhooks";
 import { BridgedChannel } from "../bridges/SlackBridge";
-import { HookshotConnection, HookshotJiraInstance } from "../bridges/models/hookshot";
+import {
+    HookshotConnection, HookshotGithubRoomConfig,
+    HookshotJiraInstance,
+    HookshotJiraRoomConfig,
+    HookshotWebhookRoomConfig
+} from "../bridges/models/hookshot";
 
 const PRIVATE_ACCESS_SUPPORTED_BRIDGES = ["webhooks"];
 
@@ -49,12 +54,17 @@ export interface SlackBridgeConfiguration {
 
 export interface HookshotGithubBridgeConfiguration {
     botUserId: string;
-    connections: HookshotConnection[];
+    connections: HookshotGithubRoomConfig[];
 }
 
 export interface HookshotJiraBridgeConfiguration {
     botUserId: string;
-    connections: HookshotConnection[];
+    connections: HookshotJiraRoomConfig[];
     loggedIn: boolean;
     instances?: HookshotJiraInstance[];
+}
+
+export interface HookshotWebhookBridgeConfiguration {
+    botUserId: string;
+    connections: HookshotWebhookRoomConfig[];
 }

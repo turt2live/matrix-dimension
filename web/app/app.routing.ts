@@ -54,6 +54,10 @@ import { AdminHookshotGithubBridgeComponent } from "./admin/bridges/hookshot-git
 import { HookshotGithubBridgeConfigComponent } from "./configs/bridge/hookshot-github/hookshot-github.bridge.component";
 import { AdminHookshotJiraBridgeComponent } from "./admin/bridges/hookshot-jira/hookshot-jira.component";
 import { HookshotJiraBridgeConfigComponent } from "./configs/bridge/hookshot-jira/hookshot-jira.bridge.component";
+import { AdminHookshotWebhookBridgeComponent } from "./admin/bridges/hookshot-webhook/hookshot-webhook.component";
+import {
+    HookshotWebhookBridgeConfigComponent
+} from "./configs/bridge/hookshot-webhook/hookshot-webhook.bridge.component";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -149,6 +153,11 @@ const routes: Routes = [
                                 path: "hookshot_jira",
                                 component: AdminHookshotJiraBridgeComponent,
                                 data: {breadcrumb: "Jira Bridge", name: "Jira Bridge"},
+                            },
+                            {
+                                path: "hookshot_webhook",
+                                component: AdminHookshotWebhookBridgeComponent,
+                                data: {breadcrumb: "Webhook Bridge", name: "Webhook Bridge"},
                             },
                         ],
                     },
@@ -299,6 +308,11 @@ const routes: Routes = [
                         path: "hookshot_jira",
                         component: HookshotJiraBridgeConfigComponent,
                         data: {breadcrumb: "Jira Bridge Configuration", name: "Jira Bridge Configuration"},
+                    },
+                    {
+                        path: "hookshot_webhook",
+                        component: HookshotWebhookBridgeConfigComponent,
+                        data: {breadcrumb: "Webhook Bridge Configuration", name: "Webhook Bridge Configuration"},
                     },
                 ],
             },
