@@ -12,6 +12,7 @@ import { HookshotGithubBridge } from "../../bridges/HookshotGithubBridge";
 import { HookshotWebhookBridge } from "../../bridges/HookshotWebhookBridge";
 
 interface BridgeRoomRequest {
+    name?: string;
 }
 
 /**
@@ -31,7 +32,7 @@ export class DimensionHookshotWebhookService {
 
         try {
             const hookshot = new HookshotWebhookBridge(userId);
-            return hookshot.newConnection(roomId);
+            return hookshot.newConnection(roomId, request.name);
         } catch (e) {
             LogService.error("DimensionHookshotWebhookService", e);
             throw new ApiError(400, "Error bridging room");

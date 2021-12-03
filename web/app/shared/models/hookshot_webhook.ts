@@ -9,7 +9,7 @@ export interface FE_HookshotWebhookBridge {
 export interface FE_HookshotWebhookConnection {
     id: string;
     config: {
-        name?: string; // TODO: Update according to bridge support
+        name?: string;
         url: string;
     };
 }

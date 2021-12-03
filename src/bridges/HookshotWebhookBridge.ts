@@ -34,10 +34,11 @@ export class HookshotWebhookBridge extends HookshotBridge {
         return (await this.getAllRoomConfigurations(inRoomId)).filter(c => c.eventType === HookshotTypes.Webhook);
     }
 
-    public async newConnection(roomId: string): Promise<HookshotWebhookRoomConfig> {
+    public async newConnection(roomId: string, name: string): Promise<HookshotWebhookRoomConfig> {
         const bridge = await this.getDefaultBridge();
 
         const body = {
+            name,
         };
         return await this.doProvisionRequest<HookshotWebhookRoomConfig>(bridge, "PUT", `/v1/${roomId}/connections/${HookshotTypes.Webhook}`, null, body);
     }
