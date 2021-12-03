@@ -1,10 +1,7 @@
 import { Component } from "@angular/core";
 import { BridgeComponent } from "../bridge.component";
-import { FE_Webhook } from "../../../shared/models/webhooks";
-import { WebhooksApiService } from "../../../shared/services/integrations/webhooks-api.service";
 import { ScalarClientApiService } from "../../../shared/services/scalar/scalar-client-api.service";
 import { TranslateService } from "@ngx-translate/core";
-import { FE_HookshotJiraConnection } from "../../../shared/models/hookshot_jira";
 import { FE_HookshotWebhookConnection } from "../../../shared/models/hookshot_webhook";
 import { HookshotWebhookApiService } from "../../../shared/services/integrations/hookshot-webhook-api.service";
 

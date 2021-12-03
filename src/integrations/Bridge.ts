@@ -5,7 +5,7 @@ import { PortalInfo, PuppetInfo } from "../bridges/TelegramBridge";
 import { WebhookConfiguration } from "../bridges/models/webhooks";
 import { BridgedChannel } from "../bridges/SlackBridge";
 import {
-    HookshotConnection, HookshotGithubRoomConfig,
+    HookshotGithubRoomConfig,
     HookshotJiraInstance,
     HookshotJiraRoomConfig,
     HookshotWebhookRoomConfig

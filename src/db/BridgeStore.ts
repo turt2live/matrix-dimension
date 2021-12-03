@@ -1,7 +1,8 @@
 import {
     Bridge,
     HookshotGithubBridgeConfiguration,
-    HookshotJiraBridgeConfiguration, HookshotWebhookBridgeConfiguration,
+    HookshotJiraBridgeConfiguration,
+    HookshotWebhookBridgeConfiguration,
     SlackBridgeConfiguration,
     TelegramBridgeConfiguration,
     WebhookBridgeConfiguration
@@ -15,7 +16,6 @@ import { SlackBridge } from "../bridges/SlackBridge";
 import { HookshotGithubBridge } from "../bridges/HookshotGithubBridge";
 import { HookshotJiraBridge } from "../bridges/HookshotJiraBridge";
 import { HookshotWebhookBridge } from "../bridges/HookshotWebhookBridge";
-import HookshotWebhookBridgeRecord from "./models/HookshotWebhookBridgeRecord";
 
 export class BridgeStore {
 

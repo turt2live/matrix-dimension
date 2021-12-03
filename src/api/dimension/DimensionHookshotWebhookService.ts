@@ -1,14 +1,8 @@
-import { Context, DELETE, GET, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
+import { Context, DELETE, Path, PathParam, POST, Security, ServiceContext } from "typescript-rest";
 import { ApiError } from "../ApiError";
 import { LogService } from "matrix-bot-sdk";
 import { ROLE_USER } from "../security/MatrixSecurity";
-import {
-    HookshotGithubOrg,
-    HookshotGithubRepo,
-    HookshotGithubRoomConfig,
-    HookshotWebhookRoomConfig
-} from "../../bridges/models/hookshot";
-import { HookshotGithubBridge } from "../../bridges/HookshotGithubBridge";
+import { HookshotWebhookRoomConfig } from "../../bridges/models/hookshot";
 import { HookshotWebhookBridge } from "../../bridges/HookshotWebhookBridge";
 
 interface BridgeRoomRequest {

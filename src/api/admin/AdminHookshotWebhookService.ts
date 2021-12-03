@@ -3,7 +3,6 @@ import { Cache, CACHE_HOOKSHOT_WEBHOOK_BRIDGE, CACHE_INTEGRATIONS } from "../../
 import { LogService } from "matrix-bot-sdk";
 import { ApiError } from "../ApiError";
 import { ROLE_ADMIN, ROLE_USER } from "../security/MatrixSecurity";
-import HookshotGithubBridgeRecord from "../../db/models/HookshotGithubBridgeRecord";
 import HookshotWebhookBridgeRecord from "../../db/models/HookshotWebhookBridgeRecord";
 
 interface CreateWithUpstream {

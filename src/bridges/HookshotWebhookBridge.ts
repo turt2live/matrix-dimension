@@ -1,7 +1,4 @@
-import {
-    HookshotTypes,
-    HookshotWebhookRoomConfig
-} from "./models/hookshot";
+import { HookshotTypes, HookshotWebhookRoomConfig } from "./models/hookshot";
 import { HookshotBridge } from "./HookshotBridge";
 import HookshotWebhookBridgeRecord from "../db/models/HookshotWebhookBridgeRecord";
 

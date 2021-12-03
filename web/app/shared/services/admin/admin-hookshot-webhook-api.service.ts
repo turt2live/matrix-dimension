@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { AuthedApi } from "../authed-api";
 import { FE_Upstream } from "../../models/admin-responses";
 import { HttpClient } from "@angular/common/http";
-import { FE_HookshotGithubBridge } from "../../models/hookshot_github";
 import { FE_HookshotWebhookBridge } from "../../models/hookshot_webhook";
 
 @Injectable()
