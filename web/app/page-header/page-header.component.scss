@@ -2,19 +2,15 @@
 @import "../../style/themes/themes";
 
 @include themifyComponent() {
-  .wrapper {
-    width: 100%;
-  }
-
   .header {
     width: 100%;
+    padding: 32px;
     background-color: themed(headerBgColor);
   }
 
   .header .title {
     margin: 0;
     width: 83.333333%; // col-sm-10
-    padding: 15px;
     display: inline-block;
   }
 
@@ -22,6 +18,7 @@
     font-weight: 600;
     padding: 0;
     margin: 0;
+    font-size: 1.5em;
   }
 
   .header .quickAction {
@@ -33,4 +30,16 @@
     width: 15.666667%; // col-sm-2
     position: relative;
   }
+
+  .back-btn {
+    cursor: pointer;
+    margin-bottom: 16px;
+  }
+
+  .back-btn > span:not(.dim-icon) {
+    margin-left: 4px;
+    line-height: 1em;
+    font-size: 0.9em;
+  }
 }
+

@@ -1,0 +1,34 @@
+@import "../themes/themes";
+
+@mixin dim-icon {
+  display: inline-block;
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+
+@include themifyRoot() {
+  .dim-icon {
+    &.dim-chevron-left {
+      @include dim-icon();
+      width: 10px;
+      height: 10px;
+      mask-image: url('/assets/img/element/chevron-left.svg');
+      background-color: themed(defaultFgColor);
+    }
+    &.dim-cog {
+      @include dim-icon();
+      width: 20px;
+      height: 20px;
+      mask-image: url('/assets/img/element/cog.svg');
+      background-color: themed(mutedColor);
+    }
+    &.dim-close {
+      @include dim-icon();
+      width: 20px;
+      height: 20px;
+      mask-image: url('/assets/img/element/close.svg');
+      background-color: themed(mutedColor);
+    }
+  }
+}

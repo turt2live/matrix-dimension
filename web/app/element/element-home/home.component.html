@@ -6,8 +6,6 @@
 </div>
 
 <div *ngIf="!isLoading && !isError">
-    <div class="stickerpacks" *ngIf="hasStickerPacks">{{'Looking for your sticker packs?' | translate}}<a routerLink='stickerpicker'> {{'Click here' | translate}}</a>.</div>
-
     <!-- ------------------------ -->
     <!-- EMPTY/ENCRYPTED STATES   -->
     <!-- ------------------------ -->
@@ -29,11 +27,8 @@
     <!-- CATEGORIES               -->
     <!-- ------------------------ -->
     <div *ngFor="let category of getCategories()">
-        <my-ibox *ngIf="getIntegrationsIn(category).length > 0" boxTitle="{{category}}" [isCollapsible]="true">
-            <div class="my-ibox-content">
-                <my-integration-bag [integrations]="getIntegrationsIn(category)"
-                                    (integrationClicked)="modifyIntegration($event)"></my-integration-bag>
-            </div>
-        </my-ibox>
+        <h3 *ngIf="getIntegrationsIn(category).length > 0">{{category}}</h3>
+        <my-integration-bag [integrations]="getIntegrationsIn(category)"
+                            (integrationClicked)="modifyIntegration($event)"></my-integration-bag>
     </div>
 </div>

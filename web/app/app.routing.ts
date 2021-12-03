@@ -61,12 +61,12 @@ import {
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
-    {path: "riot", pathMatch: "full", redirectTo: "riot-app", data: {breadcrumb: "Home", name: "Dimension"}},
-    {path: "element", pathMatch: "full", redirectTo: "riot-app", data: {breadcrumb: "Home", name: "Dimension"}},
+    {path: "riot", pathMatch: "full", redirectTo: "riot-app", data: {breadcrumb: "Home", name: "Integration manager"}},
+    {path: "element", pathMatch: "full", redirectTo: "riot-app", data: {breadcrumb: "Home", name: "Integration manager"}},
     {
         path: "riot-app",
         component: ElementComponent,
-        data: {breadcrumb: "Home", name: "Dimension"},
+        data: {breadcrumb: "Home", name: "Integration manager"},
         children: [
             {
                 path: "",
@@ -205,57 +205,57 @@ const routes: Routes = [
                     {
                         path: "bigbluebutton",
                         component: BigBlueButtonConfigComponent,
-                        data: {breadcrumb: "BigBlueButton Widgets", name: "BigBlueButton Widgets"},
+                        data: {breadcrumb: "BigBlueButton", name: "BigBlueButton"},
                     },
                     {
                         path: "etherpad",
                         component: EtherpadWidgetConfigComponent,
-                        data: {breadcrumb: "Notes Widgets", name: "Notes Widgets"},
+                        data: {breadcrumb: "Etherpad", name: "Etherpad"},
                     },
                     {
                         path: "googlecalendar",
                         component: GoogleCalendarWidgetConfigComponent,
-                        data: {breadcrumb: "Google Calendar Widgets", name: "Google Calendar Widgets"},
+                        data: {breadcrumb: "Google Calendar", name: "Google Calendar"},
                     },
                     {
                         path: "googledocs",
                         component: GoogleDocsWidgetConfigComponent,
-                        data: {breadcrumb: "Google Doc Widgets", name: "Google Doc Widgets"},
+                        data: {breadcrumb: "Google Docs", name: "Google Docs"},
                     },
                     {
                         path: "jitsi",
                         component: JitsiWidgetConfigComponent,
-                        data: {breadcrumb: "Jitsi Widgets", name: "Jitsi Widgets"},
+                        data: {breadcrumb: "Jitsi", name: "Jitsi"},
                     },
                     {
                         path: "twitch",
                         component: TwitchWidgetConfigComponent,
-                        data: {breadcrumb: "Twitch Livestream Widgets", name: "Twitch Livestream Widgets"},
+                        data: {breadcrumb: "Twitch Livestream", name: "Twitch Livestream"},
                     },
                     {
                         path: "youtube",
                         component: YoutubeWidgetConfigComponent,
-                        data: {breadcrumb: "Youtube Video Widgets", name: "Youtube Video Widgets"},
+                        data: {breadcrumb: "Youtube", name: "Youtube"},
                     },
                     {
                         path: "grafana",
                         component: GrafanaWidgetConfigComponent,
-                        data: {breadcrumb: "Grafana Widgets", name: "Grafana Widgets"},
+                        data: {breadcrumb: "Grafana", name: "Grafana"},
                     },
                     {
                         path: "tradingview",
                         component: TradingViewWidgetConfigComponent,
-                        data: {breadcrumb: "TradingView Widgets", name: "TradingView Widgets"},
+                        data: {breadcrumb: "TradingView", name: "TradingView"},
                     },
                     {
                         path: "spotify",
                         component: SpotifyWidgetConfigComponent,
-                        data: {breadcrumb: "Spotify Widgets", name: "Spotify Widgets"},
+                        data: {breadcrumb: "Spotify", name: "Spotify"},
                     },
                     {
                         path: "whiteboard",
                         component: WhiteboardWidgetComponent,
-                        data: {breadcrumb: "Whiteboard Widgets", name: "Whiteboard Widgets"},
+                        data: {breadcrumb: "Whiteboard", name: "Whiteboard"},
                     },
                 ],
             },
@@ -266,12 +266,12 @@ const routes: Routes = [
                     {
                         path: "rss",
                         component: RssComplexBotConfigComponent,
-                        data: {breadcrumb: "RSS Bot Configuration", name: "RSS Bot Configuration"},
+                        data: {breadcrumb: "RSS Bot", name: "RSS Bot"},
                     },
                     {
                         path: "travisci",
                         component: TravisCiComplexBotConfigComponent,
-                        data: {breadcrumb: "Travis CI Configuration", name: "Travis CI Configuration"},
+                        data: {breadcrumb: "Travis CI", name: "Travis CI"},
                     },
                 ],
             },
@@ -282,37 +282,37 @@ const routes: Routes = [
                     {
                         path: "irc",
                         component: IrcBridgeConfigComponent,
-                        data: {breadcrumb: "IRC Bridge Configuration", name: "IRC Bridge Configuration"},
+                        data: {breadcrumb: "IRC Bridge", name: "IRC Bridge"},
                     },
                     {
                         path: "telegram",
                         component: TelegramBridgeConfigComponent,
-                        data: {breadcrumb: "Telegram Bridge Configuration", name: "Telegram Bridge Configuration"},
+                        data: {breadcrumb: "Telegram Bridge", name: "Telegram Bridge"},
                     },
                     {
                         path: "webhooks",
                         component: WebhooksBridgeConfigComponent,
-                        data: {breadcrumb: "Webhook Bridge Configuration", name: "Webhook Bridge Configuration"},
+                        data: {breadcrumb: "Webhooks Bridge", name: "Webhooks Bridge"},
                     },
                     {
                         path: "slack",
                         component: SlackBridgeConfigComponent,
-                        data: {breadcrumb: "Slack Bridge Configuration", name: "Slack Bridge Configuration"},
+                        data: {breadcrumb: "Slack Bridge", name: "Slack Bridge"},
                     },
                     {
                         path: "hookshot_github",
                         component: HookshotGithubBridgeConfigComponent,
-                        data: {breadcrumb: "Github Bridge Configuration", name: "Github Bridge Configuration"},
+                        data: {breadcrumb: "Github Bridge", name: "Github Bridge"},
                     },
                     {
                         path: "hookshot_jira",
                         component: HookshotJiraBridgeConfigComponent,
-                        data: {breadcrumb: "Jira Bridge Configuration", name: "Jira Bridge Configuration"},
+                        data: {breadcrumb: "Jira Bridge", name: "Jira Bridge"},
                     },
                     {
                         path: "hookshot_webhook",
                         component: HookshotWebhookBridgeConfigComponent,
-                        data: {breadcrumb: "Webhook Bridge Configuration", name: "Webhook Bridge Configuration"},
+                        data: {breadcrumb: "Webhooks Bridge", name: "Webhooks Bridge"},
                     },
                 ],
             },
