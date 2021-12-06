@@ -14,9 +14,10 @@ export class HookshotGithubApiService extends AuthedApi {
         super(http);
     }
 
-    public bridgeRoom(roomId: string): Promise<FE_HookshotGithubConnection> {
+    public bridgeRoom(roomId: string, orgId: string, repoId: string): Promise<FE_HookshotGithubConnection> {
         return this.authedPost<FE_HookshotGithubConnection>("/api/v1/dimension/hookshot/github/room/" + roomId + "/connect", {
-            // TODO
+            orgId,
+            repoId,
         }).toPromise();
     }
 

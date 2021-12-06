@@ -127,7 +127,7 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
             }
         }
 
-        this.hookshot.bridgeRoom(this.roomId).then(conn => {
+        this.hookshot.bridgeRoom(this.roomId, this.orgId, this.repoId).then(conn => {
             this.bridge.config.connections.push(conn);
             this.isBusy = false;
             this.translate.get('Bridge requested').subscribe((res: string) => {
