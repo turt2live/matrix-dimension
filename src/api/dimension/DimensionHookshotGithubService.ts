@@ -46,12 +46,19 @@ export class DimensionHookshotGithubService {
     public async getOrgs(): Promise<{ orgs: HookshotGithubOrg[] }> {
         const userId = this.context.request.user.userId;
 
-        const hookshot = new HookshotGithubBridge(userId);
-        const userInfo = await hookshot.getLoggedInUserInfo();
-        if (!userInfo.loggedIn) {
-            throw new ApiError(403, "Not logged in", "T2B_NOT_LOGGED_IN");
+        try {
+            const hookshot = new HookshotGithubBridge(userId);
+            const userInfo = await hookshot.getLoggedInUserInfo();
+            if (!userInfo.loggedIn) {
+                throw new ApiError(403, "Not logged in", "T2B_NOT_LOGGED_IN");
+            }
+            const repos = await hookshot.getInstalledRepos();
+            const orgs = Array.from(new Set(repos.map(r => r.owner))).map(o => ({ name: o, avatarUrl: null }));
+            return { orgs: orgs }; // was from userInfo
+        } catch (e) {
+            LogService.error("DimensionHookshotGithubService", e);
+            throw new ApiError(400, "Error getting org information", "T2B_MISSING_AUTH");
         }
-        return {orgs: userInfo.organisations};
     }
 
     @GET
@@ -60,9 +67,15 @@ export class DimensionHookshotGithubService {
     public async getRepos(@PathParam("orgId") orgId: string): Promise<{ repos: HookshotGithubRepo[] }> {
         const userId = this.context.request.user.userId;
 
-        const hookshot = new HookshotGithubBridge(userId);
-        const repos = await hookshot.getRepos(orgId);
-        return {repos};
+        try {
+            const hookshot = new HookshotGithubBridge(userId);
+            // const repos = await hookshot.getRepos(orgId);
+            const repos = await hookshot.getInstalledRepos();
+            return {repos: repos.filter(r => r.owner === orgId)};
+        } catch (e) {
+            LogService.error("DimensionHookshotGithubService", e);
+            throw new ApiError(400, "Error getting repo information", "T2B_MISSING_AUTH");
+        }
     }
 
     @POST

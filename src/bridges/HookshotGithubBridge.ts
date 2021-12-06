@@ -53,9 +53,28 @@ export class HookshotGithubBridge extends HookshotBridge {
             const res = await this.doProvisionRequest<HookshotGithubRepo[]>(bridge, "GET", `/v1/github/orgs/${orgId}/repositories`, {
                 page,
                 perPage,
-            });
+            }).then(r => r['repositories']);
             results.push(...res);
             if (res.length < perPage) more = false;
+            page++;
+        } while(more);
+        return results;
+    }
+
+    public async getInstalledRepos(): Promise<HookshotGithubRepo[]> {
+        const bridge = await this.getDefaultBridge();
+        const results: HookshotGithubRepo[] = [];
+        let more = true;
+        let page = 1;
+        let perPage = 10;
+        do {
+            const res = await this.doProvisionRequest<HookshotGithubRepo[]>(bridge, "GET", `/v1/github/repositories`, {
+                page,
+                perPage,
+            }).then(r => r['repositories']);
+            results.push(...res);
+            if (res.length < perPage) more = false;
+            page++;
         } while(more);
         return results;
     }

@@ -43,19 +43,22 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
         this.tryLoadOrgs();
     }
 
+    private tryOrgAuth() {
+        this.hookshot.getAuthUrls().then(urls => {
+            this.orgAuthUrl = this.sanitizer.bypassSecurityTrustResourceUrl(urls.orgUrl);
+            this.loadingConnections = false;
+            this.timerId = setTimeout(() => {
+                this.tryLoadOrgs();
+            }, 1000);
+        });
+    }
+
     private tryLoadOrgs() {
         this.hookshot.getOrgs().then(r => {
             this.authUrl = null;
 
             if (r.length <= 0) {
-                this.hookshot.getAuthUrls().then(urls => {
-                    console.log(urls);
-                    this.orgAuthUrl = this.sanitizer.bypassSecurityTrustResourceUrl(urls.orgUrl);
-                    this.loadingConnections = false;
-                    this.timerId = setTimeout(() => {
-                        this.tryLoadOrgs();
-                    }, 1000);
-                });
+                this.tryOrgAuth();
                 return;
             }
 
@@ -76,6 +79,8 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
                         this.tryLoadOrgs();
                     }, 1000);
                 });
+            } else if (e.status === 400 && e.error.dim_errcode === "T2B_MISSING_AUTH") {
+                this.tryOrgAuth();
             } else {
                 console.error(e);
                 this.translate.get('Error getting Github information').subscribe((res: string) => {
