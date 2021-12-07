@@ -33,6 +33,11 @@
                 <div *ngIf="!isBridged && !authUrl && !orgAuthUrl">
                     <label class="label-block">
                         {{'Organization' | translate}}
+                        <small *ngIf="orgAddAuthUrl" style="padding-left: 16px">
+                            <a [href]="orgAddAuthUrl" rel="noopener" target="_blank">
+                                {{'Add to another GitHub organization' | translate}}
+                            </a>
+                        </small>
                         <select class="form-control form-control-sm" [(ngModel)]="orgId"
                                 (change)="loadRepos()" [disabled]="isBusy">
                             <option *ngFor="let org of orgs" [ngValue]="org">

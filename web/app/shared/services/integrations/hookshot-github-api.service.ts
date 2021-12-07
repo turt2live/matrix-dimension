@@ -4,7 +4,6 @@ import { HttpClient } from "@angular/common/http";
 import {
     FE_HookshotGithubAuthUrls,
     FE_HookshotGithubConnection,
-    FE_HookshotGithubOrg,
     FE_HookshotGithubRepo
 } from "../../models/hookshot_github";
 
@@ -29,11 +28,7 @@ export class HookshotGithubApiService extends AuthedApi {
         return this.authedGet<FE_HookshotGithubAuthUrls>("/api/v1/dimension/hookshot/github/auth").toPromise();
     }
 
-    public getOrgs(): Promise<FE_HookshotGithubOrg[]> {
-        return this.authedGet("/api/v1/dimension/hookshot/github/orgs").toPromise().then(r => r['orgs']);
-    }
-
-    public getRepos(orgId: string): Promise<FE_HookshotGithubRepo[]> {
-        return this.authedGet("/api/v1/dimension/hookshot/github/org/" + orgId + "/repos").toPromise().then(r => r['repos']);
+    public getKnownRepos(): Promise<FE_HookshotGithubRepo[]> {
+        return this.authedGet("/api/v1/dimension/hookshot/github/repos").toPromise().then(r => r['repos']);
     }
 }

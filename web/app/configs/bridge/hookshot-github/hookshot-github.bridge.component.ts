@@ -3,7 +3,7 @@ import { BridgeComponent } from "../bridge.component";
 import { ScalarClientApiService } from "../../../shared/services/scalar/scalar-client-api.service";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { TranslateService } from "@ngx-translate/core";
-import { FE_HookshotGithubConnection } from "../../../shared/models/hookshot_github";
+import { FE_HookshotGithubConnection, FE_HookshotGithubRepo } from "../../../shared/models/hookshot_github";
 import { HookshotGithubApiService } from "../../../shared/services/integrations/hookshot-github-api.service";
 
 interface HookshotConfig {
@@ -22,14 +22,18 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
     public orgAuthUrl: SafeUrl;
     public loadingConnections = true;
     public bridgedRepoSlug: string;
+    public orgEditAuthUrl: SafeUrl;
+    public orgAddAuthUrl: SafeUrl;
 
     public orgs: string[] = [];
     public orgId: string;
 
-    public repos: string[] = []; // for org
+    public repos: string[] = [];
     public repoId: string;
 
     private timerId: any;
+    private orgToRepoMap: Record<string, FE_HookshotGithubRepo[]> = {};
+    private limitedOrgs: string[] = [];
 
     constructor(private hookshot: HookshotGithubApiService, private scalar: ScalarClientApiService, private sanitizer: DomSanitizer, public translate: TranslateService) {
         super("hookshot_github", translate);
@@ -41,6 +45,10 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
 
         this.loadingConnections = true;
         this.tryLoadOrgs();
+
+        this.hookshot.getAuthUrls().then(urls => {
+            this.orgAddAuthUrl = this.sanitizer.bypassSecurityTrustResourceUrl(urls.orgUrl);
+        });
     }
 
     private tryOrgAuth() {
@@ -54,7 +62,7 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
     }
 
     private tryLoadOrgs() {
-        this.hookshot.getOrgs().then(r => {
+        this.hookshot.getKnownRepos().then(r => {
             this.authUrl = null;
 
             if (r.length <= 0) {
@@ -62,7 +70,16 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
                 return;
             }
 
-            this.orgs = r.map(o => o.name);
+            this.orgToRepoMap = {};
+            for (const repo of r) {
+                if (!this.orgToRepoMap[repo.owner]) {
+                    this.orgToRepoMap[repo.owner] = [];
+                }
+                this.orgToRepoMap[repo.owner].push(repo);
+                console.log(repo);
+            }
+
+            this.orgs = Object.keys(this.orgToRepoMap);
             this.orgId = this.orgs[0];
             this.orgAuthUrl = null;
             this.loadRepos();
@@ -92,24 +109,16 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
 
     public loadRepos() {
         this.isBusy = true;
-        this.hookshot.getRepos(this.orgId).then(repos => {
-            this.repos = repos.map(r => r.name);
-            this.repoId = this.repos[0];
+        this.repos = this.orgToRepoMap[this.orgId].map(r => r.name);
+        this.repoId = this.repos[0];
 
-            if (this.isBridged) {
-                const conn = this.bridge.config.connections[0].config;
-                this.bridgedRepoSlug = `${conn.org}/${conn.repo}`;
-            }
+        if (this.isBridged) {
+            const conn = this.bridge.config.connections[0].config;
+            this.bridgedRepoSlug = `${conn.org}/${conn.repo}`;
+        }
 
-            this.isBusy = false;
-            this.loadingConnections = false;
-        }).catch(e => {
-            console.error(e);
-            this.isBusy = false;
-            this.translate.get('Error getting Github information').subscribe((res: string) => {
-                this.toaster.pop("error", res);
-            });
-        });
+        this.isBusy = false;
+        this.loadingConnections = false;
     }
 
     public get isBridged(): boolean {
@@ -131,6 +140,8 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
                 return;
             }
         }
+
+        await this.scalar.setUserPowerLevel(this.roomId, this.bridge.config.botUserId, 50);
 
         this.hookshot.bridgeRoom(this.roomId, this.orgId, this.repoId).then(conn => {
             this.bridge.config.connections.push(conn);

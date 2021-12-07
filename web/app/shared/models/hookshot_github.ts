@@ -14,11 +14,6 @@ export interface FE_HookshotGithubConnection {
     };
 }
 
-export interface FE_HookshotGithubOrg {
-    name: string;
-    avatarUrl: string;
-}
-
 export interface FE_HookshotGithubRepo {
     name: string;
     owner: string;
