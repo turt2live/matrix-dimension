@@ -161,8 +161,6 @@ export class BigBlueButtonWidgetWrapperComponent
                 this.meetingPassword
             )
             .then((response) => {
-                console.log("The response");
-                console.log(response);
                 if ("errorCode" in response) {
                     // This is an instance of ApiError
                     if (response.errorCode === "UNKNOWN_MEETING_ID") {

@@ -20,7 +20,6 @@ export class EtherpadWidgetConfigComponent extends WidgetComponent {
     }
 
     protected OnWidgetsDiscovered(widgets: EditableWidget[]): void {
-        console.log(widgets);
         for (const widget of widgets) {
             if (!widget.dimension.newUrl.startsWith("http://") && !widget.dimension.newUrl.startsWith("https://")) {
                 const parsedUrl = url.parse(widget.url, true);

@@ -339,7 +339,7 @@ export class AppModule {
     }
 
     hmrOnInit(store) {
-        console.log("HMR store", store);
+        console.log("Dimension HMR store", store);
     }
 
     hmrOnDestroy(store) {
