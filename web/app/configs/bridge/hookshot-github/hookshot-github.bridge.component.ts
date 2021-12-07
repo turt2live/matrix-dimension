@@ -3,11 +3,7 @@ import { BridgeComponent } from "../bridge.component";
 import { ScalarClientApiService } from "../../../shared/services/scalar/scalar-client-api.service";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { TranslateService } from "@ngx-translate/core";
-import {
-    FE_HookshotGithubConnection,
-    FE_HookshotGithubOrgReposDto,
-    FE_HookshotGithubRepo
-} from "../../../shared/models/hookshot_github";
+import { FE_HookshotGithubConnection, FE_HookshotGithubOrgReposDto } from "../../../shared/models/hookshot_github";
 import { HookshotGithubApiService } from "../../../shared/services/integrations/hookshot-github-api.service";
 
 interface HookshotConfig {

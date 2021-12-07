@@ -3,7 +3,8 @@ import { AuthedApi } from "../authed-api";
 import { HttpClient } from "@angular/common/http";
 import {
     FE_HookshotGithubAuthUrls,
-    FE_HookshotGithubConnection, FE_HookshotGithubOrgReposDto,
+    FE_HookshotGithubConnection,
+    FE_HookshotGithubOrgReposDto,
 } from "../../models/hookshot_github";
 
 @Injectable()

@@ -1,6 +1,8 @@
 import HookshotGithubBridgeRecord from "../db/models/HookshotGithubBridgeRecord";
 import {
-    HookshotGithubAuthUrls, HookshotGithubOrg, HookshotGithubOrgReposDto,
+    HookshotGithubAuthUrls,
+    HookshotGithubOrg,
+    HookshotGithubOrgReposDto,
     HookshotGithubRepo,
     HookshotGithubRoomConfig,
     HookshotGithubUserInfo,

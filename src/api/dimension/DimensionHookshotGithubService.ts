@@ -5,7 +5,6 @@ import { ROLE_USER } from "../security/MatrixSecurity";
 import {
     HookshotGithubAuthUrls,
     HookshotGithubOrgReposDto,
-    HookshotGithubRepo,
     HookshotGithubRoomConfig
 } from "../../bridges/models/hookshot";
 import { HookshotGithubBridge } from "../../bridges/HookshotGithubBridge";
