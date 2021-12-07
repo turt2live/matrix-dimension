@@ -2,7 +2,12 @@ import { Context, DELETE, GET, Path, PathParam, POST, Security, ServiceContext }
 import { ApiError } from "../ApiError";
 import { LogService } from "matrix-bot-sdk";
 import { ROLE_USER } from "../security/MatrixSecurity";
-import { HookshotGithubAuthUrls, HookshotGithubRepo, HookshotGithubRoomConfig } from "../../bridges/models/hookshot";
+import {
+    HookshotGithubAuthUrls,
+    HookshotGithubOrgReposDto,
+    HookshotGithubRepo,
+    HookshotGithubRoomConfig
+} from "../../bridges/models/hookshot";
 import { HookshotGithubBridge } from "../../bridges/HookshotGithubBridge";
 
 interface BridgeRoomRequest {
@@ -35,15 +40,15 @@ export class DimensionHookshotGithubService {
     }
 
     @GET
-    @Path("repos")
+    @Path("locations")
     @Security(ROLE_USER)
-    public async getUserRepos(): Promise<{ repos: HookshotGithubRepo[] }> {
+    public async getUserRepos(): Promise<{ locations: HookshotGithubOrgReposDto[] }> {
         const userId = this.context.request.user.userId;
 
         try {
             const hookshot = new HookshotGithubBridge(userId);
-            const repos = await hookshot.getInstalledRepos();
-            return {repos};
+            const locations = await hookshot.getInstalledLocations();
+            return {locations};
         } catch (e) {
             LogService.error("DimensionHookshotGithubService", e);
             throw new ApiError(400, "Error getting repo information", "T2B_MISSING_AUTH");

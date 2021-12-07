@@ -3,7 +3,11 @@ import { BridgeComponent } from "../bridge.component";
 import { ScalarClientApiService } from "../../../shared/services/scalar/scalar-client-api.service";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { TranslateService } from "@ngx-translate/core";
-import { FE_HookshotGithubConnection, FE_HookshotGithubRepo } from "../../../shared/models/hookshot_github";
+import {
+    FE_HookshotGithubConnection,
+    FE_HookshotGithubOrgReposDto,
+    FE_HookshotGithubRepo
+} from "../../../shared/models/hookshot_github";
 import { HookshotGithubApiService } from "../../../shared/services/integrations/hookshot-github-api.service";
 
 interface HookshotConfig {
@@ -32,8 +36,7 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
     public repoId: string;
 
     private timerId: any;
-    private orgToRepoMap: Record<string, FE_HookshotGithubRepo[]> = {};
-    private limitedOrgs: string[] = [];
+    private orgToRepoMap: Record<string, FE_HookshotGithubOrgReposDto>;
 
     constructor(private hookshot: HookshotGithubApiService, private scalar: ScalarClientApiService, private sanitizer: DomSanitizer, public translate: TranslateService) {
         super("hookshot_github", translate);
@@ -62,7 +65,7 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
     }
 
     private tryLoadOrgs() {
-        this.hookshot.getKnownRepos().then(r => {
+        this.hookshot.getInstalledLocations().then(r => {
             this.authUrl = null;
 
             if (r.length <= 0) {
@@ -71,12 +74,8 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
             }
 
             this.orgToRepoMap = {};
-            for (const repo of r) {
-                if (!this.orgToRepoMap[repo.owner]) {
-                    this.orgToRepoMap[repo.owner] = [];
-                }
-                this.orgToRepoMap[repo.owner].push(repo);
-                console.log(repo);
+            for (const orgDto of r) {
+                this.orgToRepoMap[orgDto.organization.name] = orgDto;
             }
 
             this.orgs = Object.keys(this.orgToRepoMap);
@@ -109,8 +108,11 @@ export class HookshotGithubBridgeConfigComponent extends BridgeComponent<Hooksho
 
     public loadRepos() {
         this.isBusy = true;
-        this.repos = this.orgToRepoMap[this.orgId].map(r => r.name);
+
+        const dto = this.orgToRepoMap[this.orgId];
+        this.repos = dto.repositories.map(r => r.name);
         this.repoId = this.repos[0];
+        this.orgEditAuthUrl = dto.changeSelectionUrl ? this.sanitizer.bypassSecurityTrustResourceUrl(dto.changeSelectionUrl) : null;
 
         if (this.isBridged) {
             const conn = this.bridge.config.connections[0].config;

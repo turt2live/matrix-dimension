@@ -36,12 +36,23 @@ export interface HookshotGithubOrg {
     avatarUrl: string;
 }
 
+export interface HookshotGithubOrgReposResponse {
+    repositories: HookshotGithubRepo[];
+    changeSelectionUrl?: string;
+}
+
 export interface HookshotGithubRepo {
     name: string;
     owner: string;
     fullName: string;
     avatarUrl: string;
     description: string;
+}
+
+export interface HookshotGithubOrgReposDto {
+    organization: HookshotGithubOrg;
+    repositories: HookshotGithubRepo[];
+    changeSelectionUrl?: string;
 }
 
 export interface HookshotGithubUserInfo {

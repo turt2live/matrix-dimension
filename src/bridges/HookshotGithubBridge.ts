@@ -1,6 +1,6 @@
 import HookshotGithubBridgeRecord from "../db/models/HookshotGithubBridgeRecord";
 import {
-    HookshotGithubAuthUrls,
+    HookshotGithubAuthUrls, HookshotGithubOrg, HookshotGithubOrgReposDto,
     HookshotGithubRepo,
     HookshotGithubRoomConfig,
     HookshotGithubUserInfo,
@@ -61,21 +61,41 @@ export class HookshotGithubBridge extends HookshotBridge {
         return results;
     }
 
-    public async getInstalledRepos(): Promise<HookshotGithubRepo[]> {
+    public async getInstalledLocations(): Promise<HookshotGithubOrgReposDto[]> {
         const bridge = await this.getDefaultBridge();
-        const results: HookshotGithubRepo[] = [];
-        let more = true;
+
+        const orgs: HookshotGithubOrg[] = [];
+        let lastOrgs: HookshotGithubOrg[] = [];
         let page = 1;
         let perPage = 10;
         do {
-            const res = await this.doProvisionRequest<HookshotGithubRepo[]>(bridge, "GET", `/v1/github/repositories`, {
-                page,
-                perPage,
-            }).then(r => r['repositories']);
-            results.push(...res);
-            if (res.length < perPage) more = false;
+            const res = await this.doProvisionRequest<HookshotGithubUserInfo>(bridge, "GET", `/v1/github/account`, {page, perPage});
+            lastOrgs = res.organisations;
             page++;
-        } while(more);
+            orgs.push(...lastOrgs);
+        } while(lastOrgs.length >= perPage);
+
+        const results: HookshotGithubOrgReposDto[] = [];
+        for (const org of orgs) {
+            page = 1;
+            let lastRepos: HookshotGithubRepo[] = [];
+            const repos: HookshotGithubRepo[] = [];
+            let changeUrl: string;
+            do {
+                const res = await this.doProvisionRequest(bridge, "GET", `/v1/github/orgs/${org.name}/repositories`, {page, perPage});
+                lastRepos = res['repositories'];
+                changeUrl = res['changeSelectionUrl'];
+                page++;
+                repos.push(...lastRepos);
+            } while(lastRepos.length >= perPage);
+
+            results.push({
+                organization: org,
+                repositories: repos,
+                changeSelectionUrl: changeUrl,
+            });
+        }
+
         return results;
     }
 

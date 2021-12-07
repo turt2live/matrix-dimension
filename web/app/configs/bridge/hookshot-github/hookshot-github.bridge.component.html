@@ -47,6 +47,11 @@
                     </label>
                     <label class="label-block">
                         {{'Repository' | translate}}
+                        <small *ngIf="orgEditAuthUrl" style="padding-left: 16px">
+                            <a [href]="orgEditAuthUrl" rel="noopener" target="_blank">
+                                {{'Add more repositories from this organization' | translate}}
+                            </a>
+                        </small>
                         <select class="form-control form-control-sm" [(ngModel)]="repoId" [disabled]="isBusy">
                             <option *ngFor="let repo of repos" [ngValue]="repo">
                                 {{ repo }}

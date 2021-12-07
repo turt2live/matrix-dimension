@@ -3,8 +3,7 @@ import { AuthedApi } from "../authed-api";
 import { HttpClient } from "@angular/common/http";
 import {
     FE_HookshotGithubAuthUrls,
-    FE_HookshotGithubConnection,
-    FE_HookshotGithubRepo
+    FE_HookshotGithubConnection, FE_HookshotGithubOrgReposDto,
 } from "../../models/hookshot_github";
 
 @Injectable()
@@ -28,7 +27,7 @@ export class HookshotGithubApiService extends AuthedApi {
         return this.authedGet<FE_HookshotGithubAuthUrls>("/api/v1/dimension/hookshot/github/auth").toPromise();
     }
 
-    public getKnownRepos(): Promise<FE_HookshotGithubRepo[]> {
-        return this.authedGet("/api/v1/dimension/hookshot/github/repos").toPromise().then(r => r['repos']);
+    public getInstalledLocations(): Promise<FE_HookshotGithubOrgReposDto[]> {
+        return this.authedGet("/api/v1/dimension/hookshot/github/locations").toPromise().then(r => r['locations']);
     }
 }

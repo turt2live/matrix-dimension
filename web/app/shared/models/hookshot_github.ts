@@ -26,3 +26,14 @@ export interface FE_HookshotGithubAuthUrls {
     userUrl: string;
     orgUrl: string;
 }
+
+export interface FE_HookshotGithubOrg {
+    name: string;
+    avatarUrl: string;
+}
+
+export interface FE_HookshotGithubOrgReposDto {
+    organization: FE_HookshotGithubOrg;
+    repositories: FE_HookshotGithubRepo[];
+    changeSelectionUrl?: string;
+}
