@@ -1,12 +1,15 @@
-<my-widget-config [widgetComponent]="this">
+<my-widget-config
+        [widgetComponent]="this"
+        addTitle="{{'Embed music' | translate}}"
+        editTitle="{{'Embedded music' | translate}}"
+>
     <ng-template #widgetParamsTemplate let-widget="widget">
-        <label class="label-block">
-           {{' Spotify URI' | translate}}
-            <span class="text-muted">{{'Click \'share\' from your favourite playlist, artist, track, or album and paste the Spotify URI here.' | translate}}</span>
-            <input type="text" class="form-control"
-                   placeholder="spotify:artist:7CajNmpbOovFoOoasH2HaY"
-                   [(ngModel)]="widget.dimension.newData.uri" name="widget-uri-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
+        <p>{{'Click \'share\' from your favourite playlist, artist, track, or album and paste the Spotify URI here.' | translate}}</p>
+        <my-field
+                label="{{'Spotify URI' | translate}}"
+                placeholder="spotify:artist:7CajNmpbOovFoOoasH2HaY"
+                [(value)]="widget.dimension.newData.uri"
+                [disabled]="isUpdating"
+        ></my-field>
     </ng-template>
 </my-widget-config>

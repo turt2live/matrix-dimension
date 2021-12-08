@@ -7,6 +7,7 @@
 @import "components/ibox";
 @import "components/dialog";
 @import "components/bootstrap_override";
+@import "components/element";
 @import "~angular2-toaster/toaster";
 @import "riot";
 
@@ -50,4 +51,9 @@ button {
 
 .error-text {
   color: #bd362f !important;
+}
+
+h3 {
+  font-size: 1.13em;
+  font-weight: 600;
 }

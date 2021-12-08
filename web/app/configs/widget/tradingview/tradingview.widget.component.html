@@ -1,4 +1,8 @@
-<my-widget-config [widgetComponent]="this">
+<my-widget-config
+        [widgetComponent]="this"
+        addTitle="{{'New dashboard' | translate}}"
+        editTitle="{{'Dashboards' | translate}}"
+>
     <ng-template #widgetParamsTemplate let-widget="widget">
         <label class="label-block">
             {{'Trading Pair' | translate}}

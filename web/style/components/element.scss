@@ -1,0 +1,29 @@
+@import "../themes/themes";
+
+.main-app {
+  @include themify() {
+    .element-btn {
+      outline: none;
+      border: none;
+      background: themed(buttonAccentColor);
+      color: themed(buttonPrimaryColor);
+      text-align: center;
+      padding: 4px 18px;
+      border-radius: 8px;
+      font-size: 0.9em;
+
+      &.element-btn-danger-link {
+        background: themed(buttonPrimaryColor);
+        color: themed(buttonDangerColor);
+      }
+    }
+
+    .element-btn-row {
+      margin-top: 25px;
+
+      button {
+        margin-right: 8px;
+      }
+    }
+  }
+}

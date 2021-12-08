@@ -1,20 +1,21 @@
-<my-widget-config [widgetComponent]="this">
+<my-widget-config
+        [widgetComponent]="this"
+        addTitle="{{'Create new notepad' | translate}}"
+        editTitle="{{'Notepads' | translate}}"
+>
     <ng-template #widgetParamsTemplate let-widget="widget">
-        <label class="label-block">
-            <my-field
-                    label="{{'Pad Name' | translate}}"
-                    [placeholder]="defaultName"
-                    [(value)]="widget.dimension.newName"
-                    [disabled]="isUpdating"
-                    [maxlength]="39"
-            ></my-field>
-        </label>
-        <label class="label-block">
-            {{'Pad URL' | translate}}
-            <input type="text" class="form-control"
-                   placeholder="https://scalar.vector.im/etherpad/p/MyCoolPadName"
-                   [(ngModel)]="widget.dimension.newUrl" name="widget-url-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
+        <my-field
+                label="{{'Pad name' | translate}}"
+                [placeholder]="defaultName"
+                [(value)]="widget.dimension.newName"
+                [disabled]="isUpdating"
+                [maxlength]="39"
+        ></my-field>
+        <my-field
+                label="{{'Pad URL' | translate}}"
+                placeholder="https://scalar.vector.im/etherpad/p/MyCoolPadName"
+                [(value)]="widget.dimension.newUrl"
+                [disabled]="isUpdating"
+        ></my-field>
     </ng-template>
 </my-widget-config>

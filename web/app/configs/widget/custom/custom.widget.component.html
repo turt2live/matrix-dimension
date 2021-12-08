@@ -1,18 +1,20 @@
-<my-widget-config [widgetComponent]="this">
+<my-widget-config
+        [widgetComponent]="this"
+        addTitle="{{'Embed new website' | translate}}"
+        editTitle="{{'Embedded websites' | translate}}"
+>
     <ng-template #widgetParamsTemplate let-widget="widget">
-        <label class="label-block">
-            {{'Widget Name' | translate}}
-            <input type="text" class="form-control"
-                   placeholder="{{ defaultName | translate}}"
-                   [(ngModel)]="widget.dimension.newName" name="widget-name-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
-        <label class="label-block">
-            {{'Widget URL' | translate}}
-            <input type="text" class="form-control"
-                   placeholder="https://matrix.org"
-                   [(ngModel)]="widget.dimension.newUrl" name="widget-url-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
+        <my-field
+                label="{{'Site name' | translate}}"
+                [placeholder]="defaultName | translate"
+                [(value)]="widget.dimension.newName"
+                [disabled]="isUpdating"
+        ></my-field>
+        <my-field
+                label="{{'Site URL' | translate}}"
+                placeholder="https://matrix.org"
+                [(value)]="widget.dimension.newUrl"
+                [disabled]="isUpdating"
+        ></my-field>
     </ng-template>
 </my-widget-config>
