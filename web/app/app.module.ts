@@ -152,6 +152,7 @@ import { HookshotWebhookApiService } from "./shared/services/integrations/hooksh
 import {
     HookshotWebhookBridgeConfigComponent
 } from "./configs/bridge/hookshot-webhook/hookshot-webhook.bridge.component";
+import { FieldComponent } from "./elements/field/field.component";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -270,6 +271,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminHookshotWebhookBridgeComponent,
         AdminHookshotWebhookBridgeManageSelfhostedComponent,
         HookshotWebhookBridgeConfigComponent,
+        FieldComponent,
 
         // Vendor
     ],

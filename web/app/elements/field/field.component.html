@@ -1,0 +1,12 @@
+<div class="field">
+    <input
+            [type]="type"
+            [placeholder]="placeholder"
+            [(ngModel)]="value"
+            (ngModelChange)="onValueChange()"
+            [id]="id"
+            [disabled]="disabled"
+            [maxlength]="maxlength"
+    />
+    <label [htmlFor]="id">{{label}}</label>
+</div>

@@ -1,0 +1,92 @@
+@import "../../../style/themes/themes";
+
+// CSS largely copied from https://github.com/matrix-org/matrix-react-sdk/blob/9db0ebb7f5479f70e8f637b76f0a4470de591f34/res/css/views/elements/_Field.scss
+// to match Element styling.
+
+@include themifyComponent() {
+  .field {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    margin: 1em 0;
+    border-radius: 4px;
+    transition: border-color 0.25s;
+    border: 1px solid themed(formControlBorderColor);
+
+    input, select, textarea {
+      font-family: inherit;
+      font-weight: normal;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 9px;
+      color: themed(formControlFgColor);
+      background-color: themed(formControlBgColor);
+      flex: 1;
+      min-width: 0;
+
+      &:focus {
+        outline: 0;
+      }
+
+      &::placeholder {
+        transition: color 0.25s ease-in 0s;
+        color: transparent;
+      }
+
+      &:placeholder-shown:focus::placeholder {
+        transition: color 0.25s ease-in 0.1s;
+        color: themed(formControlPlaceholderColor);
+      }
+    }
+
+    &:focus-within {
+      border-color: themed(accentAlt);
+    }
+
+    label {
+      transition:
+              font-size 0.25s ease-out 0.1s,
+              color 0.25s ease-out 0.1s,
+              transform 0.25s ease-out 0.1s,
+              background-color 0.25s ease-out 0.1s;
+      background-color: transparent;
+      font-size: 14px;
+      transform: translateY(0);
+      position: absolute;
+      left: 0;
+      margin: 7px 8px;
+      padding: 2px;
+      pointer-events: none; // Allow clicks to fall through to the input
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: calc(100% - 20px); // 100% of parent minus margin and padding
+    }
+
+    input:focus + label,
+    input:not(:placeholder-shown) + label {
+      transition:
+              font-size 0.25s ease-out 0s,
+              color 0.25s ease-out 0s,
+              transform 0.25s ease-out 0s,
+              background-color 0.25s ease-out 0s;
+      font-size: 10px;
+      transform: translateY(-13px);
+      padding: 0 2px;
+      background-color: themed(formControlBgColor);
+      pointer-events: initial;
+    }
+
+    input:focus + label {
+      color: themed(accentAlt);
+    }
+
+    input:disabled,
+    input:disabled + label {
+      background-color: themed(formControlBgColor);
+      color: themed(formControlPlaceholderColor);
+    }
+  }
+}
