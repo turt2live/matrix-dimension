@@ -30,15 +30,23 @@ export class HookshotJiraBridgeConfigComponent extends BridgeComponent<HookshotC
     public bridgedProjectUrlUnsafe: string;
 
     public instances: FE_HookshotJiraInstance[] = [];
-    public instance: FE_HookshotJiraInstance;
+    public instance: string;
 
     public projects: FE_HookshotJiraProject[] = [];
-    public project: FE_HookshotJiraProject;
+    public project: string;
 
     private timerId: any;
 
     constructor(private hookshot: HookshotJiraApiService, private scalar: ScalarClientApiService, private sanitizer: DomSanitizer, public translate: TranslateService) {
         super("hookshot_jira", translate);
+    }
+
+    public get instanceOptions(): {key: string, value: string}[] {
+        return this.instances.map(i => ({key: i.name, value: `${i.name} (${i.url})`}));
+    }
+
+    public get projectOptions(): {key: string, value: string}[] {
+        return this.projects.map(p => ({key: p.key, value: `${p.key} (${p.name})`}));
     }
 
     public ngOnInit() {
@@ -52,7 +60,7 @@ export class HookshotJiraBridgeConfigComponent extends BridgeComponent<HookshotC
         this.hookshot.getInstances().then(r => {
             this.authUrl = null;
             this.instances = r;
-            this.instance = this.instances[0];
+            this.instance = this.instances[0].name;
             this.loadProjects();
 
             if (this.timerId) {
@@ -78,9 +86,9 @@ export class HookshotJiraBridgeConfigComponent extends BridgeComponent<HookshotC
 
     public loadProjects() {
         this.isBusy = true;
-        this.hookshot.getProjects(this.instance.name).then(projects => {
+        this.hookshot.getProjects(this.instance).then(projects => {
             this.projects = projects;
-            this.project = this.projects[0];
+            this.project = this.projects[0].key;
 
             if (this.isBridged) {
                 this.bridgedProjectUrlUnsafe = this.bridge.config.connections[0].config.url;
@@ -120,8 +128,9 @@ export class HookshotJiraBridgeConfigComponent extends BridgeComponent<HookshotC
 
         await this.scalar.setUserPowerLevel(this.roomId, this.bridge.config.botUserId, 50);
 
-        this.hookshot.bridgeRoom(this.roomId, this.instance.name, this.project.key).then(conn => {
+        this.hookshot.bridgeRoom(this.roomId, this.instance, this.project).then(conn => {
             this.bridge.config.connections.push(conn);
+            this.loadProjects();
             this.isBusy = false;
             this.translate.get('Bridge requested').subscribe((res: string) => {
                 this.toaster.pop("success", res);

@@ -58,19 +58,19 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
         return this.bridge.config.portalInfo ? this.bridge.config.portalInfo.chatName : null;
     }
 
-    public get chatId(): number {
-        return this.bridge.config.portalInfo ? this.bridge.config.portalInfo.chatId : 0;
+    public get chatId(): string {
+        return `${this.bridge.config.portalInfo ? this.bridge.config.portalInfo.chatId : 0}`;
     }
 
-    public set chatId(n: number) {
+    public set chatId(n: string) {
         if (!this.bridge.config.portalInfo) this.bridge.config.portalInfo = {
-            chatId: n,
+            chatId: Number(n),
             chatName: null,
             canUnbridge: false,
             bridged: false,
             roomId: this.roomId,
         };
-        else this.bridge.config.portalInfo.chatId = n;
+        else this.bridge.config.portalInfo.chatId = Number(n);
     }
 
     public bridgeRoom(): void {

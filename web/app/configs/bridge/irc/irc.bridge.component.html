@@ -1,90 +1,54 @@
 <my-bridge-config [bridgeComponent]="this">
     <ng-template #bridgeParamsTemplate>
-        <my-ibox [isCollapsible]="true">
-            <h5 class="my-ibox-title">
-                {{'Add an IRC channel' | translate}}
-            </h5>
-            <div class="my-ibox-content">
-                <div class="alert alert-info">
-                    {{'Bridging a channel requires authorization from a channel operator. When entering a channel below, a bot will join the channel to ensure it exists and has operators available.' | translate}}
-                </div>
+        <h3>{{'Add IRC channel' | translate}}</h3>
+        <div class="alert alert-info">
+            {{'Bridging a channel requires authorization from a channel operator. When entering a channel below, a bot will join the channel to ensure it exists and has operators available.' | translate}}
+        </div>
+        <div *ngIf="channelStep === 1">
+            <my-field
+                    label="{{'Network' | translate}}"
+                    [asSelect]="true"
+                    [(value)]="networkId"
+                    [disabled]="loadingOps"
+                    [selectOptions]="getNetworks()"
+            ></my-field>
+            <my-field
+                    label="{{'Channel name (without leading #)' | translate}}"
+                    placeholder="example"
+                    [(value)]="channel"
+                    [disabled]="loadingOps"
+            ></my-field>
+            <button type="button" class="element-btn" [disabled]="loadingOps"
+                    (click)="loadOps()">
+                {{'Next' | translate}}
+            </button>
+        </div>
 
-                <div *ngIf="channelStep === 1">
-                    <label class="label-block">
-                        {{'Network' | translate}}
-                        <select class="form-control form-control-sm" [(ngModel)]="networkId" [disabled]="loadingOps">
-                            <option *ngFor="let network of getNetworks()" [ngValue]="network.id">
-                                {{ network.name }}
-                            </option>
-                        </select>
-                    </label>
-                    <label class="label-block">
-                        {{'Channel Name' | translate}}
-                    </label>
-                    <div class="input-group input-group-sm">
-                        <div class="input-group-addon">#</div>
-                        <input title="channel" type="text" class="form-control form-control-sm" [(ngModel)]="channel"
-                               [disabled]="loadingOps">
-                    </div>
-                    <div style="margin-top: 25px">
-                        <button type="button" class="btn btn-sm btn-primary" [disabled]="loadingOps"
-                                (click)="loadOps()">
-                            {{'Next' | translate}}
-                        </button>
-                    </div>
-                </div>
+        <div *ngIf="channelStep === 2">
+            <p>{{'The person selected here will be asked to approve or deny the bridge request.' | translate}}</p>
+            <my-field
+                    label="{{'Operator' | translate}}"
+                    [asSelect]="true"
+                    [(value)]="op"
+                    [disabled]="requestingBridge"
+                    [selectOptions]="ops"
+            ></my-field>
+            <button type="button" class="element-btn" [disabled]="requestingBridge"
+                    (click)="requestBridge()">
+                {{'Request bridge' | translate}}
+            </button>
+        </div>
 
-                <div *ngIf="channelStep === 2">
-                    <label class="label-block">
-                        {{'Operator' | translate}}
-                        <span class="text-muted ">{{'The person selected here will be asked to approve or deny the bridge request.' | translate}}</span>
-                        <select class="form-control form-control-sm" [(ngModel)]="op" [disabled]="requestingBridge">
-                            <option *ngFor="let op of ops" [ngValue]="op">{{ op }}</option>
-                        </select>
-                    </label>
-                    <div style="margin-top: 25px">
-                        <button type="button" class="btn btn-sm btn-primary" [disabled]="requestingBridge"
-                                (click)="requestBridge()">
-                            {{'Request Bridge' | translate}}
-                        </button>
-                    </div>
-                </div>
+        <h3 style="margin-top: 36px">{{'Bridged channels' | translate}}</h3>
+        <p *ngIf="getChannels().length === 0">{{'No channels are bridged to this room.' | translate}}</p>
+        <details *ngFor="let channel of getChannels()">
+            <summary>{{channel.name + ' on ' + channel.networkName + (channel.pending ? ' (pending)' : '')}}</summary>
+            <div style="padding-bottom: 16px">
+                <button type="button" class="element-btn element-btn-danger" [disabled]="isUpdating || channel.pending"
+                        (click)="removeChannel(channel)">
+                    {{'Unbridge channel' | translate}}
+                </button>
             </div>
-        </my-ibox>
-        <my-ibox [isCollapsible]="true">
-            <h5 class="my-ibox-title">
-                {{'IRC Networks' | translate}}
-            </h5>
-            <div class="my-ibox-content">
-                <table class="table table-striped table-condensed table-bordered">
-                    <thead>
-                    <tr>
-                        <th>{{'Channel' | translate}}</th>
-                        <th>{{'Network' | translate}}</th>
-                        <th class="actions-col">{{'Actions' | translate}}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngIf="getChannels().length === 0">
-                        <td colspan="3">{{'No bridged channels' | translate}}</td>
-                    </tr>
-                    <tr *ngFor="let channel of getChannels()">
-                        <td>
-                            {{ channel.name }}
-                            <span *ngIf="channel.pending" class="text-muted">(pending)</span>
-                        </td>
-                        <td>{{ channel.networkName }}</td>
-                        <td class="actions-col">
-                            <button type="button" class="btn btn-sm btn-outline-danger"
-                                    [disabled]="isUpdating || channel.pending"
-                                    (click)="removeChannel(channel)">
-                                <i class="far fa-trash-alt"></i> {{'Remove' | translate}}
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </my-ibox>
+        </details>
     </ng-template>
 </my-bridge-config>
