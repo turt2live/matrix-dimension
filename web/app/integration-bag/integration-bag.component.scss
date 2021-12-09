@@ -19,6 +19,12 @@
     position: relative;
     cursor: pointer;
     border-radius: 8px;
+
+    .bot-toggle {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+    }
   }
 
   .integration .integration-avatar {

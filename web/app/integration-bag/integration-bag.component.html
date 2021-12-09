@@ -4,5 +4,8 @@
         <div class="integration-name">{{integration.displayName | translate}}</div>
         <div class="integration-description">{{ integration.description | translate }}</div>
         <div class="integration-offline error-text" *ngIf="!integration.isOnline"><i class="fa fa-exclamation-triangle"></i></div>
+        <div class="bot-toggle" *ngIf="integration.category === 'bot'">
+            <ui-switch [checked]="integration._inRoom" [disabled]="integration._isUpdating" size="small"></ui-switch>
+        </div>
     </div>
 </div>

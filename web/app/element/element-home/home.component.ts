@@ -8,11 +8,11 @@ import { IntegrationsRegistry } from "../../shared/registry/integrations.registr
 import { SessionStorage } from "../../shared/SessionStorage";
 import { AdminApiService } from "../../shared/services/admin/admin-api.service";
 import { IntegrationsApiService } from "../../shared/services/integrations/integrations-api.service";
-import { ConfigSimpleBotComponent, SimpleBotConfigDialogContext, } from "../../configs/simple-bot/simple-bot.component";
 import { ToasterService } from "angular2-toaster";
 import { StickerApiService } from "../../shared/services/integrations/sticker-api.service";
 import { TranslateService } from "@ngx-translate/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { SimpleBotController } from "../../shared/helpers/SimpleBotController";
 
 const CATEGORY_MAP = {
     Widgets: ["widget"],
@@ -166,11 +166,7 @@ export class ElementHomeComponent {
     public modifyIntegration(integration: FE_Integration) {
         if (!integration._isSupported) {
             console.log(
-                this.userId +
-          " tried to modify " +
-          integration.displayName +
-          " with error: " +
-          integration._notSupportedReason
+                this.userId + " tried to modify " + integration.displayName + " with error: " + integration._notSupportedReason
             );
             this.translate
                 .get(
@@ -193,26 +189,21 @@ export class ElementHomeComponent {
         );
 
         if (integration.category === "bot") {
-            const widgetConfigRef = this.modal.open(ConfigSimpleBotComponent, {
-                backdrop: "static",
-                size: "lg",
-            });
-            const widgetConfigInterface =
-        widgetConfigRef.componentInstance as SimpleBotConfigDialogContext;
-            widgetConfigInterface.bot = <FE_SimpleBot>integration;
-            widgetConfigInterface.roomId = this.roomId;
+            this.toggleBot(<FE_SimpleBot>integration);
         } else {
             console.log(
-                "Navigating to edit screen for " +
-          integration.category +
-          " " +
-          integration.type
+                "Navigating to edit screen for " + integration.category + " " + integration.type
             );
             this.router.navigate(
                 ["riot-app", integration.category, integration.type],
                 { queryParams: { roomId: this.roomId } }
             );
         }
+    }
+
+    public toggleBot(bot: FE_SimpleBot) {
+        const controller = new SimpleBotController(bot, this.scalar, this.integrationsApi, this.toaster, this.translate);
+        controller.toggle(this.roomId);
     }
 
     private prepareIntegrations() {
@@ -335,6 +326,8 @@ export class ElementHomeComponent {
     }
 
     private async updateIntegrationState(integration: FE_Integration) {
+        integration._isUpdating = false;
+
         if (!integration.isOnline) {
             integration._isSupported = false;
             this.translate
