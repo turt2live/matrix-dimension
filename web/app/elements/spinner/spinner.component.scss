@@ -1,4 +1,49 @@
-// component styles are encapsulated and only applied to their components
-@import "../../../../node_modules/spinkit/spinkit.min.css";
+@import "../../../style/themes/themes";
 
-// see app.scss for the spinner color stuff
+@include themifyComponent() {
+  .container {
+    position: relative;
+  }
+
+  .container .spinner {
+    height: 30px;
+    width: 30px;
+    animation: rotate 2s linear infinite;
+    transform-origin: center center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+
+  .container .spinner .path {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    animation: dash 1.5s ease-in-out infinite;
+    stroke-linecap: round;
+    stroke: themed(defaultFgColor);
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -35px;
+    }
+    100% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -124px;
+    }
+  }
+}

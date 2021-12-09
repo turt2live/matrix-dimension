@@ -65,6 +65,7 @@
       max-width: calc(100% - 20px); // 100% of parent minus margin and padding
     }
 
+    select + label,
     input:focus + label,
     input:not(:placeholder-shown) + label {
       transition:

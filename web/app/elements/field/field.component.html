@@ -1,5 +1,6 @@
 <div class="field">
     <input
+            *ngIf="!asSelect"
             [type]="type"
             [placeholder]="placeholder"
             [(ngModel)]="value"
@@ -8,5 +9,14 @@
             [disabled]="disabled"
             [maxlength]="maxlength"
     />
+    <select
+            *ngIf="asSelect"
+            [(ngModel)]="value"
+            (ngModelChange)="onValueChange()"
+            [id]="id"
+            [disabled]="disabled"
+    >
+        <option *ngFor="let opt of options trackById" [ngValue]="opt.key">{{opt.value ?? opt.key}}</option>
+    </select>
     <label [htmlFor]="id">{{label}}</label>
 </div>

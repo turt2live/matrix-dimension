@@ -16,6 +16,14 @@
         background: themed(buttonPrimaryColor);
         color: themed(buttonDangerColor);
       }
+
+      &.element-btn-danger {
+        background: themed(buttonDangerColor);
+      }
+
+      &:disabled {
+        opacity: 0.3;
+      }
     }
 
     .element-btn-row {
