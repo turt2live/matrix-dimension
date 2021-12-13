@@ -20,24 +20,20 @@
 
     .header .quickAction .closeButton .scalarClose {
       position: absolute;
-      top: 19px;
-      right: 15px;
+      top: 0px;
+      right: 0px;
     }
 
     .header .quickAction .adminButton {
       position: absolute;
-      top: 19px;
-      right: 55px;
+      top: 0px;
+      right: 26px;
     }
 
     .header .quickAction .headerButton {
-      font-size: 35px;
+      width: 20px;
+      height: 20px;
       cursor: pointer;
-      color: themed(quickActionColor);
-    }
-
-    .header .quickAction .headerButton:hover {
-      color: themed(quickActionHoverColor);
     }
   }
 }

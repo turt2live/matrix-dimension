@@ -1,23 +1,22 @@
-<my-widget-config [widgetComponent]="this">
+<my-widget-config
+        [widgetComponent]="this"
+        addTitle="{{'New dashboard' | translate}}"
+        editTitle="{{'Dashboards' | translate}}"
+>
     <ng-template #widgetParamsTemplate let-widget="widget">
-        <label class="label-block">
-            {{'Trading Pair' | translate}}
-            <select class="form-control form-control-sm" [(ngModel)]="widget.dimension.newData.pair"
-                    [disabled]="isUpdating" name="widget-pair-{{widget.id}}">
-                <option *ngFor="let pair of pairs" [ngValue]="pair.value">
-                    {{ pair.label }}
-                </option>
-            </select>
-        </label>
-
-        <label class="label-block">
-            {{'Interval' | translate}}
-            <select class="form-control form-control-sm" [(ngModel)]="widget.dimension.newData.interval"
-                    [disabled]="isUpdating" name="widget-interval-{{widget.id}}">
-                <option *ngFor="let interval of intervals" [ngValue]="interval.value">
-                    {{ interval.label }}
-                </option>
-            </select>
-        </label>
+        <my-field
+                label="{{'Trading pair' | translate}}"
+                [asSelect]="true"
+                [(value)]="widget.dimension.newData.pair"
+                [disabled]="isUpdating"
+                [selectOptions]="pairs"
+        ></my-field>
+        <my-field
+                label="{{'Interval' | translate}}"
+                [asSelect]="true"
+                [(value)]="widget.dimension.newData.interval"
+                [disabled]="isUpdating"
+                [selectOptions]="intervals"
+        ></my-field>
     </ng-template>
 </my-widget-config>

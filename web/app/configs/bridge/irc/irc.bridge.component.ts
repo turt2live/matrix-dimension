@@ -41,17 +41,17 @@ export class IrcBridgeConfigComponent extends BridgeComponent<IrcConfig> {
     }
 
     private resetForm() {
-        this.networkId = this.getNetworks()[0].id;
+        this.networkId = this.getNetworks()[0].key;
         this.channel = "";
         this.ops = [];
         this.channelStep = 1;
     }
 
-    public getNetworks(): { id: string, name: string }[] {
+    public getNetworks(): { key: string, value: string }[] {
         const ids = Object.keys(this.bridge.config.availableNetworks);
         if (!this.networkId) setTimeout(() => this.networkId = ids[0], 0);
         return ids.map(i => {
-            return {id: i, name: this.bridge.config.availableNetworks[i].name};
+            return {key: i, value: this.bridge.config.availableNetworks[i].name};
         });
     }
 

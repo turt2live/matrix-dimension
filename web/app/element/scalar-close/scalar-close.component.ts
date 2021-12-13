@@ -1,0 +1,16 @@
+import { Component } from "@angular/core";
+import { ScalarClientApiService } from "../../shared/services/scalar/scalar-client-api.service";
+
+@Component({
+    selector: "my-scalar-close",
+    templateUrl: "./scalar-close.component.html",
+    styleUrls: ["./scalar-close.component.scss"],
+})
+export class ScalarCloseComponent {
+    constructor(private scalar: ScalarClientApiService) {}
+
+    public closeScalar() {
+        console.log("Closing Dimension...");
+        this.scalar.close();
+    }
+}

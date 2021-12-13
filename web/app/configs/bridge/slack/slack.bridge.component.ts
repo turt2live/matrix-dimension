@@ -33,6 +33,14 @@ export class SlackBridgeConfigComponent extends BridgeComponent<SlackConfig> imp
         this.translate = translate;
     }
 
+    public get teamOptions(): {key: string, value: string}[] {
+        return this.teams.map(t => ({key: t.id, value: t.name}));
+    }
+
+    public get channelOptions(): {key: string, value: string}[] {
+        return this.channels.map(t => ({key: t.id, value: t.name}));
+    }
+
     public ngOnInit() {
         super.ngOnInit();
 

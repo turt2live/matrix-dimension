@@ -1,0 +1,8 @@
+// component styles are encapsulated and only applied to their components
+@import "../../../style/themes/themes";
+
+@include themifyComponent() {
+  h3 {
+    font-size: 1.12em;
+  }
+}

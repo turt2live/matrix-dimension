@@ -1,4 +1,4 @@
-import { LogLevel, LogService } from "matrix-bot-sdk";
+import { LogLevel, LogService, RichConsoleLogger } from "matrix-bot-sdk";
 import { DimensionStore } from "./db/DimensionStore";
 import Webserver from "./api/Webserver";
 import { CURRENT_VERSION } from "./version";
@@ -16,11 +16,12 @@ declare global {
 }
 
 LogService.setLevel(LogLevel.DEBUG);
+LogService.setLogger(new RichConsoleLogger());
 LogService.info("index", "Starting dimension " + CURRENT_VERSION);
 
 async function startup() {
     const schemas = await DimensionStore.updateSchema();
-    LogService.info("DimensionStore", schemas);
+    LogService.info("DimensionStore", "Applied schemas: ", schemas);
 
     const webserver = new Webserver();
     await webserver.start();

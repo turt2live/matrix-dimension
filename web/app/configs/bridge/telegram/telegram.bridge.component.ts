@@ -3,9 +3,7 @@ import { BridgeComponent } from "../bridge.component";
 import { TelegramApiService } from "../../../shared/services/integrations/telegram-api.service";
 import { FE_PortalInfo } from "../../../shared/models/telegram";
 import { TelegramAskUnbridgeComponent } from "./ask-unbridge/ask-unbridge.component";
-import {
-    TelegramCannotUnbridgeComponent
-} from "./cannot-unbridge/cannot-unbridge.component";
+import { TelegramCannotUnbridgeComponent } from "./cannot-unbridge/cannot-unbridge.component";
 import { TranslateService } from "@ngx-translate/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
@@ -60,19 +58,19 @@ export class TelegramBridgeConfigComponent extends BridgeComponent<TelegramConfi
         return this.bridge.config.portalInfo ? this.bridge.config.portalInfo.chatName : null;
     }
 
-    public get chatId(): number {
-        return this.bridge.config.portalInfo ? this.bridge.config.portalInfo.chatId : 0;
+    public get chatId(): string {
+        return `${this.bridge.config.portalInfo ? this.bridge.config.portalInfo.chatId : 0}`;
     }
 
-    public set chatId(n: number) {
+    public set chatId(n: string) {
         if (!this.bridge.config.portalInfo) this.bridge.config.portalInfo = {
-            chatId: n,
+            chatId: Number(n),
             chatName: null,
             canUnbridge: false,
             bridged: false,
             roomId: this.roomId,
         };
-        else this.bridge.config.portalInfo.chatId = n;
+        else this.bridge.config.portalInfo.chatId = Number(n);
     }
 
     public bridgeRoom(): void {

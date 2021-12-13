@@ -52,6 +52,7 @@ export class DimensionSlackService {
 
     @DELETE
     @Path("room/:roomId/link")
+    @Security(ROLE_USER)
     public async unbridgeRoom(@PathParam("roomId") roomId: string): Promise<any> {
         const userId = this.context.request.user.userId;
 

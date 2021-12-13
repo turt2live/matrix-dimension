@@ -1,11 +1,14 @@
-<my-widget-config [widgetComponent]="this">
+<my-widget-config
+        [widgetComponent]="this"
+        addTitle="{{'New video' | translate}}"
+        editTitle="{{'Videos' | translate}}"
+>
     <ng-template #widgetParamsTemplate let-widget="widget">
-        <label class="label-block">
-            {{'Video URL' | translate}}
-            <input type="text" class="form-control"
-                   placeholder="https://www.youtube.com/watch?v=jr2mXSKq3B4"
-                   [(ngModel)]="widget.dimension.newData.videoUrl" name="widget-url-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
+        <my-field
+                label="{{'Video URL' | translate}}"
+                placeholder="https://www.youtube.com/watch?v=jr2mXSKq3B4"
+                [(value)]="widget.dimension.newData.videoUrl"
+                [disabled]="isUpdating"
+        ></my-field>
     </ng-template>
 </my-widget-config>

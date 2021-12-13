@@ -1,0 +1,41 @@
+<my-bridge-config [bridgeComponent]="this">
+    <ng-template #bridgeParamsTemplate>
+        <my-spinner *ngIf="loadingConnections"></my-spinner>
+        <div *ngIf="!loadingConnections">
+            <div *ngIf="isBridged">
+                <p>{{'This room is bridged to' | translate}} <a [href]="bridgedProjectUrl" rel="noopener" target="_blank">{{bridgedProjectUrlUnsafe}}</a></p>
+                <button type="button" class="element-btn element-btn-danger" [disabled]="isBusy" (click)="unbridgeRoom()">
+                    {{'Unbridge' | translate}}
+                </button>
+            </div>
+            <div *ngIf="!isBridged && authUrl">
+                <p>
+                    {{'In order to bridge to Jira, you\'ll need to authorize the bridge to access your organization(s). Please click the button below to do so.' | translate}}
+                </p>
+                <a [href]="authUrl" rel="noopener" target="_blank" class="btn btn-lg btn-link">
+                    <img src="/assets/img/avatars/jira.png" width="35" /> {{'Sign in with Jira' | translate}}
+                </a>
+            </div>
+            <div *ngIf="!isBridged && !authUrl">
+                <my-field
+                        label="{{'Instance' | translate}}"
+                        [asSelect]="true"
+                        [(value)]="instance"
+                        [disabled]="isBusy"
+                        (valueChange)="loadProjects()"
+                        [selectOptions]="instanceOptions"
+                ></my-field>
+                <my-field
+                        label="{{'Project' | translate}}"
+                        [asSelect]="true"
+                        [(value)]="project"
+                        [disabled]="isBusy"
+                        [selectOptions]="projectOptions"
+                ></my-field>
+                <button type="button" class="element-btn" [disabled]="isBusy" (click)="bridgeRoom()">
+                    Bridge
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</my-bridge-config>

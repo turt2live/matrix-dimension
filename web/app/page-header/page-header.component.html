@@ -1,11 +1,11 @@
-<div class="wrapper">
-    <div class="header">
-        <div class="title">
-            <h2 class="pageName">{{ pageName | translate }}</h2>
-            <xng-breadcrumb></xng-breadcrumb>
+<div class="header">
+    <div class="title">
+        <div *ngIf="!isHome" routerLink="/riot-app" class="back-btn">
+            <span class="dim-icon dim-chevron-left"></span> <span>{{ 'Browse integrations' | translate }}</span>
         </div>
-        <div class="quickAction">
-            <ng-content></ng-content>
-        </div>
+        <h2 class="pageName">{{ pageName | translate }}</h2>
+    </div>
+    <div class="quickAction">
+        <ng-content></ng-content>
     </div>
 </div>

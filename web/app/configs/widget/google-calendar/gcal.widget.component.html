@@ -1,11 +1,14 @@
-<my-widget-config [widgetComponent]="this">
+<my-widget-config
+        [widgetComponent]="this"
+        addTitle="{{'New calendar' | translate}}"
+        editTitle="{{'Calendars' | translate}}"
+>
     <ng-template #widgetParamsTemplate let-widget="widget">
-        <label class="label-block">
-            {{'Shared Calendar ID' | translate}}
-            <input type="text" class="form-control"
-                   placeholder="en.uk#holiday@group.v.calendar.google.com"
-                   [(ngModel)]="widget.dimension.newData.shareId" name="widget-url-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
+        <my-field
+                label="{{'Shared calendar ID' | translate}}"
+                placeholder="en.uk#holiday@group.v.calendar.google.com"
+                [(value)]="widget.dimension.shareId"
+                [disabled]="isUpdating"
+        ></my-field>
     </ng-template>
 </my-widget-config>

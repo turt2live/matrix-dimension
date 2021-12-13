@@ -1,11 +1,14 @@
-<my-widget-config [widgetComponent]="this">
+<my-widget-config
+        [widgetComponent]="this"
+        addTitle="{{'Embed livestream' | translate}}"
+        editTitle="{{'Livestreams' | translate}}"
+>
     <ng-template #widgetParamsTemplate let-widget="widget">
-        <label class="label-block">
-            {{'Channel Name' | translate}}
-            <input type="text" class="form-control"
-                   placeholder="TwitchUsername"
-                   [(ngModel)]="widget.dimension.newData.channelName" name="widget-url-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
+        <my-field
+                label="{{'Channel name' | translate}}"
+                placeholder="TwitchUsername"
+                [(value)]="widget.dimension.newData.channelName"
+                [disabled]="isUpdating"
+        ></my-field>
     </ng-template>
 </my-widget-config>

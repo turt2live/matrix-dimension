@@ -5,10 +5,7 @@ import { ScalarWidgetApi } from "../../shared/services/scalar/scalar-widget.api"
 import { CapableWidget } from "../capable-widget";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { BigBlueButtonApiService } from "../../shared/services/integrations/bigbluebutton-api.service";
-import {
-    FE_BigBlueButtonCreateAndJoinMeeting,
-    FE_BigBlueButtonJoin,
-} from "../../shared/models/integration";
+import { FE_BigBlueButtonCreateAndJoinMeeting, FE_BigBlueButtonJoin, } from "../../shared/models/integration";
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
@@ -164,8 +161,6 @@ export class BigBlueButtonWidgetWrapperComponent
                 this.meetingPassword
             )
             .then((response) => {
-                console.log("The response");
-                console.log(response);
                 if ("errorCode" in response) {
                     // This is an instance of ApiError
                     if (response.errorCode === "UNKNOWN_MEETING_ID") {

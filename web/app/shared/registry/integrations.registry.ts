@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import {
-    WIDGET_CUSTOM,
     WIDGET_BIGBLUEBUTTON,
+    WIDGET_CUSTOM,
     WIDGET_ETHERPAD,
     WIDGET_GOOGLE_CALENDAR,
     WIDGET_GOOGLE_DOCS,
@@ -11,8 +11,8 @@ import {
     WIDGET_STICKER_PICKER,
     WIDGET_TRADINGVIEW,
     WIDGET_TWITCH,
-    WIDGET_YOUTUBE,
-    WIDGET_WHITEBOARD
+    WIDGET_WHITEBOARD,
+    WIDGET_YOUTUBE
 } from "../models/widget";
 import { FE_Integration } from "../models/integration";
 
@@ -31,6 +31,9 @@ export class IntegrationsRegistry {
             "telegram": {},
             "webhooks": {},
             "slack": {},
+            "hookshot_github": {},
+            "hookshot_jira": {},
+            "hookshot_webhook": {},
         },
         "widget": {
             "custom": {

@@ -1,17 +1,23 @@
 $theme_dark: (
-        bodyBgColor: rgba(47, 50, 51, 0.85),
-        defaultFgColor: #eaeaea,
+        bodyBgColor: #21262C,
+        defaultFgColor: #ffffff,
         headerColor: #f9f9f9,
         mutedColor: #d6d6d6,
         altMutedColor: #a6b6c1,
-        anchorColor: #82c5ff,
+        anchorColor: #0DBD8B,
         tableBorderColor: #1e1e1e,
         codeBgColor: #323233,
         spinnerColor: #d4d4d4,
-        formControlBgColor: #494b4e,
+        formControlBorderColor: #21262C,
+        formControlBgColor: #15191E,
         formControlFgColor: #fff,
-        formControlPlaceholderColor: #969696,
+        formControlPlaceholderColor: #8E99A4,
+        accentAlt: #238CF5,
         activeBreadcrumbColor: #afbfca,
+
+        buttonAccentColor: #0DBD8B,
+        buttonDangerColor: #FF5B55,
+        buttonPrimaryColor: #fff,
 
         stickerpacksNotifBgColor: #525252,
         stickerpackBgColor: #676a6d,
@@ -21,17 +27,13 @@ $theme_dark: (
         stickerPreviewBgColor: #676a6d,
         stickerPreviewFgColor: #dedddd,
 
-        headerBgColor: rgb(47, 47, 47),
-        headerBorderColor: #585858,
-        headerGradientStartColor: rgba(201, 80, 54, 0.7),
-        headerGradientEndColor: rgba(143, 45, 86, 0.7),
+        headerBgColor: #21262C,
 
         containerBgColor: rgba(47, 47, 47, 0.66),
         containerShadowColor: hsla(0, 0%, 0%, 0.2),
         containerBorderColor: rgb(79, 79, 79),
 
         quickActionColor: #7b7b7b,
-        quickActionHoverColor: #fff,
 
         dialogBgColor: #464646,
         dialogFgColor: #ececec,
@@ -60,7 +62,6 @@ $theme_dark: (
         widgetBannedSymbolColor: #bd362f,
 
         integrationBorderColor: rgba(148, 148, 148, 0.19),
-        integrationShadowColor: rgba(89, 98, 105, 0.28),
         integrationDescriptionColor: #bcc0c1,
 
         promoSpacerColor: rgba(206, 222, 235, 0.85),

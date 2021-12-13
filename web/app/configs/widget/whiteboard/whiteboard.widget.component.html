@@ -1,18 +1,20 @@
-<my-widget-config [widgetComponent]="this">
+<my-widget-config
+        [widgetComponent]="this"
+        addTitle="{{'New whiteboard' | translate}}"
+        editTitle="{{'Whiteboards' | translate}}"
+>
     <ng-template #widgetParamsTemplate let-widget="widget">
-        <label class="label-block">
-            {{'Whiteboard Name' | translate}}
-            <input type="text" class="form-control"
-                   placeholder="{{ defaultName }}"
-                   [(ngModel)]="widget.dimension.newName" name="widget-name-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
-        <label class="label-block">
-            {{'Whiteboard URL' | translate}}
-            <input type="text" class="form-control"
-                   placeholder=""
-                   [(ngModel)]="widget.dimension.newUrl" name="widget-url-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
+        <my-field
+                label="{{'Name' | translate}}"
+                placeholder="{{defaultName}}"
+                [(value)]="widget.dimension.newName"
+                [disabled]="isUpdating"
+        ></my-field>
+        <my-field
+                label="{{'URL' | translate}}"
+                placeholder=""
+                [(value)]="widget.dimension.newUrl"
+                [disabled]="isUpdating"
+        ></my-field>
     </ng-template>
 </my-widget-config>

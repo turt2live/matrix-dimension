@@ -3,7 +3,9 @@
         <img class="integration-avatar" [src]="getSafeUrl(integration.avatarUrl)"/>
         <div class="integration-name">{{integration.displayName | translate}}</div>
         <div class="integration-description">{{ integration.description | translate }}</div>
-        <div class="integration-arrow"><i class="fa fa-chevron-right"></i></div>
         <div class="integration-offline error-text" *ngIf="!integration.isOnline"><i class="fa fa-exclamation-triangle"></i></div>
+        <div class="bot-toggle" *ngIf="integration.category === 'bot'">
+            <ui-switch [checked]="integration._inRoom" [disabled]="integration._isUpdating" size="small"></ui-switch>
+        </div>
     </div>
 </div>

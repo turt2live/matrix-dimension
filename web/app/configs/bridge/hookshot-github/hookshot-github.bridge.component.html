@@ -1,0 +1,59 @@
+<my-bridge-config [bridgeComponent]="this">
+    <ng-template #bridgeParamsTemplate>
+        <my-spinner *ngIf="loadingConnections"></my-spinner>
+        <div *ngIf="!loadingConnections">
+            <div *ngIf="isBridged">
+                <p>{{'This room is bridged to' | translate}} {{bridgedRepoSlug}}</p>
+                <button type="button" class="element-btn element-btn-danger" [disabled]="isBusy" (click)="unbridgeRoom()">
+                    {{'Unbridge' | translate}}
+                </button>
+            </div>
+            <div *ngIf="!isBridged && authUrl">
+                <p>
+                    {{'In order to bridge to Github, you\'ll need to authorize the bridge to access your organization(s). Please click the button below to do so.' | translate}}
+                </p>
+                <a [href]="authUrl" rel="noopener" target="_blank" class="btn btn-lg btn-link">
+                    <img src="/assets/img/avatars/github.png" width="35" /> {{'Sign in with GitHub' | translate}}
+                </a>
+            </div>
+            <div *ngIf="!isBridged && orgAuthUrl">
+                <p>
+                    {{'Almost there! Just need to add the bot to your organizations now.' | translate}}
+                </p>
+                <a [href]="orgAuthUrl" rel="noopener" target="_blank" class="btn btn-lg btn-link">
+                    <img src="/assets/img/avatars/github.png" width="35" /> {{'Add to GitHub' | translate}}
+                </a>
+            </div>
+            <div *ngIf="!isBridged && !authUrl && !orgAuthUrl">
+                <my-field
+                        label="{{'Organization' | translate}}"
+                        [asSelect]="true"
+                        [(value)]="orgId"
+                        [disabled]="isBusy"
+                        (valueChange)="loadRepos()"
+                        [selectOptions]="orgs"
+                ></my-field>
+                <my-field
+                        label="{{'Repository' | translate}}"
+                        [asSelect]="true"
+                        [(value)]="repoId"
+                        [disabled]="isBusy"
+                        [selectOptions]="repos"
+                ></my-field>
+                <p *ngIf="orgAddAuthUrl">
+                    <a [href]="orgAddAuthUrl" rel="noopener" target="_blank">
+                        {{'Add to another GitHub organization' | translate}}
+                    </a>
+                </p>
+                <p *ngIf="orgEditAuthUrl">
+                    <a [href]="orgEditAuthUrl" rel="noopener" target="_blank">
+                        {{'Add more repositories from ' | translate}} {{ orgId }}
+                    </a>
+                </p>
+                <button type="button" class="element-btn" [disabled]="isBusy" (click)="bridgeRoom()">
+                    Bridge
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</my-bridge-config>

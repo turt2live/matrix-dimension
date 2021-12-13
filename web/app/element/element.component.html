@@ -1,0 +1,12 @@
+<div id="wrapper">
+    <my-page-header>
+        <span class="adminButton headerButton" *ngIf="isAdmin()" routerLink="/riot-app/admin/">
+            <div class="dim-icon dim-cog"></div>
+        </span>
+        <my-scalar-close class="closeButton headerButton"></my-scalar-close>
+    </my-page-header>
+
+    <div class="page-content">
+        <router-outlet></router-outlet>
+    </div>
+</div>

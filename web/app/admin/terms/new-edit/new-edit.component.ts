@@ -4,9 +4,7 @@ import { AdminTermsApiService } from "../../../shared/services/admin/admin-terms
 import { ActivatedRoute, Router } from "@angular/router";
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ISO6391 from "iso-639-1";
-import {
-    AdminTermsNewEditPublishDialogComponent,
-} from "./publish/publish.component";
+import { AdminTermsNewEditPublishDialogComponent, } from "./publish/publish.component";
 import { TranslateService } from "@ngx-translate/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 

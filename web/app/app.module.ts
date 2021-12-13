@@ -10,10 +10,10 @@ import { BrowserModule } from "@angular/platform-browser";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
 import { createNewHosts, removeNgStyles } from "@angularclass/hmr";
-import { RiotComponent } from "./riot/riot.component";
+import { ElementComponent } from "./element/element.component";
 import { ScalarClientApiService } from "./shared/services/scalar/scalar-client-api.service";
 import { ToasterModule, ToasterService } from "angular2-toaster";
-import { ScalarCloseComponent } from "./riot/scalar-close/scalar-close.component";
+import { ScalarCloseComponent } from "./element/scalar-close/scalar-close.component";
 import { GenericWidgetWrapperComponent } from "./widget-wrappers/generic/generic.component";
 import { ToggleFullscreenDirective } from "./shared/directives/toggle-fullscreen.directive";
 import { FullscreenButtonComponent } from "./elements/fullscreen-button/fullscreen-button.component";
@@ -22,7 +22,7 @@ import { JitsiWidgetWrapperComponent } from "./widget-wrappers/jitsi/jitsi.compo
 import { GCalWidgetWrapperComponent } from "./widget-wrappers/gcal/gcal.component";
 import { PageHeaderComponent } from "./page-header/page-header.component";
 import { SpinnerComponent } from "./elements/spinner/spinner.component";
-import { RiotHomeComponent } from "./riot/riot-home/home.component";
+import { ElementHomeComponent } from "./element/element-home/home.component";
 import { IntegrationBagComponent } from "./integration-bag/integration-bag.component";
 import { ScalarServerApiService } from "./shared/services/scalar/scalar-server-api.service";
 import { AdminApiService } from "./shared/services/admin/admin-api.service";
@@ -56,8 +56,9 @@ import { AdminNebGiphyConfigComponent } from "./admin/neb/config/giphy/giphy.com
 import { AdminNebGuggyConfigComponent } from "./admin/neb/config/guggy/guggy.component";
 import { AdminNebGoogleConfigComponent } from "./admin/neb/config/google/google.component";
 import { AdminNebImgurConfigComponent } from "./admin/neb/config/imgur/imgur.component";
-import { ConfigSimpleBotComponent } from "./configs/simple-bot/simple-bot.component";
-import { ConfigScreenComplexBotComponent } from "./configs/complex-bot/config-screen/config-screen.complex-bot.component";
+import {
+    ConfigScreenComplexBotComponent
+} from "./configs/complex-bot/config-screen/config-screen.complex-bot.component";
 import { RssComplexBotConfigComponent } from "./configs/complex-bot/rss/rss.complex-bot.component";
 import { TravisCiComplexBotConfigComponent } from "./configs/complex-bot/travisci/travisci.complex-bot.component";
 import { ConfigScreenBridgeComponent } from "./configs/bridge/config-screen/config-screen.bridge.component";
@@ -78,17 +79,23 @@ import { StickerpickerComponent } from "./configs/stickerpicker/stickerpicker.co
 import { StickerPickerWidgetWrapperComponent } from "./widget-wrappers/sticker-picker/sticker-picker.component";
 import { AdminTelegramApiService } from "./shared/services/admin/admin-telegram-api.service";
 import { AdminTelegramBridgeComponent } from "./admin/bridges/telegram/telegram.component";
-import { AdminTelegramBridgeManageSelfhostedComponent } from "./admin/bridges/telegram/manage-selfhosted/manage-selfhosted.component";
+import {
+    AdminTelegramBridgeManageSelfhostedComponent
+} from "./admin/bridges/telegram/manage-selfhosted/manage-selfhosted.component";
 import { TelegramApiService } from "./shared/services/integrations/telegram-api.service";
 import { TelegramBridgeConfigComponent } from "./configs/bridge/telegram/telegram.bridge.component";
 import { TelegramAskUnbridgeComponent } from "./configs/bridge/telegram/ask-unbridge/ask-unbridge.component";
 import { TelegramCannotUnbridgeComponent } from "./configs/bridge/telegram/cannot-unbridge/cannot-unbridge.component";
-import { AdminWebhooksBridgeManageSelfhostedComponent } from "./admin/bridges/webhooks/manage-selfhosted/manage-selfhosted.component";
+import {
+    AdminWebhooksBridgeManageSelfhostedComponent
+} from "./admin/bridges/webhooks/manage-selfhosted/manage-selfhosted.component";
 import { AdminWebhooksBridgeComponent } from "./admin/bridges/webhooks/webhooks.component";
 import { AdminWebhooksApiService } from "./shared/services/admin/admin-webhooks-api.service";
 import { WebhooksApiService } from "./shared/services/integrations/webhooks-api.service";
 import { WebhooksBridgeConfigComponent } from "./configs/bridge/webhooks/webhooks.bridge.component";
-import { GenericFullscreenWidgetWrapperComponent } from "./widget-wrappers/generic-fullscreen/generic-fullscreen.component";
+import {
+    GenericFullscreenWidgetWrapperComponent
+} from "./widget-wrappers/generic-fullscreen/generic-fullscreen.component";
 import { GrafanaWidgetConfigComponent } from "./configs/widget/grafana/grafana.widget.component";
 import { TradingViewWidgetConfigComponent } from "./configs/widget/tradingview/tradingview.widget.component";
 import { TradingViewWidgetWrapperComponent } from "./widget-wrappers/tradingview/tradingview.component";
@@ -99,7 +106,9 @@ import { AdminCustomBotsComponent } from "./admin/custom-bots/custom-bots.compon
 import { AdminAddCustomBotComponent } from "./admin/custom-bots/add/add.component";
 import { SlackApiService } from "./shared/services/integrations/slack-api.service";
 import { SlackBridgeConfigComponent } from "./configs/bridge/slack/slack.bridge.component";
-import { AdminSlackBridgeManageSelfhostedComponent } from "./admin/bridges/slack/manage-selfhosted/manage-selfhosted.component";
+import {
+    AdminSlackBridgeManageSelfhostedComponent
+} from "./admin/bridges/slack/manage-selfhosted/manage-selfhosted.component";
 import { AdminSlackBridgeComponent } from "./admin/bridges/slack/slack.component";
 import { AdminSlackApiService } from "./shared/services/admin/admin-slack-api.service";
 import { AdminLogoutConfirmationDialogComponent } from "./admin/home/logout-confirmation/logout-confirmation.component";
@@ -119,6 +128,30 @@ import { AdminWidgetWhiteboardConfigComponent } from "./admin/widgets/whiteboard
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AdminHookshotGithubBridgeComponent } from "./admin/bridges/hookshot-github/hookshot-github.component";
+import {
+    AdminHookshotGithubBridgeManageSelfhostedComponent
+} from "./admin/bridges/hookshot-github/manage-selfhosted/manage-selfhosted.component";
+import { AdminHookshotGithubApiService } from "./shared/services/admin/admin-hookshot-github-api.service";
+import { HookshotGithubApiService } from "./shared/services/integrations/hookshot-github-api.service";
+import { HookshotGithubBridgeConfigComponent } from "./configs/bridge/hookshot-github/hookshot-github.bridge.component";
+import { AdminHookshotJiraBridgeComponent } from "./admin/bridges/hookshot-jira/hookshot-jira.component";
+import {
+    AdminHookshotJiraBridgeManageSelfhostedComponent
+} from "./admin/bridges/hookshot-jira/manage-selfhosted/manage-selfhosted.component";
+import { AdminHookshotJiraApiService } from "./shared/services/admin/admin-hookshot-jira-api.service";
+import { HookshotJiraApiService } from "./shared/services/integrations/hookshot-jira-api.service";
+import { HookshotJiraBridgeConfigComponent } from "./configs/bridge/hookshot-jira/hookshot-jira.bridge.component";
+import { AdminHookshotWebhookBridgeComponent } from "./admin/bridges/hookshot-webhook/hookshot-webhook.component";
+import {
+    AdminHookshotWebhookBridgeManageSelfhostedComponent
+} from "./admin/bridges/hookshot-webhook/manage-selfhosted/manage-selfhosted.component";
+import { AdminHookshotWebhookApiService } from "./shared/services/admin/admin-hookshot-webhook-api.service";
+import { HookshotWebhookApiService } from "./shared/services/integrations/hookshot-webhook-api.service";
+import {
+    HookshotWebhookBridgeConfigComponent
+} from "./configs/bridge/hookshot-webhook/hookshot-webhook.bridge.component";
+import { FieldComponent } from "./elements/field/field.component";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -149,7 +182,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     declarations: [
         AppComponent,
         HomeComponent,
-        RiotComponent,
+        ElementComponent,
         IntegrationBagComponent,
         PageHeaderComponent,
         SpinnerComponent,
@@ -162,7 +195,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         BigBlueButtonWidgetWrapperComponent,
         GCalWidgetWrapperComponent,
         BigBlueButtonConfigComponent,
-        RiotHomeComponent,
+        ElementHomeComponent,
         IboxComponent,
         ConfigScreenWidgetComponent,
         CustomWidgetConfigComponent,
@@ -185,7 +218,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminNebGuggyConfigComponent,
         AdminNebGoogleConfigComponent,
         AdminNebImgurConfigComponent,
-        ConfigSimpleBotComponent,
         ConfigScreenComplexBotComponent,
         RssComplexBotConfigComponent,
         TravisCiComplexBotConfigComponent,
@@ -227,7 +259,17 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminTermsNewEditPublishDialogComponent,
         TermsWidgetWrapperComponent,
         WhiteboardWidgetComponent,
-        AdminWidgetWhiteboardConfigComponent
+        AdminWidgetWhiteboardConfigComponent,
+        AdminHookshotGithubBridgeComponent,
+        AdminHookshotGithubBridgeManageSelfhostedComponent,
+        HookshotGithubBridgeConfigComponent,
+        AdminHookshotJiraBridgeComponent,
+        AdminHookshotJiraBridgeManageSelfhostedComponent,
+        HookshotJiraBridgeConfigComponent,
+        AdminHookshotWebhookBridgeComponent,
+        AdminHookshotWebhookBridgeManageSelfhostedComponent,
+        HookshotWebhookBridgeConfigComponent,
+        FieldComponent,
 
         // Vendor
     ],
@@ -257,6 +299,12 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminSlackApiService,
         ToasterService,
         AdminTermsApiService,
+        AdminHookshotGithubApiService,
+        HookshotGithubApiService,
+        AdminHookshotJiraApiService,
+        HookshotJiraApiService,
+        AdminHookshotWebhookApiService,
+        HookshotWebhookApiService,
         {provide: Window, useValue: window},
 
         // Vendor
@@ -270,7 +318,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminNebGuggyConfigComponent,
         AdminNebGoogleConfigComponent,
         AdminNebImgurConfigComponent,
-        ConfigSimpleBotComponent,
         AdminIrcBridgeNetworksComponent,
         AdminIrcBridgeAddSelfhostedComponent,
         AdminStickerPackPreviewComponent,
@@ -282,7 +329,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         AdminSlackBridgeManageSelfhostedComponent,
         AdminLogoutConfirmationDialogComponent,
         AdminTermsNewEditPublishDialogComponent,
-        AdminWidgetWhiteboardConfigComponent
+        AdminWidgetWhiteboardConfigComponent,
     ]
 })
 export class AppModule {
@@ -291,7 +338,7 @@ export class AppModule {
     }
 
     hmrOnInit(store) {
-        console.log("HMR store", store);
+        console.log("Dimension HMR store", store);
     }
 
     hmrOnDestroy(store) {

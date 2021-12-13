@@ -16,8 +16,8 @@
     "lint:app": "eslint src",
     "lint:web": "eslint web",
     "i18n": "npm run-script i18n:init && npm run-script i18n:extract",
-    "i18n:init": "ngx-translate-extract --input ./web --output ./web/public/assets/i18n/template.json --key-as-default-value --replace --format json",
-    "i18n:extract": "ngx-translate-extract --input ./web --output ./web/public/assets/i18n/en.json --clean --format json"
+    "i18n:init": "ngx-translate-extract --input ./web --output ./web/assets/i18n/template.json --key-as-default-value --replace --format json",
+    "i18n:extract": "ngx-translate-extract --input ./web --output ./web/assets/i18n/en.json --key-as-default-value --clean --format json"
   },
   "repository": {
     "type": "git",

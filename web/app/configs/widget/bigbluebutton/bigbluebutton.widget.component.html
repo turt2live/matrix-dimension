@@ -1,11 +1,14 @@
-<my-widget-config [widgetComponent]="this">
+<my-widget-config
+        [widgetComponent]="this"
+        addTitle="{{'New meeting' | translate}}"
+        editTitle="{{'Meetings' | translate}}"
+>
     <ng-template #widgetParamsTemplate let-widget="widget">
-        <label class="label-block">
-            {{'BigBlueButton Meeting URL' | translate}}
-            <input type="text" class="form-control"
-                   placeholder="https://bbb.example.com/abc-def-ghi"
-                   [(ngModel)]="widget.dimension.newData.conferenceUrl" name="widget-url-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
+        <my-field
+                label="{{'Meeting URL' | translate}}"
+                placeholder="https://bbb.example.com/abc-def-ghi"
+                [(value)]="widget.dimension.conferenceUrl"
+                [disabled]="isUpdating"
+        ></my-field>
     </ng-template>
 </my-widget-config>

@@ -1,18 +1,19 @@
 // styles in src/style directory are applied to the whole page
-@import "../assets//fonts/opensans100-roboto300";
+@import "../assets/fonts/inter.scss";
 @import "~bootstrap/scss/bootstrap";
 @import "~ngx-ui-switch/ui-switch.component.scss";
 @import "themes/themes";
+@import "components/icons";
 @import "components/ibox";
 @import "components/dialog";
 @import "components/bootstrap_override";
+@import "components/element";
 @import "~angular2-toaster/toaster";
 @import "riot";
 
 body {
   margin: 0;
   padding: 0;
-  font-family: "Roboto", "Open Sans", Arial, sans-serif;
 }
 
 @include themifyRoot() {
@@ -50,4 +51,9 @@ button {
 
 .error-text {
   color: #bd362f !important;
+}
+
+h3 {
+  font-size: 1.13em;
+  font-weight: 600;
 }

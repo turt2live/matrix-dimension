@@ -11,7 +11,7 @@ import { HttpClient } from "@angular/common/http";
 export class AppComponent {
     constructor(public translate: TranslateService, public http: HttpClient) {
         translate.addLangs(["en", "de"]);
-        translate.setDefaultLang("de");
+        translate.setDefaultLang("en");
         if (navigator.language === "de") {
             translate.use("de");
         } else {

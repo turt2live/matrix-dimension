@@ -1,0 +1,29 @@
+<my-bridge-config [bridgeComponent]="this">
+    <ng-template #bridgeParamsTemplate>
+        <h3>{{'New webhook' | translate}}</h3>
+        <form (submit)="newHook()" novalidate name="addForm">
+            <my-field
+                    label="{{'Webhook name' | translate}}"
+                    [placeholder]="'My Webhook' | translate"
+                    [(value)]="webhookName"
+                    [disabled]="isBusy"
+            ></my-field>
+            <button type="button" class="element-btn" [disabled]="isBusy" (click)="newHook()">
+                {{'Add webhook' | translate}}
+            </button>
+        </form>
+        <h3 style="margin-top: 36px">{{'Webhooks' | translate}}</h3>
+        <p *ngIf="newConfig.connections.length === 0">{{'No webhooks configured for this room.' | translate}}</p>
+
+        <details *ngFor="let hook of newConfig.connections trackById">
+            <summary>{{hook.config.name || ('No name' | translate)}}</summary>
+            URL: <a [href]="hook.config.url" target="_blank">{{ hook.config.url }}</a>
+            <div style="padding-bottom: 16px">
+                <button type="button" class="element-btn element-btn-danger" [disabled]="isBusy"
+                        (click)="removeHook(hook)">
+                    {{'Remove webhook' | translate}}
+                </button>
+            </div>
+        </details>
+    </ng-template>
+</my-bridge-config>

@@ -1,19 +1,21 @@
-<my-widget-config [widgetComponent]="this">
+<my-widget-config
+        [widgetComponent]="this"
+        addTitle="{{'New dashboard' | translate}}"
+        editTitle="{{'Dashboards' | translate}}"
+>
     <ng-template #widgetParamsTemplate let-widget="widget">
-        <label class="label-block">
-            {{'Grafana URL' | translate}}
-            <span class="text-muted">{{'To get a URL, go to Grafana and click \'share\' on a graph.' | translate}}</span>
-            <input type="text" class="form-control"
-                   placeholder="https://example.com/grafana/dashboard/db/example?orgId=1&panelId=1&fullscreen"
-                   [(ngModel)]="widget.dimension.newData.url" name="widget-url-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
-        <label class="label-block">
-            {{'Widget Name' | translate}}
-            <input type="text" class="form-control"
-                   placeholder="{{ defaultName }}"
-                   [(ngModel)]="widget.dimension.newName" name="widget-name-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
+        <p>{{'To get a URL, go to Grafana and click \'share\' on a graph.' | translate}}</p>
+        <my-field
+                label="{{'Dashboard name' | translate}}"
+                placeholder="{{ defaultName | translate }}"
+                [(value)]="widget.dimension.newName"
+                [disabled]="isUpdating"
+        ></my-field>
+        <my-field
+                label="{{'Dashboard URL' | translate}}"
+                placeholder="https://example.com/grafana/dashboard/db/example?orgId=1&panelId=1&fullscreen"
+                [(value)]="widget.dimension.newData.url"
+                [disabled]="isUpdating"
+        ></my-field>
     </ng-template>
 </my-widget-config>

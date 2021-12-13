@@ -1,18 +1,14 @@
-<my-widget-config [widgetComponent]="this">
+<my-widget-config
+        [widgetComponent]="this"
+        addTitle="{{'Start conference' | translate}}"
+        editTitle="{{'Ongoing conferences' | translate}}"
+>
     <ng-template #widgetParamsTemplate let-widget="widget">
-        <label class="label-block">
-            {{'Conference URL' | translate}}
-            <input type="text" class="form-control"
-                   placeholder="https://jitsi.riot.im/MyCoolConference"
-                   [(ngModel)]="widget.dimension.newData.conferenceUrl" name="widget-url-{{widget.id}}"
-                   [disabled]="isUpdating"/>
-        </label>
-        <label class="label-block">
-            Audio only
-            <span class="text-muted">Starts the conference without camera by default. Users can still manually turn on the camera when joining or joined.</span>
-            <ui-switch size="medium"
-                   [(ngModel)]="widget.dimension.newData.isAudioOnly" name="widget-audio-{{widget.id}}"
-                   [disabled]="isUpdating"></ui-switch>
-        </label>
+        <my-field
+                label="{{'Conference URL' | translate}}"
+                placeholder="https://jitsi.riot.im/MyCoolConference"
+                [(value)]="widget.dimension.newData.conferenceUrl"
+                [disabled]="isUpdating"
+        ></my-field>
     </ng-template>
 </my-widget-config>
