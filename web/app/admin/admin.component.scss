@@ -2,8 +2,8 @@
 
 @include themifyComponent() {
   .adminNav {
+    margin: 32px 0 0;
     width: 200px;
-    margin: 0;
     padding: 0;
     position: fixed;
     top: 100px;
@@ -34,8 +34,9 @@
   }
 
   .adminContent {
+    margin-top: 32px;
     position: fixed;
-    top: 120px;
+    top: 85px;
     left: 200px;
     bottom: 0;
     right: 0;
