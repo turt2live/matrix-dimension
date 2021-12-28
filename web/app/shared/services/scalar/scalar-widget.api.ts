@@ -39,33 +39,36 @@ export class ScalarWidgetApi {
     }
 
     public static sendSticker(sticker: FE_Sticker, pack: FE_StickerPack): void {
-        ScalarWidgetApi.callAction("m.sticker", {
-            data: {
-                description: sticker.description,
-                content: {
-                    // Element Android requires content.body to contain the sticker description, otherwise
-                    // you will not be able to send any stickers
-                    body: sticker.description,
-                    url: sticker.thumbnail.mxc,
-                    info: {
+        const payload = {
+            description: sticker.description,
+            content: {
+                // Element Android requires content.body to contain the sticker description, otherwise
+                // you will not be able to send any stickers
+                body: sticker.description,
+                url: sticker.thumbnail.mxc,
+                info: {
+                    mimetype: sticker.image.mimetype,
+                    w: Math.round(sticker.thumbnail.width / 2),
+                    h: Math.round(sticker.thumbnail.height / 2),
+                    thumbnail_url: sticker.thumbnail.mxc,
+                    thumbnail_info: {
                         mimetype: sticker.image.mimetype,
                         w: Math.round(sticker.thumbnail.width / 2),
                         h: Math.round(sticker.thumbnail.height / 2),
-                        thumbnail_url: sticker.thumbnail.mxc,
-                        thumbnail_info: {
-                            mimetype: sticker.image.mimetype,
-                            w: Math.round(sticker.thumbnail.width / 2),
-                            h: Math.round(sticker.thumbnail.height / 2),
-                        },
+                    },
 
-                        // This has to be included in the info object so it makes it to the event
-                        dimension: {
-                            license: pack.license,
-                            author: pack.author,
-                        },
+                    // This has to be included in the info object so it makes it to the event
+                    dimension: {
+                        license: pack.license,
+                        author: pack.author,
                     },
                 },
             },
+        };
+        ScalarWidgetApi.callAction("m.sticker", {
+            data: payload,
+            // This is needed for Element iOS to work as it uses widgetData
+            widgetData: payload,
         });
     }
 
