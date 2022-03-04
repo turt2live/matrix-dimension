@@ -46,6 +46,10 @@ export class DimensionHookshotGithubService {
 
         try {
             const hookshot = new HookshotGithubBridge(userId);
+            const userInfo = await hookshot.getLoggedInUserInfo();
+            if (!userInfo.loggedIn) {
+                throw new ApiError(403, "Not logged in", "T2B_NOT_LOGGED_IN");
+            }
             const locations = await hookshot.getInstalledLocations();
             return {locations};
         } catch (e) {
