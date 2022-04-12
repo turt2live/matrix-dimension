@@ -192,6 +192,7 @@ export class DimensionBigBlueButtonService {
 
         // NOTE: BBB meetings will by default end a minute or two after the last person leaves.
         const createQueryParameters = {
+            name: roomId,
             meetingID: randomString(20),
             // To help admins link meeting IDs to rooms
             meta_MatrixRoomID: roomId,
