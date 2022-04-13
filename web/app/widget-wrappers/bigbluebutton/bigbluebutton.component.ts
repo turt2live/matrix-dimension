@@ -149,7 +149,7 @@ export class BigBlueButtonWidgetWrapperComponent
     private async joinThroughDimension() {
         console.log(
             "BigBlueButton: Joining meeting created by Dimension with meeting ID: " +
-        this.meetingId
+            this.meetingId
         );
 
         this.bigBlueButtonApi
@@ -166,16 +166,14 @@ export class BigBlueButtonWidgetWrapperComponent
                     if (response.errorCode === "UNKNOWN_MEETING_ID") {
                         // This meeting ID is invalid.
                         // Inform the user that they should try and start a new meeting
-                        this.statusMessage =
-              "This meeting has ended or otherwise does not exist.<br>Please start a new meeting.";
+                        this.statusMessage = "This meeting has ended or otherwise does not exist.<br>Please start a new meeting.";
                         return;
                     }
 
                     if (response.errorCode === "MEETING_HAS_ENDED") {
                         // It's likely that everyone has left the meeting, and it's been garbage collected.
                         // Inform the user that they should try and start a new meeting
-                        this.statusMessage =
-              "This meeting has ended.<br>Please start a new meeting.";
+                        this.statusMessage = "This meeting has ended.<br>Please start a new meeting.";
                         return;
                     }
                     // Otherwise this is a generic error
@@ -223,7 +221,7 @@ export class BigBlueButtonWidgetWrapperComponent
     }
 
     private embedMeetingWithUrl(url: string) {
-    // Hide widget-related UI
+        // Hide widget-related UI
         this.statusMessage = null;
 
         // Embed the return meeting URL, joining the meeting
@@ -235,8 +233,9 @@ export class BigBlueButtonWidgetWrapperComponent
     }
 
     public ngOnDestroy() {
-        if (this.bigBlueButtonApiSubscription)
+        if (this.bigBlueButtonApiSubscription) {
             this.bigBlueButtonApiSubscription.unsubscribe();
+        }
     }
 
     protected onCapabilitiesSent(): void {
