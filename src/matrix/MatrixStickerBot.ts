@@ -156,7 +156,7 @@ class _MatrixStickerBot {
                 }
                 if (mime === "image/jpeg") {
                     imageUpload = await resizedImage.clone().jpeg({quality: 80, chromaSubsampling: '4:4:4'}).toBuffer();
-                    thumbUpload = await resizedImage.avif({quality: 60, chromaSubsampling: '4:2:0'}).toBuffer();;
+                    thumbUpload = await resizedImage.jpeg({quality: 60, chromaSubsampling: '4:2:0'}).toBuffer();;
                 }
                 stickerEvent.contentUri = await mx.upload(imageUpload, mime);
                 stickerEvent.mimetype = mime;
