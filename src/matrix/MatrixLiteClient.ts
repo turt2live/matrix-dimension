@@ -159,7 +159,7 @@ export class MatrixLiteClient {
                 url: url,
                 encoding: null,
                 headers: {
-                    'Range': 'bytes=0-16'
+                    'Range': 'bytes=0-32'
                 },
             }, (err, res, _body) => {
                 if (err) {
@@ -179,17 +179,19 @@ export class MatrixLiteClient {
     }
 
     public parseFileHeaderMIME(data: Buffer): string {
-        const s = data.slice(0,12);
+        const s = data.slice(0,32);
         if (s.slice(0,8).includes(Buffer.from("89504E470D0A1A0A", "hex"))) {
             return("image/png");
         } else if (s.slice(0,3).includes(Buffer.from("474946", "hex"))) {
             return("image/gif");
         } else if (s.slice(0,3).includes(Buffer.from("FFD8FF", "hex"))) {
             return("image/jpeg");
-        } else if (s.slice(0,12).includes(Buffer.from("000000206674797061766966", "hex"))) {
-            return("image/avif");
-        } else if (s.slice(0,12).includes(Buffer.from("000000206674797061766973", "hex"))) {
-            return("image/avif-sequence");
+        } else if (s.slice(0,3).includes(Buffer.from("000000", "hex")) && s.slice(4,8).includes(Buffer.from("66747970", "hex"))) {
+            if (s.slice(16,28).includes(Buffer.from("61766973", "hex"))) {
+                return("image/avif-sequence");
+            } else if (s.slice(16,28).includes(Buffer.from("61766966", "hex"))) {
+                return("image/avif");
+            }
         } else if (s.slice(0,4).includes(Buffer.from("52494646", "hex")) && s.slice(8,12).includes(Buffer.from("57454250", "hex"))) {
             return("image/webp");
         }
