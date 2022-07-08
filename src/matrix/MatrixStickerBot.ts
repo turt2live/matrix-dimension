@@ -141,13 +141,13 @@ class _MatrixStickerBot {
                     thumbUpload = imageUpload;
                 }
                 if (mime === "image/gif" || mime === "image/webp" || mime === "image/avif-sequence") {
-                    imageUpload = await resizedImage.webp({nearLossless: true, quality: 60}).toBuffer();
+                    imageUpload = await resizedImage.webp({quality: 60, effort: 6}).toBuffer();
                     thumbUpload = await sharp(downImage, {animated: false}).resize({
                         width: size,
                         height: size,
                         fit: 'contain',
                         background: 'rgba(0,0,0,0)',
-                    }).webp({quality: 60}).toBuffer();
+                    }).webp({quality: 50}).toBuffer();
                     mime = "image/webp";
                 }
                 if (mime === "image/avif") {
