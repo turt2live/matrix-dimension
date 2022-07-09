@@ -121,19 +121,31 @@ class _MatrixStickerBot {
                 var mime = mx.parseFileHeaderMIME(downImage);
                 if (!mime) continue;
 
-                const origImage = await sharp(downImage, {animated: true});
-                const metadata = await origImage.metadata();
-                var size = metadata.height;
-                if (metadata.width > metadata.height) {
-                    metadata.width;
+                const origImage = await sharp(downImage, {animated: config.stickers.allowAnimated});
+                var resizedImage:any;
+                if (config.stickers.resize) {
+                    const metadata = await origImage.metadata();
+                    var size = metadata.height;
+                    if (metadata.width > metadata.height) {
+                        metadata.width;
+                    }
+                    if (size > 512) size = 512;
+                    resizedImage = await origImage.resize({
+                        width: size,
+                        height: size,
+                        fit: 'contain',
+                        background: 'rgba(0,0,0,0)',
+                    });
+                } else {
+                    if (config.stickers.verifyImageSize) {
+                        const metadata = await origImage.metadata();
+                        if (metadata.width !== metadata.height || metadata.width !== 512) {
+                            LogService.info("MatrixStickerBot", `Sticker ${stickerId} has an invalid size. Skipping...`);
+                            continue;
+                        }
+                    }
+                    resizedImage = origImage;
                 }
-                if (size > 512) size = 512;
-                const resizedImage = await origImage.resize({
-                    width: size,
-                    height: size,
-                    fit: 'contain',
-                    background: 'rgba(0,0,0,0)',
-                });
                 var imageUpload;
                 var thumbUpload;
                 if (mime === "image/png") {
@@ -141,14 +153,28 @@ class _MatrixStickerBot {
                     thumbUpload = imageUpload;
                 }
                 if (mime === "image/gif" || mime === "image/webp" || mime === "image/avif-sequence") {
-                    imageUpload = await resizedImage.webp({quality: 60, effort: 6}).toBuffer();
-                    thumbUpload = await sharp(downImage, {animated: false}).resize({
-                        width: size,
-                        height: size,
-                        fit: 'contain',
-                        background: 'rgba(0,0,0,0)',
-                    }).webp({quality: 50}).toBuffer();
-                    mime = "image/webp";
+                    if (config.stickers.allowAnimated) {
+                        if (config.stickers.resize){
+                            imageUpload = await resizedImage.webp({quality: 60, effort: 6}).toBuffer();
+                            mime = "image/webp";
+                            thumbUpload = await sharp(downImage, {animated: false}).webp({quality: 50}).toBuffer();
+                        } else {
+                            imageUpload = null;
+                            if (mime === "image/gif") {
+                                thumbUpload = await sharp(downImage, {animated: false}).toBuffer();
+                            } else if (mime === "image/avif-sequence") {
+                                thumbUpload = await sharp(downImage, {animated: false}).toBuffer();
+                            } else {
+                                thumbUpload = await sharp(downImage, {animated: false}).webp({quality: 50}).toBuffer();
+                            }
+                        }
+                        
+                    } else {
+                        imageUpload = await resizedImage.clone().webp({quality: 60, effort: 6}).toBuffer();
+                        thumbUpload = await resizedImage.webp({quality: 50}).toBuffer();
+                        mime = "image/webp";
+                    }
+                    
                 }
                 if (mime === "image/avif") {
                     imageUpload = await resizedImage.clone().avif({quality: 70}).toBuffer();
@@ -158,9 +184,15 @@ class _MatrixStickerBot {
                     imageUpload = await resizedImage.clone().jpeg({quality: 80, chromaSubsampling: '4:4:4'}).toBuffer();
                     thumbUpload = await resizedImage.jpeg({quality: 60, chromaSubsampling: '4:2:0'}).toBuffer();;
                 }
-                stickerEvent.contentUri = await mx.upload(imageUpload, mime);
+                if (imageUpload) {
+                    stickerEvent.contentUri = await mx.upload(imageUpload, mime);
+                }
                 stickerEvent.mimetype = mime;
-                stickerEvent.thumbMxc = await mx.upload(thumbUpload, mime);
+                if (thumbUpload) {
+                    stickerEvent.thumbMxc = await mx.upload(thumbUpload, mime);
+                } else {
+                    continue;
+                }
 
                 stickerEvents.push(stickerEvent);
             }
@@ -189,8 +221,13 @@ class _MatrixStickerBot {
                 pack.description = "Matrix sticker pack created by " + authorDisplayName;
                 pack.license = license.name;
                 pack.licensePath = license.url;
-                if (stickerEvents.length > 0) pack.avatarUrl = stickerEvents[0].thumbMxc;
-                await pack.save();
+                if (stickerEvents.length > 0) {
+                    pack.avatarUrl = stickerEvents[0].thumbMxc;
+                    await pack.save();
+                } else {
+                    LogService.error("MatrixStickerBot", `No stickers in pack ${pack.name}. Removing...`);
+                    pack.destroy();
+                }
 
                 const existingStickers = await Sticker.findAll({where: {packId: pack.id}});
                 for (const sticker of existingStickers) await sticker.destroy();

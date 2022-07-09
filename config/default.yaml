@@ -79,6 +79,15 @@ stickers:
   # Whether or not to allow people to add custom sticker packs
   enabled: true
 
+  # Whether to resize images that are not 512x512 during import. This might slow down the import of animated Stickers.
+  resize: true
+
+  # Whether to allow animated stickers. If set to false animations will be stripped from images.
+  allowAnimated: true
+
+  # Whether to skip over images that are not 512x512. Ignored when resize is true.
+  verifyImageSize: true
+
   # The sticker manager bot to promote
   stickerBot: "@stickers:t2bot.io"
 
