@@ -123,9 +123,10 @@ class _MatrixStickerBot {
 
                 const origImage = await sharp(downImage, {animated: config.stickers.allowAnimated});
                 var resizedImage:any;
+                var size;
                 if (config.stickers.resize) {
                     const metadata = await origImage.metadata();
-                    var size = metadata.height;
+                    size = metadata.height;
                     if (metadata.width > metadata.height) {
                         metadata.width;
                     }
@@ -148,41 +149,74 @@ class _MatrixStickerBot {
                 }
                 var imageUpload;
                 var thumbUpload;
+                size = 512;
                 if (mime === "image/png") {
-                    imageUpload = await resizedImage.png().toBuffer();
-                    thumbUpload = imageUpload;
+                    if (config.stickers.resize) {
+                        imageUpload = await resizedImage.png().toBuffer();
+                        thumbUpload = imageUpload;
+                    } else {
+                        thumbUpload = await resizedImage.resize({
+                            width: size,
+                            height: size,
+                            fit: 'contain',
+                            background: 'rgba(0,0,0,0)',
+                        }).png().toBuffer();
+                    }
                 }
                 if (mime === "image/gif" || mime === "image/webp" || mime === "image/avif-sequence") {
                     if (config.stickers.allowAnimated) {
                         if (config.stickers.resize){
-                            imageUpload = await resizedImage.webp({quality: 60, effort: 6}).toBuffer();
+                            imageUpload = await resizedImage.webp({quality: 60, effort: 3}).toBuffer();
                             mime = "image/webp";
                             thumbUpload = await sharp(downImage, {animated: false}).webp({quality: 50}).toBuffer();
                         } else {
-                            imageUpload = null;
+                            resizedImage = await sharp(downImage, {animated: false}).resize({
+                                width: size,
+                                height: size,
+                                fit: 'contain',
+                                background: 'rgba(0,0,0,0)',
+                            });
                             if (mime === "image/gif") {
-                                thumbUpload = await sharp(downImage, {animated: false}).toBuffer();
+                                thumbUpload = await resizedImage.gif().toBuffer();
                             } else if (mime === "image/avif-sequence") {
-                                thumbUpload = await sharp(downImage, {animated: false}).toBuffer();
+                                thumbUpload = await resizedImage.avif().toBuffer();
                             } else {
-                                thumbUpload = await sharp(downImage, {animated: false}).webp({quality: 50}).toBuffer();
+                                thumbUpload = await resizedImage.webp({quality: 50}).toBuffer();
                             }
                         }
                         
                     } else {
-                        imageUpload = await resizedImage.clone().webp({quality: 60, effort: 6}).toBuffer();
+                        imageUpload = await resizedImage.clone().webp({quality: 60, effort: 3}).toBuffer();
                         thumbUpload = await resizedImage.webp({quality: 50}).toBuffer();
                         mime = "image/webp";
                     }
                     
                 }
                 if (mime === "image/avif") {
-                    imageUpload = await resizedImage.clone().avif({quality: 70}).toBuffer();
-                    thumbUpload = await resizedImage.avif({quality: 50, chromaSubsampling: '4:2:0'}).toBuffer();;
+                    if (config.stickers.resize) {
+                        imageUpload = await resizedImage.clone().avif({quality: 70}).toBuffer();
+                        thumbUpload = await resizedImage.avif({quality: 50, chromaSubsampling: '4:2:0'}).toBuffer();
+                    } else {
+                        thumbUpload = await resizedImage.resize({
+                            width: size,
+                            height: size,
+                            fit: 'contain',
+                            background: 'rgba(0,0,0,0)',
+                        }).avif({quality: 50, chromaSubsampling: '4:2:0'}).toBuffer();
+                    }
                 }
                 if (mime === "image/jpeg") {
-                    imageUpload = await resizedImage.clone().jpeg({quality: 80, chromaSubsampling: '4:4:4'}).toBuffer();
-                    thumbUpload = await resizedImage.jpeg({quality: 60, chromaSubsampling: '4:2:0'}).toBuffer();;
+                    if (config.stickers.resize) {
+                        imageUpload = await resizedImage.clone().jpeg({quality: 80, chromaSubsampling: '4:4:4'}).toBuffer();
+                        thumbUpload = await resizedImage.jpeg({quality: 60, chromaSubsampling: '4:2:0'}).toBuffer();
+                    } else {
+                        thumbUpload = await resizedImage.resize({
+                            width: size,
+                            height: size,
+                            fit: 'contain',
+                            background: 'rgba(0,0,0,0)',
+                        }).jpeg({quality: 60, chromaSubsampling: '4:2:0'}).toBuffer();
+                    }
                 }
                 if (imageUpload) {
                     stickerEvent.contentUri = await mx.upload(imageUpload, mime);
