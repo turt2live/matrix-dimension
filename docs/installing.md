@@ -175,8 +175,6 @@ you should make following file available via https at `https://example.com/.well
         "base_url": "https://example.com",
         "server_name": "example.com"
     },
-    "im.vector.riot.e2ee": {"default": false},
-    "io.element.e2ee": {"default": false},
     "m.integrations": {
         "managers": [{
             "api_url": "https://dimension.example.com/api/v1/scalar",
