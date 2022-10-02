@@ -137,19 +137,71 @@ server {
 
 Reload or restart nginx after creating the configuration.
 
-### Step 5: Final steps
+### Step 5: Checking your integration server
 
 If everything went according to plan, you should be able to visit `https://dimension.example.org`
 and see instructions for configuring Element. If you don't, your configuration isn't working as
 intended - double check that all the configuration is set up and visit [#dimension:t2bot.io](https://matrix.to/#/#dimension:t2bot.io)
 for further help.
 
+### Step 6: Configuring Element
+
+Your element clients (both Web and Desktop/Mobile) will need some configuration to use your own
+integration server.
+
+#### Web Element
+
+To configure Web Element client to use your own integration server you should add following lines to
+`config.json` of your Web Element client:
+
+```
+"integrations_ui_url": "https://dimension.example.com/element",
+"integrations_rest_url": "https://dimension.example.com/api/v1/scalar",
+"integrations_widgets_urls": ["https://dimension.example.com/widgets"],
+"integrations_jitsi_widget_url": "https://dimension.example.com/widgets/jitsi",
+
+```
+Replace `dimension.example.com` with your integration server url. You can also get these lines by visiting
+your own integration server via browser, with correct host names placed in proper places.
+
+#### Desktop/Mobile Element
+
+If you wish Desktop or Mobile Element clients to use your integration server when they are connected your homeserver,
+you should make following file available via https at `https://example.com/.well-known/matrix/client`:
+
+```
+{
+    "m.homeserver": {
+        "base_url": "https://example.com",
+        "server_name": "example.com"
+    },
+    "im.vector.riot.e2ee": {"default": false},
+    "io.element.e2ee": {"default": false},
+    "m.integrations": {
+        "managers": [{
+            "api_url": "https://dimension.example.com/api/v1/scalar",
+            "ui_url": "https://dimension.example.com/element"
+        }]
+    }
+}
+```
+Put your homeserver name instead of `example.com` and your integration server name instead of `dimension.example.com`.
+This will tell Desktop or Mobile Element client to use your own integration server instead of default one.
+
+#### Known issues
+
+Mobile Element Client is known not to work with dimension's sticker packs. This hopefully will be fixed sooner or later
+but for now, do not worry if you does not have stickers in your Mobile Client, do not worry, everything is configured well
+it never worked, and should not work for you for now.
+
+### Step 7: Using integration server
+
 After configuring Element, click the integrations button (4 squares in the top right of any room) and
 then click the gear icon. If you don't see a gear icon, you're not an admin in the config. This is
 where you'll configure different integrations as Dimension doesn't ship with anything enabled by
 default - click around and start enabling things.
 
-### Step 6: Updating and restarting Dimension
+### Step 8: Updating and restarting Dimension
 
 **Docker**:
 ```bash
