@@ -1,10 +1,15 @@
 ![dimension](https://t2bot.io/_matrix/media/r0/download/t2l.io/b3101d429588673087f457a4bdd52f45)
 
 
-[![TravisCI badge](https://travis-ci.org/turt2live/matrix-dimension.svg?branch=master)](https://travis-ci.org/turt2live/matrix-dimension)
-
 An open source integration manager for matrix clients, like Element. For help and support, please visit
 us in [#dimension:t2bot.io](https://matrix.to/#/#dimension:t2bot.io) on Matrix.
+
+# 🚨 Project not receiving maintenance
+
+Please be aware that Dimension is no longer formally maintained. Bugs are not being looked at, and features are not being implemented.
+Support for the project is extremely limited as well - please check the issue tracker before attempting to use Dimension.
+
+At a future date, Dimension may be replaced or made obsolete, however this is not planned for the immediate horizon.
 
 # Installing Dimension / Running your own
 
