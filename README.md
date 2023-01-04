@@ -11,6 +11,12 @@ Support for the project is extremely limited as well - please check the issue tr
 
 At a future date, Dimension may be replaced or made obsolete, however this is not planned for the immediate horizon.
 
+Chances are you don't need an integration manager though:
+
+* Widgets can be added to rooms with Element Web/Desktop with `/addwidget`
+* Self-hosted bots and bridges can be managed entirely by commands
+* Stickers can either be supported by https://github.com/maunium/stickerpicker or MSC2545-supported clients (like Nheko)
+
 # Installing Dimension / Running your own
 
 See [docs/installing.md](./docs/installing.md) for more information on running Dimension.
