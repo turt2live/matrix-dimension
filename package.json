@@ -69,7 +69,7 @@
     "rxjs": "^6.6.7",
     "rxjs-compat": "^6.6.7",
     "semver": "^7.3.5",
-    "sequelize": "^6.12.0-alpha.1",
+    "sequelize": "^6.29.0",
     "sequelize-typescript": "^2.1.1",
     "sharp": "^0.29.0",
     "split-host": "^0.1.1",
