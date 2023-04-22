@@ -48,7 +48,7 @@
     "@webcomponents/custom-elements": "^1.5.0",
     "body-parser": "^1.19.0",
     "config": "^3.3.6",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "matrix-bot-sdk": "^0.5.19",
