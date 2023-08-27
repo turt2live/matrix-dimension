@@ -1,4 +1,4 @@
-import { AutoIncrement, Column, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AutoIncrement, Column, ForeignKey, Model, PrimaryKey, Table, DataType } from "sequelize-typescript";
 import NebIntegration from "./NebIntegration";
 
 @Table({
@@ -19,6 +19,6 @@ export default class NebIntegrationConfig extends Model {
     @Column
     roomId: string;
 
-    @Column
+    @Column(DataType.TEXT)
     jsonContent: string;
 }

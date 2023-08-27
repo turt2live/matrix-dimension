@@ -1,4 +1,4 @@
-import { AllowNull, Column, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AllowNull, Column, ForeignKey, Model, PrimaryKey, Table, DataType } from "sequelize-typescript";
 import AppService from "./AppService";
 
 @Table({
@@ -11,7 +11,7 @@ export default class AppServiceUser extends Model {
     @Column
     id: string;
 
-    @Column
+    @Column(DataType.TEXT)
     accessToken: string;
 
     @AllowNull
