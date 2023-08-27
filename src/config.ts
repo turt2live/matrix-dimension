@@ -36,6 +36,9 @@ export interface DimensionConfig {
     };
     stickers: {
         enabled: boolean;
+        resize: boolean;
+        allowAnimated: boolean;
+        verifyImageSize: boolean;
         stickerBot: string;
         managerUrl: string;
     };

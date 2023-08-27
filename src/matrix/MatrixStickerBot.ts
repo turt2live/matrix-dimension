@@ -12,6 +12,7 @@ import { MatrixLiteClient } from "./MatrixLiteClient";
 import { Cache, CACHE_STICKERS } from "../MemoryCache";
 import { LicenseMap } from "../utils/LicenseMap";
 import { OpenId } from "../models/OpenId";
+import * as sharp from "sharp";
 
 class _MatrixStickerBot {
 
@@ -113,7 +114,119 @@ class _MatrixStickerBot {
 
                 const serverName = mxc.substring("mxc://".length).split("/")[0];
                 const contentId = mxc.substring("mxc://".length).split("/")[1];
-                stickerEvent.thumbMxc = await mx.uploadFromUrl(await mx.getThumbnailUrl(serverName, contentId, 512, 512, "scale", false), "image/png");
+
+                const url = await mx.getMediaUrl(serverName, contentId);
+                const downImage = await mx.downloadFromUrl(url);
+                
+                var mime = mx.parseFileHeaderMIME(downImage);
+                if (!mime) continue;
+
+                const origImage = await sharp(downImage, {animated: config.stickers.allowAnimated});
+                var resizedImage:any;
+                var size;
+                if (config.stickers.resize) {
+                    const metadata = await origImage.metadata();
+                    size = metadata.height;
+                    if (metadata.width > metadata.height) {
+                        metadata.width;
+                    }
+                    if (size > 512) size = 512;
+                    resizedImage = await origImage.resize({
+                        width: size,
+                        height: size,
+                        fit: 'contain',
+                        background: 'rgba(0,0,0,0)',
+                    });
+                } else {
+                    if (config.stickers.verifyImageSize) {
+                        const metadata = await origImage.metadata();
+                        if (metadata.width !== metadata.height || metadata.width !== 512) {
+                            LogService.info("MatrixStickerBot", `Sticker ${stickerId} has an invalid size. Skipping...`);
+                            continue;
+                        }
+                    }
+                    resizedImage = origImage;
+                }
+                var imageUpload;
+                var thumbUpload;
+                size = 512;
+                if (mime === "image/png") {
+                    if (config.stickers.resize) {
+                        imageUpload = await resizedImage.png().toBuffer();
+                        thumbUpload = imageUpload;
+                    } else {
+                        thumbUpload = await resizedImage.resize({
+                            width: size,
+                            height: size,
+                            fit: 'contain',
+                            background: 'rgba(0,0,0,0)',
+                        }).png().toBuffer();
+                    }
+                }
+                if (mime === "image/gif" || mime === "image/webp" || mime === "image/avif-sequence") {
+                    if (config.stickers.allowAnimated) {
+                        if (config.stickers.resize){
+                            imageUpload = await resizedImage.webp({quality: 60, effort: 3}).toBuffer();
+                            mime = "image/webp";
+                            thumbUpload = await sharp(downImage, {animated: false}).webp({quality: 50}).toBuffer();
+                        } else {
+                            resizedImage = await sharp(downImage, {animated: false}).resize({
+                                width: size,
+                                height: size,
+                                fit: 'contain',
+                                background: 'rgba(0,0,0,0)',
+                            });
+                            if (mime === "image/gif") {
+                                thumbUpload = await resizedImage.gif().toBuffer();
+                            } else if (mime === "image/avif-sequence") {
+                                thumbUpload = await resizedImage.avif().toBuffer();
+                            } else {
+                                thumbUpload = await resizedImage.webp({quality: 50}).toBuffer();
+                            }
+                        }
+                        
+                    } else {
+                        imageUpload = await resizedImage.clone().webp({quality: 60, effort: 3}).toBuffer();
+                        thumbUpload = await resizedImage.webp({quality: 50}).toBuffer();
+                        mime = "image/webp";
+                    }
+                    
+                }
+                if (mime === "image/avif") {
+                    if (config.stickers.resize) {
+                        imageUpload = await resizedImage.clone().avif({quality: 70}).toBuffer();
+                        thumbUpload = await resizedImage.avif({quality: 50, chromaSubsampling: '4:2:0'}).toBuffer();
+                    } else {
+                        thumbUpload = await resizedImage.resize({
+                            width: size,
+                            height: size,
+                            fit: 'contain',
+                            background: 'rgba(0,0,0,0)',
+                        }).avif({quality: 50, chromaSubsampling: '4:2:0'}).toBuffer();
+                    }
+                }
+                if (mime === "image/jpeg") {
+                    if (config.stickers.resize) {
+                        imageUpload = await resizedImage.clone().jpeg({quality: 80, chromaSubsampling: '4:4:4'}).toBuffer();
+                        thumbUpload = await resizedImage.jpeg({quality: 60, chromaSubsampling: '4:2:0'}).toBuffer();
+                    } else {
+                        thumbUpload = await resizedImage.resize({
+                            width: size,
+                            height: size,
+                            fit: 'contain',
+                            background: 'rgba(0,0,0,0)',
+                        }).jpeg({quality: 60, chromaSubsampling: '4:2:0'}).toBuffer();
+                    }
+                }
+                if (imageUpload) {
+                    stickerEvent.contentUri = await mx.upload(imageUpload, mime);
+                }
+                stickerEvent.mimetype = mime;
+                if (thumbUpload) {
+                    stickerEvent.thumbMxc = await mx.upload(thumbUpload, mime);
+                } else {
+                    continue;
+                }
 
                 stickerEvents.push(stickerEvent);
             }
@@ -142,8 +255,13 @@ class _MatrixStickerBot {
                 pack.description = "Matrix sticker pack created by " + authorDisplayName;
                 pack.license = license.name;
                 pack.licensePath = license.url;
-                if (stickerEvents.length > 0) pack.avatarUrl = stickerEvents[0].contentUri;
-                await pack.save();
+                if (stickerEvents.length > 0) {
+                    pack.avatarUrl = stickerEvents[0].thumbMxc;
+                    await pack.save();
+                } else {
+                    LogService.error("MatrixStickerBot", `No stickers in pack ${pack.name}. Removing...`);
+                    pack.destroy();
+                }
 
                 const existingStickers = await Sticker.findAll({where: {packId: pack.id}});
                 for (const sticker of existingStickers) await sticker.destroy();
@@ -157,7 +275,7 @@ class _MatrixStickerBot {
                         thumbnailMxc: stickerEvent.thumbMxc,
                         thumbnailWidth: 512,
                         thumbnailHeight: 512,
-                        mimetype: "image/png",
+                        mimetype: stickerEvent.mimetype,
                     });
                 }
             }

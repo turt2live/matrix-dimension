@@ -36,6 +36,15 @@ export class MatrixLiteClient {
         return baseUrl + `/_matrix/media/r0/thumbnail/${serverName}/${contentId}?width=${width}&height=${height}&method=${method}&animated=${isAnimated}`;
     }
 
+    public async getMediaUrl(serverName: string, contentId: string): Promise<string> {
+        let baseUrl = config.homeserver.mediaUrl;
+        if (!baseUrl) baseUrl = config.homeserver.clientServerUrl;
+        if (baseUrl.endsWith("/")) baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+
+        // DO NOT RETURN THE ACCESS TOKEN.
+        return baseUrl + `/_matrix/media/r0/download/${serverName}/${contentId}`;
+    }
+
     public async whoAmI(): Promise<string> {
         const response = await doClientApiCall(
             "GET",
@@ -106,6 +115,7 @@ export class MatrixLiteClient {
     }
 
     public async upload(content: Buffer, contentType: string): Promise<string> {
+        LogService.info("MatrixLiteClient", "Uploading file (type:" + contentType + ")");
         return doClientApiCall(
             "POST",
             "/_matrix/media/r0/upload",
@@ -126,6 +136,7 @@ export class MatrixLiteClient {
                 method: "GET",
                 url: url,
                 encoding: null,
+                headers: {},
             }, (err, res, _body) => {
                 if (err) {
                     LogService.error("MatrixLiteClient", "Error downloading file from " + url);
@@ -139,5 +150,51 @@ export class MatrixLiteClient {
                 }
             });
         });
+    }
+
+    public async parseMediaMIME(url: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            request({
+                method: "GET",
+                url: url,
+                encoding: null,
+                headers: {
+                    'Range': 'bytes=0-32'
+                },
+            }, (err, res, _body) => {
+                if (err) {
+                    LogService.error("MatrixLiteClient", "Error downloading file from " + url);
+                    LogService.error("MatrixLiteClient", err);
+                    reject(err);
+                } else if (res.statusCode !== 200) {
+                    if (res.statusCode !== 206) {
+                        LogService.error("MatrixLiteClient", "Got status code " + res.statusCode + " while calling url " + url);
+                        reject(new Error("Error in request: invalid status code"));
+                    }
+                } else {
+                    return this.parseFileHeaderMIME(res.body);
+                }
+            });
+        });
+    }
+
+    public parseFileHeaderMIME(data: Buffer): string {
+        const s = data.slice(0,32);
+        if (s.slice(0,8).includes(Buffer.from("89504E470D0A1A0A", "hex"))) {
+            return("image/png");
+        } else if (s.slice(0,3).includes(Buffer.from("474946", "hex"))) {
+            return("image/gif");
+        } else if (s.slice(0,3).includes(Buffer.from("FFD8FF", "hex"))) {
+            return("image/jpeg");
+        } else if (s.slice(0,3).includes(Buffer.from("000000", "hex")) && s.slice(4,8).includes(Buffer.from("66747970", "hex"))) {
+            if (s.slice(16,28).includes(Buffer.from("61766973", "hex"))) {
+                return("image/avif-sequence");
+            } else if (s.slice(16,28).includes(Buffer.from("61766966", "hex"))) {
+                return("image/avif");
+            }
+        } else if (s.slice(0,4).includes(Buffer.from("52494646", "hex")) && s.slice(8,12).includes(Buffer.from("57454250", "hex"))) {
+            return("image/webp");
+        }
+        return;
     }
 }
