@@ -15,7 +15,7 @@ declare global {
     }
 }
 
-LogService.setLevel(LogLevel.DEBUG);
+LogService.setLevel(LogLevel.ERROR);
 LogService.setLogger(new RichConsoleLogger());
 LogService.info("index", "Starting dimension " + CURRENT_VERSION);
 
