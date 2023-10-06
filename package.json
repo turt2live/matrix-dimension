@@ -95,7 +95,7 @@
     "@babel/preset-env": "^7.15.0",
     "@biesbjerg/ngx-translate-extract": "^7.0.4",
     "@ckeditor/ckeditor5-angular": "^2.0.2",
-    "@ckeditor/ckeditor5-build-classic": "^29.1.0",
+    "@ckeditor/ckeditor5-build-classic": "^36.0.1",
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-brands": "^5.0.13",
     "@fortawesome/fontawesome-free-regular": "^5.0.13",
